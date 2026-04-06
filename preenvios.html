@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preenvíos — Compara antes de enviar dinero a RD</title>
+<meta name="description" content="Compara Western Union, Remitly, Wise y más antes de hacer tus envíos a República Dominicana. Gratis. Sin registro.">
+
+<!-- Google Analytics — reemplaza G-XXXXXXXXXX con tu ID real -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #ffffff;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid #1e293b;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #22c55e;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: #ffffff; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 40px 24px 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: #22c55e;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+
+  /* CALCULADORA */
+  .calc-section {
+    padding: 20px 24px 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .calc-label {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .input-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .input-wrap .currency {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    font-weight: 700;
+    color: #22c55e;
+  }
+
+  .calc-input {
+    width: 100%;
+    padding: 18px 20px 18px 44px;
+    font-size: 24px;
+    font-weight: 700;
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 14px;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .calc-input:focus {
+    border-color: #22c55e;
+  }
+
+  .calc-input::placeholder {
+    color: #475569;
+    font-weight: 400;
+    font-size: 18px;
+  }
+
+  .btn-comparar {
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 700;
+    background: #22c55e;
+    color: #0f172a;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: -0.3px;
+  }
+
+  .btn-comparar:hover { background: #16a34a; }
+  .btn-comparar:active { transform: scale(0.98); }
+
+  /* RESULTADOS */
+  .results {
+    display: none;
+    padding: 20px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .results-title {
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .result-card {
+    background: #1e293b;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: 1px solid #334155;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card.winner {
+    border-color: #22c55e;
+    background: #0f2a1a;
+  }
+
+  .winner-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #22c55e;
+    color: #0f172a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 0 14px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .operator-info { flex: 1; }
+
+  .operator-rank {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .operator-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .operator-amount {
+    text-align: right;
+  }
+
+  .amount-label {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 2px;
+  }
+
+  .amount-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #22c55e;
+    line-height: 1;
+  }
+
+  .amount-currency {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  .card-detail {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .detail-item {
+    flex: 1;
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .detail-label {
+    font-size: 10px;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+  }
+
+  .detail-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+  }
+
+  .btn-enviar {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .result-card.winner .btn-enviar {
+    background: #22c55e;
+    color: #0f172a;
+  }
+
+  .result-card.winner .btn-enviar:hover { background: #16a34a; }
+
+  .result-card:not(.winner) .btn-enviar {
+    background: transparent;
+    color: #22c55e;
+    border: 1px solid #22c55e;
+  }
+
+  .result-card:not(.winner) .btn-enviar:hover {
+    background: #22c55e;
+    color: #0f172a;
+  }
+
+  /* AHORRO BANNER */
+  .savings-banner {
+    display: none;
+    max-width: 480px;
+    margin: 0 auto 8px;
+    padding: 0 24px;
+  }
+
+  .savings-inner {
+    background: linear-gradient(135deg, #064e3b, #065f46);
+    border: 1px solid #22c55e;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+  }
+
+  .savings-inner p {
+    font-size: 14px;
+    color: #86efac;
+    line-height: 1.45;
+  }
+
+  .savings-inner strong {
+    color: #ffffff;
+    font-size: 16px;
+  }
+
+  /* FECHA ACTUALIZACIÓN */
+  .update-note {
+    text-align: center;
+    font-size: 11px;
+    color: #334155;
+    padding: 8px 24px 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* FOOTER */
+  .footer-trust {
+    text-align: center;
+    padding: 32px 24px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .trust-text {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  .trust-text strong { color: #64748b; }
+
+  .footer-bottom {
+    text-align: center;
+    padding: 16px 24px 32px;
+    font-size: 11px;
+    color: #1e293b;
+  }
+
+  .footer-bottom a {
+    color: #334155;
+    text-decoration: none;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Pre<span>envíos</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Antes de hacer los envíos<br>a RD… <em>mira esto</em></h1>
+  <p>Compara en 30 segundos. Gratis. Sin registro.</p>
+</div>
+
+<!-- CALCULADORA -->
+<div class="calc-section">
+  <div class="calc-label">¿Cuánto quieres enviar hoy?</div>
+  <div class="input-wrap">
+    <span class="currency">$</span>
+    <input
+      type="number"
+      id="amount"
+      class="calc-input"
+      placeholder="Ej: 200"
+      min="10"
+      max="10000"
+      inputmode="numeric"
+    >
+  </div>
+  <button class="btn-comparar" onclick="comparar()">
+    Ver quién te da más pesos →
+  </button>
+</div>
+
+<!-- BANNER DE AHORRO -->
+<div class="savings-banner" id="savingsBanner">
+  <div class="savings-inner">
+    <p id="savingsText"></p>
+  </div>
+</div>
+
+<!-- FECHA -->
+<div class="update-note" id="updateNote" style="display:none">
+  📅 Tasas actualizadas el 6 de abril de 2026 · Verifica en el sitio de cada operador antes de enviar
+</div>
+
+<!-- RESULTADOS -->
+<div class="results" id="results">
+  <div class="results-title">Resultado para tu envío</div>
+
+  <!-- REMITLY — GANADOR HOY -->
+  <div class="result-card winner" id="card-remitly">
+    <div class="winner-badge">✓ Mejor hoy</div>
+    <div class="card-top">
+      <div class="operator-info">
+        <div class="operator-rank">🥇 #1 · Más pesos</div>
+        <div class="operator-name">Remitly</div>
+      </div>
+      <div class="operator-amount">
+        <div class="amount-label">Tu familia recibe</div>
+        <div class="amount-value" id="remitly-amount">—</div>
+        <div class="amount-currency">pesos dominicanos</div>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-item">
+        <div class="detail-label">Tasa hoy</div>
+        <div class="detail-value">60.67 DOP/$</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Fee</div>
+        <div class="detail-value">$0 – $3.99</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Velocidad</div>
+        <div class="detail-value">Minutos</div>
+      </div>
+    </div>
+    <a
+      href="https://www.remitly.com/us/en/dominican-republic"
+      target="_blank"
+      class="btn-enviar"
+      onclick="trackClick('remitly')"
+    >
+      Enviar con Remitly →
+    </a>
+  </div>
+
+  <!-- WESTERN UNION -->
+  <div class="result-card" id="card-wu">
+    <div class="card-top">
+      <div class="operator-info">
+        <div class="operator-rank">🥈 #2</div>
+        <div class="operator-name">Western Union</div>
+      </div>
+      <div class="operator-amount">
+        <div class="amount-label">Tu familia recibe</div>
+        <div class="amount-value" id="wu-amount" style="color:#94a3b8">—</div>
+        <div class="amount-currency">pesos dominicanos</div>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-item">
+        <div class="detail-label">Tasa hoy</div>
+        <div class="detail-value">59.20 DOP/$</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Fee</div>
+        <div class="detail-value">$0 – $8</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Velocidad</div>
+        <div class="detail-value">Minutos</div>
+      </div>
+    </div>
+    <a
+      href="https://www.westernunion.com/us/en/send-money/app/start"
+      target="_blank"
+      class="btn-enviar"
+      onclick="trackClick('westernunion')"
+    >
+      Enviar con Western Union →
+    </a>
+  </div>
+
+  <!-- WISE -->
+  <div class="result-card" id="card-wise">
+    <div class="card-top">
+      <div class="operator-info">
+        <div class="operator-rank">🥉 #3</div>
+        <div class="operator-name">Wise</div>
+      </div>
+      <div class="operator-amount">
+        <div class="amount-label">Tu familia recibe</div>
+        <div class="amount-value" id="wise-amount" style="color:#94a3b8">—</div>
+        <div class="amount-currency">pesos dominicanos</div>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-item">
+        <div class="detail-label">Tasa hoy</div>
+        <div class="detail-value">58.02 DOP/$</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Fee</div>
+        <div class="detail-value">~$4.50</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Velocidad</div>
+        <div class="detail-value">Segundos</div>
+      </div>
+    </div>
+    <a
+      href="https://wise.com/us/send-money/send-money-to-dominican-republic"
+      target="_blank"
+      class="btn-enviar"
+      onclick="trackClick('wise')"
+    >
+      Enviar con Wise →
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER TRUST -->
+<div class="footer-trust" id="footerTrust">
+  <p class="trust-text">
+    Miles de dominicanos ya están comparando antes de enviar.<br>
+    <strong>Gratis · Sin registro · Sin complicaciones</strong>
+  </p>
+</div>
+
+<div class="footer-bottom">
+  <a href="#">Preenvíos.com</a> · No somos una remesadora. Solo comparamos.
+</div>
+
+<script>
+  // Tasas reales del 6 de abril de 2026
+  // Actualizar estos números cada semana
+  const TASAS = {
+    remitly:      60.67,   // $200 → RD$12,134 verificado hoy
+    westernunion: 59.20,   // $200 → RD$11,840 verificado hoy
+    wise:         58.02    // $200 → RD$11,604 verificado hoy
+  };
+
+  function formatPesos(n) {
+    return 'RD$' + Math.round(n).toLocaleString('es-DO');
+  }
+
+  function comparar() {
+    const raw = document.getElementById('amount').value;
+    const amount = parseFloat(raw);
+
+    if (!amount || amount < 10) {
+      document.getElementById('amount').focus();
+      document.getElementById('amount').style.borderColor = '#ef4444';
+      setTimeout(() => {
+        document.getElementById('amount').style.borderColor = '#334155';
+      }, 1500);
+      return;
+    }
+
+    // Calcular
+    const remitlyDOP      = amount * TASAS.remitly;
+    const wuDOP           = amount * TASAS.westernunion;
+    const wiseDOP         = amount * TASAS.wise;
+    const ahorroPesos     = Math.round(remitlyDOP - wuDOP);
+    const ahorroVsWise    = Math.round(remitlyDOP - wiseDOP);
+
+    // Mostrar montos
+    document.getElementById('remitly-amount').textContent = formatPesos(remitlyDOP);
+    document.getElementById('wu-amount').textContent      = formatPesos(wuDOP);
+    document.getElementById('wise-amount').textContent    = formatPesos(wiseDOP);
+
+    // Banner de ahorro
+    const banner = document.getElementById('savingsBanner');
+    const savingsText = document.getElementById('savingsText');
+    savingsText.innerHTML =
+      `Con Remitly tu familia recibe <strong>${formatPesos(ahorroPesos)} pesos más</strong> que con Western Union — enviando los mismos $${amount.toLocaleString()} dólares.`;
+    banner.style.display = 'block';
+
+    // Mostrar resultados y fecha
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('updateNote').style.display = 'block';
+
+    // Scroll suave a resultados
+    setTimeout(() => {
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
+    // Analytics — evento de comparación
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'comparar_click', {
+        'event_category': 'calculadora',
+        'event_label': 'monto_' + amount
+      });
+    }
+  }
+
+  // Enter en el input dispara la comparación
+  document.getElementById('amount').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') comparar();
+  });
+
+  // Tracking de clics en operadores
+  function trackClick(operador) {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'click_operador', {
+        'event_category': 'afiliado',
+        'event_label': operador
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
