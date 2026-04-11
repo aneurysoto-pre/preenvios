@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preenvíos — Compara antes de enviar dinero a RD</title>
-<meta name="description" content="Compara Western Union, Remitly, Wise y más antes de hacer tus envíos a República Dominicana. Gratis. Sin registro.">
+<title>Preenvíos — Compare Remittances to Dominican Republic</title>
+<meta name="description" content="Compare 8 money transfer services in seconds. Find who gives your family more pesos today. Free. No registration.">
 
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RBFS2812S"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,600 +14,796 @@
   gtag('config', 'G-6RBFS2812S');
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#00875A;
+  --green-dark:#005C3B;
+  --green-light:#E8F5EE;
+  --blue:#1A73E8;
+  --blue-dark:#1557B0;
+  --ink:#1A1A1A;
+  --muted:#5F6368;
+  --line:#E8EAED;
+  --bg:#F8F9FA;
+  --white:#FFFFFF;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:0 2px 8px rgba(0,0,0,0.1),0 8px 32px rgba(0,0,0,0.1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #0f172a;
-    color: #ffffff;
-    min-height: 100vh;
+/* ── HEADER ── */
+.header{
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;top:0;z-index:100;
+}
+.logo{
+  font-size:26px;font-weight:800;letter-spacing:-0.5px;
+  text-decoration:none;display:flex;align-items:baseline;
+}
+.logo .pre{color:var(--green)}
+.logo .envios{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 18px;border:1.5px solid var(--line);
+  border-radius:24px;font-size:13px;font-weight:600;
+  color:var(--ink);background:var(--white);cursor:pointer;
+  font-family:var(--sans);transition:all 0.2s;text-decoration:none;
+}
+.header-btn:hover{border-color:#DADCE0;background:var(--bg)}
+.header-btn.primary{background:var(--blue);color:var(--white);border-color:var(--blue)}
+.header-btn.primary:hover{background:var(--blue-dark)}
+
+/* ── HERO ── */
+.hero-wrap{
+  background:var(--white);
+  padding:36px 40px 0;
+  max-width:1280px;margin:0 auto;
+}
+.hero{
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:32px;align-items:center;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--green-light);color:var(--green-dark);
+  font-size:11px;font-weight:700;padding:5px 12px;
+  border-radius:20px;margin-bottom:14px;
+  text-transform:uppercase;letter-spacing:0.05em;
+}
+.hero h1{
+  font-size:clamp(26px,3.2vw,42px);font-weight:800;
+  color:var(--ink);line-height:1.15;margin-bottom:10px;letter-spacing:-0.5px;
+}
+.hero h1 .blue{color:var(--blue)}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.6}
+
+/* AD BOX — invisible to users, ready for content */
+.ad-box{
+  min-height:220px;
+  background:transparent;
+  position:relative;
+  overflow:hidden;
+}
+.ad-label{display:none}
+
+/* ── SEARCH BAR — slim & elegant like Trivago ── */
+.search-wrap{
+  padding:28px 40px 40px;
+  max-width:1280px;margin:0 auto;
+}
+.search-box{
+  background:var(--white);
+  border:1.5px solid #DADCE0;
+  border-radius:48px;
+  display:flex;align-items:stretch;
+  box-shadow:0 2px 16px rgba(0,0,0,0.10);
+  transition:border-color 0.2s,box-shadow 0.2s;
+  overflow:hidden;
+}
+.search-box:focus-within{
+  border-color:var(--blue);
+  box-shadow:0 2px 20px rgba(26,115,232,0.18);
+}
+.s-field{
+  flex:1;display:flex;align-items:center;gap:0;
+  padding:0 48px;height:62px;
+  border-right:1.5px solid var(--line);
+  cursor:text;
+}
+.s-field:last-of-type{border-right:none}
+.s-icon{display:none}
+.s-inner{flex:1}
+.s-label{
+  font-size:11px;font-weight:800;color:var(--ink);
+  text-transform:uppercase;letter-spacing:0.08em;
+  display:block;margin-bottom:3px;
+}
+.s-input{
+  width:100%;font-size:17px;font-weight:700;
+  font-family:var(--sans);border:none;outline:none;
+  color:var(--ink);background:transparent;padding:0;
+}
+.s-input::placeholder{color:#BDC1C6;font-weight:400;font-size:16px}
+.s-select{
+  width:100%;font-size:17px;font-weight:600;
+  font-family:var(--sans);border:none;outline:none;
+  color:var(--ink);background:transparent;cursor:pointer;
+  -webkit-appearance:none;padding:0;
+}
+.btn-compare{
+  background:var(--blue);color:var(--white);border:none;
+  border-radius:0 46px 46px 0;
+  height:62px;padding:0 48px;
+  font-size:16px;font-weight:700;font-family:var(--sans);
+  cursor:pointer;transition:background 0.2s;white-space:nowrap;flex-shrink:0;
+  letter-spacing:-0.2px;
+}
+.btn-compare:hover{background:var(--blue-dark)}
+
+/* ── OPERATORS STRIP — with logos & colors ── */
+.ops-strip{
+  padding:48px 40px 32px;max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;gap:0;
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;scrollbar-width:none;
+}
+.ops-strip::-webkit-scrollbar{display:none}
+.op-item{
+  display:flex;align-items:center;justify-content:center;
+  padding:0 28px;height:36px;flex-shrink:0;
+  border-right:1px solid var(--line);
+  opacity:0.7;transition:opacity 0.2s;cursor:default;
+}
+.op-item:last-of-type{border-right:none}
+.op-item:hover{opacity:1}
+
+/* Styled operator names with brand colors */
+.brand-remitly{font-size:13px;font-weight:800;color:#004B87;letter-spacing:-0.3px}
+.brand-wu{font-size:12px;font-weight:800;color:#FBBC05;letter-spacing:-0.3px;text-shadow:0 0 0 #000}
+.brand-wu-wrap{background:#333;padding:3px 8px;border-radius:4px}
+.brand-wise{font-size:13px;font-weight:800;color:#9FE870;background:#163300;padding:3px 8px;border-radius:4px;letter-spacing:-0.3px}
+.brand-mg{font-size:13px;font-weight:800;color:#CC0000;letter-spacing:-0.3px}
+.brand-ria{font-size:13px;font-weight:700;color:#FF6600;letter-spacing:-0.3px}
+.brand-xoom{font-size:13px;font-weight:800;color:#003087;letter-spacing:-0.3px}
+.brand-boss{font-size:12px;font-weight:900;color:#FFFFFF;background:#CC0000;padding:3px 8px;border-radius:4px;letter-spacing:-0.3px}
+.brand-br{font-size:11px;font-weight:800;color:#003087;letter-spacing:-0.3px}
+.ops-more{font-size:12px;color:#9AA0A6;font-weight:500;padding:0 20px;flex-shrink:0;white-space:nowrap}
+
+/* ── TRUST ── */
+.trust-bar{
+  background:var(--bg);border-bottom:1px solid var(--line);
+  padding:8px 40px;display:flex;gap:28px;align-items:center;flex-wrap:wrap;
+}
+.t-item{font-size:12px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:5px}
+.t-dot{width:5px;height:5px;background:var(--green);border-radius:50%;flex-shrink:0}
+
+/* ── SAVINGS BANNER ── */
+.savings-wrap{display:none;max-width:1280px;margin:20px auto 0;padding:0 40px}
+.savings-inner{
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  border-radius:12px;padding:14px 22px;color:var(--white);
+  display:flex;align-items:center;gap:14px;
+}
+.savings-emoji{font-size:22px;flex-shrink:0}
+.savings-text{font-size:14px;line-height:1.4}
+.savings-text strong{font-size:15px}
+
+/* ── RESULTS ── */
+.results-wrap{display:none;max-width:1280px;margin:0 auto;padding:16px 40px 48px}
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
+.results-count{font-size:13px;font-weight:600;color:var(--muted)}
+.results-date{font-size:11px;color:var(--muted);background:var(--bg);padding:4px 10px;border-radius:20px;border:1px solid var(--line)}
+
+.result-row{
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:12px;margin-bottom:10px;
+  display:grid;grid-template-columns:100px 1fr auto;
+  align-items:stretch;overflow:hidden;
+  transition:box-shadow 0.2s,border-color 0.2s;
+}
+.result-row:hover{box-shadow:var(--shadow);border-color:#DADCE0}
+.result-row.winner{border-color:var(--green);border-width:2px}
+
+.r-logo{
+  padding:14px 10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;
+  border-right:1px solid var(--line);background:var(--bg);
+}
+.r-logo img{width:64px;height:32px;object-fit:contain}
+.r-logo-name{font-size:9px;font-weight:700;color:var(--muted);text-align:center;line-height:1.2}
+.winner-badge{
+  background:var(--green);color:var(--white);
+  font-size:9px;font-weight:700;padding:2px 7px;
+  border-radius:4px;text-transform:uppercase;letter-spacing:0.04em;
+}
+.r-info{padding:14px 20px;display:flex;flex-direction:column;justify-content:center}
+.r-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.r-details{display:flex;gap:20px;flex-wrap:wrap}
+.r-detail{font-size:12px;color:var(--muted)}
+.r-detail .lbl{color:#9AA0A6;margin-right:3px}
+
+.r-price{
+  padding:14px 24px;border-left:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:flex-end;
+  justify-content:center;gap:12px;min-width:200px;
+}
+.price-lbl{font-size:11px;color:var(--muted)}
+.price-val{font-size:26px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-0.5px}
+.result-row.winner .price-val{color:var(--green)}
+.price-cur{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* Default button — blue outline for non-winners */
+.btn-go{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;color:var(--blue);
+  font-size:13px;font-weight:700;font-family:var(--sans);
+  padding:10px 20px;border-radius:8px;text-decoration:none;
+  border:1.5px solid var(--blue);cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+}
+.btn-go:hover{background:var(--blue);color:var(--white);transform:translateY(-1px)}
+
+/* Winner button — Trivago "View Deal" style */
+.result-row.winner .btn-go{
+  background:var(--green);color:var(--white);
+  border-color:var(--green);
+  font-size:15px;padding:13px 24px;
+  border-radius:10px;
+  box-shadow:0 4px 14px rgba(0,135,90,0.35);
+}
+.result-row.winner .btn-go:hover{
+  background:var(--green-dark);border-color:var(--green-dark);
+  box-shadow:0 6px 20px rgba(0,135,90,0.45);
+  transform:translateY(-1px);
+}
+
+/* Winner price cell — green background like Trivago */
+.result-row.winner .r-price{
+  background:linear-gradient(135deg,#F0FDF7,#E8F5EE);
+}
+
+.disclaimer{text-align:center;font-size:11px;color:#9AA0A6;padding:8px 0 0;line-height:1.7}
+
+/* ── HOW IT WORKS ── */
+.how-section{background:var(--bg);border-top:1px solid var(--line);padding:48px 40px}
+.how-inner{max-width:1280px;margin:0 auto}
+.how-title{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.how-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.how-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:22px}
+.how-num{
+  width:36px;height:36px;background:var(--blue);color:var(--white);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;margin-bottom:12px;
+}
+.how-card h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.how-card p{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* ── FAQ ── */
+.faq-section{padding:48px 40px;max-width:1280px;margin:0 auto}
+.faq-title{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:24px}
+.faq-item{border-bottom:1px solid var(--line);padding:16px 0}
+.faq-q{
+  font-size:15px;font-weight:600;color:var(--ink);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  user-select:none;
+}
+.faq-q:hover{color:var(--blue)}
+.faq-arrow{font-size:14px;color:var(--muted);transition:transform 0.2s;flex-shrink:0}
+.faq-a{
+  font-size:14px;color:var(--muted);line-height:1.65;
+  max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s;
+}
+.faq-item.open .faq-a{max-height:200px;padding-top:10px}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+/* ── FOOTER ── */
+.footer{background:var(--ink);padding:48px 40px 24px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;margin-bottom:40px;
+}
+.footer-brand .f-logo{font-size:22px;font-weight:800;margin-bottom:12px}
+.footer-brand .f-logo .pre{color:var(--green)}
+.footer-brand .f-logo .envios{color:var(--white)}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.65;max-width:260px}
+.footer-col h5{
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;
+}
+.footer-col a{
+  display:block;font-size:13px;color:rgba(255,255,255,0.6);
+  text-decoration:none;margin-bottom:8px;transition:color 0.2s;
+}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding-top:20px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;
+}
+.footer-bottom p{font-size:11px;color:rgba(255,255,255,0.3)}
+.footer-bottom .legal{display:flex;gap:16px}
+.footer-bottom .legal a{font-size:11px;color:rgba(255,255,255,0.4);text-decoration:none}
+.footer-bottom .legal a:hover{color:rgba(255,255,255,0.7)}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .header{padding:14px 16px}
+  .hero-wrap{padding:24px 16px 0}
+  .hero{grid-template-columns:1fr;gap:20px}
+  .ad-box{min-height:140px}
+  .search-wrap{padding:16px 16px 0}
+  .search-box{border-radius:14px;flex-direction:column;overflow:visible}
+  .s-field{border-right:none;border-bottom:1.5px solid var(--line);height:50px;padding:0 16px}
+  .s-field:last-of-type{border-bottom:none}
+  .btn-compare{border-radius:0 0 12px 12px;width:100%;height:48px}
+  .ops-strip{padding:14px 16px;gap:0}
+  .op-item{padding:0 12px}
+  .trust-bar{padding:8px 16px;gap:12px}
+  .savings-wrap{padding:0 16px}
+  .results-wrap{padding:16px 16px 40px}
+  .result-row{grid-template-columns:72px 1fr}
+  .r-price{
+    grid-column:1/-1;border-left:none;border-top:1px solid var(--line);
+    flex-direction:row;justify-content:space-between;
+    align-items:center;padding:10px 14px;min-width:0;
   }
-
-  /* HEADER */
-  .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 18px 24px;
-    border-bottom: 1px solid #1e293b;
-  }
-
-  .logo {
-    font-size: 22px;
-    font-weight: 700;
-    color: #22c55e;
-    letter-spacing: -0.5px;
-  }
-
-  .logo span { color: #ffffff; }
-
-  /* HERO */
-  .hero {
-    text-align: center;
-    padding: 40px 24px 28px;
-  }
-
-  .hero h1 {
-    font-size: clamp(22px, 5vw, 32px);
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 10px;
-    color: #ffffff;
-  }
-
-  .hero h1 em {
-    font-style: normal;
-    color: #22c55e;
-  }
-
-  .hero p {
-    font-size: 15px;
-    color: #94a3b8;
-    margin-bottom: 0;
-  }
-
-  /* CALCULADORA */
-  .calc-section {
-    padding: 20px 24px 0;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .calc-label {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-
-  .input-wrap {
-    position: relative;
-    margin-bottom: 12px;
-  }
-
-  .input-wrap .currency {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-    font-weight: 700;
-    color: #22c55e;
-  }
-
-  .calc-input {
-    width: 100%;
-    padding: 18px 20px 18px 44px;
-    font-size: 24px;
-    font-weight: 700;
-    background: #1e293b;
-    border: 2px solid #334155;
-    border-radius: 14px;
-    color: #ffffff;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .calc-input:focus {
-    border-color: #22c55e;
-  }
-
-  .calc-input::placeholder {
-    color: #475569;
-    font-weight: 400;
-    font-size: 18px;
-  }
-
-  .btn-comparar {
-    width: 100%;
-    padding: 18px;
-    font-size: 18px;
-    font-weight: 700;
-    background: #22c55e;
-    color: #0f172a;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    letter-spacing: -0.3px;
-  }
-
-  .btn-comparar:hover { background: #16a34a; }
-  .btn-comparar:active { transform: scale(0.98); }
-
-  /* RESULTADOS */
-  .results {
-    display: none;
-    padding: 20px 24px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .results-title {
-    text-align: center;
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .result-card {
-    background: #1e293b;
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    border: 1px solid #334155;
-    transition: border-color 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-card.winner {
-    border-color: #22c55e;
-    background: #0f2a1a;
-  }
-
-  .winner-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #22c55e;
-    color: #0f172a;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 0 14px 0 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 14px;
-  }
-
-  .operator-info { flex: 1; }
-
-  .operator-rank {
-    font-size: 11px;
-    color: #64748b;
-    margin-bottom: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .operator-name {
-    font-size: 17px;
-    font-weight: 700;
-    color: #ffffff;
-  }
-
-  .operator-amount {
-    text-align: right;
-  }
-
-  .amount-label {
-    font-size: 11px;
-    color: #64748b;
-    margin-bottom: 2px;
-  }
-
-  .amount-value {
-    font-size: 22px;
-    font-weight: 800;
-    color: #22c55e;
-    line-height: 1;
-  }
-
-  .amount-currency {
-    font-size: 13px;
-    color: #64748b;
-    margin-top: 2px;
-  }
-
-  .card-detail {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-
-  .detail-item {
-    flex: 1;
-    background: #0f172a;
-    border-radius: 8px;
-    padding: 8px 10px;
-    text-align: center;
-  }
-
-  .detail-label {
-    font-size: 10px;
-    color: #475569;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 2px;
-  }
-
-  .detail-value {
-    font-size: 13px;
-    font-weight: 600;
-    color: #cbd5e1;
-  }
-
-  .btn-enviar {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-
-  .result-card.winner .btn-enviar {
-    background: #22c55e;
-    color: #0f172a;
-  }
-
-  .result-card.winner .btn-enviar:hover { background: #16a34a; }
-
-  .result-card:not(.winner) .btn-enviar {
-    background: transparent;
-    color: #22c55e;
-    border: 1px solid #22c55e;
-  }
-
-  .result-card:not(.winner) .btn-enviar:hover {
-    background: #22c55e;
-    color: #0f172a;
-  }
-
-  /* AHORRO BANNER */
-  .savings-banner {
-    display: none;
-    max-width: 480px;
-    margin: 0 auto 8px;
-    padding: 0 24px;
-  }
-
-  .savings-inner {
-    background: linear-gradient(135deg, #064e3b, #065f46);
-    border: 1px solid #22c55e;
-    border-radius: 12px;
-    padding: 14px 18px;
-    text-align: center;
-  }
-
-  .savings-inner p {
-    font-size: 14px;
-    color: #86efac;
-    line-height: 1.45;
-  }
-
-  .savings-inner strong {
-    color: #ffffff;
-    font-size: 16px;
-  }
-
-  /* FECHA ACTUALIZACIÓN */
-  .update-note {
-    text-align: center;
-    font-size: 11px;
-    color: #334155;
-    padding: 8px 24px 0;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  /* FOOTER */
-  .footer-trust {
-    text-align: center;
-    padding: 32px 24px 24px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .trust-text {
-    font-size: 13px;
-    color: #475569;
-    line-height: 1.6;
-  }
-
-  .trust-text strong { color: #64748b; }
-
-  .footer-bottom {
-    text-align: center;
-    padding: 16px 24px 32px;
-    font-size: 11px;
-    color: #1e293b;
-  }
-
-  .footer-bottom a {
-    color: #334155;
-    text-decoration: none;
-  }
-
+  .how-section{padding:32px 16px}
+  .how-grid{grid-template-columns:1fr}
+  .faq-section{padding:32px 16px}
+  .footer{padding:32px 16px 20px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:24px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="header">
-  <div class="logo">Pre<span>envíos</span></div>
-</div>
+<header class="header">
+  <a href="/" class="logo"><span class="pre">Pre</span><span class="envios">envíos</span></a>
+  <div class="header-right">
+    <button class="header-btn">🌐 EN</button>
+    <a href="#contact" class="header-btn primary">Contact</a>
+  </div>
+</header>
 
 <!-- HERO -->
-<div class="hero">
-  <h1>Antes de hacer los envíos<br>a RD… <em>mira esto</em></h1>
-  <p>Compara en 30 segundos. Gratis. Sin registro.</p>
-</div>
-
-<!-- CALCULADORA -->
-<div class="calc-section">
-  <div class="calc-label">¿Cuánto quieres enviar hoy?</div>
-  <div class="input-wrap">
-    <span class="currency">$</span>
-    <input
-      type="number"
-      id="amount"
-      class="calc-input"
-      placeholder="Ej: 200"
-      min="10"
-      max="10000"
-      inputmode="numeric"
-    >
+<div class="hero-wrap">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">USA → República Dominicana</div>
+      <h1>Ahorra en tus envíos a<br><span class="blue">República Dominicana</span></h1>
+      <p class="hero-sub">Comparamos 8 remesadoras para que tu familia reciba más pesos hoy</p>
+    </div>
+    <!-- AD BOX — blank, ready for promotions -->
+    <div class="ad-box" id="adBox">
+      <div class="ad-label">Publicidad</div>
+    </div>
   </div>
-  <button class="btn-comparar" onclick="comparar()">
-    Ver quién te da más pesos →
-  </button>
+
+  <!-- SEARCH BAR -->
+  <div class="search-wrap" style="padding:28px 0 0">
+    <div class="search-box">
+      <div class="s-field">
+        <div class="s-inner">
+          <span class="s-label">Monto a enviar</span>
+          <input type="number" id="amount" class="s-input" placeholder="Ej: 200" min="10" max="10000" inputmode="numeric">
+        </div>
+      </div>
+      <div class="s-field">
+        <div class="s-inner">
+          <span class="s-label">Destino</span>
+          <select class="s-select" id="destination">
+            <option value="RD">República Dominicana</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-compare" onclick="comparar()">Comparar</button>
+    </div>
+  </div>
 </div>
 
-<!-- BANNER DE AHORRO -->
-<div class="savings-banner" id="savingsBanner">
+<!-- OPERATORS STRIP — brand colors & typography -->
+<div class="ops-strip">
+  <div class="op-item">
+    <span class="brand-remitly">Remitly</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-wu-wrap"><span class="brand-wu">Western Union</span></span>
+  </div>
+  <div class="op-item">
+    <span class="brand-wise">wise</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-mg">MoneyGram</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-ria">ria</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-xoom">xoom</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-boss">BOSS MONEY</span>
+  </div>
+  <div class="op-item">
+    <span class="brand-br">Remesas Reservas</span>
+  </div>
+  <span class="ops-more">+más operadores →</span>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="t-item"><span class="t-dot"></span>Gratis · Sin registro</div>
+  <div class="t-item"><span class="t-dot"></span>Comparador independiente</div>
+  <div class="t-item"><span class="t-dot"></span>Tasas actualizadas hoy</div>
+  <div class="t-item"><span class="t-dot"></span>No procesamos pagos</div>
+</div>
+
+<!-- SAVINGS BANNER -->
+<div class="savings-wrap" id="savingsWrap">
   <div class="savings-inner">
-    <p id="savingsText"></p>
+    <div class="savings-emoji">💰</div>
+    <div class="savings-text">
+      <strong id="savingsAmount"></strong><br>
+      <span id="savingsDesc"></span>
+    </div>
   </div>
 </div>
 
-<!-- FECHA -->
-<div class="update-note" id="updateNote" style="display:none">
-  📅 Tasas actualizadas el 6 de abril de 2026 · Verifica en el sitio de cada operador antes de enviar
-</div>
+<!-- RESULTS -->
+<div class="results-wrap" id="results">
+  <div class="results-header">
+    <div class="results-count" id="resultsCount"></div>
+    <div class="results-date">📅 10 abr 2026 · Verifica en cada operador</div>
+  </div>
 
-<!-- RESULTADOS -->
-<div class="results" id="results">
-  <div class="results-title">Resultado para tu envío</div>
-
-  <!-- REMITLY — GANADOR HOY -->
-  <div class="result-card winner" id="card-remitly">
-    <div class="winner-badge">✓ Mejor hoy</div>
-    <div class="card-top">
-      <div class="operator-info">
-        <div class="operator-rank">🥇 #1 · Más pesos</div>
-        <div class="operator-name">Remitly</div>
-      </div>
-      <div class="operator-amount">
-        <div class="amount-label">Tu familia recibe</div>
-        <div class="amount-value" id="remitly-amount">—</div>
-        <div class="amount-currency">pesos dominicanos</div>
+  <!-- REMITLY -->
+  <div class="result-row winner">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/remitly.com" alt="Remitly" onerror="this.style.display='none'">
+      <div class="r-logo-name">Remitly</div>
+      <div class="winner-badge">Mejor hoy</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Remitly</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>60.67 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$0–$3.99</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
       </div>
     </div>
-    <div class="card-detail">
-      <div class="detail-item">
-        <div class="detail-label">Tasa hoy</div>
-        <div class="detail-value">60.67 DOP/$</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Fee</div>
-        <div class="detail-value">$0 – $3.99</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Velocidad</div>
-        <div class="detail-value">Minutos</div>
-      </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-remitly">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.remitly.com/us/en/dominican-republic" target="_blank" class="btn-go" onclick="trackClick('remitly')">Enviar ahora &nbsp;›</a>
     </div>
-    <a
-      href="https://www.remitly.com/us/en/dominican-republic"
-      target="_blank"
-      class="btn-enviar"
-      onclick="trackClick('remitly')"
-    >
-      Enviar con Remitly →
-    </a>
   </div>
 
   <!-- WESTERN UNION -->
-  <div class="result-card" id="card-wu">
-    <div class="card-top">
-      <div class="operator-info">
-        <div class="operator-rank">🥈 #2</div>
-        <div class="operator-name">Western Union</div>
-      </div>
-      <div class="operator-amount">
-        <div class="amount-label">Tu familia recibe</div>
-        <div class="amount-value" id="wu-amount" style="color:#94a3b8">—</div>
-        <div class="amount-currency">pesos dominicanos</div>
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/westernunion.com" alt="WU" onerror="this.style.display='none'">
+      <div class="r-logo-name">Western Union</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Western Union</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>59.20 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$0–$8</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
       </div>
     </div>
-    <div class="card-detail">
-      <div class="detail-item">
-        <div class="detail-label">Tasa hoy</div>
-        <div class="detail-value">59.20 DOP/$</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Fee</div>
-        <div class="detail-value">$0 – $8</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Velocidad</div>
-        <div class="detail-value">Minutos</div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-wu">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.westernunion.com/us/en/send-money/app/start" target="_blank" class="btn-go" onclick="trackClick('wu')">Enviar →</a>
+    </div>
+  </div>
+
+  <!-- REMESAS RESERVAS -->
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/banreservas.com" alt="Remesas Reservas" onerror="this.style.display='none'">
+      <div class="r-logo-name">Remesas Reservas</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Remesas Reservas</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>59.50 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$0</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
       </div>
     </div>
-    <a
-      href="https://www.westernunion.com/us/en/send-money/app/start"
-      target="_blank"
-      class="btn-enviar"
-      onclick="trackClick('westernunion')"
-    >
-      Enviar con Western Union →
-    </a>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-banreservas">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://apps.apple.com/us/app/remesas-reservas/id1669474271" target="_blank" class="btn-go" onclick="trackClick('banreservas')">Enviar →</a>
+    </div>
+  </div>
+
+  <!-- BOSS MONEY -->
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/bossmoney.com" alt="Boss Money" onerror="this.style.display='none'">
+      <div class="r-logo-name">Boss Money</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Boss Money</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>59.00 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$0–$3</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
+      </div>
+    </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-boss">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.bossmoney.com" target="_blank" class="btn-go" onclick="trackClick('boss')">Enviar →</a>
+    </div>
+  </div>
+
+  <!-- RIA -->
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/riamoneytransfer.com" alt="Ria" onerror="this.style.display='none'">
+      <div class="r-logo-name">Ria Money Transfer</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Ria Money Transfer</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>58.80 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$1.99–$4</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
+      </div>
+    </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-ria">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.riamoneytransfer.com/us/en/send-money-to/dominican-republic" target="_blank" class="btn-go" onclick="trackClick('ria')">Enviar →</a>
+    </div>
+  </div>
+
+  <!-- XOOM -->
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/xoom.com" alt="Xoom" onerror="this.style.display='none'">
+      <div class="r-logo-name">Xoom (PayPal)</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Xoom (PayPal)</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>58.70 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$0–$4.99</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
+      </div>
+    </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-xoom">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.xoom.com/dominican-republic/send-money" target="_blank" class="btn-go" onclick="trackClick('xoom')">Enviar →</a>
+    </div>
+  </div>
+
+  <!-- MONEYGRAM -->
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/moneygram.com" alt="MoneyGram" onerror="this.style.display='none'">
+      <div class="r-logo-name">MoneyGram</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">MoneyGram</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>58.50 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>$1.99–$5</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Minutos</div>
+      </div>
+    </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-mg">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://www.moneygram.com/mgo/us/en/send-money/dominican-republic" target="_blank" class="btn-go" onclick="trackClick('moneygram')">Enviar →</a>
+    </div>
   </div>
 
   <!-- WISE -->
-  <div class="result-card" id="card-wise">
-    <div class="card-top">
-      <div class="operator-info">
-        <div class="operator-rank">🥉 #3</div>
-        <div class="operator-name">Wise</div>
-      </div>
-      <div class="operator-amount">
-        <div class="amount-label">Tu familia recibe</div>
-        <div class="amount-value" id="wise-amount" style="color:#94a3b8">—</div>
-        <div class="amount-currency">pesos dominicanos</div>
+  <div class="result-row">
+    <div class="r-logo">
+      <img src="https://logo.clearbit.com/wise.com" alt="Wise" onerror="this.style.display='none'">
+      <div class="r-logo-name">Wise</div>
+    </div>
+    <div class="r-info">
+      <div class="r-name">Wise</div>
+      <div class="r-details">
+        <div class="r-detail"><span class="lbl">Tasa:</span>58.02 DOP/$</div>
+        <div class="r-detail"><span class="lbl">Fee:</span>~$4.50</div>
+        <div class="r-detail"><span class="lbl">Velocidad:</span>Segundos</div>
       </div>
     </div>
-    <div class="card-detail">
-      <div class="detail-item">
-        <div class="detail-label">Tasa hoy</div>
-        <div class="detail-value">58.02 DOP/$</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Fee</div>
-        <div class="detail-value">~$4.50</div>
-      </div>
-      <div class="detail-item">
-        <div class="detail-label">Velocidad</div>
-        <div class="detail-value">Segundos</div>
-      </div>
+    <div class="r-price">
+      <div><div class="price-lbl">Tu familia recibe</div><div class="price-val" id="p-wise">—</div><div class="price-cur">pesos dominicanos</div></div>
+      <a href="https://wise.com/us/send-money/send-money-to-dominican-republic" target="_blank" class="btn-go" onclick="trackClick('wise')">Enviar →</a>
     </div>
-    <a
-      href="https://wise.com/us/send-money/send-money-to-dominican-republic"
-      target="_blank"
-      class="btn-enviar"
-      onclick="trackClick('wise')"
-    >
-      Enviar con Wise →
-    </a>
   </div>
 
-</div>
-
-<!-- FOOTER TRUST -->
-<div class="footer-trust" id="footerTrust">
-  <p class="trust-text">
-    Miles de dominicanos ya están comparando antes de enviar.<br>
-    <strong>Gratis · Sin registro · Sin complicaciones</strong>
+  <p class="disclaimer">
+    Las tasas son aproximadas y se actualizan periódicamente · Verifica el precio final antes de enviar<br>
+    Preenvíos es un comparador independiente · No procesamos ni custodiamos fondos
   </p>
 </div>
 
-<div class="footer-bottom">
-  <a href="#">Preenvíos.com</a> · No somos una remesadora. Solo comparamos.
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="how-inner">
+    <div class="how-title">¿Cómo funciona Preenvíos?</div>
+    <div class="how-sub">Simple, rápido y completamente gratis</div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">1</div>
+        <h4>Escribe el monto</h4>
+        <p>Dinos cuántos dólares quieres enviar hoy a República Dominicana</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">2</div>
+        <h4>Comparamos al instante</h4>
+        <p>Te mostramos cuántos pesos recibe tu familia con cada operador hoy</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">3</div>
+        <h4>Envías con el mejor</h4>
+        <p>Haz clic y ve directo al operador que más da. Sin costo ni registro.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-title">Preguntas frecuentes</div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      <span>¿Preenvíos cobra algún cargo?</span>
+      <span class="faq-arrow">▾</span>
+    </div>
+    <div class="faq-a">No. Preenvíos es completamente gratuito. No cobramos ningún cargo por comparar. Ganamos una comisión de los operadores cuando un usuario hace clic y completa una transferencia — sin costo adicional para ti.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      <span>¿Las tasas mostradas son exactas?</span>
+      <span class="faq-arrow">▾</span>
+    </div>
+    <div class="faq-a">Las tasas son aproximadas y se actualizan periódicamente. El precio final puede variar según el método de pago, el monto exacto y el horario. Siempre verifica el costo total en el sitio del operador antes de confirmar el envío.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      <span>¿Preenvíos procesa los pagos?</span>
+      <span class="faq-arrow">▾</span>
+    </div>
+    <div class="faq-a">No. Preenvíos es un comparador independiente. No procesamos ni custodiamos ningún dinero. Cuando haces clic en "Enviar", te llevamos directamente al sitio oficial del operador que elegiste.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      <span>¿Con qué frecuencia se actualizan las tasas?</span>
+      <span class="faq-arrow">▾</span>
+    </div>
+    <div class="faq-a">Actualizamos las tasas varias veces por semana. Para el precio exacto del momento, siempre verifica directamente en el sitio de cada operador antes de enviar.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">
+      <span>¿Por qué el operador "mejor" cambia?</span>
+      <span class="faq-arrow">▾</span>
+    </div>
+    <div class="faq-a">Las tasas de cambio y los cargos de cada operador varían diariamente. Un operador puede ser el mejor hoy y no serlo mañana. Por eso existe Preenvíos — para que siempre sepas quién da más en el momento que vas a enviar.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" id="contact">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="f-logo"><span class="pre">Pre</span><span class="envios">envíos</span></div>
+        <p>Comparador independiente de remesas para la diáspora latinoamericana en Estados Unidos. Gratis, sin registro, sin complicaciones.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Empresa</h5>
+        <a href="#about">Sobre nosotros</a>
+        <a href="#how">Cómo funciona</a>
+        <a href="#contact">Contacto</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <a href="#">Términos de uso</a>
+        <a href="#">Política de privacidad</a>
+        <a href="#">Política de cookies</a>
+        <a href="#">Aviso legal</a>
+      </div>
+      <div class="footer-col">
+        <h5>Corredores</h5>
+        <a href="#">USA → Rep. Dom.</a>
+        <a href="#">USA → Colombia</a>
+        <a href="#">USA → Haití</a>
+        <a href="#">USA → Venezuela</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Preenvíos · Comparador independiente · No procesamos pagos · preenvios.com</p>
+      <div class="legal">
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Cookies</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
 <script>
-  // Tasas reales del 6 de abril de 2026
-  // Actualizar estos números cada semana
-  const TASAS = {
-    remitly:      60.67,   // $200 → RD$12,134 verificado hoy
-    westernunion: 59.20,   // $200 → RD$11,840 verificado hoy
-    wise:         58.02    // $200 → RD$11,604 verificado hoy
-  };
+const TASAS = {
+  remitly:60.67, wu:59.20, banreservas:59.50,
+  boss:59.00, ria:58.80, xoom:58.70, mg:58.50, wise:58.02
+};
 
-  function formatPesos(n) {
-    return 'RD$' + Math.round(n).toLocaleString('es-DO');
+function fmt(n){return 'RD$'+Math.round(n).toLocaleString('es-DO')}
+
+function comparar(){
+  const amount = parseFloat(document.getElementById('amount').value);
+  if(!amount||amount<10){
+    const inp=document.getElementById('amount');
+    inp.style.outline='2px solid #EA4335';inp.focus();
+    setTimeout(()=>inp.style.outline='',1500);return;
   }
-
-  function comparar() {
-    const raw = document.getElementById('amount').value;
-    const amount = parseFloat(raw);
-
-    if (!amount || amount < 10) {
-      document.getElementById('amount').focus();
-      document.getElementById('amount').style.borderColor = '#ef4444';
-      setTimeout(() => {
-        document.getElementById('amount').style.borderColor = '#334155';
-      }, 1500);
-      return;
-    }
-
-    // Calcular
-    const remitlyDOP      = amount * TASAS.remitly;
-    const wuDOP           = amount * TASAS.westernunion;
-    const wiseDOP         = amount * TASAS.wise;
-    const ahorroPesos     = Math.round(remitlyDOP - wuDOP);
-    const ahorroVsWise    = Math.round(remitlyDOP - wiseDOP);
-
-    // Mostrar montos
-    document.getElementById('remitly-amount').textContent = formatPesos(remitlyDOP);
-    document.getElementById('wu-amount').textContent      = formatPesos(wuDOP);
-    document.getElementById('wise-amount').textContent    = formatPesos(wiseDOP);
-
-    // Banner de ahorro
-    const banner = document.getElementById('savingsBanner');
-    const savingsText = document.getElementById('savingsText');
-    savingsText.innerHTML =
-      `Con Remitly tu familia recibe <strong>${formatPesos(ahorroPesos)} pesos más</strong> que con Western Union — enviando los mismos $${amount.toLocaleString()} dólares.`;
-    banner.style.display = 'block';
-
-    // Mostrar resultados y fecha
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('updateNote').style.display = 'block';
-
-    // Scroll suave a resultados
-    setTimeout(() => {
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-
-    // Analytics — evento de comparación
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'comparar_click', {
-        'event_category': 'calculadora',
-        'event_label': 'monto_' + amount
-      });
-    }
-  }
-
-  // Enter en el input dispara la comparación
-  document.getElementById('amount').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') comparar();
+  Object.keys(TASAS).forEach(k=>{
+    const el=document.getElementById('p-'+k);
+    if(el) el.textContent=fmt(amount*TASAS[k]);
   });
-
-  // Tracking de clics en operadores
-  function trackClick(operador) {
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'click_operador', {
-        'event_category': 'afiliado',
-        'event_label': operador
-      });
-    }
+  const ahorro=Math.round(amount*(TASAS.remitly-TASAS.wu));
+  document.getElementById('savingsAmount').textContent=
+    `Con Remitly tu familia recibe ${fmt(ahorro)} más que con Western Union`;
+  document.getElementById('savingsDesc').textContent=
+    `enviando los mismos $${amount.toLocaleString()} dólares — elige bien antes de enviar`;
+  document.getElementById('savingsWrap').style.display='block';
+  document.getElementById('resultsCount').textContent=
+    `8 operadores comparados para $${amount.toLocaleString()} USD`;
+  document.getElementById('results').style.display='block';
+  setTimeout(()=>document.getElementById('savingsWrap').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  if(typeof gtag!=='undefined'){
+    gtag('event','comparar_click',{event_category:'calculadora',event_label:'monto_'+amount,value:amount});
   }
-</script>
+}
 
+function trackClick(op){
+  if(typeof gtag!=='undefined'){
+    gtag('event','click_operador',{event_category:'afiliado',event_label:op});
+  }
+}
+
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+document.getElementById('amount').addEventListener('keydown',e=>{
+  if(e.key==='Enter') comparar();
+});
+</script>
 </body>
 </html>
