@@ -327,7 +327,64 @@ Cuando estos umbrales se cumplan — se detienen los anuncios y se construye
 el producto final con el stack completo.
 
 ---
+## Etapas de desarrollo del MVP
 
+### Etapa 1 — Landing definitivo (Paso 1–5)
+- [ ] Diseño Trivago implementado — línea gráfica final, no se toca más
+- [ ] Hero 2 columnas: título izquierda + slot de publicidad derecha (vacío)
+- [ ] Barra de búsqueda: Monto · Destino (4 corredores) · botón Comparar
+- [ ] Strip de operadores con tipografías y colores de marca
+- [ ] Trust bar: Gratis · Sin registro · Independiente · Actualizado hoy
+- [ ] Sección Cómo funciona (3 pasos)
+- [ ] FAQ con acordeón
+- [ ] Footer completo: Empresa · Legal · Corredores · Copyright
+- [ ] Slots de publicidad vacíos: ad-hero · ad-mid · ad-footer
+- [ ] Slots de afiliado preparados en cada botón "Enviar ahora"
+- [ ] Algoritmo de ranking implementado (pesos 40/35/25)
+- [ ] Google Analytics completo con todos los eventos personalizados
+- [ ] Disclaimer de ranking visible junto a los resultados
+- [ ] Mobile-first verificado en iPhone y Android
+
+### Etapa 2 — Calculadoras por corredor (Paso 2)
+- [ ] Corredor Honduras (HNL) activo con los 7 operadores
+- [ ] Corredor República Dominicana (DOP) activo con los 7 operadores
+- [ ] Corredor Guatemala (GTQ) activo con los 7 operadores
+- [ ] Corredor El Salvador (USD) activo — solo fee y velocidad
+- [ ] Tasas verificadas manualmente para los 4 corredores
+- [ ] Estructura de código lista para recibir API en el futuro
+- [ ] Cookie que recuerda el corredor elegido por el usuario
+- [ ] Geolocalización IP como fallback
+
+### Etapa 3 — SEO por corredor (Paso 6)
+- [ ] URL preenvios.com/honduras activa e indexada
+- [ ] URL preenvios.com/dominican-republic activa e indexada
+- [ ] URL preenvios.com/guatemala activa e indexada
+- [ ] URL preenvios.com/el-salvador activa e indexada
+- [ ] Propiedad verificada en Google Search Console
+- [ ] Sitemap.xml configurado
+- [ ] Meta tags por corredor (title, description, og:image)
+
+### Etapa 4 — Anuncios y contenido orgánico (Pasos 7–8)
+- [ ] Imágenes de anuncios creadas — una por corredor, sin mencionar marcas
+- [ ] Primer anuncio lanzado en TikTok ($40–50/semana)
+- [ ] Primer post orgánico publicado por corredor
+- [ ] Publicación semanal de tasa de cambio en TikTok, Instagram y Facebook
+
+### Etapa 5 — Afiliados activos (Paso 9)
+- [ ] 30 días de tráfico demostrable en Google Analytics
+- [ ] Aplicación enviada a Impact.com (Remitly)
+- [ ] Aplicación enviada a Partnerize (Wise)
+- [ ] Aplicación enviada a CJ Affiliate (Xoom, Ria, WorldRemit)
+- [ ] Links de afiliado reemplazados en los slots correspondientes
+- [ ] Verificación de que los eventos click_operador coinciden con conversiones en las redes
+
+### Etapa 6 — Validación confirmada (Paso 10)
+- [ ] 50+ clics en "Enviar ahora" en 30 días ← umbral principal
+- [ ] 70%+ del tráfico desde EE.UU.
+- [ ] 30%+ de visitantes hace clic en Comparar
+- [ ] 30+ segundos de tiempo promedio en página
+- [ ] Honduras o RD con 60%+ del tráfico total
+- [ ] ✅ MVP validado — detener anuncios e iniciar construcción del producto final
 ## Estructura del repositorio GitHub (MVP)
 ```
 preenvios/
