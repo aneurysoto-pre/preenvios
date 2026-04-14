@@ -122,7 +122,8 @@ img,svg{display:block;max-width:100%}
 .bm-wise{background:#9FE870;color:#163300;padding:8px 14px;font-size:14px;border-radius:20px}
 .bm-ria{background:#FF6600;color:#fff;padding:8px 14px;font-size:14px;border-radius:10px}
 .bm-wr{background:#E8124D;color:#fff;padding:8px 14px;font-size:14px;border-radius:10px}
-.field-select{flex:1;border:none;background:transparent;font-size:16px;font-weight:700;color:var(--ink);outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,var(--g500) 50%),linear-gradient(135deg,var(--g500) 50%,transparent 50%);background-position:calc(100% - 10px) 50%,calc(100% - 5px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.field-select{flex:1;border:none;background:transparent;font-size:18px;font-weight:800;color:var(--ink);outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,var(--g500) 50%),linear-gradient(135deg,var(--g500) 50%,transparent 50%);background-position:calc(100% - 10px) 50%,calc(100% - 5px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.sel-flag{width:30px;height:22px;border-radius:3px;flex-shrink:0;box-shadow:0 0 0 1px var(--g200);object-fit:cover}
 .c-btn-ref{background:var(--g200) !important;color:var(--g600) !important}
 .c-btn-ref:hover{background:var(--g300) !important;transform:none !important}
 
@@ -385,11 +386,12 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
         <div class="field">
           <label>País destino</label>
           <div class="field-row">
+            <img id="corridorFlag" src="https://flagcdn.com/w40/hn.png" alt="" class="sel-flag">
             <select id="corridorSelect" class="field-select">
-              <option value="honduras">🇭🇳 Honduras</option>
-              <option value="dominican_republic">🇩🇴 Rep. Dominicana</option>
-              <option value="guatemala">🇬🇹 Guatemala</option>
-              <option value="el_salvador">🇸🇻 El Salvador</option>
+              <option value="honduras">Honduras</option>
+              <option value="dominican_republic">República Dominicana</option>
+              <option value="guatemala">Guatemala</option>
+              <option value="el_salvador">El Salvador</option>
             </select>
           </div>
         </div>
@@ -829,9 +831,12 @@ function render(usd){
 // ══════════════════════════════════════════════════════
 const amtUsd = document.getElementById('amtUsd');
 const corridorSelect = document.getElementById('corridorSelect');
+const corridorFlag = document.getElementById('corridorFlag');
 const resultsSection = document.getElementById('comparar');
 const searchBtn = document.querySelector('.search-btn');
 const rateRef = document.getElementById('rateRef');
+
+const FLAG_CODE = { honduras:'hn', dominican_republic:'do', guatemala:'gt', el_salvador:'sv' };
 
 function _corredorActivo(){ return corridorSelect.value; }
 
@@ -857,11 +862,13 @@ function getCookie(name){
 })();
 
 function applyCorredorUI(){
-  const c = CORREDORES[_corredorActivo()];
+  const key = _corredorActivo();
+  const c = CORREDORES[key];
   const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
   rateRef.textContent = c.moneda === 'USD'
     ? '1 USD = 1 USD (sin conversión)'
     : '1 USD = ' + (best.rate || 0).toFixed(2) + ' ' + c.moneda;
+  corridorFlag.src = 'https://flagcdn.com/w40/' + FLAG_CODE[key] + '.png';
 }
 applyCorredorUI();
 
