@@ -105,13 +105,13 @@ img,svg{display:block;max-width:100%}
 .search-bg-2{inset:28px -28px -28px 28px;background:var(--blue-soft);transform:rotate(4deg);opacity:.6}
 
 /* ═════ LOGOS STRIP ═════ */
-.strip{background:var(--white);padding:22px 0}
-.strip-title{text-align:center;font-size:11px;font-weight:700;color:var(--g500);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
-.strip-logos{display:flex;justify-content:center;align-items:center;gap:46px;flex-wrap:wrap}
-.strip-logos .brand{display:flex;align-items:center;justify-content:center;height:32px;filter:none;opacity:1;transition:.2s}
+.strip{background:var(--white);padding:26px 0}
+.strip-title{text-align:center;font-size:11px;font-weight:700;color:var(--g500);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px}
+.strip-logos{display:flex;justify-content:center;align-items:center;gap:34px;flex-wrap:wrap}
+.strip-logos .brand{display:flex;align-items:center;gap:9px;height:36px;transition:.2s}
 .strip-logos .brand:hover{transform:translateY(-2px)}
-.strip-logos .brand img{height:32px;width:auto;object-fit:contain;background:transparent;display:block}
-.strip-logos .brand .bm{font-size:13px;padding:6px 10px}
+.strip-logos .brand img{height:28px;width:28px;object-fit:contain;border-radius:6px;flex-shrink:0}
+.strip-logos .brand .brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:var(--ink);white-space:nowrap}
 
 /* Brand badges (inline SVG-ish) */
 .bm{display:inline-flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;border-radius:10px;letter-spacing:-.5px}
@@ -151,6 +151,8 @@ img,svg{display:block;max-width:100%}
 .card.fast::before{content:"⚡ MÁS RÁPIDO";position:absolute;top:0;right:0;background:var(--orange);color:#fff;font-size:10px;font-weight:900;padding:6px 14px;border-bottom-left-radius:12px;letter-spacing:.8px}
 
 .c-brand{display:flex;align-items:center;gap:16px}
+.c-logo{width:48px;height:48px;border-radius:10px;background:var(--g50);border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.c-logo img{width:36px;height:36px;object-fit:contain}
 .c-brand-info .name{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:2px}
 .c-brand-info .meta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g500)}
 .c-brand-info .stars{color:var(--yellow);letter-spacing:-1px}
@@ -423,13 +425,13 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="strip-title">Comparamos las remesadoras más confiables</div>
     <div class="strip-logos">
-      <div class="brand"><img src="https://cdn.brandfetch.io/remitly.com/w/400/h/120" alt="Remitly" onerror="this.outerHTML='<span class=&quot;bm bm-remitly&quot;>Remitly</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/wise.com/w/400/h/120" alt="Wise" onerror="this.outerHTML='<span class=&quot;bm bm-wise&quot;>wise</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/xoom.com/w/400/h/120" alt="Xoom" onerror="this.outerHTML='<span class=&quot;bm bm-xoom&quot;>xoom</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/riamoneytransfer.com/w/400/h/120" alt="Ria" onerror="this.outerHTML='<span class=&quot;bm bm-ria&quot;>ria</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/worldremit.com/w/400/h/120" alt="WorldRemit" onerror="this.outerHTML='<span class=&quot;bm bm-wr&quot;>WorldRemit</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/westernunion.com/w/400/h/120" alt="Western Union" onerror="this.outerHTML='<span class=&quot;bm bm-wu&quot;>WU</span>'"></div>
-      <div class="brand"><img src="https://cdn.brandfetch.io/moneygram.com/w/400/h/120" alt="MoneyGram" onerror="this.outerHTML='<span class=&quot;bm bm-mg&quot;>MoneyGram</span>'"></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/remitly.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">Remitly</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/wise.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">Wise</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/xoom.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">Xoom</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/riamoneytransfer.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">Ria</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/worldremit.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">WorldRemit</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/westernunion.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">Western Union</span></div>
+      <div class="brand"><img src="https://cdn.brandfetch.io/moneygram.com/w/120/h/120" alt="" onerror="this.style.display='none'"><span class="brand-name">MoneyGram</span></div>
     </div>
   </div>
 </section>
@@ -709,6 +711,19 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
 
 <script>
 // ══════════════════════════════════════════════════════
+// LOGOS · Brandfetch por operador (usado en strip y cards)
+// ══════════════════════════════════════════════════════
+const LOGOS = {
+  remitly:      'https://cdn.brandfetch.io/remitly.com/w/120/h/120',
+  wise:         'https://cdn.brandfetch.io/wise.com/w/120/h/120',
+  xoom:         'https://cdn.brandfetch.io/xoom.com/w/120/h/120',
+  ria:          'https://cdn.brandfetch.io/riamoneytransfer.com/w/120/h/120',
+  worldremit:   'https://cdn.brandfetch.io/worldremit.com/w/120/h/120',
+  westernunion: 'https://cdn.brandfetch.io/westernunion.com/w/120/h/120',
+  moneygram:    'https://cdn.brandfetch.io/moneygram.com/w/120/h/120'
+};
+
+// ══════════════════════════════════════════════════════
 // DATA · Corredores y operadores
 // ══════════════════════════════════════════════════════
 const CORREDORES = {
@@ -809,10 +824,15 @@ function render(usd){
     const btn = p.afiliado
       ? `<a href="${p.link}" target="_blank" rel="noopener sponsored" class="c-btn" data-affiliate-slot="${p.key}" data-corredor="${corredorKey}" data-operator="${p.key}" data-position="${i+1}">Enviar ahora <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
       : `<a href="${p.link || 'https://www.google.com/search?q='+encodeURIComponent(p.name)}" target="_blank" rel="noopener" class="c-btn c-btn-ref" data-corredor="${corredorKey}" data-operator="${p.key}" data-position="${i+1}">Ver en sitio <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`;
+    const logoUrl = LOGOS[p.key];
+    const fallbackBadge = p.badge.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+    const logoBlock = logoUrl
+      ? `<div class="c-logo"><img src="${logoUrl}" alt="${p.name}" onerror="this.parentElement.outerHTML='${fallbackBadge}'"></div>`
+      : p.badge;
     return `
       <article class="card ${tag}" data-operator="${p.key}" data-position="${i+1}" data-affiliate="${p.afiliado}">
         <div class="c-brand">
-          ${p.badge}
+          ${logoBlock}
           <div class="c-brand-info">
             <div class="name">${p.name}</div>
             <div class="meta"><span class="stars">${stars}</span> ${p.rating} · ${p.reviews.toLocaleString()} opiniones</div>
