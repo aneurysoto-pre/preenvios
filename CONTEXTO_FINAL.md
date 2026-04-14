@@ -284,6 +284,8 @@ NODE_ENV=production
 - [ ] Crear scraper para Remitly (protección alta — puede requerir proxy)
 - [ ] Configurar proxies rotativos si Western Union o Remitly bloquean
 - [ ] Dashboard interno para monitorear estado de scrapers
+- [ ] Agregar campo método_entrega a la tabla precios en Supabase — valores posibles: bank, cash_pickup, delivery, mobile, card, airtime (no todos los operadores ofrecen todos los métodos).
+- [ ] Los scrapers capturan la tasa por método de entrega por operador — mostrar en el comparador como selector horizontal tipo Monito.com, con ícono y monto recibido por método. Marcar POPULAR y BEST DEAL según corresponda.
 
 ### Fase 3 — Afiliados activos y primeras comisiones (Mes 2)
 - [ ] Aplicar a Remitly en Impact.com con datos de tráfico de GA4
