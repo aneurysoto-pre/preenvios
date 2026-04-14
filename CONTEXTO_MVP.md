@@ -97,14 +97,13 @@ solo se cambia la fuente de los datos, no cómo se muestran.
 
 ### Links de verificación por operador:
 ```
-Remitly:       https://www.remitly.com/us/en/dominican-republic
-Western Union: https://www.westernunion.com/us/en/send-money/app/start
-Wise:          https://wise.com/us/send-money/
-MoneyGram:     https://www.moneygram.com/mgo/us/en/send-money/
-Ria:           https://www.riamoneytransfer.com/us/en/send-money-to/
-Xoom:          https://www.xoom.com/send-money
-WorldRemit:    https://www.worldremit.com/en/send-money
-Boss Money:    https://www.bossmoney.com
+Remitly:       https://www.remitly.com
+Western Union: https://www.westernunion.com
+Wise:          https://wise.com/send
+MoneyGram:     https://www.moneygram.com
+Ria:           https://www.riamoneytransfer.com
+Xoom:          https://www.xoom.com
+WorldRemit:    https://www.worldremit.com
 ```
 
 ### Tasas iniciales verificadas (semana de lanzamiento):
