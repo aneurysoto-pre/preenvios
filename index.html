@@ -728,16 +728,19 @@ const LOGOS = {
 // DATA · Corredores y operadores
 // ══════════════════════════════════════════════════════
 const CORREDORES = {
+  // HONDURAS · mid-market USD/HNL 26.58 (Wise converter + XE, verificado)
+  // ✅ verificado: wise
+  // ⚠ estimado: remitly, xoom, ria, worldremit, westernunion, moneygram — reemplazar el lunes con verificación manual en cada sitio
   honduras: {
     moneda: 'HNL', simbolo: 'L', nombre: 'Honduras', bandera: '🇭🇳',
     providers: [
-      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:0, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com' },
-      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:0, fee:0,    time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/send' },
-      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:0, fee:0,    time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com' },
-      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com' },
-      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com' },
-      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:0, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
-      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:0, fee:0,    time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:26.45, fee:2.99, time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com/us/en/honduras' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:26.58, fee:2.50, time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/us/send-money/send-money-to-honduras' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:26.30, fee:4.99, time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com/honduras/send-money' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:26.25, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com/us/en/send-money-to/honduras' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:26.20, fee:1.99, time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com/en/send-money/united-states/honduras' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:26.10, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:25.95, fee:1.99, time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
     ]
   },
   dominican_republic: {
@@ -752,16 +755,19 @@ const CORREDORES = {
       { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:58.50, fee:1.99, time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
     ]
   },
+  // GUATEMALA · mid-market USD/GTQ 7.64 (Wise converter + XE, verificado)
+  // ✅ verificado: wise (mid-market), remitly (tasa promocional primer envío 7.7724)
+  // ⚠ estimado: xoom, ria, worldremit, westernunion, moneygram — reemplazar el lunes
   guatemala: {
     moneda: 'GTQ', simbolo: 'Q', nombre: 'Guatemala', bandera: '🇬🇹',
     providers: [
-      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:0, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com' },
-      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:0, fee:0,    time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/send' },
-      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:0, fee:0,    time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com' },
-      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com' },
-      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com' },
-      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:0, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
-      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:0, fee:0,    time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:7.77, fee:2.99, time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com/us/en/guatemala' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:7.64, fee:2.50, time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/us/send-money/send-money-to-guatemala' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:7.58, fee:4.99, time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com/guatemala/send-money' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:7.56, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com/us/en/send-money-to/guatemala' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:7.55, fee:1.99, time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com/en/send-money/united-states/guatemala' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:7.52, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:7.48, fee:1.99, time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
     ]
   },
   el_salvador: {
