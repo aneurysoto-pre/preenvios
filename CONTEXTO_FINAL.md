@@ -253,6 +253,7 @@ NODE_ENV=production
 - [x] Algoritmo de ranking implementado
 - [x] Slots de afiliado preparados
 - [x] Slots de publicidad preparados
+- [x] Sección "Ofertas destacadas hoy" oculta en el HTML (clase `hidden-block`) — se construye en Fase 1
 - [x] 50+ clics en "Enviar ahora" en 30 días confirmados
 - [x] 70%+ del tráfico desde EE.UU. confirmado
 
@@ -268,6 +269,7 @@ NODE_ENV=production
 - [ ] Configurar dominio preenvios.com en Vercel (dejar de usar GitHub Pages)
 - [ ] Verificar que Google Analytics sigue midiendo correctamente
 - [ ] Verificar que todos los slots de afiliado y publicidad funcionan
+- [ ] Construir sección **"Ofertas destacadas hoy"** (estilo trivago · carrusel horizontal de tarjetas patrocinadas) — estuvo oculta en el MVP porque mostrar promociones sin sponsors reales es publicidad engañosa y pone en riesgo la aplicación a Impact/CJ. Activarla en Fase 1 solo cuando: (a) al menos un afiliado esté aprobado y genere comisión real, (b) las tarjetas muestren únicamente promociones reales verificadas con el operador, (c) cada tarjeta tenga el badge "Patrocinado" visible y link directo con tracking ID. Tabla `ofertas` en Supabase alimenta el carrusel.
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
 - [ ] Configurar Upstash Redis para cache de precios
