@@ -130,6 +130,7 @@ img,svg{display:block;max-width:100%}
 /* ═════ RESULTS ═════ */
 .results{padding:80px 0;background:var(--g50);animation:fadeIn .5s ease}
 .results.hidden{display:none}
+.hidden-block{display:none !important}
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .results-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:34px;flex-wrap:wrap;gap:20px}
 .results-head h2{font-size:clamp(28px,3.5vw,40px);font-weight:900;line-height:1.1}
@@ -388,10 +389,10 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
         <div class="field">
           <label>País destino</label>
           <div class="field-row">
-            <img id="corridorFlag" src="https://flagcdn.com/w40/hn.png" alt="" class="sel-flag">
+            <img id="corridorFlag" src="https://flagcdn.com/w40/do.png" alt="" class="sel-flag">
             <select id="corridorSelect" class="field-select">
+              <option value="dominican_republic" selected>República Dominicana</option>
               <option value="honduras">Honduras</option>
-              <option value="dominican_republic">República Dominicana</option>
               <option value="guatemala">Guatemala</option>
               <option value="el_salvador">El Salvador</option>
             </select>
@@ -441,8 +442,8 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="results-head">
       <div>
-        <h2>Resultados para <span style="color:var(--blue)">$<span id="uiUsd">0</span> USD → <span id="uiDest">Honduras</span></span></h2>
-        <p>Tasas comparadas en tiempo real · Última actualización hace 2 minutos</p>
+        <h2>Resultados para <span style="color:var(--blue)">$<span id="uiUsd">0</span> USD → <span id="uiDest">Rep. Dominicana</span></span></h2>
+        <p id="uiUpdated">Tasas comparadas en tiempo real</p>
         <p class="ranking-note" style="font-size:12px;color:var(--g500);margin-top:6px;">El orden de los resultados puede estar influenciado por acuerdos comerciales con los operadores. <a href="#faq" style="color:var(--blue)">Saber más</a></p>
       </div>
       <div class="sort">
@@ -463,8 +464,8 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   </div>
 </section>
 
-<!-- SPONSOR DEALS (trivago-style) -->
-<section class="sponsors">
+<!-- SPONSOR DEALS (trivago-style) — OCULTO hasta tener sponsors reales y aprobación legal de afiliados. Reactivar cambiando "sponsors hidden-block" a "sponsors". -->
+<section class="sponsors hidden-block">
   <div class="container">
     <div class="sp-head">
       <div>
@@ -549,7 +550,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="banks-head">
       <h3><span class="dot-live"></span> Tasas de referencia</h3>
-      <span class="updated">Actualizado: hoy 14:32 EST</span>
+      <span class="updated">Actualización semanal</span>
     </div>
     <div class="banks-grid">
       <div class="bk">
@@ -808,6 +809,19 @@ function render(usd){
   const list = document.getElementById('cardList');
   document.getElementById('uiUsd').textContent = usd.toLocaleString();
   document.getElementById('uiDest').textContent = corredor.nombre;
+
+  if(!tasasDisponibles(corredorKey)){
+    list.innerHTML = `
+      <div style="background:#fff;border:1.5px dashed var(--g300);border-radius:22px;padding:50px 30px;text-align:center">
+        <div style="font-size:40px;margin-bottom:12px">🕑</div>
+        <h3 style="font-size:20px;font-weight:800;margin-bottom:8px">Tasas disponibles pronto</h3>
+        <p style="color:var(--ink-2);font-size:15px;max-width:420px;margin:0 auto">
+          Estamos verificando manualmente las tasas para ${corredor.nombre}. Mientras tanto, puedes comparar el corredor <b>República Dominicana</b>.
+        </p>
+      </div>`;
+    return;
+  }
+
   const ranked = rankProviders(corredorKey);
   const esUSD = corredor.moneda === 'USD';
   list.innerHTML = ranked.map((p,i)=>{
@@ -877,17 +891,27 @@ function getCookie(name){
   if(saved && CORREDORES[saved]){
     corridorSelect.value = saved;
   } else {
-    corridorSelect.value = 'honduras';
+    corridorSelect.value = 'dominican_republic';
   }
 })();
+
+function tasasDisponibles(corredorKey){
+  const c = CORREDORES[corredorKey];
+  if(c.moneda === 'USD') return true;
+  return c.providers.some(p => p.rate > 0);
+}
 
 function applyCorredorUI(){
   const key = _corredorActivo();
   const c = CORREDORES[key];
   const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
-  rateRef.textContent = c.moneda === 'USD'
-    ? '1 USD = 1 USD (sin conversión)'
-    : '1 USD = ' + (best.rate || 0).toFixed(2) + ' ' + c.moneda;
+  if(c.moneda === 'USD'){
+    rateRef.textContent = '1 USD = 1 USD (sin conversión)';
+  } else if(best && best.rate > 0){
+    rateRef.textContent = '1 USD = ' + best.rate.toFixed(2) + ' ' + c.moneda;
+  } else {
+    rateRef.textContent = 'Tasas disponibles pronto';
+  }
   corridorFlag.src = 'https://flagcdn.com/w40/' + FLAG_CODE[key] + '.png';
 }
 applyCorredorUI();
