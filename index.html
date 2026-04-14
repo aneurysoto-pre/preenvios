@@ -10,7 +10,9 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-6RBFS2812S');
+  gtag('config', 'G-6RBFS2812S', {
+    send_page_view: true
+  });
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -133,7 +135,11 @@ img,svg{display:block;max-width:100%}
 .card{background:var(--white);border-radius:var(--r-lg);padding:22px 26px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:24px;align-items:center;border:1.5px solid var(--g200);transition:.25s;position:relative;overflow:hidden}
 .card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--sh-lg)}
 .card.best{border-color:var(--green);background:linear-gradient(135deg,#fff 0%,#F0FDF4 100%)}
-.card.best::before{content:"★ MEJOR TASA";position:absolute;top:0;right:0;background:var(--green);color:#fff;font-size:10px;font-weight:900;padding:6px 14px;border-bottom-left-radius:12px;letter-spacing:.8px}
+.card.best::before{content:"★ MEJOR OPCIÓN";position:absolute;top:0;right:0;background:var(--green);color:#fff;font-size:10px;font-weight:900;padding:6px 14px;border-bottom-left-radius:12px;letter-spacing:.8px}
+.card.second{border-color:var(--blue);background:linear-gradient(135deg,#fff 0%,#F0F6FF 100%)}
+.card.second::before{content:"SEGUNDA OPCIÓN";position:absolute;top:0;right:0;background:var(--blue);color:#fff;font-size:10px;font-weight:900;padding:6px 14px;border-bottom-left-radius:12px;letter-spacing:.8px}
+.card.second .c-btn{background:var(--blue)}
+.card.second .c-btn:hover{background:var(--blue-dark)}
 .card.fast{border-color:var(--orange)}
 .card.fast::before{content:"⚡ MÁS RÁPIDO";position:absolute;top:0;right:0;background:var(--orange);color:#fff;font-size:10px;font-weight:900;padding:6px 14px;border-bottom-left-radius:12px;letter-spacing:.8px}
 
@@ -735,24 +741,51 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
 
 <script>
 const RATE = 60.00;
+const CORREDOR = 'USA_RD';
+const AFILIADOS = ['remitly','wise','xoom','ria','worldremit'];
+
 const providers = [
-  {name:"Remitly",    badge:'<span class="bm bm-remitly">Remitly</span>',    rate:60.00, fee:0.00, time:"Minutos",     rating:4.8, reviews:8421, tag:"best"},
-  {name:"Wise",       badge:'<span class="bm bm-wise">wise</span>',          rate:59.95, fee:1.99, time:"1-2 horas",   rating:4.9, reviews:12043,tag:""},
-  {name:"Xoom",       badge:'<span class="bm bm-xoom">xoom</span>',          rate:59.90, fee:0.00, time:"Segundos",    rating:4.7, reviews:6120, tag:"fast"},
-  {name:"BOSS Money", badge:'<span class="bm bm-boss">BOSS</span>',          rate:59.85, fee:0.00, time:"Minutos",     rating:4.6, reviews:3210, tag:""},
-  {name:"Western Union", badge:'<span class="bm bm-wu">WU</span>',           rate:59.70, fee:2.99, time:"Minutos",     rating:4.5, reviews:15820,tag:""},
-  {name:"MoneyGram",  badge:'<span class="bm bm-mg">MoneyGram</span>',       rate:59.60, fee:3.99, time:"Horas",       rating:4.4, reviews:7541, tag:""},
+  {name:"Remitly",       key:"remitly",     badge:'<span class="bm bm-remitly">Remitly</span>',    rate:60.00, fee:0.00, time:"Minutos",   rating:4.8, reviews:8421},
+  {name:"Wise",          key:"wise",        badge:'<span class="bm bm-wise">wise</span>',          rate:59.95, fee:1.99, time:"1-2 horas", rating:4.9, reviews:12043},
+  {name:"Xoom",          key:"xoom",        badge:'<span class="bm bm-xoom">xoom</span>',          rate:59.90, fee:0.00, time:"Segundos",  rating:4.7, reviews:6120},
+  {name:"BOSS Money",    key:"boss",        badge:'<span class="bm bm-boss">BOSS</span>',          rate:59.85, fee:0.00, time:"Minutos",   rating:4.6, reviews:3210},
+  {name:"Western Union", key:"westernunion",badge:'<span class="bm bm-wu">WU</span>',              rate:59.70, fee:2.99, time:"Minutos",   rating:4.5, reviews:15820},
+  {name:"MoneyGram",     key:"moneygram",   badge:'<span class="bm bm-mg">MoneyGram</span>',       rate:59.60, fee:3.99, time:"Horas",     rating:4.4, reviews:7541},
 ];
+
+function velocidad(t){
+  const s = (t || '').toLowerCase();
+  if(s.includes('segundo') || s.includes('minuto')) return 1.0;
+  if(s.includes('hora')) return 0.5;
+  return 0.0;
+}
+
+function rankProviders(){
+  const rates = providers.map(p=>p.rate);
+  const maxR = Math.max(...rates), minR = Math.min(...rates);
+  const span = (maxR - minR) || 1;
+  return providers
+    .map(p=>{
+      const rateScore = (p.rate - minR) / span;
+      const affScore  = AFILIADOS.includes(p.key) ? 1 : 0;
+      const spdScore  = velocidad(p.time);
+      const score = rateScore*0.40 + affScore*0.35 + spdScore*0.25;
+      return {...p, _score: score, _affiliate: !!affScore};
+    })
+    .sort((a,b)=> b._score - a._score);
+}
 
 function render(usd){
   const list = document.getElementById('cardList');
   document.getElementById('uiUsd').textContent = usd.toLocaleString();
-  list.innerHTML = providers.map(p=>{
+  const ranked = rankProviders();
+  list.innerHTML = ranked.map((p,i)=>{
     const net = Math.max(0, usd - p.fee);
     const receive = (net * p.rate).toFixed(0);
     const stars = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
+    const tag = i===0 ? 'best' : (i===1 ? 'second' : '');
     return `
-      <article class="card ${p.tag}">
+      <article class="card ${tag}" data-operator="${p.key}" data-position="${i+1}" data-affiliate="${p._affiliate}">
         <div class="c-brand">
           ${p.badge}
           <div class="c-brand-info">
@@ -763,11 +796,58 @@ function render(usd){
         <div class="c-col"><div class="lbl">Tasa</div><div class="val rate">${p.rate.toFixed(2)}</div><div class="sub">DOP por USD</div></div>
         <div class="c-col"><div class="lbl">Comisión</div><div class="val">${p.fee===0?'Gratis':'$'+p.fee.toFixed(2)}</div><div class="sub">${p.time}</div></div>
         <div class="c-col"><div class="lbl">Reciben</div><div class="val receive">${Number(receive).toLocaleString()}<small>DOP</small></div></div>
-        <a href="#" class="c-btn">Enviar <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="#" class="c-btn" data-operator="${p.key}" data-position="${i+1}">Enviar <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </article>`;
   }).join('');
 }
 
+// ══════════════════════════════════════════════════════
+// ANALYTICS · Medición de tiempo y eventos
+// ══════════════════════════════════════════════════════
+const _t0 = Date.now();
+const _tiempos = { comparo: false, clickOperador: false };
+let _inicioUsoEnviado = false;
+let _resultadosVistosEnviado = false;
+
+function _segundos() {
+  return Math.round((Date.now() - _t0) / 1000);
+}
+
+const _intervalos = [10, 20, 30, 45, 60, 90, 120, 180, 240, 300];
+_intervalos.forEach(seg => {
+  setTimeout(() => {
+    gtag('event', 'tiempo_en_pagina', {
+      event_category: 'engagement',
+      event_label: seg + '_segundos',
+      segundos: seg,
+      comparo: _tiempos.comparo,
+      click_operador: _tiempos.clickOperador
+    });
+  }, seg * 1000);
+});
+
+window.addEventListener('beforeunload', () => {
+  const duracion = _segundos();
+  try {
+    navigator.sendBeacon('/beacon', JSON.stringify({
+      event: 'salida',
+      duracion_segundos: duracion,
+      comparo: _tiempos.comparo,
+      click_operador: _tiempos.clickOperador
+    }));
+  } catch(_) {}
+  gtag('event', 'salida_pagina', {
+    event_category: 'engagement',
+    event_label: 'salida',
+    duracion_segundos: duracion,
+    comparo: _tiempos.comparo,
+    click_operador: _tiempos.clickOperador
+  });
+});
+
+// ══════════════════════════════════════════════════════
+// CALCULADORA · Flujo principal
+// ══════════════════════════════════════════════════════
 const amtUsd = document.getElementById('amtUsd');
 const amtDop = document.getElementById('amtDop');
 const resultsSection = document.getElementById('comparar');
@@ -784,7 +864,19 @@ function sync(){
   resultsSection.classList.remove('hidden');
   render(v);
 }
-amtUsd.addEventListener('input', sync);
+
+amtUsd.addEventListener('input', ()=>{
+  if(!_inicioUsoEnviado && amtUsd.value.length > 0){
+    _inicioUsoEnviado = true;
+    gtag('event', 'inicio_uso', {
+      event_category: 'engagement',
+      event_label: 'empezo_a_escribir',
+      segundos_hasta_escribir: _segundos()
+    });
+  }
+  sync();
+});
+
 searchBtn.addEventListener('click', (e)=>{
   const v = parseFloat(amtUsd.value);
   if(!v || v <= 0){
@@ -792,8 +884,47 @@ searchBtn.addEventListener('click', (e)=>{
     amtUsd.focus();
     amtUsd.parentElement.parentElement.style.borderColor = 'var(--red)';
     setTimeout(()=>amtUsd.parentElement.parentElement.style.borderColor = '', 1400);
+    return;
   }
+  _tiempos.comparo = true;
+  gtag('event', 'comparar_click', {
+    event_category: 'calculadora',
+    event_label: 'boton_comparar',
+    monto: v,
+    corredor: CORREDOR,
+    segundos_hasta_comparar: _segundos()
+  });
 });
+
+// Delegación: clicks en botones de operador
+document.getElementById('cardList').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.c-btn');
+  if(!btn) return;
+  _tiempos.clickOperador = true;
+  gtag('event', 'click_operador', {
+    event_category: 'afiliado',
+    event_label: (btn.dataset.operator || '').toLowerCase(),
+    corredor: CORREDOR,
+    monto: parseFloat(amtUsd.value) || 0,
+    posicion: parseInt(btn.dataset.position, 10) || 0,
+    segundos_hasta_click: _segundos()
+  });
+});
+
+// Scroll: registra la primera vez que la sección de resultados es visible
+const _obs = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting && !_resultadosVistosEnviado && !resultsSection.classList.contains('hidden')){
+      _resultadosVistosEnviado = true;
+      gtag('event', 'resultados_vistos', {
+        event_category: 'engagement',
+        event_label: 'scroll_resultados',
+        segundos_hasta_scroll: _segundos()
+      });
+    }
+  });
+}, { threshold: 0.25 });
+_obs.observe(resultsSection);
 
 // Nav shadow on scroll
 const nav = document.getElementById('nav');
