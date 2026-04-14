@@ -1,255 +1,373 @@
-# CONTEXTO DEL PROYECTO — Comparador de Giros LATAM · MVP
+# CONTEXTO DEL PROYECTO — Preenvíos.com · MVP
 
 ---
 
 ## Qué es este documento
-Este es el contexto del MVP (Producto Mínimo Viable) del Comparador de Giros LATAM.
-El MVP consiste en un sitio web comparador de precios de remesas para la diáspora dominicana
-en EE.UU., enfocado exclusivamente en el corredor USA → República Dominicana.
-No procesa pagos, no mueve dinero, no requiere licencias. Solo compara precios públicos
-de operadores de remesas y genera ingresos mediante comisiones de afiliados cuando
-un usuario hace clic y completa su primera transferencia con alguno de los operadores listados.
+Contexto completo del MVP de Preenvíos.com — comparador de precios de remesas para
+la diáspora latinoamericana en EE.UU. El MVP es un sitio web estático (HTML/CSS/JS)
+alojado en GitHub Pages que compara precios públicos de operadores de remesas para
+4 corredores desde EE.UU. No procesa pagos, no mueve dinero, no requiere licencias.
 
-El MVP se considera completo cuando:
-- La calculadora muestra precios en tiempo real de 5 operadores
-- Los links de afiliado de Wise y Remitly están activos y trackeando
-- El bot de WhatsApp responde con el tipo de cambio DOP/USD
-- 3 artículos SEO están publicados e indexados
-- Se han recibido las primeras comisiones de afiliado (aunque sean pequeñas)
+El MVP termina cuando Google Analytics confirma que el modelo es viable —
+suficiente tráfico real, clics en operadores, y comportamiento de usuario que justifique
+construir el producto final. En ese momento se detienen los anuncios y se construye
+el producto completo con Next.js, Supabase, scrapers automáticos, y afiliados activos.
 
 ---
 
 ## URLs del proyecto
-- Web live:         [pendiente — configurar dominio]
-- Vercel dashboard: https://vercel.com
-- Supabase:         https://supabase.com
-- GitHub:           https://github.com/[usuario]/giros-latam
+- Web live:       https://preenvios.com
+- GitHub:         https://github.com/aneurysoto-pre/preenvios
+- Google Analytics: G-6RBFS2812S
+- Dominio inglés (futuro): remitbefore.com — comprar cuando se expanda al mercado angloparlante
 
 ---
 
-## Repositorio GitHub
-```
-[pendiente — crear repositorio]
-```
+## Stack tecnológico del MVP
+- HTML + CSS + JavaScript puro — sin frameworks
+- GitHub Pages — hosting gratuito
+- Google Analytics GA4 — medición completa de comportamiento
+- Google Search Console — indexación SEO por corredor
+- Canva — creación de imágenes para anuncios
 
-## Estructura del repositorio
-```
-giros-latam/
-  app/
-    globals.css
-    layout.tsx
-    page.tsx                  ← calculadora principal / comparador
-    blog/
-      page.tsx                ← listado de artículos SEO
-      [slug]/page.tsx         ← artículo individual
-    api/
-      precios/route.ts        ← endpoint que devuelve precios actualizados
-      tasa/route.ts           ← endpoint tipo de cambio DOP/USD
-  components/
-    Comparador.tsx            ← tabla de comparación de operadores
-    Calculadora.tsx           ← input de monto + resultado por operador
-    AfiliadoLink.tsx          ← link con tracking de afiliado
-  lib/
-    supabase.ts               ← cliente Supabase
-    scrapers/
-      wise.ts                 ← obtiene precio Wise
-      remitly.ts              ← obtiene precio Remitly
-      xoom.ts                 ← obtiene precio Xoom
-      worldremit.ts           ← obtiene precio WorldRemit
-      westernunion.ts         ← obtiene precio Western Union
-  public/
-  .env.local                  ← variables de entorno (nunca al repo)
-  next.config.ts
-  package.json
-  CONTEXTO_MVP.md
-  CONTEXTO_FINAL.md
-```
-
----
-
-## Stack tecnológico
-- Next.js 14+ (TypeScript) — frontend y API routes
-- Tailwind CSS — estilos
+## Stack tecnológico del producto final (post-MVP)
+- Next.js 14+ con TypeScript
+- Tailwind CSS
 - Supabase — base de datos y cache de precios
-- Vercel — hosting y deploy automático desde GitHub
-- Upstash Redis — cache de precios (actualización cada 30 min)
-- Resend — emails de la lista de espera / newsletter
-- WhatsApp Business API — bot de tipo de cambio diario
-- GitHub — control de versiones
+- Vercel — hosting con deploy automático desde GitHub
+- Upstash Redis — cache de precios cada 2 horas
+- Scrapers automáticos — Playwright/Puppeteer
+- Impact.com — red de afiliados (Remitly)
+- Partnerize — red de afiliados (Wise)
+- CJ Affiliate — red de afiliados (Xoom, Ria, WorldRemit)
+- Resend — emails y newsletter
+- WhatsApp Business API — bot de tipo de cambio
 
 ---
 
-## Tipografía y diseño
-- Fuente: [pendiente — decidir en Etapa 1]
-- Colores: verde bosque como acento, fondo claro neutro
-- Mobile-first — el 91% de la audiencia llega desde smartphone
-- Español dominicano en todo el copy
+## Corredores del MVP — los 4 desde el inicio
+Atención primaria a Honduras — es el corredor de mayor prioridad para validación.
+
+| Corredor | Moneda | Código | Prioridad |
+|----------|--------|--------|-----------|
+| USA → Honduras | Lempira | HNL | 🥇 Primera |
+| USA → República Dominicana | Peso Dominicano | DOP | 🥈 Segunda |
+| USA → Guatemala | Quetzal | GTQ | 🥉 Tercera |
+| USA → El Salvador | Dólar Americano | USD | 4️⃣ Cuarta |
+
+Nota El Salvador: usa dólar americano como moneda oficial desde 2001.
+La comparación es por fee y velocidad únicamente — no hay tasa de cambio.
 
 ---
 
 ## Operadores comparados en el MVP
-| Operador         | Programa de afiliados       | Comisión        |
-|------------------|-----------------------------|-----------------|
-| Wise             | Partnerize (wise.com/gb/affiliate-program) | £10 personal / £50 business |
-| Remitly          | partner@remitly.com         | $20–$40/usuario |
-| Xoom (PayPal)    | PayPal Affiliate Program    | $25–$50/usuario |
-| WorldRemit       | worldremit.com/affiliates   | $15–$30/usuario |
-| Western Union    | Programa propio (CPA variable) | Variable     |
+
+### Con afiliado — tienen botón "Enviar ahora" con link activo
+| Operador | Red de afiliados | Comisión estimada | Corredor |
+|----------|-----------------|-------------------|---------|
+| Remitly | Impact.com | $20–$40/usuario nuevo | Todos |
+| Wise | Partnerize | £10 personal / £50 business | Todos |
+| Xoom (PayPal) | CJ Affiliate | $25–$50/usuario nuevo | Todos |
+| Ria Money Transfer | CJ Affiliate | $15–$30/usuario nuevo | Todos |
+| WorldRemit | CJ Affiliate | $15–$30/usuario nuevo | Todos |
+
+### Sin afiliado — aparecen en la comparación sin botón de link
+| Operador | Razón | Estado futuro |
+|----------|-------|---------------|
+| Western Union | No tiene programa público de afiliados | Negociar directo cuando haya volumen |
+| MoneyGram | No tiene programa público activo | Negociar directo cuando haya volumen |
 
 ---
 
-## Variables de entorno (.env.local)
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+## Tasas manuales — actualización semanal
+Las tasas se actualizan manualmente cada semana verificando en el sitio de cada operador.
+La estructura del código está preparada para recibir tasas de API en el futuro —
+solo se cambia la fuente de los datos, no cómo se muestran.
 
-# Upstash Redis (cache de precios)
-UPSTASH_REDIS_REST_URL=
-UPSTASH_REDIS_REST_TOKEN=
+### Quién actualiza: el fundador
+### Cuándo: todos los lunes en la mañana — máximo 30 minutos
 
-# Resend (email)
-RESEND_API_KEY=
+### Proceso de actualización:
+1. Abrir cada link de verificación (guardados en favoritos)
+2. Simular enviar $200 a cada país
+3. Anotar la tasa o fee que aparece
+4. Abrir GitHub → index.html → buscar sección TASAS
+5. Actualizar los números correspondientes
+6. Commit y push — el sitio se actualiza en 2 minutos
 
-# WhatsApp Business API
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-TWILIO_WHATSAPP_FROM=
+### Links de verificación por operador:
+```
+Remitly:       https://www.remitly.com/us/en/dominican-republic
+Western Union: https://www.westernunion.com/us/en/send-money/app/start
+Wise:          https://wise.com/us/send-money/
+MoneyGram:     https://www.moneygram.com/mgo/us/en/send-money/
+Ria:           https://www.riamoneytransfer.com/us/en/send-money-to/
+Xoom:          https://www.xoom.com/send-money
+WorldRemit:    https://www.worldremit.com/en/send-money
+Boss Money:    https://www.bossmoney.com
+```
 
-# Afiliados — tracking IDs
-WISE_AFFILIATE_ID=
-REMITLY_AFFILIATE_ID=
-XOOM_AFFILIATE_ID=
-WORLDREMIT_AFFILIATE_ID=
+### Tasas iniciales verificadas (semana de lanzamiento):
+```javascript
+// Estructura en el código — actualizar cada lunes
+const TASAS = {
+  honduras: {
+    remitly:     { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' },
+    wise:        { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Segundos' },
+    xoom:        { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' },
+    ria:         { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' },
+    worldremit:  { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' },
+    westernunion:{ tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' },
+    moneygram:   { tasa: 0, fee: 0, moneda: 'HNL', velocidad: 'Minutos' }
+  },
+  dominican_republic: {
+    remitly:     { tasa: 59.64, fee: 0,    moneda: 'DOP', velocidad: 'Minutos' },
+    wise:        { tasa: 58.02, fee: 4.50, moneda: 'DOP', velocidad: 'Segundos' },
+    xoom:        { tasa: 58.70, fee: 4.99, moneda: 'DOP', velocidad: 'Minutos' },
+    ria:         { tasa: 58.80, fee: 1.99, moneda: 'DOP', velocidad: 'Minutos' },
+    worldremit:  { tasa: 58.50, fee: 1.99, moneda: 'DOP', velocidad: 'Minutos' },
+    westernunion:{ tasa: 59.20, fee: 0,    moneda: 'DOP', velocidad: 'Minutos' },
+    moneygram:   { tasa: 58.50, fee: 1.99, moneda: 'DOP', velocidad: 'Minutos' }
+  },
+  guatemala: {
+    remitly:     { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' },
+    wise:        { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Segundos' },
+    xoom:        { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' },
+    ria:         { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' },
+    worldremit:  { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' },
+    westernunion:{ tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' },
+    moneygram:   { tasa: 0, fee: 0, moneda: 'GTQ', velocidad: 'Minutos' }
+  },
+  el_salvador: {
+    // El Salvador usa USD — no hay tasa de cambio, solo fee y velocidad
+    remitly:     { tasa: 1, fee: 0,    moneda: 'USD', velocidad: 'Minutos' },
+    wise:        { tasa: 1, fee: 2.50, moneda: 'USD', velocidad: 'Segundos' },
+    xoom:        { tasa: 1, fee: 4.99, moneda: 'USD', velocidad: 'Minutos' },
+    ria:         { tasa: 1, fee: 1.99, moneda: 'USD', velocidad: 'Minutos' },
+    worldremit:  { tasa: 1, fee: 1.99, moneda: 'USD', velocidad: 'Minutos' },
+    westernunion:{ tasa: 1, fee: 5.00, moneda: 'USD', velocidad: 'Minutos' },
+    moneygram:   { tasa: 1, fee: 1.99, moneda: 'USD', velocidad: 'Minutos' }
+  }
+}
+```
 
-# Banco Central RD — tipo de cambio oficial
-BCRD_API_URL=https://apis.bancentral.gov.do/currency/get?key=
+---
 
-# Entorno
-NODE_ENV=development
+## Arquitectura del landing — construida para escalar sin rediseñar
+
+### Paso 1 — Landing definitivo
+Diseño estilo Trivago. Línea gráfica final — no se toca más.
+Mobile-first. Estructura:
+- Header: Logo PRE (verde) + ENVÍOS (negro) · botón EN · botón Contact
+- Hero 2 columnas: título izquierda + espacio publicidad derecha (vacío, listo)
+- Barra de búsqueda: Monto · Destino (4 corredores) · botón Comparar
+- Strip de operadores con tipografías y colores de marca
+- Trust bar: Gratis · Sin registro · Independiente · Actualizado hoy
+- Resultados ordenados por algoritmo de ranking
+- Sección Cómo funciona (3 pasos)
+- FAQ con acordeón
+- Footer completo: Empresa · Legal · Corredores · Copyright
+
+### Paso 2 — Calculadoras por corredor
+4 corredores en el selector desde el inicio.
+El código está estructurado para que en el futuro las tasas vengan de una API
+sin cambiar nada de cómo se muestran los resultados.
+
+### Paso 3 — Slots de afiliado listos
+Cada botón "Enviar ahora" tiene esta estructura:
+```html
+<a href="LINK_DIRECTO_HOY" 
+   data-affiliate-slot="remitly" 
+   data-corredor="honduras"
+   class="btn-enviar"
+   onclick="trackClick('remitly', 'honduras', monto, posicion)">
+  Enviar ahora ›
+</a>
+```
+Cuando Impact aprueba el afiliado — se cambia LINK_DIRECTO_HOY por el link
+con tracking ID. Una línea por operador. Nada más.
+
+### Paso 4 — Espacios de publicidad estructurados
+Tres slots vacíos en el código desde el inicio:
+- `id="ad-hero"` — hero lado derecho (hoy vacío, invisible)
+- `id="ad-mid"` — entre resultados 3 y 4 (hoy vacío, invisible)
+- `id="ad-footer"` — antes del footer (hoy vacío, invisible)
+Cuando un operador paga por visibilidad — se inserta su banner en el slot.
+Sin rediseñar nada.
+
+### Paso 5 — Algoritmo de ranking
+Pesos fijos definidos en el código:
+```javascript
+const PESOS = {
+  tasa:     0.40,  // 40% — qué tanto da el operador
+  afiliado: 0.35,  // 35% — si genera comisión para Preenvíos
+  velocidad: 0.25  // 25% — qué tan rápido llega el dinero
+}
+const CON_AFILIADO = ['remitly', 'wise', 'xoom', 'ria', 'worldremit']
+```
+Para cambiar el ranking — se cambian tres números. La estructura no cambia.
+
+### Paso 6 — SEO y personalización por corredor
+URLs desde el inicio:
+```
+preenvios.com/                    → detecta y muestra corredor por defecto
+preenvios.com/honduras            → corredor Honduras (prioridad 1)
+preenvios.com/dominican-republic  → corredor República Dominicana
+preenvios.com/guatemala           → corredor Guatemala
+preenvios.com/el-salvador         → corredor El Salvador
+```
+Tres niveles de personalización:
+1. Cookie — recuerda el corredor que el usuario eligió antes
+2. Geolocalización IP — detecta el país de origen como fallback
+3. Anuncio segmentado — cada anuncio apunta a la URL del corredor correcto
+
+---
+
+## Google Analytics — medición completa
+
+### Eventos automáticos (GA4 los mide solo):
+- Visitas únicas y sesiones
+- País, ciudad, dispositivo
+- Fuente de tráfico (TikTok, Instagram, Google, directo)
+- Tiempo en página
+- Bounce rate
+
+### Eventos personalizados (implementados en el código):
+
+| Evento | Qué mide |
+|--------|----------|
+| `inicio_uso` | Cuando el usuario empieza a escribir el monto |
+| `comparar_click` | Clic en Comparar + monto + corredor + segundos hasta comparar |
+| `resultados_vistos` | Cuando los resultados entran en el viewport |
+| `click_operador` | Clic en Enviar + operador + corredor + monto + posición + segundos |
+| `tiempo_en_pagina` | Cada 10, 20, 30, 45, 60, 90, 120, 180, 240, 300 segundos |
+| `salida_pagina` | Al salir — duración exacta + si comparó + si hizo clic |
+
+### La métrica que importa cada semana:
+**Cuántas personas hicieron clic en "Enviar ahora"**
+Ese número determina todo. Si crece — escala el presupuesto. Si no — cambia el canal.
+
+---
+
+## Estrategia de anuncios pagados
+
+### Cuándo empieza: cuando el landing esté completo y las imágenes listas
+### Presupuesto: $40–50/semana
+
+### Orden de prioridad de plataformas:
+1. **TikTok** — más barato por CPM para audiencia latina. Empezar aquí.
+2. **Instagram** — segundo cuando TikTok valide
+3. **Facebook** — tercero
+4. **YouTube** — cuando haya video profesional
+5. **Twitter/X** — solo si hay tracción orgánica
+
+### Regla: una plataforma a la vez hasta validar, luego escalar
+
+### Imágenes de anuncios — sin mencionar marcas:
+- Imagen 1: "Estás perdiendo hasta RD$500 en envío... sin darte cuenta"
+- Imagen 2: "¿Mandas dinero a Centroamérica o RD? Compara todas las remesadoras gratis"
+- Una imagen por corredor — copy específico al país
+
+### Segmentación:
+- Cada anuncio apunta a la URL del corredor específico
+- TikTok e Instagram usan comportamiento de búsqueda del usuario para distribuir
+- No se mencionan marcas de operadores en ningún anuncio
+
+---
+
+## Contenido orgánico semanal
+
+Un post por semana por corredor activo:
+- "La tasa de hoy Honduras — semana del [fecha]"
+- "La tasa de hoy República Dominicana — semana del [fecha]"
+- Sin mencionar marcas. Solo el número y el corredor.
+- Plataformas: TikTok, Instagram, Facebook Page
+
+Objetivo: construir audiencia orgánica que reduce el costo de adquisición con el tiempo.
+
+---
+
+## Programas de afiliados — cuándo y cómo aplicar
+
+### Cuándo aplicar: cuando tengas 30 días de tráfico demostrable en Google Analytics
+
+### Dónde aplicar:
+| Operador | Red | URL de aplicación |
+|----------|-----|-------------------|
+| Remitly | Impact.com | app.impact.com → buscar Remitly |
+| Wise | Partnerize | partnerize.com → buscar Wise |
+| Xoom | CJ Affiliate | cj.com → buscar Xoom |
+| Ria | CJ Affiliate | cj.com → buscar Ria Money Transfer |
+| WorldRemit | CJ Affiliate | cj.com → buscar WorldRemit |
+
+### Después de aprobación:
+- Impact, Partnerize, o CJ te dan un link único con tu ID de tracking
+- Reemplazas el link directo en el slot de afiliado correspondiente
+- Una línea de código por operador — nada más
+
+### Negociación directa — cuando tengas 200+ clics/mes por operador:
+1. Primero Boss Money y Remesas Reservas — más pequeños, negocian más fácil
+2. Luego Ria y WorldRemit
+3. Luego Remitly y Wise cuando el volumen lo justifique
+
+---
+
+## Métricas de validación del MVP
+
+El MVP está validado cuando Google Analytics muestra:
+
+| Métrica | Umbral de validación |
+|---------|---------------------|
+| Clics en "Enviar ahora" | 50+ en 30 días |
+| Usuarios de EE.UU. | 70%+ del tráfico total |
+| Tasa de comparación | 30%+ de visitantes hace clic en Comparar |
+| Tiempo promedio en página | 30+ segundos promedio |
+| Corredor más activo | Honduras o RD con 60%+ del tráfico |
+
+Cuando estos umbrales se cumplan — se detienen los anuncios y se construye
+el producto final con el stack completo.
+
+---
+
+## Estructura del repositorio GitHub (MVP)
+```
+preenvios/
+  index.html          ← landing principal con toda la lógica
+  CNAME               ← apunta preenvios.com a GitHub Pages
+  CONTEXTO_MVP.md     ← este documento
+  CONTEXTO_FINAL.md   ← roadmap del producto completo
 ```
 
 ---
 
 ## Comandos esenciales
 ```bash
-# Clonar en PC nueva
-git clone https://github.com/[usuario]/giros-latam.git
-cd giros-latam
-npm install
-npm run dev
-
-# Abrir proyecto ya clonado
-cd [ruta del proyecto]
-code .
+# Antes de trabajar siempre
+git pull origin main
 
 # Subir cambios
 git add .
-git commit -m "descripcion"
-git push
+git commit -m "descripcion del cambio en español"
+git push origin main
 
-# Antes de trabajar siempre
-git pull
+# El sitio se actualiza en 2 minutos en preenvios.com
 ```
 
 ## Reglas del repositorio
 - Siempre git pull antes de empezar
 - Siempre git push al terminar
 - Commits descriptivos en español
-- Nunca subir .env.local al repositorio
+- El index.html es el único archivo de código — todo vive ahí hasta migrar a Next.js
+- No crear archivos adicionales de HTML, CSS, o JS durante el MVP
 
 ---
 
-## ROADMAP MVP — 4 Etapas
-
-### Etapa 0 — Preparación (Semana 1)
-- [ ] Decidir nombre de dominio definitivo y registrarlo
-- [ ] Crear repositorio GitHub: giros-latam
-- [ ] Crear proyecto en Vercel — conectar con GitHub
-- [ ] Crear proyecto en Supabase
-- [ ] Crear cuenta en Upstash para Redis cache
-- [ ] Registrarse en Wise Partnerize: wise.com/gb/affiliate-program
-- [ ] Registrarse en Remitly Partner Program: partner@remitly.com
-- [ ] Aplicar a Xoom Affiliate (PayPal Partner Program)
-- [ ] Aplicar a WorldRemit Affiliates: worldremit.com/affiliates
-- [ ] Crear cuenta de TikTok con el nombre del proyecto
-- [ ] Crear cuenta de Instagram y Facebook Page
-- [ ] Crear cuenta de YouTube
-- [ ] Crear cuenta de WhatsApp Business
-- [ ] Crear hoja de cálculo manual con precios actuales de los 5 operadores
-- [ ] Entrar en 5 grupos de Facebook de dominicanos en NY/FL como observador
-
-### Etapa 1 — Calculadora y comparador (Semana 2–3)
-- [ ] Inicializar proyecto Next.js 14+ con TypeScript
-- [ ] Configurar Tailwind CSS
-- [ ] Crear layout.tsx con fuentes y estructura base
-- [ ] Crear componente Calculadora — input de monto en USD
-- [ ] Crear componente Comparador — tabla con 5 operadores
-- [ ] Conectar a Supabase — tabla `precios` con cache de operadores
-- [ ] Crear scraper básico para Wise (precio en tiempo real)
-- [ ] Crear scraper básico para Remitly
-- [ ] Crear scraper básico para Western Union
-- [ ] Crear API route /api/precios que devuelve los precios actualizados
-- [ ] Configurar Upstash Redis — cache de precios cada 30 minutos
-- [ ] Crear API route /api/tasa — tipo de cambio DOP/USD desde BCRD
-- [ ] Cada botón "Enviar con X" tiene link de afiliado con tracking
-- [ ] Deploy en Vercel — web visible en dominio real
-- [ ] Prueba manual con 5 operadores comparados correctamente
-
-### Etapa 2 — Contenido SEO y WhatsApp bot (Semana 4–5)
-- [ ] Crear estructura de blog en Next.js (app/blog/)
-- [ ] Escribir y publicar Artículo 1: "Cuánto cobra Western Union para enviar dinero a República Dominicana hoy"
-- [ ] Escribir y publicar Artículo 2: "Remitly vs Western Union para enviar a República Dominicana — comparación real"
-- [ ] Escribir y publicar Artículo 3: "La forma más barata de mandar giros a RD en 2025"
-- [ ] Configurar next-seo o metadata de Next.js en cada artículo
-- [ ] Configurar sitemap.xml automático
-- [ ] Configurar robots.txt
-- [ ] Verificar propiedad en Google Search Console
-- [ ] Configurar WhatsApp Business API (Twilio)
-- [ ] Bot responde "tasa" con tipo de cambio DOP/USD del día
-- [ ] Bot responde "comparar" con link al comparador
-- [ ] Añadir link al grupo de WhatsApp en el sitio web
-- [ ] Verificar que los 3 artículos estén indexados en Google
-
-### Etapa 3 — Comunidad inicial y primeras comisiones (Semana 6–8)
-- [ ] Publicar primer video de TikTok en español dominicano
-- [ ] Publicar mismo video como Reel de Instagram
-- [ ] Entrar a 10 grupos de Facebook de dominicanos en NY, FL, NJ, MA
-- [ ] Publicar tipo de cambio DOP/USD en grupos de Facebook — todos los días hábiles
-- [ ] Compartir link del comparador una vez después de 2 semanas de dar valor
-- [ ] Crear grupo de WhatsApp propio: "Tipo de cambio diario — Dominicanos USA"
-- [ ] Recibir primeras comisiones de Wise y/o Remitly (aunque sean pequeñas)
-- [ ] Documentar en hoja de cálculo: qué canal generó cada clic de afiliado
-- [ ] Identificar cuál de los 3 artículos trae más tráfico orgánico
-- [ ] Revisar Google Analytics — qué páginas funcionan mejor
-
----
-
-## PUNTO DE LANZAMIENTO MVP
-= Etapas 0 + 1 + 2 completas
-= Calculadora funcionando + 3 artículos indexados + afiliados activos + bot WhatsApp
-= Etapa 3 es validación del modelo, no requisito del MVP técnico
-
----
-
-## Métricas de éxito del MVP
-- Primera comisión de afiliado recibida: validación del modelo
-- 500 visitas únicas en el primer mes: validación del SEO
-- 50 personas en el grupo de WhatsApp: validación de comunidad
-- 3 artículos indexados en Google: validación del contenido
-
----
-
-## Lo que el MVP NO incluye (queda para CONTEXTO_FINAL.md)
-- App móvil nativa (iOS / Android)
-- Sistema de usuarios / login / perfil
-- Alertas premium de tipo de cambio ($3/mes)
-- Corredor USA → Haití
-- Corredor USA → Colombia
-- Publicidad directa de operadores (requiere tráfico mínimo de 10K visitas/mes)
-- Dashboard de analytics avanzado
-- Widget de tasa de cambio para bancos
-- Datos y research B2B
-- Acuerdo formal con Banreservas
-- Conversación con UniTeller
+## Reglas del proyecto que no cambian durante el MVP
+1. No migrar a Next.js hasta que Google Analytics confirme viabilidad
+2. No aplicar a afiliados hasta tener 30 días de tráfico demostrable
+3. No escalar presupuesto de anuncios hasta validar el primer canal
+4. No agregar nuevos corredores más allá de los 4 definidos
+5. No rediseñar el landing — solo agregar contenido a los slots vacíos
+6. Actualizar tasas todos los lunes sin excepción
+7. Revisar Google Analytics una vez por semana — no todos los días
+8. El número que importa cada semana es uno solo: clics en "Enviar ahora"

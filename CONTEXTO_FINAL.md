@@ -1,84 +1,194 @@
-# CONTEXTO DEL PROYECTO — Comparador de Giros LATAM · Producto Final
+# CONTEXTO DEL PROYECTO — Preenvíos.com · Producto Final
 
 ---
 
 ## Qué es este documento
-Este es el contexto del producto final del Comparador de Giros LATAM — una plataforma
-completa de comparación de precios de remesas para la diáspora latinoamericana en EE.UU.,
-con cobertura de múltiples corredores (USA→RD, USA→Haití, USA→Colombia), app móvil nativa,
-sistema de alertas premium, publicidad directa de operadores bancarios, y partnerships
-estratégicos con Banreservas y UniTeller.
+Roadmap completo del producto final de Preenvíos.com — el comparador de referencia
+de remesas para América Latina y expansión a Europa. Lo que Monito.com es para Europa,
+Preenvíos.com es para la diáspora latinoamericana en EE.UU. y el mundo.
 
-El producto se construye sobre el MVP validado. Cada etapa aquí marcada con [x]
-ya fue completada durante el MVP. Las etapas sin marcar son las que quedan por construir
-en la fase de crecimiento y escala.
+Este documento se construye sobre el MVP validado. Cada etapa aquí marcada con [ ]
+se ejecuta después de que Google Analytics confirme la viabilidad del modelo.
 
 El negocio no procesa pagos, no mueve dinero, no requiere licencias regulatorias.
-Es una plataforma de información y comparación — el "Trivago de las remesas" para
-la diáspora latinoamericana en EE.UU., en español, con contexto cultural real.
+Es una plataforma de información, comparación y referidos — modelo de negocio en 4 capas
+que evoluciona desde CPA hasta Revenue Share en 12–18 meses.
 
-Modelo de negocio (4 capas):
-  Capa 1 → Afiliados de operadores (desde mes 2)
-  Capa 2 → Publicidad directa de operadores y bancos (desde mes 7)
-  Capa 3 → Alertas premium / suscripción $2–5/mes (desde mes 9)
-  Capa 4 → Datos y research B2B vendidos a bancos y fintechs (año 2+)
+---
+
+## La visión
+Ser el comparador de remesas de referencia para América Latina —
+lo que Monito.com es para Europa, nosotros para el hemisferio occidental.
+Expansión posterior a mercados de Europa con alta diáspora latinoamericana
+(España, Italia, Reino Unido).
 
 ---
 
 ## URLs del proyecto
-- Web live:         [pendiente — configurar dominio]
-- App iOS:          [pendiente — App Store]
-- App Android:      [pendiente — Google Play]
-- Vercel dashboard: https://vercel.com
-- Supabase:         https://supabase.com
-- GitHub:           https://github.com/[usuario]/giros-latam
+- Web MVP:        https://preenvios.com
+- Web final:      https://preenvios.com (mismo dominio, nueva arquitectura)
+- Dominio inglés: https://remitbefore.com (comprar cuando se expanda al mercado angloparlante)
+- App iOS:        App Store (Fase 5)
+- App Android:    Google Play (Fase 5)
+- Vercel:         https://vercel.com
+- Supabase:       https://supabase.com
+- GitHub:         https://github.com/aneurysoto-pre/preenvios
 
 ---
 
-## Repositorio GitHub
-```
-[pendiente — crear repositorio]
-```
+## Modelo de negocio — 4 capas en evolución
 
-## Estructura del repositorio (producto final)
+### Capa 1 — CPA por red de afiliados (Mes 2–6)
+Comisión fija por cada usuario nuevo que completa su primera transferencia.
+- Remitly vía Impact.com: $20–$40/usuario
+- Wise vía Partnerize: £10 personal / £50 business
+- Xoom, Ria, WorldRemit vía CJ Affiliate: $15–$50/usuario
+
+### Capa 2 — CPL + negociación directa (Mes 6–12)
+Cuando se tienen 200+ clics/mes por operador — negociación directa sin intermediario.
+- CPL: pago por usuario registrado aunque no haya enviado todavía
+- Fee mensual fijo con operadores pequeños (Boss Money, Remesas Reservas): $500–$3,000/mes
+- Eliminación del intermediario (Impact, CJ) — más margen por la misma conversión
+
+### Capa 3 — Publicidad directa + alertas premium (Mes 7–12)
+- Banners en slots de publicidad pagados por operadores y bancos
+- Widget de tasa de cambio patrocinado por bancos dominicanos y centroamericanos
+- Alertas premium de tipo de cambio: $2–5/mes por suscriptor
+
+### Capa 4 — Revenue Share + datos B2B (Mes 12–18)
+Meta explícita: cuando el volumen referido llegue a $50,000/mes —
+negociar Revenue Share directo con Remitly y Wise.
+- Revenue Share: 0.3%–0.5% de cada transferencia de por vida por usuario referido
+- Datos y research B2B vendidos a bancos y fintechs: $500–$5,000/reporte
+- API pública de precios históricos: $99–$499/mes por acceso
+
+---
+
+## Stack tecnológico — producto final
+
+### Frontend
+- Next.js 14+ con TypeScript
+- Tailwind CSS
+- React Native + Expo (app móvil — Fase 5)
+
+### Backend
+- Supabase — base de datos PostgreSQL + auth + storage
+- Vercel — hosting con deploy automático desde GitHub
+- Upstash Redis — cache de precios (actualización cada 2 horas)
+
+### Scrapers automáticos
+- Playwright o Puppeteer — scraping de tasas
+- Vercel Cron Jobs — ejecución cada 2 horas
+- Proxies rotativos — para operadores con protección avanzada ($10–30/mes)
+- Wise API semi-pública — datos directos sin scraping
+- APIs de afiliados (Impact, CJ, Partnerize) — tasas en tiempo real para operadores aprobados
+
+### Redes de afiliados
+- Impact.com — Remitly
+- Partnerize — Wise
+- CJ Affiliate — Xoom, Ria, WorldRemit, y futuras incorporaciones
+
+### Comunicación
+- Resend — emails, newsletter, alertas premium
+- WhatsApp Business API (Twilio) — bot de tipo de cambio + alertas
+- Stripe — cobro recurrente de alertas premium
+
+---
+
+## Corredores — expansión por fases
+
+### Fase MVP (activos desde el inicio)
+| Corredor | Moneda | Código | Prioridad |
+|----------|--------|--------|-----------|
+| USA → Honduras | Lempira | HNL | 🥇 Primera |
+| USA → República Dominicana | Peso Dominicano | DOP | 🥈 Segunda |
+| USA → Guatemala | Quetzal | GTQ | 🥉 Tercera |
+| USA → El Salvador | Dólar Americano | USD | 4️⃣ Cuarta |
+
+### Fase 4 — Expansión Latinoamérica
+| Corredor | Moneda | Código |
+|----------|--------|--------|
+| USA → Colombia | Peso Colombiano | COP |
+| USA → México | Peso Mexicano | MXN |
+| USA → Haití | Gourde | HTG |
+| USA → Nicaragua | Córdoba | NIO |
+| USA → Ecuador | Dólar Americano | USD |
+| USA → Perú | Sol | PEN |
+
+### Fase 5 — Expansión Europa
+| Corredor | Desde | Moneda destino |
+|----------|-------|----------------|
+| España → América Latina | EUR | Múltiples |
+| Italia → América Latina | EUR | Múltiples |
+| Reino Unido → América Latina | GBP | Múltiples |
+
+---
+
+## Operadores — expansión por fases
+
+### MVP — 7 operadores (5 con afiliado + 2 referencia)
+| Operador | Afiliado | Red | Estado |
+|----------|----------|-----|--------|
+| Remitly | ✅ | Impact.com | MVP |
+| Wise | ✅ | Partnerize | MVP |
+| Xoom (PayPal) | ✅ | CJ Affiliate | MVP |
+| Ria Money Transfer | ✅ | CJ Affiliate | MVP |
+| WorldRemit | ✅ | CJ Affiliate | MVP |
+| Western Union | ❌ | Sin programa público | MVP (referencia) |
+| MoneyGram | ❌ | Sin programa público | MVP (referencia) |
+
+### Fase 4 — Operadores adicionales
+| Operador | Afiliado | Tipo de acuerdo |
+|----------|----------|-----------------|
+| Boss Money | Negociar directo | Fee mensual fijo |
+| Remesas Reservas (Banreservas) | Negociar directo | Fee mensual fijo |
+| Viamericas | Negociar directo | CPA directo |
+| Caribe Express | Negociar directo | CPA directo |
+| La Nacional | Negociar directo | Fee mensual fijo |
+
+---
+
+## Estructura del repositorio — producto final
 ```
-giros-latam/
+preenvios/
   app/
     globals.css
     layout.tsx
-    page.tsx                        ← calculadora principal / comparador
+    page.tsx                        ← calculadora principal
+    [corredor]/
+      page.tsx                      ← página por corredor (honduras, rd, etc.)
     blog/
       page.tsx                      ← listado de artículos SEO
       [slug]/page.tsx               ← artículo individual
-    haiti/
-      page.tsx                      ← corredor USA → Haití
-    colombia/
-      page.tsx                      ← corredor USA → Colombia
     alertas/
-      page.tsx                      ← página de alertas premium
+      page.tsx                      ← suscripción a alertas premium
     api/
       precios/route.ts              ← endpoint precios actualizados
-      tasa/route.ts                 ← tipo de cambio DOP/USD
+      tasa/route.ts                 ← tipo de cambio por corredor
       suscripcion/route.ts          ← gestión alertas premium
-      webhook/route.ts              ← webhook Stripe alertas premium
+      webhook/route.ts              ← webhook Stripe
   components/
-    Comparador.tsx                  ← tabla de comparación
-    Calculadora.tsx                 ← input monto + resultado
-    AfiliadoLink.tsx                ← link con tracking afiliado
+    Comparador.tsx
+    Calculadora.tsx
+    AfiliadoLink.tsx                ← link con tracking + slot de afiliado
+    AdSlot.tsx                      ← slot de publicidad (hero, mid, footer)
     WidgetTasaBanco.tsx             ← widget patrocinado por banco
-    AlertaForm.tsx                  ← suscripción a alertas premium
-    ReviewCard.tsx                  ← review de usuario real
+    AlertaForm.tsx
+    RankingBadge.tsx                ← badge "Mejor opción" / "Segunda opción"
   lib/
     supabase.ts
     stripe.ts
+    ranking.ts                      ← algoritmo de ranking con pesos
     scrapers/
-      wise.ts
       remitly.ts
+      wise.ts
       xoom.ts
+      ria.ts
       worldremit.ts
       westernunion.ts
-      banreservas.ts                ← Remesas Reservas (Banreservas)
-      viamericas.ts
+      moneygram.ts
+      bossmoney.ts
+      banreservas.ts
   public/
   .env.local
   next.config.ts
@@ -89,45 +199,7 @@ giros-latam/
 
 ---
 
-## Stack tecnológico
-- Next.js 14+ (TypeScript) — frontend y API routes
-- Tailwind CSS — estilos
-- Supabase — base de datos, auth de usuarios, cache de precios
-- Vercel — hosting y deploy automático
-- Upstash Redis — cache de precios (actualización cada 30 min)
-- Stripe — cobro de alertas premium ($2–5/mes)
-- Resend — emails newsletter y alertas
-- WhatsApp Business API (Twilio) — bot de tipo de cambio + alertas premium
-- React Native + Expo — app móvil iOS y Android (Fase 2)
-- GitHub — control de versiones
-
----
-
-## Tipografía y diseño
-- Fuente: [pendiente — decidir en Etapa 1 del MVP]
-- Colores: verde bosque como acento, fondo claro neutro
-- Mobile-first — el 91% de la audiencia llega desde smartphone
-- Español dominicano en todo el copy
-- App móvil diseñada para uso con una mano, tipografía grande
-
----
-
-## Operadores comparados (producto final)
-| Operador              | Afiliado activo | Estado        |
-|-----------------------|-----------------|---------------|
-| Wise                  | Partnerize      | MVP           |
-| Remitly               | Directo         | MVP           |
-| Xoom (PayPal)         | PayPal Affiliate| MVP           |
-| WorldRemit            | Directo         | MVP           |
-| Western Union         | CPA variable    | MVP           |
-| Banreservas (Remesas Reservas) | Acuerdo directo | Fase 2 |
-| Viamericas            | Acuerdo directo | Fase 2        |
-| Operadores corredor Haití | Por definir | Fase 2       |
-| Operadores corredor Colombia | Por definir | Fase 3    |
-
----
-
-## Variables de entorno (.env.local)
+## Variables de entorno — producto final
 ```env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
@@ -138,7 +210,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
-# Resend (email)
+# Resend
 RESEND_API_KEY=
 
 # WhatsApp Business API
@@ -146,220 +218,177 @@ TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_WHATSAPP_FROM=
 
-# Stripe (alertas premium)
+# Stripe
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 
-# Afiliados — tracking IDs
-WISE_AFFILIATE_ID=
-REMITLY_AFFILIATE_ID=
-XOOM_AFFILIATE_ID=
-WORLDREMIT_AFFILIATE_ID=
-BANRESERVAS_AFFILIATE_ID=
-VIAMERICAS_AFFILIATE_ID=
+# Redes de afiliados
+IMPACT_ACCOUNT_SID=
+IMPACT_AUTH_TOKEN=
+PARTNERIZE_API_KEY=
+CJ_API_KEY=
 
-# Banco Central RD — tipo de cambio oficial
+# IDs de tracking por operador
+REMITLY_AFFILIATE_ID=
+WISE_AFFILIATE_ID=
+XOOM_AFFILIATE_ID=
+RIA_AFFILIATE_ID=
+WORLDREMIT_AFFILIATE_ID=
+
+# Banco Central RD
 BCRD_API_URL=https://apis.bancentral.gov.do/currency/get?key=
 
 # Entorno
-NODE_ENV=development
+NODE_ENV=production
 ```
 
 ---
 
-## Comandos esenciales
-```bash
-# Clonar en PC nueva
-git clone https://github.com/[usuario]/giros-latam.git
-cd giros-latam
-npm install
-npm run dev
+## ROADMAP COMPLETO — 6 Fases
 
-# Abrir proyecto ya clonado
-cd [ruta del proyecto]
-code .
+### Fase 0 — MVP validado (completado antes de esta fase)
+- [x] Landing HTML estático con 4 corredores y 7 operadores
+- [x] Google Analytics con medición completa de comportamiento
+- [x] Algoritmo de ranking implementado
+- [x] Slots de afiliado preparados
+- [x] Slots de publicidad preparados
+- [x] 50+ clics en "Enviar ahora" en 30 días confirmados
+- [x] 70%+ del tráfico desde EE.UU. confirmado
 
-# Subir cambios
-git add .
-git commit -m "descripcion"
-git push
+### Fase 1 — Migración al stack final (Semana 1–2 post-MVP)
+- [ ] Crear proyecto Next.js 14+ con TypeScript en el mismo repositorio
+- [ ] Migrar el diseño HTML a componentes React manteniendo línea gráfica exacta
+- [ ] Configurar Tailwind CSS con las variables de diseño del MVP
+- [ ] Conectar repositorio a Vercel — deploy automático desde GitHub
+- [ ] Crear proyecto en Supabase — tabla `precios` y tabla `corredores`
+- [ ] Migrar las tasas manuales del HTML a Supabase
+- [ ] Crear API route /api/precios que sirve las tasas desde Supabase
+- [ ] El landing ahora lee precios de Supabase en lugar del HTML hardcodeado
+- [ ] Configurar dominio preenvios.com en Vercel (dejar de usar GitHub Pages)
+- [ ] Verificar que Google Analytics sigue midiendo correctamente
+- [ ] Verificar que todos los slots de afiliado y publicidad funcionan
 
-# Antes de trabajar siempre
-git pull
-```
+### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
+- [ ] Configurar Upstash Redis para cache de precios
+- [ ] Crear scraper para Wise (API semi-pública — más fácil)
+- [ ] Crear scraper para Ria
+- [ ] Crear scraper para Boss Money
+- [ ] Crear Vercel Cron Job — ejecuta scrapers cada 2 horas
+- [ ] Los scrapers guardan resultados en Supabase
+- [ ] Upstash Redis cachea los últimos precios para servir rápido
+- [ ] Crear scraper para MoneyGram (protección media)
+- [ ] Crear scraper para Western Union (protección alta — puede requerir proxy)
+- [ ] Crear scraper para Remitly (protección alta — puede requerir proxy)
+- [ ] Configurar proxies rotativos si Western Union o Remitly bloquean
+- [ ] Dashboard interno para monitorear estado de scrapers
 
-## Reglas del repositorio
-- Siempre git pull antes de empezar
-- Siempre git push al terminar
-- Commits descriptivos en español
-- Nunca subir .env.local al repositorio
+### Fase 3 — Afiliados activos y primeras comisiones (Mes 2)
+- [ ] Aplicar a Remitly en Impact.com con datos de tráfico de GA4
+- [ ] Aplicar a Wise en Partnerize
+- [ ] Aplicar a Xoom, Ria, WorldRemit en CJ Affiliate
+- [ ] Reemplazar links directos por links de afiliado con tracking ID
+- [ ] Verificar que los eventos click_operador en GA4 coinciden con las conversiones en Impact/CJ
+- [ ] Primer reporte mensual: clics → conversiones → comisiones generadas
+- [ ] Contactar Boss Money directamente para acuerdo CPA directo
+- [ ] Contactar Remesas Reservas (Banreservas) para acuerdo directo
+- [ ] Implementar slots de publicidad activos con primeros banners
 
----
+### Fase 4 — Escala y nuevos corredores (Mes 3–9)
 
-## ROADMAP COMPLETO — 6 Etapas
-
-### Etapa 0 — Preparación (Semana 1)
-- [ ] Decidir nombre de dominio definitivo y registrarlo
-- [ ] Crear repositorio GitHub: giros-latam
-- [ ] Crear proyecto en Vercel — conectar con GitHub
-- [ ] Crear proyecto en Supabase
-- [ ] Crear cuenta en Upstash para Redis cache
-- [ ] Registrarse en Wise Partnerize: wise.com/gb/affiliate-program
-- [ ] Registrarse en Remitly Partner Program: partner@remitly.com
-- [ ] Aplicar a Xoom Affiliate (PayPal Partner Program)
-- [ ] Aplicar a WorldRemit Affiliates: worldremit.com/affiliates
-- [ ] Crear cuenta de TikTok con el nombre del proyecto
-- [ ] Crear cuenta de Instagram y Facebook Page
-- [ ] Crear cuenta de YouTube
-- [ ] Crear cuenta de WhatsApp Business
-- [ ] Crear hoja de cálculo manual con precios actuales de los 5 operadores
-- [ ] Entrar en 5 grupos de Facebook de dominicanos en NY/FL como observador
-
-### Etapa 1 — MVP: Calculadora y comparador (Semana 2–3)
-- [ ] Inicializar proyecto Next.js 14+ con TypeScript
-- [ ] Configurar Tailwind CSS
-- [ ] Crear layout.tsx con fuentes y estructura base
-- [ ] Crear componente Calculadora — input de monto en USD
-- [ ] Crear componente Comparador — tabla con 5 operadores
-- [ ] Conectar a Supabase — tabla `precios` con cache de operadores
-- [ ] Crear scraper básico para Wise
-- [ ] Crear scraper básico para Remitly
-- [ ] Crear scraper básico para Western Union
-- [ ] Crear API route /api/precios que devuelve precios actualizados
-- [ ] Configurar Upstash Redis — cache de precios cada 30 minutos
-- [ ] Crear API route /api/tasa — tipo de cambio DOP/USD desde BCRD
-- [ ] Cada botón "Enviar con X" tiene link de afiliado con tracking
-- [ ] Deploy en Vercel — web visible en dominio real
-- [ ] Prueba manual con 5 operadores comparados correctamente
-
-### Etapa 2 — MVP: Contenido SEO y WhatsApp bot (Semana 4–5)
-- [ ] Crear estructura de blog en Next.js (app/blog/)
-- [ ] Escribir y publicar Artículo 1: "Cuánto cobra Western Union para enviar dinero a RD hoy"
-- [ ] Escribir y publicar Artículo 2: "Remitly vs Western Union para enviar a RD"
-- [ ] Escribir y publicar Artículo 3: "La forma más barata de mandar giros a RD en 2025"
-- [ ] Configurar metadata de Next.js en cada artículo
+#### 4.1 — SEO y contenido
+- [ ] Crear estructura de blog en Next.js
+- [ ] Artículo 1: "Cuánto cobra Western Union para enviar dinero a Honduras hoy"
+- [ ] Artículo 2: "Remitly vs Western Union para enviar a República Dominicana"
+- [ ] Artículo 3: "La forma más barata de mandar dinero a Guatemala en 2026"
+- [ ] Un artículo por corredor por mes mínimo
 - [ ] Configurar sitemap.xml automático
-- [ ] Configurar robots.txt
 - [ ] Verificar propiedad en Google Search Console
-- [ ] Configurar WhatsApp Business API (Twilio)
-- [ ] Bot responde "tasa" con tipo de cambio DOP/USD del día
-- [ ] Bot responde "comparar" con link al comparador
-- [ ] Añadir link al grupo de WhatsApp en el sitio web
-- [ ] Verificar que los 3 artículos estén indexados en Google
-
-### Etapa 3 — MVP: Comunidad y primeras comisiones (Semana 6–8)
-- [ ] Publicar primer video de TikTok en español dominicano
-- [ ] Publicar mismo video como Reel de Instagram
-- [ ] Entrar a 10 grupos de Facebook de dominicanos en NY, FL, NJ, MA
-- [ ] Publicar tipo de cambio DOP/USD en grupos Facebook todos los días hábiles
-- [ ] Compartir link del comparador después de 2 semanas de dar valor
-- [ ] Crear grupo de WhatsApp propio: "Tipo de cambio diario — Dominicanos USA"
-- [ ] Recibir primeras comisiones de Wise y/o Remitly
-- [ ] Documentar en hoja de cálculo qué canal generó cada clic
-- [ ] Identificar cuál de los 3 artículos trae más tráfico orgánico
-- [ ] Revisar Google Analytics — qué páginas funcionan mejor
-
-### Etapa 4 — Escala: nuevos operadores, más corredores y publicidad directa (Mes 3–9)
-
-#### 4.1 — Mejoras al comparador
-- [ ] Añadir Banreservas (Remesas Reservas) al comparador
-- [ ] Añadir Viamericas al comparador
-- [ ] Crear scrapers para los dos nuevos operadores
-- [ ] Historial de precios — "esta semana WU cobró X, la semana pasada Y"
-- [ ] Calculadora de ahorro anual — "cambiando a Remitly ahorras $X al año"
-- [ ] Página individual de review por operador con análisis editorial honesto
-- [ ] Optimizar Core Web Vitals — verde en Google PageSpeed
+- [ ] Optimizar Core Web Vitals — verde en PageSpeed
 
 #### 4.2 — Nuevos corredores
-- [ ] Añadir corredor USA → Haití (app/haiti/)
-- [ ] Identificar y registrarse en programas de afiliados de operadores del corredor Haití
-- [ ] Crear contenido SEO específico para el corredor Haití (3 artículos mínimo)
-- [ ] Añadir corredor USA → Colombia (app/colombia/)
-- [ ] Identificar y registrarse en programas de afiliados para Colombia
-- [ ] Crear contenido SEO específico para Colombia
+- [ ] Agregar corredor USA → Colombia con operadores y afiliados
+- [ ] Agregar corredor USA → México
+- [ ] Agregar corredor USA → Nicaragua
+- [ ] Agregar corredor USA → Haití
+- [ ] Crear contenido SEO específico por cada nuevo corredor
 
-#### 4.3 — Publicidad directa
-- [ ] Reunión con oficina de Banreservas en Washington Heights, NY (Fabian)
-- [ ] Propuesta CPA: $25–75 por usuario que descarga Remesas Reservas desde la plataforma
+#### 4.3 — Publicidad directa con bancos
+- [ ] Reunión con Banreservas NY (Washington Heights)
+- [ ] Propuesta: widget de tasa de cambio patrocinado en el landing
 - [ ] Acuerdo de publicidad directa con Viamericas ($500–$1,500/mes)
-- [ ] Implementar componente WidgetTasaBanco — tasa patrocinada por banco
-- [ ] Contactar Banco Popular RD para acuerdo de widget de tasa de cambio
-- [ ] Contactar BHD León para acuerdo de widget
+- [ ] Contactar Banco Popular RD para widget de tasa
+- [ ] Contactar bancos centroamericanos para acuerdos similares
 
-#### 4.4 — Sistema de alertas premium
-- [ ] Crear tabla `alertas_suscriptores` en Supabase
+#### 4.4 — Alertas premium
+- [ ] Crear tabla alertas_suscriptores en Supabase
 - [ ] Configurar Stripe para cobro recurrente $2–5/mes
-- [ ] Implementar webhook Stripe para activar/desactivar alertas
-- [ ] Bot de WhatsApp envía alerta cuando DOP/USD cruza umbral configurado
-- [ ] Página de suscripción a alertas (app/alertas/)
+- [ ] Bot WhatsApp envía alerta cuando tasa cruza umbral configurado
+- [ ] Página de suscripción a alertas
 - [ ] Email de confirmación de suscripción (Resend)
+- [ ] Newsletter semanal: mejor operador de la semana por corredor
 
-#### 4.5 — Crecimiento de comunidad
-- [ ] Escalar a 3–5 videos TikTok por mes
-- [ ] Primer micro-influencer dominicano: $100–$300 por video patrocinado
-- [ ] Meta Ads: $200–500/mes segmentado en NY, FL, NJ, MA — solo si orgánico funciona
-- [ ] Newsletter semanal con tipo de cambio + mejor operador de la semana
-- [ ] Grupos de WhatsApp segmentados por estado: NY, FL, NJ, MA
+#### 4.5 — Negociación CPL y acuerdos directos
+- [ ] Cuando 200+ clics/mes por operador: contactar para negociar directo
+- [ ] Eliminar intermediario (Impact, CJ) para operadores con volumen
+- [ ] Negociar CPL: pago por usuario registrado aunque no haya enviado
 
-### Etapa 5 — App móvil y datos B2B (Mes 9–18)
+### Fase 5 — App móvil y datos B2B (Mes 9–18)
 
-#### 5.1 — App móvil nativa
-- [ ] Solo iniciar cuando la web tenga 5,000+ usuarios activos mensuales
-- [ ] Inicializar proyecto React Native + Expo
+#### Solo iniciar cuando la web tenga 5,000+ usuarios activos mensuales
+
+#### 5.1 — App móvil
+- [ ] Inicializar React Native + Expo
 - [ ] Pantalla principal: calculadora comparador
-- [ ] Notificaciones push nativas (reemplaza el bot de WhatsApp para usuarios de app)
+- [ ] Notificaciones push nativas
 - [ ] Widget de tipo de cambio en pantalla de inicio del teléfono
-- [ ] Historial de comparaciones del usuario
 - [ ] Publicar en App Store (iOS)
 - [ ] Publicar en Google Play (Android)
 
-#### 5.2 — Datos y research B2B
-- [ ] Crear API de precios públicos (datos históricos del corredor RD)
-- [ ] Primer reporte de mercado: "Comportamiento del corredor USA–RD 2025"
-- [ ] Identificar compradores potenciales: bancos, fintechs, consultoras
-- [ ] Vender primer reporte ($500–$2,000)
-- [ ] Contactar UniTeller como canal de distribución hacia sus 100+ clientes operadores
-- [ ] Propuesta a UniTeller: el comparador como canal de adquisición de usuarios para sus clientes
+#### 5.2 — Revenue Share — meta explícita: mes 12–18
+Cuando el volumen referido llegue a $50,000/mes:
+- [ ] Contactar Remitly para negociar Revenue Share directo
+- [ ] Contactar Wise para Revenue Share
+- [ ] Meta: 0.3%–0.5% de cada transferencia de por vida por usuario referido
+- [ ] Modelo híbrido: CPA inicial + Revenue Share recurrente
 
-### Etapa 6 — Decisión estratégica (Mes 18–36)
-- [ ] Revenue de $10,000+/mes sostenido por 3 meses consecutivos
+#### 5.3 — Datos B2B
+- [ ] API pública de precios históricos por corredor: $99–$499/mes
+- [ ] Primer reporte de mercado: "Comportamiento del corredor USA–Honduras 2026"
+- [ ] Identificar compradores: bancos, fintechs, consultoras, gobiernos
+- [ ] Contactar UniTeller como canal de distribución hacia sus 100+ clientes
+
+### Fase 6 — Expansión Europa y decisión estratégica (Mes 18–36)
+- [ ] Lanzar remitbefore.com para mercado angloparlante
+- [ ] Corredores desde España, Italia, Reino Unido hacia América Latina
 - [ ] 200,000+ visitas únicas mensuales
-- [ ] Lista de WhatsApp de 5,000+ personas activas
-- [ ] 3 corredores activos con contenido y afiliados
-- [ ] Acuerdo formal vigente con al menos 1 banco dominicano
-- [ ] Evaluar dirección: crecer independiente / partnership exclusivo / venta
-- [ ] Si venta: preparar due diligence — métricas, ingresos, contratos, audiencia
-- [ ] Precio objetivo de exit: 3–8x ARR anual
+- [ ] 3+ acuerdos de Revenue Share activos
+- [ ] Presencia en al menos 8 corredores activos
+- [ ] Evaluar dirección: crecer independiente / partnership / expansión con capital
 
 ---
 
-## PUNTO DE LANZAMIENTO MVP
-= Etapas 0 + 1 + 2 completas
+## Métricas por fase
 
-## PUNTO DE PRODUCTO COMPLETO
-= Etapas 0 + 1 + 2 + 3 + 4 + 5 completas
-
----
-
-## Métricas por etapa
-
-| Etapa | Visitas/mes | Ingresos/mes | Meta clave                     |
-|-------|-------------|--------------|--------------------------------|
-| MVP   | 500–1,500   | $0–$500      | Primera comisión recibida      |
-| 3     | 3,000–8,000 | $500–$2,000  | Break-even de costos operativos|
-| 4     | 20,000–60,000 | $3,000–$10,000 | Acuerdo Banreservas activo  |
-| 5     | 60,000–150,000 | $10,000–$25,000 | App lanzada                |
-| 6     | 150,000–300,000 | $20,000–$50,000 | Decisión estratégica       |
+| Fase | Visitas/mes | Ingresos/mes | Meta clave |
+|------|-------------|--------------|------------|
+| MVP | 500–2,000 | $0 | 50 clics en Enviar ahora |
+| 1–2 | 2,000–5,000 | $200–$800 | Primera comisión recibida |
+| 3 | 5,000–15,000 | $800–$3,000 | Break-even costos operativos |
+| 4 | 15,000–60,000 | $3,000–$10,000 | Acuerdo directo con 2 operadores |
+| 5 | 60,000–150,000 | $10,000–$30,000 | Revenue Share activo |
+| 6 | 150,000–400,000 | $30,000–$100,000 | Referente hemisferio occidental |
 
 ---
 
 ## Reglas del proyecto que no cambian
-1. No construir la app móvil hasta tener 5,000 usuarios activos/mes en la web
-2. No invertir en publicidad pagada hasta que el canal orgánico demuestre conversiones
-3. No agregar segundo corredor hasta que el corredor RD genere $3,000/mes estables
-4. No levantar capital externo antes del mes 12
-5. Publicar tipo de cambio todos los días hábiles en WhatsApp y Facebook — sin excepciones
-6. Nunca esconder que somos un comparador independiente — la independencia editorial es el activo más valioso
-7. Revisar métricas una vez por semana, no todos los días
-8. Ninguna decisión de dirección estratégica antes del mes 18
+1. No construir app móvil hasta 5,000 usuarios activos/mes en la web
+2. No agregar corredor nuevo hasta que el anterior genere $3,000/mes estables
+3. No levantar capital externo antes del mes 18
+4. No rediseñar el landing — solo agregar contenido a los slots vacíos
+5. Publicar tasa de cambio todos los días hábiles en redes sociales — sin excepción
+6. Nunca esconder que somos un comparador independiente — es el activo más valioso
+7. Revisar métricas una vez por semana — no todos los días
+8. El número que importa cada semana: clics en "Enviar ahora"
+9. Ninguna decisión de dirección estratégica antes del mes 18
+10. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
