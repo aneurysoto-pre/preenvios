@@ -60,7 +60,7 @@ img,svg{display:block;max-width:100%}
 .burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px}
 
 /* ═════ HERO ═════ */
-.hero{position:relative;padding:130px 0 70px;overflow:hidden;background:
+.hero{position:relative;padding:96px 0 40px;overflow:hidden;background:
   radial-gradient(1200px 500px at 80% -10%,rgba(10,79,229,.12),transparent 60%),
   radial-gradient(900px 500px at -10% 30%,rgba(16,185,129,.10),transparent 60%),
   linear-gradient(180deg,#fff 0%,#F5F9FF 100%)}
@@ -68,48 +68,50 @@ img,svg{display:block;max-width:100%}
   linear-gradient(rgba(10,79,229,.05) 1px,transparent 1px),
   linear-gradient(90deg,rgba(10,79,229,.05) 1px,transparent 1px);
   background-size:42px 42px;mask-image:radial-gradient(ellipse at center,#000 40%,transparent 75%);pointer-events:none}
-.hero-in{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--g200);padding:7px 14px;border-radius:50px;font-size:13px;font-weight:600;color:var(--g700);box-shadow:var(--sh-sm);margin-bottom:22px}
+.hero-in{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--g200);padding:6px 12px;border-radius:50px;font-size:12px;font-weight:600;color:var(--g700);box-shadow:var(--sh-sm);margin-bottom:16px}
 .hero-badge .pulse{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 0 0 rgba(16,185,129,.6);animation:pulse 2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}70%{box-shadow:0 0 0 10px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
-.hero h1{font-size:clamp(38px,5vw,62px);font-weight:900;line-height:1.04;margin-bottom:20px}
+.hero h1{font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.05;margin-bottom:14px}
 .hero h1 .hl{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p.lede{font-size:19px;color:var(--ink-2);max-width:540px;margin-bottom:28px}
-.hero-trust{display:flex;gap:28px;flex-wrap:wrap;margin-top:26px}
-.hero-trust .t{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);font-weight:700}
-.hero-trust .t svg{width:18px;height:18px;color:var(--green)}
+.hero p.lede{font-size:17px;color:var(--ink-2);max-width:540px;margin-bottom:18px}
+.hero-trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px}
+.hero-trust .t{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);font-weight:700}
+.hero-trust .t svg{width:16px;height:16px;color:var(--green)}
 
 /* ═════ SEARCH CARD ═════ */
 .search-wrap{position:relative}
-.search{background:var(--white);border-radius:var(--r-xl);padding:26px;box-shadow:var(--sh-xl);border:1px solid var(--g200);position:relative;z-index:2}
-.search-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.search-head h3{font-size:18px;font-weight:800}
+.search{background:var(--white);border-radius:var(--r-xl);padding:22px;box-shadow:var(--sh-xl);border:1px solid var(--g200);position:relative;z-index:2}
+.search-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.search-head h3{font-size:17px;font-weight:800}
 .search-head .live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--green-dark);background:var(--green-soft);padding:5px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:.5px}
 .search-head .live::before{content:"";width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.6s infinite}
-.field{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;transition:.2s}
+.field{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;transition:.2s}
 .field:focus-within{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 4px rgba(10,79,229,.08)}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
 .field-row{display:flex;align-items:center;gap:10px}
-.field input{flex:1;border:none;background:transparent;font-size:26px;font-weight:800;color:var(--ink);outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;min-width:0}
+.field input{flex:1;border:none;background:transparent;font-size:24px;font-weight:800;color:var(--ink);outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;min-width:0}
 .field .cur{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--g700);font-size:15px;flex-shrink:0}
 .flag{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 0 0 2px var(--white),0 0 0 3px var(--g200)}
 .swap{display:flex;justify-content:center;margin:-6px 0;position:relative;z-index:1}
 .swap button{width:38px;height:38px;border-radius:50%;background:var(--white);border:2px solid var(--g200);color:var(--blue);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm);transition:.2s}
 .swap button:hover{transform:rotate(180deg);border-color:var(--blue)}
-.rate-line{display:flex;justify-content:space-between;align-items:center;padding:14px 4px 6px;font-size:13px;color:var(--g600)}
+.rate-line{display:flex;justify-content:space-between;align-items:center;padding:10px 4px 4px;font-size:13px;color:var(--g600)}
 .rate-line b{color:var(--ink);font-weight:700}
-.search-btn{width:100%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:var(--white);padding:17px;border-radius:var(--r);font-size:16px;font-weight:800;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;box-shadow:0 10px 25px -8px rgba(10,79,229,.55)}
+.search-btn{width:100%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:var(--white);padding:15px;border-radius:var(--r);font-size:15px;font-weight:800;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;box-shadow:0 10px 25px -8px rgba(10,79,229,.55)}
 .search-btn:hover{transform:translateY(-2px);box-shadow:0 18px 36px -10px rgba(10,79,229,.6)}
 .search-bg-1,.search-bg-2{position:absolute;border-radius:var(--r-xl);z-index:1}
 .search-bg-1{inset:14px -14px -14px 14px;background:var(--green-soft);transform:rotate(2deg)}
 .search-bg-2{inset:28px -28px -28px 28px;background:var(--blue-soft);transform:rotate(4deg);opacity:.6}
 
 /* ═════ LOGOS STRIP ═════ */
-.strip{background:var(--white);padding:36px 0;border-top:1px solid var(--g200);border-bottom:1px solid var(--g200)}
-.strip-title{text-align:center;font-size:12px;font-weight:700;color:var(--g500);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
-.strip-logos{display:flex;justify-content:space-around;align-items:center;gap:30px;flex-wrap:wrap;opacity:.8}
-.strip-logos .brand{display:flex;align-items:center;gap:10px;filter:grayscale(.2);transition:.2s}
-.strip-logos .brand:hover{filter:none;transform:translateY(-2px)}
+.strip{background:var(--white);padding:22px 0}
+.strip-title{text-align:center;font-size:11px;font-weight:700;color:var(--g500);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.strip-logos{display:flex;justify-content:center;align-items:center;gap:46px;flex-wrap:wrap}
+.strip-logos .brand{display:flex;align-items:center;justify-content:center;height:28px;filter:grayscale(1);opacity:.7;transition:.2s}
+.strip-logos .brand:hover{filter:grayscale(0);opacity:1}
+.strip-logos .brand img{max-height:26px;width:auto;display:block}
+.strip-logos .brand .bm{font-size:13px;padding:6px 10px}
 
 /* Brand badges (inline SVG-ish) */
 .bm{display:inline-flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;border-radius:10px;letter-spacing:-.5px}
@@ -365,7 +367,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
       <h1>Envías dinero a Latinoamérica?<br><span class="hl">Compara primero, ahorra después.</span></h1>
       <p class="lede">Revisa en segundos cuánto llega de verdad por Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Honduras, República Dominicana, Guatemala y El Salvador.</p>
       <div class="hero-trust">
-        <div class="t"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 0l2.5 6.5L19 8l-5 4.5L15.5 20 10 16 4.5 20 6 12.5 1 8l6.5-1.5z"/></svg> +12,000 usuarios</div>
+        <div class="t"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> Sin registro</div>
         <div class="t"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> 100% gratis</div>
         <div class="t"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg> Actualizado hoy</div>
       </div>
@@ -381,6 +383,17 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
           <span class="live">En vivo</span>
         </div>
         <div class="field">
+          <label>País destino</label>
+          <div class="field-row">
+            <select id="corridorSelect" class="field-select">
+              <option value="honduras">🇭🇳 Honduras</option>
+              <option value="dominican_republic">🇩🇴 Rep. Dominicana</option>
+              <option value="guatemala">🇬🇹 Guatemala</option>
+              <option value="el_salvador">🇸🇻 El Salvador</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
           <label>Envías desde Estados Unidos</label>
           <div class="field-row">
             <input id="amtUsd" type="number" placeholder="0" min="1">
@@ -388,30 +401,6 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
               <div class="flag"><svg viewBox="0 0 60 30"><rect width="60" height="30" fill="#fff"/><g fill="#B22234"><rect y="0" width="60" height="2.3"/><rect y="4.6" width="60" height="2.3"/><rect y="9.2" width="60" height="2.3"/><rect y="13.8" width="60" height="2.3"/><rect y="18.4" width="60" height="2.3"/><rect y="23" width="60" height="2.3"/><rect y="27.6" width="60" height="2.4"/></g><rect width="24" height="16" fill="#3C3B6E"/></svg></div>
               USD
             </div>
-          </div>
-        </div>
-        <div class="swap">
-          <button type="button" aria-label="Cambiar"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 7h10M5 7l3-3M5 7l3 3M15 13H5m10 0l-3 3m3-3l-3-3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-        <div class="field">
-          <label id="lblReceive">Reciben en Honduras</label>
-          <div class="field-row">
-            <input id="amtDop" type="number" placeholder="0" readonly>
-            <div class="cur">
-              <span id="curFlag" style="font-size:22px;line-height:1">🇭🇳</span>
-              <span id="curCode">HNL</span>
-            </div>
-          </div>
-        </div>
-        <div class="field">
-          <label>País destino</label>
-          <div class="field-row">
-            <select id="corridorSelect" class="field-select">
-              <option value="honduras">🇭🇳 Honduras (HNL)</option>
-              <option value="dominican_republic">🇩🇴 Rep. Dominicana (DOP)</option>
-              <option value="guatemala">🇬🇹 Guatemala (GTQ)</option>
-              <option value="el_salvador">🇸🇻 El Salvador (USD)</option>
-            </select>
           </div>
         </div>
         <div class="rate-line">
@@ -432,13 +421,13 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="strip-title">Comparamos las remesadoras más confiables</div>
     <div class="strip-logos">
-      <div class="brand"><span class="bm bm-remitly">Remitly</span></div>
-      <div class="brand"><span class="bm bm-wise">wise</span></div>
-      <div class="brand"><span class="bm bm-xoom">xoom</span></div>
-      <div class="brand"><span class="bm bm-ria">ria</span></div>
-      <div class="brand"><span class="bm bm-wr">WorldRemit</span></div>
-      <div class="brand"><span class="bm bm-wu">WU</span></div>
-      <div class="brand"><span class="bm bm-mg">MoneyGram</span></div>
+      <div class="brand"><img src="https://logo.clearbit.com/remitly.com" alt="Remitly" onerror="this.outerHTML='<span class=&quot;bm bm-remitly&quot;>Remitly</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/wise.com" alt="Wise" onerror="this.outerHTML='<span class=&quot;bm bm-wise&quot;>wise</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/xoom.com" alt="Xoom" onerror="this.outerHTML='<span class=&quot;bm bm-xoom&quot;>xoom</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/riamoneytransfer.com" alt="Ria" onerror="this.outerHTML='<span class=&quot;bm bm-ria&quot;>ria</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/worldremit.com" alt="WorldRemit" onerror="this.outerHTML='<span class=&quot;bm bm-wr&quot;>WorldRemit</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/westernunion.com" alt="Western Union" onerror="this.outerHTML='<span class=&quot;bm bm-wu&quot;>WU</span>'"></div>
+      <div class="brand"><img src="https://logo.clearbit.com/moneygram.com" alt="MoneyGram" onerror="this.outerHTML='<span class=&quot;bm bm-mg&quot;>MoneyGram</span>'"></div>
     </div>
   </div>
 </section>
@@ -555,7 +544,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
 <section class="banks">
   <div class="container">
     <div class="banks-head">
-      <h3><span class="dot-live"></span> Tasa del día · Bancos aliados</h3>
+      <h3><span class="dot-live"></span> Tasas de referencia</h3>
       <span class="updated">Actualizado: hoy 14:32 EST</span>
     </div>
     <div class="banks-grid">
@@ -593,7 +582,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
       </div>
     </div>
     <div class="banks-note">
-      💡 <b>Próximamente:</b> Tasas oficiales en vivo de bancos aliados en cada país. Estamos integrando alianzas con Banreservas, Bancolombia, Banamex y más.
+      Tasas de referencia del Banco Central de cada país.
     </div>
   </div>
 </section>
@@ -839,13 +828,9 @@ function render(usd){
 // CALCULADORA · Referencias DOM
 // ══════════════════════════════════════════════════════
 const amtUsd = document.getElementById('amtUsd');
-const amtDop = document.getElementById('amtDop');
 const corridorSelect = document.getElementById('corridorSelect');
 const resultsSection = document.getElementById('comparar');
 const searchBtn = document.querySelector('.search-btn');
-const lblReceive = document.getElementById('lblReceive');
-const curFlag = document.getElementById('curFlag');
-const curCode = document.getElementById('curCode');
 const rateRef = document.getElementById('rateRef');
 
 function _corredorActivo(){ return corridorSelect.value; }
@@ -873,9 +858,6 @@ function getCookie(name){
 
 function applyCorredorUI(){
   const c = CORREDORES[_corredorActivo()];
-  lblReceive.textContent = 'Reciben en ' + c.nombre;
-  curFlag.textContent = c.bandera;
-  curCode.textContent = c.moneda;
   const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
   rateRef.textContent = c.moneda === 'USD'
     ? '1 USD = 1 USD (sin conversión)'
@@ -889,14 +871,9 @@ applyCorredorUI();
 function sync(){
   const v = parseFloat(amtUsd.value);
   if(!v || v <= 0){
-    amtDop.value = '';
     resultsSection.classList.add('hidden');
     return;
   }
-  const c = CORREDORES[_corredorActivo()];
-  const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
-  const tasaUi = c.moneda === 'USD' ? 1 : (best.rate || 0);
-  amtDop.value = c.moneda === 'USD' ? v.toFixed(2) : (v * tasaUi).toFixed(0);
   resultsSection.classList.remove('hidden');
   render(v);
 }
