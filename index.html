@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PreEnvios.com — Compara remesas a República Dominicana en segundos</title>
+<title>PreEnvios.com — Compara remesadoras. Envía más por menos.</title>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RBFS2812S"></script>
 <script>
@@ -117,8 +117,12 @@ img,svg{display:block;max-width:100%}
 .bm-xoom{background:#fff;color:#0070BA;padding:8px 14px;font-size:15px;border:2px solid #0070BA;font-style:italic}
 .bm-remitly{background:#1A1F3D;color:#fff;padding:8px 14px;font-size:14px;text-transform:lowercase}
 .bm-mg{background:#DB0032;color:#fff;padding:8px 12px;font-size:14px}
-.bm-boss{background:#FF5A1F;color:#fff;padding:8px 12px;font-size:13px;letter-spacing:.5px}
 .bm-wise{background:#9FE870;color:#163300;padding:8px 14px;font-size:14px;border-radius:20px}
+.bm-ria{background:#FF6600;color:#fff;padding:8px 14px;font-size:14px;border-radius:10px}
+.bm-wr{background:#E8124D;color:#fff;padding:8px 14px;font-size:14px;border-radius:10px}
+.field-select{flex:1;border:none;background:transparent;font-size:16px;font-weight:700;color:var(--ink);outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,var(--g500) 50%),linear-gradient(135deg,var(--g500) 50%,transparent 50%);background-position:calc(100% - 10px) 50%,calc(100% - 5px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.c-btn-ref{background:var(--g200) !important;color:var(--g600) !important}
+.c-btn-ref:hover{background:var(--g300) !important;transform:none !important}
 
 /* ═════ RESULTS ═════ */
 .results{padding:80px 0;background:var(--g50);animation:fadeIn .5s ease}
@@ -346,7 +350,6 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
     <div class="nav-links">
       <a href="#comparar">Comparar</a>
       <a href="#como">Cómo funciona</a>
-      <a href="#opiniones">Opiniones</a>
       <a href="#faq">FAQ</a>
       <a href="#" class="nav-cta">Ingresar</a>
     </div>
@@ -359,8 +362,8 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container hero-in">
     <div class="hero-text">
       <div class="hero-badge"><span class="pulse"></span> Tasas actualizadas en tiempo real</div>
-      <h1>Envías dinero a RD?<br><span class="hl">Compara primero, ahorra después.</span></h1>
-      <p class="lede">Revisa en segundos cuánto llega de verdad a República Dominicana por Western Union, Remitly, Xoom, MoneyGram, BOSS Money y Wise.</p>
+      <h1>Envías dinero a Latinoamérica?<br><span class="hl">Compara primero, ahorra después.</span></h1>
+      <p class="lede">Revisa en segundos cuánto llega de verdad por Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Honduras, República Dominicana, Guatemala y El Salvador.</p>
       <div class="hero-trust">
         <div class="t"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 0l2.5 6.5L19 8l-5 4.5L15.5 20 10 16 4.5 20 6 12.5 1 8l6.5-1.5z"/></svg> +12,000 usuarios</div>
         <div class="t"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg> 100% gratis</div>
@@ -391,21 +394,32 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
           <button type="button" aria-label="Cambiar"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 7h10M5 7l3-3M5 7l3 3M15 13H5m10 0l-3 3m3-3l-3-3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
         <div class="field">
-          <label>Reciben en República Dominicana</label>
+          <label id="lblReceive">Reciben en Honduras</label>
           <div class="field-row">
             <input id="amtDop" type="number" placeholder="0" readonly>
             <div class="cur">
-              <div class="flag"><svg viewBox="0 0 60 30"><rect width="60" height="30" fill="#002D62"/><rect y="15" width="60" height="15" fill="#002D62"/><rect y="0" width="60" height="15" fill="#CE1126"/><rect x="24" y="0" width="12" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#fff"/></svg></div>
-              DOP
+              <span id="curFlag" style="font-size:22px;line-height:1">🇭🇳</span>
+              <span id="curCode">HNL</span>
             </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>País destino</label>
+          <div class="field-row">
+            <select id="corridorSelect" class="field-select">
+              <option value="honduras">🇭🇳 Honduras (HNL)</option>
+              <option value="dominican_republic">🇩🇴 Rep. Dominicana (DOP)</option>
+              <option value="guatemala">🇬🇹 Guatemala (GTQ)</option>
+              <option value="el_salvador">🇸🇻 El Salvador (USD)</option>
+            </select>
           </div>
         </div>
         <div class="rate-line">
           <span>Tasa de referencia</span>
-          <b>1 USD = 60.00 DOP</b>
+          <b id="rateRef">1 USD = 0.00 HNL</b>
         </div>
         <button class="search-btn" onclick="document.getElementById('comparar').scrollIntoView({behavior:'smooth'})">
-          Comparar 6 remesadoras
+          Comparar las mejores remesadoras
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
@@ -418,12 +432,13 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="strip-title">Comparamos las remesadoras más confiables</div>
     <div class="strip-logos">
-      <div class="brand"><span class="bm bm-wu">WU</span></div>
-      <div class="brand"><span class="bm bm-xoom">xoom</span></div>
       <div class="brand"><span class="bm bm-remitly">Remitly</span></div>
-      <div class="brand"><span class="bm bm-mg">MoneyGram</span></div>
-      <div class="brand"><span class="bm bm-boss">BOSS</span></div>
       <div class="brand"><span class="bm bm-wise">wise</span></div>
+      <div class="brand"><span class="bm bm-xoom">xoom</span></div>
+      <div class="brand"><span class="bm bm-ria">ria</span></div>
+      <div class="brand"><span class="bm bm-wr">WorldRemit</span></div>
+      <div class="brand"><span class="bm bm-wu">WU</span></div>
+      <div class="brand"><span class="bm bm-mg">MoneyGram</span></div>
     </div>
   </div>
 </section>
@@ -433,8 +448,9 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="results-head">
       <div>
-        <h2>Resultados para <span style="color:var(--blue)">$<span id="uiUsd">0</span> USD → RD</span></h2>
+        <h2>Resultados para <span style="color:var(--blue)">$<span id="uiUsd">0</span> USD → <span id="uiDest">Honduras</span></span></h2>
         <p>Tasas comparadas en tiempo real · Última actualización hace 2 minutos</p>
+        <p class="ranking-note" style="font-size:12px;color:var(--g500);margin-top:6px;">El orden de los resultados puede estar influenciado por acuerdos comerciales con los operadores. <a href="#faq" style="color:var(--blue)">Saber más</a></p>
       </div>
       <div class="sort">
         <button class="on">Mejor tasa</button>
@@ -473,35 +489,9 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
         </div>
         <div class="sp-body">
           <h3>Primer envío sin comisión</h3>
-          <div class="sub">Nuevos usuarios · USA → RD</div>
-          <div class="sp-rate"><span class="big">60.50</span><span class="unit">DOP/USD</span></div>
+          <div class="sub">Nuevos usuarios · Todos los corredores</div>
+          <div class="sp-rate"><span class="big">Mejor</span><span class="unit">tasa del día</span></div>
           <span class="sp-promo green">-100% comisión</span>
-        </div>
-      </div>
-
-      <div class="sp-card">
-        <div class="sp-img var2">
-          <span class="sp-badge">Patrocinado</span>
-          <div class="sp-logo" style="color:#FF5A1F">BOSS</div>
-        </div>
-        <div class="sp-body">
-          <h3>Bono de $10 en tu primer envío</h3>
-          <div class="sub">Reciben $10 USD extra en RD</div>
-          <div class="sp-rate"><span class="big">60.25</span><span class="unit">DOP/USD</span></div>
-          <span class="sp-promo">+$10 bono</span>
-        </div>
-      </div>
-
-      <div class="sp-card">
-        <div class="sp-img var3">
-          <span class="sp-badge">Patrocinado</span>
-          <div class="sp-logo" style="color:#0070BA;font-style:italic">xoom</div>
-        </div>
-        <div class="sp-body">
-          <h3>Envío instantáneo garantizado</h3>
-          <div class="sub">Llega en segundos a cualquier banco RD</div>
-          <div class="sp-rate"><span class="big">59.90</span><span class="unit">DOP/USD</span></div>
-          <span class="sp-promo blue">⚡ Instantáneo</span>
         </div>
       </div>
 
@@ -512,22 +502,48 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
         </div>
         <div class="sp-body">
           <h3>Tasa real del mercado</h3>
-          <div class="sub">Sin margen oculto, la tasa que ves es la que recibes</div>
-          <div class="sp-rate"><span class="big">59.95</span><span class="unit">DOP/USD</span></div>
+          <div class="sub">Sin margen oculto — la tasa que ves es la que recibes</div>
+          <div class="sp-rate"><span class="big">Transparente</span><span class="unit">100%</span></div>
           <span class="sp-promo green">Tasa transparente</span>
+        </div>
+      </div>
+
+      <div class="sp-card">
+        <div class="sp-img var3">
+          <span class="sp-badge">Patrocinado</span>
+          <div class="sp-logo" style="color:#0070BA;font-style:italic">xoom</div>
+        </div>
+        <div class="sp-body">
+          <h3>Envío instantáneo garantizado</h3>
+          <div class="sub">Llega en segundos a cualquier banco de Latinoamérica</div>
+          <div class="sp-rate"><span class="big">Instantáneo</span><span class="unit">24/7</span></div>
+          <span class="sp-promo blue">⚡ Instantáneo</span>
+        </div>
+      </div>
+
+      <div class="sp-card">
+        <div class="sp-img var2">
+          <span class="sp-badge">Patrocinado</span>
+          <div class="sp-logo" style="color:#fff;background:#FF6600">ria</div>
+        </div>
+        <div class="sp-body">
+          <h3>Red global con recogida en efectivo</h3>
+          <div class="sub">Más de 490,000 puntos en Latinoamérica</div>
+          <div class="sp-rate"><span class="big">490K+</span><span class="unit">puntos</span></div>
+          <span class="sp-promo">Efectivo</span>
         </div>
       </div>
 
       <div class="sp-card">
         <div class="sp-img var5">
           <span class="sp-badge">Patrocinado</span>
-          <div class="sp-logo" style="color:#000;background:#FFDD00;border:2px solid #000">WU</div>
+          <div class="sp-logo" style="color:#fff;background:#E8124D">WorldRemit</div>
         </div>
         <div class="sp-body">
-          <h3>Retiro en efectivo en 500+ puntos</h3>
-          <div class="sub">Red más grande de RD · Sin cuenta bancaria</div>
-          <div class="sp-rate"><span class="big">59.70</span><span class="unit">DOP/USD</span></div>
-          <span class="sp-promo">+500 agencias</span>
+          <h3>Transferencia a móvil disponible</h3>
+          <div class="sub">Envía directo a billetera digital en segundos</div>
+          <div class="sp-rate"><span class="big">Móvil</span><span class="unit">directo</span></div>
+          <span class="sp-promo blue">Wallet</span>
         </div>
       </div>
 
@@ -587,14 +603,14 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   <div class="container">
     <div class="section-head">
       <span class="tag">Por qué PreEnvios</span>
-      <h2>Ahorra en cada envío a República Dominicana</h2>
+      <h2>Ahorra en cada envío a Latinoamérica</h2>
       <p>Un lugar, todas las remesadoras. Sin sorpresas, sin comisiones escondidas.</p>
     </div>
     <div class="why-grid">
       <div class="feat a">
         <div class="icn">💰</div>
         <h3>La mejor tasa siempre</h3>
-        <p>Comparamos las 6 remesadoras más usadas y te mostramos cuál te da más pesos por tu dólar. Punto.</p>
+        <p>Comparamos las remesadoras más usadas y te mostramos cuál te da más por tu dólar. Punto.</p>
       </div>
       <div class="feat b">
         <div class="icn">⚡</div>
@@ -604,7 +620,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
       <div class="feat c">
         <div class="icn">🔒</div>
         <h3>100% confiable y gratis</h3>
-        <p>No cobramos nada. Solo te ayudamos a decidir antes de enviar tu dinero a RD.</p>
+        <p>No cobramos nada. Solo te ayudamos a decidir antes de enviar tu dinero.</p>
       </div>
     </div>
   </div>
@@ -616,7 +632,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
     <div class="section-head">
       <span class="tag">Cómo funciona</span>
       <h2>3 pasos. Eso es todo.</h2>
-      <p>Así de fácil es ahorrar en tus remesas a República Dominicana.</p>
+      <p>Así de fácil es ahorrar en tus envíos.</p>
     </div>
     <div class="step-grid">
       <div class="step">
@@ -638,52 +654,12 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   </div>
 </section>
 
-<!-- STATS -->
-<section class="stats">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat"><div class="num">12K+</div><div class="lbl">Usuarios activos</div></div>
-      <div class="stat"><div class="num">$2.4M</div><div class="lbl">Enviados a RD</div></div>
-      <div class="stat"><div class="num">6</div><div class="lbl">Remesadoras</div></div>
-      <div class="stat"><div class="num">4.9★</div><div class="lbl">Calificación</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="tests" id="opiniones">
-  <div class="container">
-    <div class="section-head">
-      <span class="tag">Opiniones reales</span>
-      <h2>Dominicanos que ya ahorran con PreEnvios</h2>
-      <p>Más de 12,000 personas comparan aquí antes de enviar dinero a casa.</p>
-    </div>
-    <div class="tests-grid">
-      <div class="tt">
-        <div class="stars">★★★★★</div>
-        <p>"Antes usaba siempre la misma remesadora. Comparé aquí y descubrí que mi mamá recibe hasta 400 pesos más por el mismo envío. Increíble."</p>
-        <div class="who"><div class="avatar a1">JR</div><div><div class="n">José R.</div><div class="c">New York → Santiago</div></div></div>
-      </div>
-      <div class="tt">
-        <div class="stars">★★★★★</div>
-        <p>"Súper fácil. Pongo el monto, veo todo en 2 segundos y elijo la mejor. Mi familia en Santo Domingo lo agradece cada semana."</p>
-        <div class="who"><div class="avatar a2">MP</div><div><div class="n">María P.</div><div class="c">Miami → Santo Domingo</div></div></div>
-      </div>
-      <div class="tt">
-        <div class="stars">★★★★★</div>
-        <p>"Lo que más me gusta es que es gratis y no pide registrarse. Entras, comparas y listo. Simple como debe ser."</p>
-        <div class="who"><div class="avatar a3">LC</div><div><div class="n">Luis C.</div><div class="c">Boston → Puerto Plata</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA -->
 <section class="cta">
   <div class="container">
     <div class="cta-in">
-      <h2>Listo para enviar más pesos a RD?</h2>
-      <p>Toma 10 segundos. Compara las 6 remesadoras principales y elige la que más te conviene hoy.</p>
+      <h2>Listo para enviar más por menos?</h2>
+      <p>Toma 10 segundos. Compara las mejores remesadoras y elige la que más te conviene hoy.</p>
       <a href="#comparar">Comparar ahora →</a>
     </div>
   </div>
@@ -699,9 +675,10 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
     <div class="faq-list">
       <details class="qa" open><summary>PreEnvios cobra alguna comisión?</summary><p>No. PreEnvios es 100% gratis. Solo te ayudamos a comparar para que elijas la mejor opción. Las comisiones las cobra cada remesadora y te las mostramos antes de enviar.</p></details>
       <details class="qa"><summary>Cómo actualizan las tasas?</summary><p>Consultamos las tasas directamente de cada remesadora varias veces al día. Lo que ves aquí es lo que obtienes al enviar.</p></details>
-      <details class="qa"><summary>Qué remesadoras están incluidas?</summary><p>Por ahora comparamos Western Union, Xoom, Remitly, MoneyGram, BOSS Money y Wise para el corredor Estados Unidos → República Dominicana. Pronto añadiremos más.</p></details>
+      <details class="qa"><summary>Qué remesadoras están incluidas?</summary><p>Comparamos Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram para los corredores USA → Honduras, USA → República Dominicana, USA → Guatemala y USA → El Salvador.</p></details>
       <details class="qa"><summary>Cuánto tarda un envío?</summary><p>Depende de la remesadora y el método. Algunas son instantáneas, otras tardan hasta 1 día hábil. Te mostramos el tiempo estimado en cada resultado.</p></details>
-      <details class="qa"><summary>Van a agregar más países?</summary><p>Sí. Empezamos con USA → RD pero planeamos expandir pronto a más corredores de Latinoamérica.</p></details>
+      <details class="qa"><summary>Van a agregar más países?</summary><p>Sí. Empezamos con Honduras, República Dominicana, Guatemala y El Salvador, y planeamos expandir pronto a más corredores de Latinoamérica.</p></details>
+      <details class="qa"><summary>¿Por qué algunos operadores aparecen primero?</summary><p>El orden de los resultados considera la tasa de cambio, la velocidad del envío y acuerdos comerciales con algunos operadores. Preenvios.com puede recibir una comisión cuando haces clic y completas una transferencia. Esto no tiene ningún costo adicional para ti.</p></details>
     </div>
   </div>
 </section>
@@ -718,7 +695,7 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
           </svg>
           <span class="logo-text"><span class="pre" style="color:#00D957">pre</span><span class="env" style="color:#fff">envios</span><span class="dot">.com</span></span>
         </div>
-        <p>Compara remesadoras antes de enviar dinero a República Dominicana. Ahorra en cada envío.</p>
+        <p>Compara remesadoras antes de enviar dinero a Latinoamérica. Ahorra en cada envío.</p>
         <div class="f-social">
           <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-1.5 19.9v-7h-2.5v-3h2.5V9.5c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 3H13.5v7A10 10 0 0012 2z"/></svg></a>
           <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
@@ -730,62 +707,119 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
       <div class="f-col"><h4>Legal</h4><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></div>
     </div>
     <div class="f-disclaimer">
-      PreEnvios.com es un comparador informativo. <b>No somos una institución financiera</b>, no procesamos pagos, no recibimos ni enviamos dinero. Las tasas publicadas son aproximadas y pueden variar respecto al monto final que ofrezca cada remesadora al momento de la transacción.
+      PreEnvios.com es un comparador informativo. <b>No somos una institución financiera</b>, no procesamos pagos, no recibimos ni enviamos dinero. Las tasas publicadas son aproximadas y pueden variar respecto al monto final que ofrezca cada remesadora al momento de la transacción. Los resultados pueden ordenarse según acuerdos de afiliado. Preenvios.com no garantiza que las tasas mostradas sean las definitivas al momento del envío.
     </div>
     <div class="f-bot">
-      <div>© 2026 PreEnvios.com — Hecho con ❤ para la comunidad dominicana</div>
-      <div>USA → República Dominicana</div>
+      <div>© 2026 PreEnvios.com — Hecho con ❤ para la diáspora latinoamericana</div>
+      <div>USA → Latinoamérica</div>
     </div>
   </div>
 </footer>
 
 <script>
-const RATE = 60.00;
-const CORREDOR = 'USA_RD';
-const AFILIADOS = ['remitly','wise','xoom','ria','worldremit'];
+// ══════════════════════════════════════════════════════
+// DATA · Corredores y operadores
+// ══════════════════════════════════════════════════════
+const CORREDORES = {
+  honduras: {
+    moneda: 'HNL', simbolo: 'L', nombre: 'Honduras', bandera: '🇭🇳',
+    providers: [
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:0, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:0, fee:0,    time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/send' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:0, fee:0,    time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:0, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:0, fee:0,    time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+    ]
+  },
+  dominican_republic: {
+    moneda: 'DOP', simbolo: 'RD$', nombre: 'Rep. Dominicana', bandera: '🇩🇴',
+    providers: [
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:59.64, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com/us/en/dominican-republic' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:58.02, fee:4.50, time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/us/send-money/send-money-to-dominican-republic' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:58.70, fee:4.99, time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com/dominican-republic/send-money' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:58.80, fee:1.99, time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com/us/en/send-money-to/dominican-republic' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:58.50, fee:1.99, time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com/en/send-money/united-states/dominican-republic' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:59.20, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:58.50, fee:1.99, time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+    ]
+  },
+  guatemala: {
+    moneda: 'GTQ', simbolo: 'Q', nombre: 'Guatemala', bandera: '🇬🇹',
+    providers: [
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:0, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:0, fee:0,    time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/send' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:0, fee:0,    time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:0, fee:0,    time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:0, fee:0,    time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:0, fee:0,    time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+    ]
+  },
+  el_salvador: {
+    moneda: 'USD', simbolo: '$', nombre: 'El Salvador', bandera: '🇸🇻',
+    providers: [
+      { key:'remitly',      name:'Remitly',       badge:'<span class="bm bm-remitly">Remitly</span>',       rate:1, fee:0,    time:'Minutos',  rating:4.8, reviews:8421,  afiliado:true,  link:'https://www.remitly.com' },
+      { key:'wise',         name:'Wise',           badge:'<span class="bm bm-wise">wise</span>',             rate:1, fee:2.50, time:'Segundos', rating:4.9, reviews:12043, afiliado:true,  link:'https://wise.com/send' },
+      { key:'xoom',         name:'Xoom',           badge:'<span class="bm bm-xoom">xoom</span>',             rate:1, fee:4.99, time:'Minutos',  rating:4.7, reviews:6120,  afiliado:true,  link:'https://www.xoom.com' },
+      { key:'ria',          name:'Ria',            badge:'<span class="bm bm-ria">ria</span>',               rate:1, fee:1.99, time:'Minutos',  rating:4.6, reviews:5200,  afiliado:true,  link:'https://www.riamoneytransfer.com' },
+      { key:'worldremit',   name:'WorldRemit',     badge:'<span class="bm bm-wr">WorldRemit</span>',         rate:1, fee:1.99, time:'Minutos',  rating:4.6, reviews:4800,  afiliado:true,  link:'https://www.worldremit.com' },
+      { key:'westernunion', name:'Western Union',  badge:'<span class="bm bm-wu">WU</span>',                 rate:1, fee:5.00, time:'Minutos',  rating:4.5, reviews:15820, afiliado:false, link:'' },
+      { key:'moneygram',    name:'MoneyGram',      badge:'<span class="bm bm-mg">MoneyGram</span>',          rate:1, fee:1.99, time:'Horas',    rating:4.4, reviews:7541,  afiliado:false, link:'' }
+    ]
+  }
+};
 
-const providers = [
-  {name:"Remitly",       key:"remitly",     badge:'<span class="bm bm-remitly">Remitly</span>',    rate:60.00, fee:0.00, time:"Minutos",   rating:4.8, reviews:8421},
-  {name:"Wise",          key:"wise",        badge:'<span class="bm bm-wise">wise</span>',          rate:59.95, fee:1.99, time:"1-2 horas", rating:4.9, reviews:12043},
-  {name:"Xoom",          key:"xoom",        badge:'<span class="bm bm-xoom">xoom</span>',          rate:59.90, fee:0.00, time:"Segundos",  rating:4.7, reviews:6120},
-  {name:"BOSS Money",    key:"boss",        badge:'<span class="bm bm-boss">BOSS</span>',          rate:59.85, fee:0.00, time:"Minutos",   rating:4.6, reviews:3210},
-  {name:"Western Union", key:"westernunion",badge:'<span class="bm bm-wu">WU</span>',              rate:59.70, fee:2.99, time:"Minutos",   rating:4.5, reviews:15820},
-  {name:"MoneyGram",     key:"moneygram",   badge:'<span class="bm bm-mg">MoneyGram</span>',       rate:59.60, fee:3.99, time:"Horas",     rating:4.4, reviews:7541},
-];
+// ══════════════════════════════════════════════════════
+// RANKING · Pesos 40/35/25
+// ══════════════════════════════════════════════════════
+const PESOS = { tasa: 0.40, afiliado: 0.35, velocidad: 0.25 };
+const VELOCIDAD = { 'Segundos': 1.0, 'Minutos': 0.8, 'Horas': 0.4, 'Días': 0.0 };
 
-function velocidad(t){
-  const s = (t || '').toLowerCase();
-  if(s.includes('segundo') || s.includes('minuto')) return 1.0;
-  if(s.includes('hora')) return 0.5;
-  return 0.0;
-}
-
-function rankProviders(){
-  const rates = providers.map(p=>p.rate);
+function rankProviders(corredorKey){
+  const list = CORREDORES[corredorKey].providers;
+  const rates = list.map(p=>p.rate);
   const maxR = Math.max(...rates), minR = Math.min(...rates);
   const span = (maxR - minR) || 1;
-  return providers
+  return list
     .map(p=>{
-      const rateScore = (p.rate - minR) / span;
-      const affScore  = AFILIADOS.includes(p.key) ? 1 : 0;
-      const spdScore  = velocidad(p.time);
-      const score = rateScore*0.40 + affScore*0.35 + spdScore*0.25;
-      return {...p, _score: score, _affiliate: !!affScore};
+      const rateScore = span > 0 ? (p.rate - minR) / span : 0;
+      const affScore  = p.afiliado ? 1 : 0;
+      const spdScore  = VELOCIDAD[p.time] ?? 0;
+      const score = rateScore*PESOS.tasa + affScore*PESOS.afiliado + spdScore*PESOS.velocidad;
+      return {...p, _score: score};
     })
     .sort((a,b)=> b._score - a._score);
 }
 
+// ══════════════════════════════════════════════════════
+// RENDER · Tarjetas de resultados
+// ══════════════════════════════════════════════════════
 function render(usd){
+  const corredorKey = corridorSelect.value;
+  const corredor = CORREDORES[corredorKey];
   const list = document.getElementById('cardList');
   document.getElementById('uiUsd').textContent = usd.toLocaleString();
-  const ranked = rankProviders();
+  document.getElementById('uiDest').textContent = corredor.nombre;
+  const ranked = rankProviders(corredorKey);
+  const esUSD = corredor.moneda === 'USD';
   list.innerHTML = ranked.map((p,i)=>{
     const net = Math.max(0, usd - p.fee);
-    const receive = (net * p.rate).toFixed(0);
+    const receive = net * p.rate;
+    const receiveFmt = esUSD
+      ? '$' + receive.toFixed(2)
+      : Number(receive.toFixed(0)).toLocaleString() + '<small>' + corredor.moneda + '</small>';
     const stars = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
     const tag = i===0 ? 'best' : (i===1 ? 'second' : '');
+    const rateCol = esUSD
+      ? `<div class="val rate">Sin conversión</div><div class="sub">USD → USD</div>`
+      : `<div class="val rate">${p.rate.toFixed(2)}</div><div class="sub">${corredor.moneda} por USD</div>`;
+    const btn = p.afiliado
+      ? `<a href="${p.link}" target="_blank" rel="noopener sponsored" class="c-btn" data-affiliate-slot="${p.key}" data-corredor="${corredorKey}" data-operator="${p.key}" data-position="${i+1}">Enviar ahora <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
+      : `<a href="${p.link || 'https://www.google.com/search?q='+encodeURIComponent(p.name)}" target="_blank" rel="noopener" class="c-btn c-btn-ref" data-corredor="${corredorKey}" data-operator="${p.key}" data-position="${i+1}">Ver en sitio <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`;
     return `
-      <article class="card ${tag}" data-operator="${p.key}" data-position="${i+1}" data-affiliate="${p._affiliate}">
+      <article class="card ${tag}" data-operator="${p.key}" data-position="${i+1}" data-affiliate="${p.afiliado}">
         <div class="c-brand">
           ${p.badge}
           <div class="c-brand-info">
@@ -793,12 +827,78 @@ function render(usd){
             <div class="meta"><span class="stars">${stars}</span> ${p.rating} · ${p.reviews.toLocaleString()} opiniones</div>
           </div>
         </div>
-        <div class="c-col"><div class="lbl">Tasa</div><div class="val rate">${p.rate.toFixed(2)}</div><div class="sub">DOP por USD</div></div>
+        <div class="c-col"><div class="lbl">Tasa</div>${rateCol}</div>
         <div class="c-col"><div class="lbl">Comisión</div><div class="val">${p.fee===0?'Gratis':'$'+p.fee.toFixed(2)}</div><div class="sub">${p.time}</div></div>
-        <div class="c-col"><div class="lbl">Reciben</div><div class="val receive">${Number(receive).toLocaleString()}<small>DOP</small></div></div>
-        <a href="#" class="c-btn" data-operator="${p.key}" data-position="${i+1}">Enviar <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="c-col"><div class="lbl">Reciben</div><div class="val receive">${receiveFmt}</div></div>
+        ${btn}
       </article>`;
   }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// CALCULADORA · Referencias DOM
+// ══════════════════════════════════════════════════════
+const amtUsd = document.getElementById('amtUsd');
+const amtDop = document.getElementById('amtDop');
+const corridorSelect = document.getElementById('corridorSelect');
+const resultsSection = document.getElementById('comparar');
+const searchBtn = document.querySelector('.search-btn');
+const lblReceive = document.getElementById('lblReceive');
+const curFlag = document.getElementById('curFlag');
+const curCode = document.getElementById('curCode');
+const rateRef = document.getElementById('rateRef');
+
+function _corredorActivo(){ return corridorSelect.value; }
+
+// ══════════════════════════════════════════════════════
+// COOKIE · Recuerda el corredor elegido 30 días
+// ══════════════════════════════════════════════════════
+function setCookie(name, value, days){
+  const d = new Date();
+  d.setTime(d.getTime() + days*24*60*60*1000);
+  document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+}
+function getCookie(name){
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+(function initCorredor(){
+  const saved = getCookie('preenvios_corredor');
+  if(saved && CORREDORES[saved]){
+    corridorSelect.value = saved;
+  } else {
+    corridorSelect.value = 'honduras';
+  }
+})();
+
+function applyCorredorUI(){
+  const c = CORREDORES[_corredorActivo()];
+  lblReceive.textContent = 'Reciben en ' + c.nombre;
+  curFlag.textContent = c.bandera;
+  curCode.textContent = c.moneda;
+  const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
+  rateRef.textContent = c.moneda === 'USD'
+    ? '1 USD = 1 USD (sin conversión)'
+    : '1 USD = ' + (best.rate || 0).toFixed(2) + ' ' + c.moneda;
+}
+applyCorredorUI();
+
+// ══════════════════════════════════════════════════════
+// SYNC · Monto + corredor → resultados
+// ══════════════════════════════════════════════════════
+function sync(){
+  const v = parseFloat(amtUsd.value);
+  if(!v || v <= 0){
+    amtDop.value = '';
+    resultsSection.classList.add('hidden');
+    return;
+  }
+  const c = CORREDORES[_corredorActivo()];
+  const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
+  const tasaUi = c.moneda === 'USD' ? 1 : (best.rate || 0);
+  amtDop.value = c.moneda === 'USD' ? v.toFixed(2) : (v * tasaUi).toFixed(0);
+  resultsSection.classList.remove('hidden');
+  render(v);
 }
 
 // ══════════════════════════════════════════════════════
@@ -809,9 +909,7 @@ const _tiempos = { comparo: false, clickOperador: false };
 let _inicioUsoEnviado = false;
 let _resultadosVistosEnviado = false;
 
-function _segundos() {
-  return Math.round((Date.now() - _t0) / 1000);
-}
+function _segundos(){ return Math.round((Date.now() - _t0) / 1000); }
 
 const _intervalos = [10, 20, 30, 45, 60, 90, 120, 180, 240, 300];
 _intervalos.forEach(seg => {
@@ -820,6 +918,7 @@ _intervalos.forEach(seg => {
       event_category: 'engagement',
       event_label: seg + '_segundos',
       segundos: seg,
+      corredor: _corredorActivo(),
       comparo: _tiempos.comparo,
       click_operador: _tiempos.clickOperador
     });
@@ -832,6 +931,7 @@ window.addEventListener('beforeunload', () => {
     navigator.sendBeacon('/beacon', JSON.stringify({
       event: 'salida',
       duracion_segundos: duracion,
+      corredor: _corredorActivo(),
       comparo: _tiempos.comparo,
       click_operador: _tiempos.clickOperador
     }));
@@ -840,41 +940,38 @@ window.addEventListener('beforeunload', () => {
     event_category: 'engagement',
     event_label: 'salida',
     duracion_segundos: duracion,
+    corredor: _corredorActivo(),
     comparo: _tiempos.comparo,
     click_operador: _tiempos.clickOperador
   });
 });
 
 // ══════════════════════════════════════════════════════
-// CALCULADORA · Flujo principal
+// EVENT WIRING
 // ══════════════════════════════════════════════════════
-const amtUsd = document.getElementById('amtUsd');
-const amtDop = document.getElementById('amtDop');
-const resultsSection = document.getElementById('comparar');
-const searchBtn = document.querySelector('.search-btn');
-
-function sync(){
-  const v = parseFloat(amtUsd.value);
-  if(!v || v <= 0){
-    amtDop.value = '';
-    resultsSection.classList.add('hidden');
-    return;
-  }
-  amtDop.value = (v * RATE).toFixed(0);
-  resultsSection.classList.remove('hidden');
-  render(v);
-}
-
 amtUsd.addEventListener('input', ()=>{
   if(!_inicioUsoEnviado && amtUsd.value.length > 0){
     _inicioUsoEnviado = true;
     gtag('event', 'inicio_uso', {
       event_category: 'engagement',
       event_label: 'empezo_a_escribir',
+      corredor: _corredorActivo(),
       segundos_hasta_escribir: _segundos()
     });
   }
   sync();
+});
+
+corridorSelect.addEventListener('change', ()=>{
+  setCookie('preenvios_corredor', corridorSelect.value, 30);
+  applyCorredorUI();
+  sync();
+  gtag('event', 'cambio_corredor', {
+    event_category: 'calculadora',
+    event_label: 'selector',
+    corredor: _corredorActivo(),
+    segundos: _segundos()
+  });
 });
 
 searchBtn.addEventListener('click', (e)=>{
@@ -891,7 +988,7 @@ searchBtn.addEventListener('click', (e)=>{
     event_category: 'calculadora',
     event_label: 'boton_comparar',
     monto: v,
-    corredor: CORREDOR,
+    corredor: _corredorActivo(),
     segundos_hasta_comparar: _segundos()
   });
 });
@@ -904,14 +1001,14 @@ document.getElementById('cardList').addEventListener('click', (e)=>{
   gtag('event', 'click_operador', {
     event_category: 'afiliado',
     event_label: (btn.dataset.operator || '').toLowerCase(),
-    corredor: CORREDOR,
+    corredor: _corredorActivo(),
     monto: parseFloat(amtUsd.value) || 0,
     posicion: parseInt(btn.dataset.position, 10) || 0,
     segundos_hasta_click: _segundos()
   });
 });
 
-// Scroll: registra la primera vez que la sección de resultados es visible
+// Scroll: primera vez que la sección de resultados es visible
 const _obs = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting && !_resultadosVistosEnviado && !resultsSection.classList.contains('hidden')){
@@ -919,6 +1016,7 @@ const _obs = new IntersectionObserver((entries)=>{
       gtag('event', 'resultados_vistos', {
         event_category: 'engagement',
         event_label: 'scroll_resultados',
+        corredor: _corredorActivo(),
         segundos_hasta_scroll: _segundos()
       });
     }
