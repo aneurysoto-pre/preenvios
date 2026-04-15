@@ -1312,9 +1312,9 @@ const pageOverlay = document.getElementById('pageOverlay');
 const pageContent = document.getElementById('pageContent');
 const pageBack = document.getElementById('pageBack');
 
-function openPage(key){
+function renderPage(key){
   const p = PAGES[key];
-  if(!p) return;
+  if(!p) return false;
   pageContent.innerHTML = `
     <span class="page-tag">${p.tag}</span>
     <h1>${p.title}</h1>
@@ -1324,20 +1324,28 @@ function openPage(key){
   pageOverlay.classList.add('open');
   pageOverlay.scrollTop = 0;
   document.body.style.overflow = 'hidden';
+  return true;
 }
-function closePage(){
+function openPage(key){
+  if(!renderPage(key)) return;
+  history.pushState({page:key}, '', '#' + key);
+}
+function closePage(updateHistory){
   pageOverlay.classList.remove('open');
   document.body.style.overflow = '';
+  if(updateHistory && history.state && history.state.page){
+    history.back();
+  }
 }
-pageBack.addEventListener('click', closePage);
+pageBack.addEventListener('click', ()=> closePage(true));
 document.querySelectorAll('[data-page-close]').forEach(el=>{
-  el.addEventListener('click', e=>{ e.preventDefault(); closePage(); });
+  el.addEventListener('click', e=>{ e.preventDefault(); closePage(true); });
 });
 document.querySelectorAll('footer [data-page]').forEach(link=>{
   link.addEventListener('click', e=>{
     const key = link.dataset.page;
     if(key === 'comparar'){
-      closePage();
+      closePage(true);
       document.getElementById('comparar').scrollIntoView({behavior:'smooth'});
       return;
     }
@@ -1346,8 +1354,24 @@ document.querySelectorAll('footer [data-page]').forEach(link=>{
   });
 });
 document.addEventListener('keydown', e=>{
-  if(e.key === 'Escape' && pageOverlay.classList.contains('open')) closePage();
+  if(e.key === 'Escape' && pageOverlay.classList.contains('open')) closePage(true);
 });
+window.addEventListener('popstate', e=>{
+  const key = e.state && e.state.page;
+  if(key && PAGES[key]){
+    renderPage(key);
+  } else {
+    pageOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+(function initFromHash(){
+  const hash = location.hash.replace('#','');
+  if(hash && PAGES[hash]){
+    renderPage(hash);
+    history.replaceState({page:hash}, '', '#' + hash);
+  }
+})();
 
 // Sort buttons visual toggle
 document.querySelectorAll('.sort button').forEach(b=>{
