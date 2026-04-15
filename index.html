@@ -321,6 +321,37 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
 .banks-note{margin-top:18px;font-size:12px;color:var(--ink-2);text-align:center}
 .banks-note b{color:var(--blue);font-weight:700}
 
+/* ═════ PAGE OVERLAY (footer pages) ═════ */
+.page-overlay{position:fixed;inset:0;background:var(--white);z-index:200;overflow-y:auto;display:none;animation:fadeIn .3s ease}
+.page-overlay.open{display:block}
+.page-overlay .page-nav{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--g200);z-index:10}
+.page-overlay .page-nav-in{max-width:1240px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.page-back{display:inline-flex;align-items:center;gap:8px;background:var(--g50);border:1.5px solid var(--g200);padding:10px 18px;border-radius:50px;font-size:14px;font-weight:700;color:var(--ink);transition:.2s;cursor:pointer}
+.page-back:hover{background:var(--blue);color:#fff;border-color:var(--blue);transform:translateX(-3px)}
+.page-back svg{width:16px;height:16px}
+.page-content{max-width:820px;margin:0 auto;padding:60px 24px 100px}
+.page-content .page-tag{display:inline-block;font-size:12px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;padding:6px 14px;background:var(--blue-soft);border-radius:50px}
+.page-content h1{font-size:clamp(30px,4vw,44px);font-weight:900;line-height:1.1;margin-bottom:18px;color:var(--ink)}
+.page-content .lead{font-size:18px;color:var(--ink-2);margin-bottom:36px;line-height:1.6}
+.page-content h2{font-size:22px;font-weight:800;margin:36px 0 14px;color:var(--ink)}
+.page-content p{font-size:15px;color:var(--ink-2);line-height:1.7;margin-bottom:14px}
+.page-content a{color:var(--blue);font-weight:700;border-bottom:1px solid var(--blue-soft);transition:.2s}
+.page-content a:hover{border-color:var(--blue)}
+.page-content ul{margin:14px 0 20px 22px}
+.page-content li{font-size:15px;color:var(--ink-2);line-height:1.7;margin-bottom:8px}
+.page-content .card-box{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r-lg);padding:24px 26px;margin-bottom:14px;transition:.2s}
+.page-content .card-box:hover{border-color:var(--blue-soft);background:var(--white);box-shadow:var(--sh)}
+.page-content .card-box h3{font-size:17px;font-weight:800;margin-bottom:6px;color:var(--ink)}
+.page-content .card-box p{font-size:14px;margin-bottom:0}
+.page-content .rate-row{display:flex;justify-content:space-between;align-items:center;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r);padding:14px 18px;margin-bottom:8px}
+.page-content .rate-row .country{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.page-content .rate-row .rate-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;color:var(--green-dark);font-size:16px}
+.page-content .soon-box{text-align:center;padding:60px 30px;background:var(--g50);border:1.5px dashed var(--g300);border-radius:var(--r-lg)}
+.page-content .soon-box .icn{font-size:48px;margin-bottom:14px}
+.page-content .contact-box{background:linear-gradient(135deg,var(--blue-soft),var(--green-soft));border-radius:var(--r-lg);padding:36px 30px;text-align:center;margin-top:24px}
+.page-content .contact-box a{display:inline-block;background:var(--ink);color:#fff !important;padding:14px 28px;border-radius:50px;font-weight:800;font-size:15px;border:none;margin-top:14px;transition:.2s}
+.page-content .contact-box a:hover{background:var(--blue);transform:translateY(-2px)}
+
 /* ═════ RESPONSIVE ═════ */
 @media(max-width:980px){
   .hero-in{grid-template-columns:1fr;gap:40px}
@@ -737,9 +768,9 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
           <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h3l-7 8 8 12h-6l-5-7-6 7H2l8-9L2 2h6l4 6z"/></svg></a>
         </div>
       </div>
-      <div class="f-col"><h4>Producto</h4><a href="#">Comparar</a><a href="#">Tasas hoy</a><a href="#">Remesadoras</a><a href="#">Alertas</a></div>
-      <div class="f-col"><h4>Empresa</h4><a href="#">Sobre nosotros</a><a href="#">Cómo funciona</a><a href="#">Contacto</a><a href="#">Blog</a></div>
-      <div class="f-col"><h4>Legal</h4><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></div>
+      <div class="f-col"><h4>Producto</h4><a href="#comparar" data-page="comparar">Comparar</a><a href="#" data-page="tasas">Tasas hoy</a><a href="#" data-page="remesadoras">Remesadoras</a><a href="#" data-page="alertas">Alertas</a></div>
+      <div class="f-col"><h4>Empresa</h4><a href="#" data-page="sobre">Sobre nosotros</a><a href="#" data-page="como">Cómo funciona</a><a href="#" data-page="contacto">Contacto</a></div>
+      <div class="f-col"><h4>Legal</h4><a href="#" data-page="privacidad">Privacidad</a><a href="#" data-page="terminos">Términos</a><a href="#" data-page="cookies">Cookies</a></div>
     </div>
     <div class="f-disclaimer">
       PreEnvios.com es un comparador informativo. <b>No somos una institución financiera</b>, no procesamos pagos, no recibimos ni enviamos dinero. Las tasas publicadas son aproximadas y pueden variar respecto al monto final que ofrezca cada remesadora al momento de la transacción. Los resultados pueden ordenarse según acuerdos de afiliado. Preenvios.com no garantiza que las tasas mostradas sean las definitivas al momento del envío.
@@ -750,6 +781,26 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
     </div>
   </div>
 </footer>
+
+<!-- PAGE OVERLAY (footer pages) -->
+<div class="page-overlay" id="pageOverlay">
+  <div class="page-nav">
+    <div class="page-nav-in">
+      <a href="#" class="logo" data-page-close>
+        <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="10" fill="#00D957"/>
+          <path d="M13 10h10.5a7 7 0 0 1 0 14H17v6h-4V10zm4 4v6h6.5a3 3 0 0 0 0-6H17z" fill="#fff"/>
+        </svg>
+        <span class="logo-text"><span class="pre">pre</span><span class="env">envios</span><span class="dot">.com</span></span>
+      </a>
+      <button class="page-back" id="pageBack">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 10H5m0 0l4-4m-4 4l4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Volver al inicio
+      </button>
+    </div>
+  </div>
+  <div class="page-content" id="pageContent"></div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════════════
@@ -1115,6 +1166,187 @@ mobileMenu.querySelectorAll('a').forEach(a=>{
     burger.classList.remove('open');
     mobileMenu.classList.remove('open');
   });
+});
+
+// ══════════════════════════════════════════════════════
+// PAGE OVERLAY · Páginas internas del footer
+// ══════════════════════════════════════════════════════
+const PAGES = {
+  tasas: {
+    tag: 'Tasas hoy',
+    title: 'Tasas actualizadas de los 4 corredores',
+    lead: 'Mejor tasa disponible hoy en cada corredor según los operadores comparados. Actualizado semanalmente.',
+    body: () => {
+      const rows = Object.keys(CORREDORES).map(k => {
+        const c = CORREDORES[k];
+        const best = [...c.providers].sort((a,b)=>b.rate-a.rate)[0];
+        const rateTxt = c.moneda === 'USD'
+          ? '1 USD = 1 USD (sin conversión)'
+          : '1 USD = ' + best.rate.toFixed(2) + ' ' + c.moneda;
+        return `<div class="rate-row"><div class="country">${c.bandera} ${c.nombre}</div><div class="rate-val">${rateTxt}</div></div>`;
+      }).join('');
+      return rows + '<p style="margin-top:18px;font-size:13px;color:var(--g500)">Las tasas mostradas son aproximadas. Confirma siempre el monto final con la remesadora antes de enviar.</p>';
+    }
+  },
+  remesadoras: {
+    tag: 'Remesadoras',
+    title: 'Las 7 remesadoras que comparamos',
+    lead: 'Comparamos los operadores más usados por la diáspora latinoamericana en EE.UU.',
+    body: () => `
+      <div class="card-box"><h3>Remitly</h3><p>Una de las remesadoras digitales más grandes del mundo. Envíos rápidos a banco o efectivo, con tasas competitivas para nuevos usuarios.</p></div>
+      <div class="card-box"><h3>Wise</h3><p>Conocida por usar la tasa real del mercado sin margen oculto. Ideal para envíos a cuentas bancarias con costos transparentes.</p></div>
+      <div class="card-box"><h3>Xoom (PayPal)</h3><p>Servicio de remesas de PayPal. Permite enviar a cuentas bancarias, recoger en efectivo o recargar móvil en segundos.</p></div>
+      <div class="card-box"><h3>Ria Money Transfer</h3><p>Una de las redes de remesas más grandes del mundo, con presencia fuerte en América Latina y costos bajos.</p></div>
+      <div class="card-box"><h3>WorldRemit</h3><p>Remesadora digital con cobertura global. Envíos a banco, efectivo, billetera móvil o recarga de celular.</p></div>
+      <div class="card-box"><h3>Western Union</h3><p>La red de remesas más reconocida del mundo. Miles de puntos físicos para enviar y recibir efectivo en toda Latinoamérica.</p></div>
+      <div class="card-box"><h3>MoneyGram</h3><p>Otra de las grandes redes globales. Envíos a banco o efectivo con cobertura amplia en Centroamérica y el Caribe.</p></div>
+    `
+  },
+  alertas: {
+    tag: 'Alertas',
+    title: 'Alertas de tasa de cambio',
+    lead: '',
+    body: () => `
+      <div class="soon-box">
+        <div class="icn">🔔</div>
+        <h2 style="margin-top:0">Próximamente</h2>
+        <p>Activa alertas cuando la tasa cambie. Estamos trabajando en esta función.</p>
+      </div>
+    `
+  },
+  sobre: {
+    tag: 'Sobre nosotros',
+    title: 'Quiénes somos',
+    lead: 'PreEnvios.com es un comparador independiente de remesas para la diáspora latinoamericana en Estados Unidos.',
+    body: () => `
+      <p><b>No somos una remesadora.</b> No movemos dinero, no procesamos pagos, no pedimos registro. Solo te ayudamos a comparar para que envíes más por menos.</p>
+      <p>Nuestro único objetivo es darte la información que necesitas para elegir la mejor opción cada vez que mandas dinero a tu familia en Latinoamérica.</p>
+      <p>Comparamos las 7 remesadoras más usadas — Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram — para los corredores USA → Honduras, República Dominicana, Guatemala y El Salvador.</p>
+    `
+  },
+  como: {
+    tag: 'Cómo funciona',
+    title: '3 pasos. Eso es todo.',
+    lead: 'Así de fácil es ahorrar en tus envíos a Latinoamérica.',
+    body: () => `
+      <div class="card-box"><h3>1. Escribe cuánto envías</h3><p>Ingresa el monto en dólares que quieres enviar desde Estados Unidos.</p></div>
+      <div class="card-box"><h3>2. Compara las tasas</h3><p>Ve al instante cuánto llega por cada remesadora, con comisiones y tiempos incluidos.</p></div>
+      <div class="card-box"><h3>3. Elige y envía</h3><p>Haz clic en la mejor opción y te llevamos directo a la remesadora para completar tu envío.</p></div>
+    `
+  },
+  contacto: {
+    tag: 'Contacto',
+    title: 'Hablemos',
+    lead: '¿Tienes alguna pregunta, sugerencia o quieres trabajar con nosotros?',
+    body: () => `
+      <div class="contact-box">
+        <p style="font-size:16px;margin-bottom:0">¿Tienes alguna pregunta? Escríbenos a <b>contact@preenvios.com</b></p>
+        <a href="mailto:contact@preenvios.com">Enviar correo</a>
+      </div>
+    `
+  },
+  privacidad: {
+    tag: 'Legal',
+    title: 'Política de privacidad',
+    lead: 'Tu privacidad es importante. Esto es lo que recopilamos y cómo lo usamos.',
+    body: () => `
+      <h2>Qué datos recopilamos</h2>
+      <p>PreEnvios.com utiliza Google Analytics para medir el tráfico del sitio. Esto incluye:</p>
+      <ul>
+        <li>País, ciudad y dispositivo desde el que visitas</li>
+        <li>Páginas que visitas y tiempo en cada una</li>
+        <li>Fuente de tráfico (de dónde llegaste)</li>
+        <li>Interacciones con el comparador (montos, corredores elegidos, clics)</li>
+      </ul>
+      <h2>Qué NO recopilamos</h2>
+      <p>No pedimos registro, no recopilamos nombre, correo, teléfono ni datos financieros. No procesamos pagos ni movemos dinero.</p>
+      <h2>Cómo usamos los datos</h2>
+      <p>Usamos esta información únicamente para entender qué necesitan los usuarios y mejorar el comparador. <b>Nunca vendemos ni compartimos datos con terceros</b> fuera de Google Analytics.</p>
+      <h2>Cookies</h2>
+      <p>Usamos cookies de Google Analytics y una cookie propia que recuerda el corredor que elegiste para no preguntarte cada vez que vuelvas.</p>
+      <h2>Contacto</h2>
+      <p>Si tienes preguntas sobre privacidad, escríbenos a <a href="mailto:contact@preenvios.com">contact@preenvios.com</a>.</p>
+    `
+  },
+  terminos: {
+    tag: 'Legal',
+    title: 'Términos de uso',
+    lead: 'Al usar PreEnvios.com aceptas los siguientes términos.',
+    body: () => `
+      <h2>Qué es PreEnvios.com</h2>
+      <p>PreEnvios.com es un <b>comparador informativo</b> de remesas. No somos una institución financiera, no procesamos pagos, no recibimos ni enviamos dinero.</p>
+      <h2>Sobre las tasas mostradas</h2>
+      <p>Las tasas, comisiones y tiempos publicados son <b>estimaciones aproximadas</b> obtenidas de información pública de las remesadoras. Pueden variar respecto al monto final que ofrezca cada operador al momento de la transacción.</p>
+      <p>No garantizamos que las tasas mostradas sean las definitivas. <b>Confirma siempre el monto final directamente con la remesadora antes de enviar.</b></p>
+      <h2>Acuerdos comerciales</h2>
+      <p>Algunos operadores tienen acuerdos de afiliado con PreEnvios.com. Cuando haces clic en "Enviar ahora" y completas una transferencia, podemos recibir una comisión del operador. Esto no tiene ningún costo adicional para ti y no afecta el monto que envías.</p>
+      <p>El orden de los resultados considera la tasa de cambio, la velocidad del envío y acuerdos comerciales con algunos operadores.</p>
+      <h2>Limitación de responsabilidad</h2>
+      <p>PreEnvios.com no es responsable por errores en las tasas mostradas, transacciones realizadas con las remesadoras, ni por cualquier perjuicio derivado del uso del sitio. Cualquier transacción ocurre directamente entre tú y la remesadora elegida.</p>
+      <h2>Cambios en los términos</h2>
+      <p>Estos términos pueden actualizarse en cualquier momento. La versión vigente siempre es la publicada en esta página.</p>
+    `
+  },
+  cookies: {
+    tag: 'Legal',
+    title: 'Política de cookies',
+    lead: 'Las cookies que usamos son simples y solo sirven para mejorar tu experiencia.',
+    body: () => `
+      <h2>Qué cookies usamos</h2>
+      <p>PreEnvios.com usa dos tipos de cookies:</p>
+      <ul>
+        <li><b>Google Analytics:</b> cookies de medición que nos permiten saber cuántas personas visitan el sitio, desde dónde y qué hacen. Son anónimas y no te identifican personalmente.</li>
+        <li><b>Cookie propia (preenvios_corredor):</b> recuerda el corredor que elegiste para no preguntarte cada vez que vuelvas. Dura 30 días.</li>
+      </ul>
+      <h2>Cookies que NO usamos</h2>
+      <p>No usamos cookies de publicidad personalizada, ni rastreo entre sitios, ni cookies de redes sociales. Tampoco compartimos información con terceros fuera de Google Analytics.</p>
+      <h2>Cómo desactivar las cookies</h2>
+      <p>Puedes desactivar las cookies en la configuración de tu navegador. El sitio seguirá funcionando, pero no recordaremos el corredor que elegiste.</p>
+      <h2>Más información</h2>
+      <p>Si tienes dudas sobre nuestras cookies, escríbenos a <a href="mailto:contact@preenvios.com">contact@preenvios.com</a>.</p>
+    `
+  }
+};
+
+const pageOverlay = document.getElementById('pageOverlay');
+const pageContent = document.getElementById('pageContent');
+const pageBack = document.getElementById('pageBack');
+
+function openPage(key){
+  const p = PAGES[key];
+  if(!p) return;
+  pageContent.innerHTML = `
+    <span class="page-tag">${p.tag}</span>
+    <h1>${p.title}</h1>
+    ${p.lead ? `<p class="lead">${p.lead}</p>` : ''}
+    ${p.body()}
+  `;
+  pageOverlay.classList.add('open');
+  pageOverlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closePage(){
+  pageOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+pageBack.addEventListener('click', closePage);
+document.querySelectorAll('[data-page-close]').forEach(el=>{
+  el.addEventListener('click', e=>{ e.preventDefault(); closePage(); });
+});
+document.querySelectorAll('footer [data-page]').forEach(link=>{
+  link.addEventListener('click', e=>{
+    const key = link.dataset.page;
+    if(key === 'comparar'){
+      closePage();
+      document.getElementById('comparar').scrollIntoView({behavior:'smooth'});
+      return;
+    }
+    e.preventDefault();
+    openPage(key);
+  });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape' && pageOverlay.classList.contains('open')) closePage();
 });
 
 // Sort buttons visual toggle
