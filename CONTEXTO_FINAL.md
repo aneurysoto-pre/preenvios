@@ -346,15 +346,34 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 - [ ] Contactar Banco Popular RD para widget de tasa
 - [ ] Contactar bancos centroamericanos para acuerdos similares
 
-#### 4.4 — Alertas premium
+#### 4.4 — Panel del cliente y alertas premium
 - [ ] Crear tabla alertas_suscriptores en Supabase
+- [ ] Crear tabla historial_tasas en Supabase — guarda tasas por corredor cada 2 horas para mostrar gráfica de fluctuación
+- [ ] Crear tabla envios_record en Supabase — el usuario registra sus envíos manualmente para tener historial descargable
 - [ ] Configurar Stripe para cobro recurrente $2–5/mes
+- [ ] Página de registro e inicio de sesión — auth con Supabase
+- [ ] Panel del cliente — lo que el usuario hace adentro:
+  - [ ] Ver tasas de cambio en tiempo real de sus corredores favoritos
+  - [ ] Elegir hasta 5 pares de monedas para seguir (DOP/USD, HNL/USD, GTQ/USD, SVC/USD)
+  - [ ] Configurar alerta por umbral — ejemplo: "avísame cuando DOP pase de 61"
+  - [ ] Configurar alerta diaria automática — recibe el tipo de cambio del día sin consultarlo manualmente
+  - [ ] Elegir canal de notificación — email, WhatsApp o ambos
+  - [ ] Ver gráfica de fluctuación histórica por par de monedas
+  - [ ] Registrar y descargar récord de envíos en PDF o CSV
+  - [ ] Gestionar suscripción y método de pago vía Stripe
 - [ ] Bot WhatsApp envía alerta cuando tasa cruza umbral configurado
-- [ ] Página de suscripción a alertas
-- [ ] Email de confirmación de suscripción (Resend)
+- [ ] Email de confirmación de suscripción y alertas diarias (Resend)
 - [ ] Newsletter semanal: mejor operador de la semana por corredor
 
-#### 4.5 — Negociación CPL y acuerdos directos
+#### 4.5 — Panel de administrador
+- [ ] Dashboard interno con métricas clave — visitas, comparaciones y clics por operador en tiempo real
+- [ ] Módulo de actualización manual de tasas por corredor — interfaz simple para actualizar sin tocar código
+- [ ] Lista de suscriptores activos con estado de pago y corredor favorito
+- [ ] Módulo para disparar alertas manualmente por corredor — para cuando un scraper falle
+- [ ] Reporte de ingresos — comisiones por afiliado + suscripciones premium por mes
+- [ ] Monitor de estado de scrapers — verde/rojo por operador con última actualización exitosa
+
+#### 4.6 — Negociación CPL y acuerdos directos
 - [ ] Cuando 200+ clics/mes por operador: contactar para negociar directo
 - [ ] Eliminar intermediario (Impact, CJ) para operadores con volumen
 - [ ] Negociar CPL: pago por usuario registrado aunque no haya enviado
