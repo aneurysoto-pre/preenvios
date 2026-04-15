@@ -270,6 +270,7 @@ NODE_ENV=production
 - [ ] Verificar que Google Analytics sigue midiendo correctamente
 - [ ] Verificar que todos los slots de afiliado y publicidad funcionan
 - [ ] Construir sección **"Ofertas destacadas hoy"** (estilo trivago · carrusel horizontal de tarjetas patrocinadas) — estuvo oculta en el MVP porque mostrar promociones sin sponsors reales es publicidad engañosa y pone en riesgo la aplicación a Impact/CJ. Activarla en Fase 1 solo cuando: (a) al menos un afiliado esté aprobado y genere comisión real, (b) las tarjetas muestren únicamente promociones reales verificadas con el operador, (c) cada tarjeta tenga el badge "Patrocinado" visible y link directo con tracking ID. Tabla `ofertas` en Supabase alimenta el carrusel.
+- [ ] Reemplazar el selector nativo del celular para elegir país destino por un buscador web personalizado — debe buscar por nombre del país, código de moneda (DOP, HNL, GTQ, USD) y código de país (DO, HN, GT, SV). Ejemplo: escribir DOP muestra República Dominicana, escribir DOM también la muestra. Referencia visual: RemitFinder.com. El selector nativo del sistema operativo no debe activarse.
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
 - [ ] Configurar Upstash Redis para cache de precios
@@ -309,6 +310,27 @@ NODE_ENV=production
 - [ ] Configurar sitemap.xml automático
 - [ ] Verificar propiedad en Google Search Console
 - [ ] Optimizar Core Web Vitals — verde en PageSpeed
+
+#### 4.1.1 — Keywords SEO prioritarias (no mencionar marcas en anuncios pagados)
+Palabras y frases de mayor volumen de búsqueda para los corredores activos:
+- enviar dinero
+- envios de dinero
+- enviar dinero a República Dominicana
+- enviar dinero a Honduras
+- enviar dinero a Guatemala
+- enviar dinero a El Salvador
+- remesas a República Dominicana
+- remesas a Honduras
+- mejor tasa de cambio hoy
+- cuanto llega si envio 100 dolares
+- DOP USD
+- HNL USD
+- GTQ USD
+- comparar remesadoras
+- remesadora más barata
+- enviar dinero sin comisión
+
+Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del blog por corredor.
 
 #### 4.2 — Nuevos corredores
 - [ ] Agregar corredor USA → Colombia con operadores y afiliados
