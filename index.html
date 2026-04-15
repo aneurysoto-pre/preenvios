@@ -345,6 +345,11 @@ footer{background:var(--ink);color:var(--g400);padding:70px 0 30px}
   .f-grid{grid-template-columns:1fr}
   .strip-logos{gap:18px}
   .cta-in{padding:48px 26px}
+  /* bank rates strip — scroll horizontal en movil */
+  .banks-grid{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 12px;margin:0 -24px;padding-left:24px;padding-right:24px;-webkit-overflow-scrolling:touch}
+  .banks-grid::-webkit-scrollbar{height:6px}
+  .banks-grid::-webkit-scrollbar-thumb{background:var(--g300);border-radius:50px}
+  .bk{flex:0 0 75%;scroll-snap-align:start;min-width:0}
   /* search card mobile — evita desbordes con cantidades grandes */
   .search{padding:18px}
   .field{padding:10px 12px}
