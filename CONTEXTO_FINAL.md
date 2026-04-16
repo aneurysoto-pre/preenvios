@@ -298,9 +298,9 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] 70%+ del tráfico desde EE.UU. confirmado
 
 ### Fase 1 — Migración al stack final (Semana 1–2 post-MVP)
-- [ ] Crear proyecto Next.js 14+ con TypeScript en el mismo repositorio
+- [x] Crear proyecto Next.js 14+ con TypeScript en el mismo repositorio (completado 2026-04-16)
 - [ ] Migrar el diseño HTML a componentes React manteniendo línea gráfica exacta
-- [ ] Configurar Tailwind CSS con las variables de diseño del MVP
+- [x] Configurar Tailwind CSS con las variables de diseño del MVP (completado 2026-04-16)
 - [ ] Conectar repositorio a Vercel — deploy automático desde GitHub
 - [ ] Crear proyecto en Supabase — tabla `precios` y tabla `corredores`
 - [ ] Migrar las tasas manuales del HTML a Supabase
@@ -317,21 +317,21 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [ ] NO incluir selector de método de pago (ACH, tarjeta débito, tarjeta crédito) — ese lo decide el usuario dentro del sitio del operador después de hacer clic en "Enviar ahora". Monito no se mete en eso y nosotros tampoco. Mantenerlo simple
 - [ ] Evento GA4 cambio_metodo_entrega para medir qué métodos usa cada corredor (insight para negociar con operadores después)
 - [ ] Expandir el algoritmo de ranking del MVP (hoy tasa 40 + afiliado 35 + velocidad 25) agregando 2 criterios nuevos: confiabilidad (basada en años del operador + licencia en EE.UU., valor fijo por operador) y disponibilidad de métodos de entrega. Nuevos pesos: tasa 35, afiliado 25, velocidad 20, confiabilidad 10, métodos 10. Tecnología: función rankProviders en lib/ranking.ts. Mostrar en la tarjeta de cada operador un badge "Preenvíos Score: X/100" que rompe el tie visual y genera credibilidad sin construir un sistema de 30 criterios como Monito
-- [ ] Configurar soporte multi-idioma español/inglés desde la migración inicial usando next-intl en Next.js 14 (App Router). Hacerlo en Fase 1 evita reescribir rutas después. Estructura de URLs: preenvios.com/es/ (español, default) y preenvios.com/en/ (inglés). Tecnología: next-intl con middleware de Next.js para detección de locale
-- [ ] Crear archivos de traducción messages/es.json y messages/en.json con todos los textos de UI — navegación, hero, comparador, resultados, FAQ, footer, formularios
-- [ ] Middleware next-intl que detecta automáticamente el idioma del navegador en primera visita (header Accept-Language) y redirige a /es o /en. Fallback a español si el navegador reporta otro idioma
+- [x] Configurar soporte multi-idioma español/inglés desde la migración inicial usando next-intl en Next.js 14 (App Router). Hacerlo en Fase 1 evita reescribir rutas después. Estructura de URLs: preenvios.com/es/ (español, default) y preenvios.com/en/ (inglés). Tecnología: next-intl con middleware de Next.js para detección de locale (completado 2026-04-16)
+- [x] Crear archivos de traducción messages/es.json y messages/en.json con todos los textos de UI — navegación, hero, comparador, resultados, FAQ, footer, formularios (completado 2026-04-16)
+- [x] Middleware next-intl que detecta automáticamente el idioma del navegador en primera visita (header Accept-Language) y redirige a /es o /en. Fallback a español si el navegador reporta otro idioma (completado 2026-04-16)
 - [ ] Cookie NEXT_LOCALE que recuerda la preferencia del usuario 365 días — prioridad sobre Accept-Language en visitas siguientes
 - [ ] Selector de idioma EN/ES en el header del sitio — reemplaza el botón EN actual del MVP. Al cambiar, navega a la misma página en el otro idioma (no pierde la ruta actual)
 - [ ] Meta tags hreflang en cada página: rel="alternate" hreflang="es" y hreflang="en" apuntando a la versión correspondiente — requerido para SEO multi-idioma por Google
 - [ ] Sitemap.xml separado por idioma — sitemap-es.xml y sitemap-en.xml, ambos referenciados en robots.txt
-- [ ] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas
+- [x] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas (completado 2026-04-16)
 - [ ] Evento GA4 cambio_idioma para medir cuántos usuarios usan cada versión (validar si inglés genera tráfico suficiente para justificar mantener contenido)
 - [ ] Configurar Vercel Environment Variables con todas las credenciales del .env.local
 - [ ] Configurar GitHub Secrets con las mismas credenciales (redundancia por si se usa GitHub Actions futuro)
-- [ ] Crear archivo .env.example con nombres de variables sin valores reales
-- [ ] Verificar que .env.local está en .gitignore antes del primer commit de Next.js
-- [ ] Crear archivo .github/dependabot.yml con scan semanal de npm
-- [ ] Crear README.md técnico del repositorio con instrucciones de setup local
+- [x] Crear archivo .env.example con nombres de variables sin valores reales (completado 2026-04-16)
+- [x] Verificar que .env.local está en .gitignore antes del primer commit de Next.js (completado 2026-04-16)
+- [x] Crear archivo .github/dependabot.yml con scan semanal de npm (completado 2026-04-16)
+- [x] Crear README.md técnico del repositorio con instrucciones de setup local (completado 2026-04-16)
 - [ ] Verificar deploy automático desde main a preenvios.com funciona correctamente
 - [ ] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel
 
