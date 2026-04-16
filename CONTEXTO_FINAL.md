@@ -307,7 +307,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Crear API route /api/precios que sirve las tasas desde Supabase (completado 2026-04-16)
 - [x] El landing ahora lee precios de Supabase en lugar del HTML hardcodeado (completado 2026-04-16)
 - [ ] Configurar dominio preenvios.com en Vercel (dejar de usar GitHub Pages)
-- [ ] Verificar que Google Analytics sigue midiendo correctamente
+- [x] Verificar que Google Analytics sigue midiendo correctamente (completado 2026-04-16)
 - [x] Verificar que todos los slots de afiliado y publicidad funcionan (completado 2026-04-16)
 - [ ] Construir sección **"Ofertas destacadas hoy"** (estilo trivago · carrusel horizontal de tarjetas patrocinadas) — estuvo oculta en el MVP porque mostrar promociones sin sponsors reales es publicidad engañosa y pone en riesgo la aplicación a Impact/CJ. Activarla en Fase 1 solo cuando: (a) al menos un afiliado esté aprobado y genere comisión real, (b) las tarjetas muestren únicamente promociones reales verificadas con el operador, (c) cada tarjeta tenga el badge "Patrocinado" visible y link directo con tracking ID. Tabla `ofertas` en Supabase alimenta el carrusel.
 - [x] Reemplazar el selector nativo del celular para elegir país destino por un buscador web personalizado — debe buscar por nombre del país, código de moneda (DOP, HNL, GTQ, USD) y código de país (DO, HN, GT, SV). Ejemplo: escribir DOP muestra República Dominicana, escribir DOM también la muestra. Referencia visual: RemitFinder.com. El selector nativo del sistema operativo no debe activarse. (completado 2026-04-16)
