@@ -336,7 +336,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel (completado 2026-04-16 — verificado con rama test/verify-preview, deploy BBviLHHJY Ready)
 
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
-Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios pagados. Tecnología: LLC via ZenBusiness o LegalZoom, páginas estáticas MDX para documentos legales.
+Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Plazo realista: 4-8 semanas (depende del proveedor de LLC). Durante ese tiempo se puede operar como individuo usando Payoneer (para CJ Affiliate) y Wise Personal (para Impact.com y Partnerize). Los pagos llegarán al nombre personal del founder hasta que la LLC esté activa, y después se migran los datos bancarios de las redes a la cuenta de la LLC.
 
 - [ ] Constituir LLC en Delaware o Florida para operar el negocio (proteger patrimonio personal) (pendiente de acción del usuario)
 - [ ] Obtener EIN (Employer Identification Number) del IRS — requerido para abrir cuenta bancaria del negocio y para aplicar a redes de afiliados (pendiente de acción del usuario)
@@ -380,6 +380,13 @@ Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios 
 - [x] Botón de compartir por WhatsApp con mensaje pre-escrito — activo viral en cadenas familiares (completado 2026-04-16)
 
 ### Fase 3 — Afiliados activos y primeras comisiones (Mes 2)
+
+#### 3.0 — Setup de cobro sin LLC (ejecutable desde día 1)
+- [ ] Crear cuenta Wise Personal (wise.com) — genera número de cuenta USA con routing number para recibir ACH desde Impact.com y Partnerize
+- [ ] Crear cuenta Payoneer (payoneer.com) — para recibir pagos de CJ Affiliate vía "CJ International Payments"
+- [ ] Si eres residente USA: preparar W-9 con tu SSN/ITIN. Si no: preparar W-8BEN. Ambos se suben a la red de afiliados cuando pasas el threshold de $2,000/año
+- [ ] Cuando la LLC y EIN estén listos (Fase 1.5), cambiar datos bancarios en cada red de afiliado a la cuenta Mercury/Relay de la LLC
+
 - [ ] Aplicar a Remitly en Impact.com con datos de tráfico de GA4
 - [ ] Aplicar a Wise en Partnerize
 - [ ] Aplicar a Xoom, Ria, WorldRemit en CJ Affiliate
@@ -592,3 +599,4 @@ Cuando el volumen referido llegue a $50,000/mes:
 13. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
 14. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
 15. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
+16. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
