@@ -327,7 +327,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas (completado 2026-04-16)
 - [x] Evento GA4 cambio_idioma para medir cuántos usuarios usan cada versión (validar si inglés genera tráfico suficiente para justificar mantener contenido) (completado 2026-04-16)
 - [x] Configurar Vercel Environment Variables con todas las credenciales del .env.local (completado 2026-04-16 — 4 variables verificadas en producción)
-- [ ] Configurar GitHub Secrets con las mismas credenciales (redundancia por si se usa GitHub Actions futuro)
+- [x] Configurar GitHub Secrets con las mismas credenciales (redundancia por si se usa GitHub Actions futuro) (completado 2026-04-16 — 4 secrets configuradas)
 - [x] Crear archivo .env.example con nombres de variables sin valores reales (completado 2026-04-16)
 - [x] Verificar que .env.local está en .gitignore antes del primer commit de Next.js (completado 2026-04-16)
 - [x] Crear archivo .github/dependabot.yml con scan semanal de npm (completado 2026-04-16)
