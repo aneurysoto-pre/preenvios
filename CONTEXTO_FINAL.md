@@ -546,6 +546,21 @@ Cuando el volumen referido llegue a $50,000/mes:
 - [ ] Presencia en al menos 8 corredores activos
 - [ ] Evaluar dirección: crecer independiente / partnership / expansión con capital
 
+### Fase 16 — Políticas legales
+
+- [ ] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador — texto: "Las tasas mostradas son aproximadas y pueden variar al momento de la transacción. Confirma el monto final directamente con la remesadora antes de enviar."
+- [ ] Implementar Disclaimer #1 también como párrafo debajo del bloque de resultados del comparador
+- [ ] Implementar Disclaimer #2 (institución no financiera) en el footer global — texto: "Preenvíos.com no es una institución financiera. No procesamos pagos, no recibimos ni enviamos dinero. Solo comparamos información pública de las remesadoras."
+- [ ] Implementar Disclaimer #3 (ranking influenciado) debajo del encabezado de resultados — texto: "El orden de los resultados puede estar influenciado por acuerdos comerciales con los operadores. Saber más." con link a /como-ganamos-dinero
+- [ ] Implementar Disclaimer #4 (FTC afiliados) cerca de cada botón "Enviar ahora" — texto: "Preenvíos puede recibir comisión cuando haces clic y completas una transferencia. Esto no tiene costo adicional para ti y no afecta el orden del ranking."
+- [ ] Crear página /terminos con Disclaimer #2 como primer párrafo y Disclaimer #5 (limitación de responsabilidad) como cláusula principal — texto Disclaimer #5: "Preenvíos no es responsable por pérdidas derivadas de decisiones tomadas con base en la información mostrada. Los usuarios deben ejercer su juicio y verificar los datos antes de transferir dinero. Al usar este sitio, aceptas estos términos." Agregar también edad mínima 18 años y jurisdicción Delaware
+- [ ] Crear página /privacidad compatible con CCPA y GDPR — qué datos se recolectan, cookies, Google Analytics, derecho a solicitar borrado
+- [ ] Crear página /como-ganamos-dinero con Disclaimer #4 como primer párrafo — explicar redes de afiliados usadas (Impact, CJ, Partnerize) y que el ranking se basa en tasa + velocidad + afiliado + confiabilidad + métodos
+- [ ] Crear página /metodologia — explica el algoritmo de ranking con los 5 criterios y pesos exactos, fuentes de datos, frecuencia de actualización
+- [ ] Crear página /uso-de-marcas con Disclaimer #6 (marcas nominativas) — texto: "Los logos y nombres de remesadoras mostrados son marcas nominativas usadas con fines informativos de comparación. Preenvíos no está afiliado, patrocinado ni respaldado por dichas empresas salvo que se indique lo contrario."
+- [ ] Footer global debe tener links visibles a /terminos, /privacidad, /como-ganamos-dinero y /uso-de-marcas
+- [ ] Traducir los 6 disclaimers y las 5 páginas legales a inglés cuando next-intl esté activo
+
 ---
 
 ## Métricas por fase
