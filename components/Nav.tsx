@@ -21,6 +21,13 @@ export default function Nav() {
   function switchLocale() {
     const next = locale === 'es' ? 'en' : 'es'
     const path = pathname.replace(`/${locale}`, `/${next}`)
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+      ;(window as any).gtag('event', 'cambio_idioma', {
+        event_category: 'i18n',
+        idioma_anterior: locale,
+        idioma_nuevo: next,
+      })
+    }
     router.push(path)
   }
 

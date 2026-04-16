@@ -40,5 +40,6 @@ Qué hace esta pieza y por qué existe.
 | 02 | [02_algoritmo_ranking.md](02_algoritmo_ranking.md) | Preenvíos Score — 5 criterios ponderados para ordenar operadores | Fase 1 — Bloque 2 |
 | 03 | [03_base_de_datos.md](03_base_de_datos.md) | Tablas Supabase, API de precios/corredores, seed de datos | Fase 1 — Bloque 2 |
 | 04 | [04_componentes_react.md](04_componentes_react.md) | Nav, Comparador, secciones estáticas, country search, delivery method | Fase 1 — Bloque 3 |
+| 05 | [05_i18n_seo.md](05_i18n_seo.md) | Cookie NEXT_LOCALE, hreflang, sitemap, robots, evento cambio_idioma, ofertas ocultas | Fase 1 — Bloque 4 |
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.

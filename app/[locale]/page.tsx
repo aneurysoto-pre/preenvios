@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import Nav from '@/components/Nav'
 import Comparador from '@/components/Comparador'
+import OfertasDestacadas from '@/components/OfertasDestacadas'
 import { LogoStrip, WhySection, StepsSection, CTASection, FAQSection, Footer } from '@/components/Sections'
 
 export default async function HomePage({
@@ -15,6 +16,7 @@ export default async function HomePage({
     <main>
       <Nav />
       <Comparador />
+      <OfertasDestacadas hidden={true} />
       <LogoStrip />
       <WhySection />
       <StepsSection />
