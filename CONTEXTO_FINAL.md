@@ -303,7 +303,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Configurar Tailwind CSS con las variables de diseño del MVP (completado 2026-04-16)
 - [ ] Conectar repositorio a Vercel — deploy automático desde GitHub
 - [x] Crear proyecto en Supabase — tabla `precios` y tabla `corredores` (completado 2026-04-16)
-- [ ] Migrar las tasas manuales del HTML a Supabase
+- [x] Migrar las tasas manuales del HTML a Supabase (completado 2026-04-16)
 - [x] Crear API route /api/precios que sirve las tasas desde Supabase (completado 2026-04-16)
 - [ ] El landing ahora lee precios de Supabase en lugar del HTML hardcodeado
 - [ ] Configurar dominio preenvios.com en Vercel (dejar de usar GitHub Pages)
