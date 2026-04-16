@@ -247,6 +247,44 @@ NODE_ENV=production
 
 ---
 
+## Infraestructura GitHub + Vercel — configuración desde Fase 1
+
+Las siguientes configuraciones no son opcionales — son base de seguridad y mantenimiento. Se documentan aquí para que queden explícitas en el roadmap.
+
+### GitHub Secrets (seguridad de credenciales)
+- Todas las variables de entorno listadas arriba NUNCA se guardan en el repositorio
+- Se guardan en dos lugares:
+  - GitHub Secrets (Settings → Secrets and variables → Actions) para que GitHub Actions pueda usarlas si se configura CI/CD futuro
+  - Vercel Environment Variables (Project Settings → Environment Variables) para que Vercel las inyecte en build y runtime
+- El archivo .env.local solo existe localmente en la máquina del desarrollador — está incluido en .gitignore
+- El archivo .env.example se commitea SIN valores reales, solo con los nombres de las variables, para que nuevos colaboradores sepan qué configurar
+
+### Vercel deploy automático
+- Rama main del repositorio aneurysoto-pre/preenvios = deploy a producción automático en preenvios.com
+- Cualquier otra rama (feature/*, fix/*) = preview deployment automático con URL única generada por Vercel
+- Rollback instantáneo disponible desde el dashboard de Vercel si un deploy rompe producción
+- Webhook de Slack o email opcional para notificar deploys exitosos y fallidos
+
+### Dependabot (seguridad automática de dependencias)
+- Crear archivo .github/dependabot.yml en el repositorio con configuración para escanear npm semanalmente
+- Dependabot abre pull requests automáticamente cuando detecta vulnerabilidades o actualizaciones importantes
+- Review manual de los PRs antes de merge — no auto-merge
+- Sin costo, incluido gratis en GitHub
+
+### README técnico del repositorio
+- Crear archivo README.md en la raíz del repositorio con las siguientes secciones:
+  - Qué es Preenvíos (link al CONTEXTO_FINAL.md y CONTEXTO_MVP.md)
+  - Stack tecnológico resumido
+  - Cómo correr el proyecto localmente (git clone, npm install, .env.local, npm run dev)
+  - Estructura de carpetas principal
+  - Scripts disponibles (dev, build, start, lint, test)
+  - Link a documentación de Vercel para deployment
+  - Link a documentación de Supabase para gestión de base de datos
+  - Convención de commits en español
+- El README se actualiza cuando se agregan dependencias nuevas o scripts
+
+---
+
 ## ROADMAP COMPLETO — 6 Fases
 
 ### Fase 0 — MVP validado (completado antes de esta fase)
@@ -288,6 +326,14 @@ NODE_ENV=production
 - [ ] Sitemap.xml separado por idioma — sitemap-es.xml y sitemap-en.xml, ambos referenciados en robots.txt
 - [ ] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas
 - [ ] Evento GA4 cambio_idioma para medir cuántos usuarios usan cada versión (validar si inglés genera tráfico suficiente para justificar mantener contenido)
+- [ ] Configurar Vercel Environment Variables con todas las credenciales del .env.local
+- [ ] Configurar GitHub Secrets con las mismas credenciales (redundancia por si se usa GitHub Actions futuro)
+- [ ] Crear archivo .env.example con nombres de variables sin valores reales
+- [ ] Verificar que .env.local está en .gitignore antes del primer commit de Next.js
+- [ ] Crear archivo .github/dependabot.yml con scan semanal de npm
+- [ ] Crear README.md técnico del repositorio con instrucciones de setup local
+- [ ] Verificar deploy automático desde main a preenvios.com funciona correctamente
+- [ ] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel
 
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
 Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios pagados. Tecnología: LLC via ZenBusiness o LegalZoom, páginas estáticas MDX para documentos legales.
