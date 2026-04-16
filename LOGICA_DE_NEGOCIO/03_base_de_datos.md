@@ -50,6 +50,11 @@ El script `scripts/seed.mjs` usa la service_role key para insertar:
 - 28 precios (7 operadores × 4 corredores) con método 'bank'
 - Usa `upsert` con `onConflict` para poder re-ejecutarse sin duplicar datos
 
+**Ejecutado exitosamente el 2026-04-16.** Datos verificados via API REST pública:
+- 4 corredores (HN, DO, GT, SV) con prioridad, moneda, bandera, tasa banco central
+- 28 precios con tasa, fee, velocidad, rating, reviews, afiliado, link, confiabilidad, metodos_disponibles
+- Todos los datos coinciden con los del MVP (index.html)
+
 ### 5. Migración del MVP al producto final
 | Antes (MVP) | Después (Producto final) |
 |---|---|

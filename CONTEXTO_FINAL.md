@@ -366,7 +366,7 @@ Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios 
 - [ ] Agregar campo método_entrega a la tabla precios en Supabase — valores posibles: bank, cash_pickup, delivery, mobile, card, airtime (no todos los operadores ofrecen todos los métodos).
 - [ ] Los scrapers capturan la tasa por método de entrega por operador — mostrar en el comparador como selector horizontal tipo Monito.com, con ícono y monto recibido por método. Marcar POPULAR y BEST DEAL según corresponda.
 - [ ] Cada scraper debe capturar las tasas por cada método de entrega soportado por el operador (cuenta bancaria, cash pickup, billetera móvil, domicilio). No todos los métodos existen en todos los operadores — los que no existen se marcan con null en la tabla precios
-- [ ] Tabla precios en Supabase con columnas: operador, corredor, metodo_entrega, tasa, fee, velocidad, actualizado_en
+- [x] Tabla precios en Supabase con columnas: operador, corredor, metodo_entrega, tasa, fee, velocidad, actualizado_en (completado 2026-04-16)
 - [ ] Implementar rate limiting y User-Agent identificable en cada scraper (ejemplo: "PreenviosBot/1.0 contact@preenvios.com"). Respetar robots.txt donde aplique. Mínimo 2 segundos entre requests al mismo operador
 - [ ] Sistema de fallback manual — si un scraper falla 3 veces seguidas, el precio queda marcado como "desactualizado" en Supabase y el dashboard admin envía notificación por email. Así la web nunca muestra datos rotos
 - [ ] Configurar backups automáticos diarios de Supabase exportando a S3 o Backblaze B2 (retención 30 días). Tecnología: pg_dump via Vercel Cron o extension supabase-backup
