@@ -1,0 +1,126 @@
+{
+  "nav": {
+    "compare": "Compare",
+    "howItWorks": "How it works",
+    "faq": "FAQ",
+    "login": "Sign in"
+  },
+  "hero": {
+    "badge": "Exchange rates updated in real time",
+    "title": "Sending money to Latin America?",
+    "titleHighlight": "Compare first, save later.",
+    "lede": "See in seconds how much actually arrives",
+    "noSignup": "No signup",
+    "free": "100% free",
+    "updatedToday": "Updated today"
+  },
+  "search": {
+    "title": "Calculate your transfer",
+    "live": "Live",
+    "destination": "Destination country",
+    "sendFrom": "Sending from the United States",
+    "refRate": "Reference rate",
+    "button": "Compare the best remittance providers",
+    "noConversion": "no conversion"
+  },
+  "results": {
+    "title": "Results for",
+    "subtitle": "Exchange rates compared in real time",
+    "disclaimer": "The order of results may be influenced by commercial agreements with operators.",
+    "learnMore": "Learn more",
+    "bestRate": "Best rate",
+    "fastest": "Fastest",
+    "lowestFee": "Lowest fee",
+    "bestOption": "BEST OPTION",
+    "secondOption": "SECOND OPTION",
+    "sendNow": "Send now",
+    "viewSite": "View site",
+    "rate": "Rate",
+    "fee": "Fee",
+    "theyReceive": "They receive",
+    "free": "Free",
+    "perUsd": "per USD",
+    "reviews": "reviews",
+    "score": "Preenvíos Score"
+  },
+  "delivery": {
+    "bank": "Bank account",
+    "cash": "Cash pickup",
+    "home": "Home delivery",
+    "wallet": "Mobile wallet",
+    "popular": "POPULAR",
+    "bestDeal": "BEST DEAL"
+  },
+  "strip": {
+    "title": "We compare the most trusted remittance providers"
+  },
+  "why": {
+    "tag": "Why PreEnvios",
+    "title": "Save on every transfer to Latin America",
+    "subtitle": "One place, all providers. No surprises, no hidden fees.",
+    "bestRate": "The best rate, always",
+    "bestRateDesc": "We compare the most popular providers and show you which gives you the most for your dollar. Period.",
+    "instant": "Instant results",
+    "instantDesc": "Enter an amount and see real results in seconds. No endless forms or signups.",
+    "trusted": "100% trusted and free",
+    "trustedDesc": "We don't charge anything. We just help you decide before sending your money."
+  },
+  "steps": {
+    "tag": "How it works",
+    "title": "3 steps. That's it.",
+    "subtitle": "Saving on your transfers is this easy.",
+    "step1": "Enter how much you're sending",
+    "step1Desc": "Type the dollar amount you want to send from the United States.",
+    "step2": "Compare the rates",
+    "step2Desc": "Instantly see how much arrives through each provider, with fees and delivery times included.",
+    "step3": "Choose and send",
+    "step3Desc": "Click the best option and we'll take you directly to the provider to complete your transfer."
+  },
+  "cta": {
+    "title": "Ready to send more for less?",
+    "subtitle": "Takes 10 seconds. Compare the best providers and choose the one that works for you today.",
+    "button": "Compare now"
+  },
+  "faq": {
+    "tag": "Frequently asked questions",
+    "title": "What you need to know",
+    "q1": "Does PreEnvios charge a fee?",
+    "a1": "No. PreEnvios is 100% free. We just help you compare so you can choose the best option. Fees are charged by each provider and we show them before you send.",
+    "q2": "How do you update the rates?",
+    "a2": "We check rates directly from each provider multiple times a day. What you see here is what you get when you send.",
+    "q3": "Which providers are included?",
+    "a3": "We compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram for corridors USA → Honduras, USA → Dominican Republic, USA → Guatemala and USA → El Salvador.",
+    "q4": "How long does a transfer take?",
+    "a4": "It depends on the provider and method. Some are instant, others take up to 1 business day. We show the estimated time in each result.",
+    "q5": "Will you add more countries?",
+    "a5": "Yes. We started with Honduras, Dominican Republic, Guatemala and El Salvador, and plan to expand to more Latin American corridors soon.",
+    "q6": "Why do some operators appear first?",
+    "a6": "The order of results considers the exchange rate, transfer speed and commercial agreements with some operators. Preenvios.com may receive a commission when you click and complete a transfer. This comes at no additional cost to you."
+  },
+  "footer": {
+    "desc": "Compare remittance providers before sending money to Latin America. Save on every transfer.",
+    "product": "Product",
+    "compare": "Compare",
+    "ratesToday": "Rates today",
+    "remittanceCompanies": "Providers",
+    "alerts": "Alerts",
+    "company": "Company",
+    "aboutUs": "About us",
+    "howItWorks": "How it works",
+    "contact": "Contact",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "disclaimerText": "PreEnvios.com is an informational comparison tool. We are not a financial institution, we do not process payments, receive or send money. Published rates are approximate and may differ from the final amount offered by each provider at the time of transaction. Results may be ordered according to affiliate agreements. Preenvios.com does not guarantee that the rates shown are final at the time of transfer.",
+    "copyright": "© 2026 PreEnvios.com — Made with ❤ for the Latin American diaspora",
+    "route": "USA → Latin America"
+  },
+  "common": {
+    "usd": "USD",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "hours": "Hours",
+    "days": "Days"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "nav": {
+    "compare": "Comparar",
+    "howItWorks": "Cómo funciona",
+    "faq": "FAQ",
+    "login": "Ingresar"
+  },
+  "hero": {
+    "badge": "Tasas actualizadas en tiempo real",
+    "title": "Envías dinero a Latinoamérica?",
+    "titleHighlight": "Compara primero, ahorra después.",
+    "lede": "Revisa en segundos cuánto llega de verdad",
+    "noSignup": "Sin registro",
+    "free": "100% gratis",
+    "updatedToday": "Actualizado hoy"
+  },
+  "search": {
+    "title": "Calcula tu envío",
+    "live": "En vivo",
+    "destination": "País destino",
+    "sendFrom": "Envías desde Estados Unidos",
+    "refRate": "Tasa de referencia",
+    "button": "Comparar las mejores remesadoras",
+    "noConversion": "sin conversión"
+  },
+  "results": {
+    "title": "Resultados para",
+    "subtitle": "Tasas comparadas en tiempo real",
+    "disclaimer": "El orden de los resultados puede estar influenciado por acuerdos comerciales con los operadores.",
+    "learnMore": "Saber más",
+    "bestRate": "Mejor tasa",
+    "fastest": "Más rápido",
+    "lowestFee": "Menor comisión",
+    "bestOption": "MEJOR OPCIÓN",
+    "secondOption": "SEGUNDA OPCIÓN",
+    "sendNow": "Enviar ahora",
+    "viewSite": "Ver en sitio",
+    "rate": "Tasa",
+    "fee": "Comisión",
+    "theyReceive": "Reciben",
+    "free": "Gratis",
+    "perUsd": "por USD",
+    "reviews": "opiniones",
+    "score": "Preenvíos Score"
+  },
+  "delivery": {
+    "bank": "Cuenta bancaria",
+    "cash": "Retiro en efectivo",
+    "home": "Domicilio",
+    "wallet": "Billetera móvil",
+    "popular": "POPULAR",
+    "bestDeal": "LA MEJOR OFERTA"
+  },
+  "strip": {
+    "title": "Comparamos las remesadoras más confiables"
+  },
+  "why": {
+    "tag": "Por qué PreEnvios",
+    "title": "Ahorra en cada envío a Latinoamérica",
+    "subtitle": "Un lugar, todas las remesadoras. Sin sorpresas, sin comisiones escondidas.",
+    "bestRate": "La mejor tasa siempre",
+    "bestRateDesc": "Comparamos las remesadoras más usadas y te mostramos cuál te da más por tu dólar. Punto.",
+    "instant": "Resultados al instante",
+    "instantDesc": "Escribe el monto y ve los resultados reales en segundos. Sin formularios eternos ni registros.",
+    "trusted": "100% confiable y gratis",
+    "trustedDesc": "No cobramos nada. Solo te ayudamos a decidir antes de enviar tu dinero."
+  },
+  "steps": {
+    "tag": "Cómo funciona",
+    "title": "3 pasos. Eso es todo.",
+    "subtitle": "Así de fácil es ahorrar en tus envíos.",
+    "step1": "Escribe cuánto envías",
+    "step1Desc": "Ingresa el monto en dólares que quieres enviar desde Estados Unidos.",
+    "step2": "Compara las tasas",
+    "step2Desc": "Ve al instante cuánto llega por cada remesadora, con comisiones y tiempos incluidos.",
+    "step3": "Elige y envía",
+    "step3Desc": "Haz clic en la mejor opción y te llevamos directo a la remesadora para completar tu envío."
+  },
+  "cta": {
+    "title": "Listo para enviar más por menos?",
+    "subtitle": "Toma 10 segundos. Compara las mejores remesadoras y elige la que más te conviene hoy.",
+    "button": "Comparar ahora"
+  },
+  "faq": {
+    "tag": "Preguntas frecuentes",
+    "title": "Lo que debes saber",
+    "q1": "PreEnvios cobra alguna comisión?",
+    "a1": "No. PreEnvios es 100% gratis. Solo te ayudamos a comparar para que elijas la mejor opción. Las comisiones las cobra cada remesadora y te las mostramos antes de enviar.",
+    "q2": "Cómo actualizan las tasas?",
+    "a2": "Consultamos las tasas directamente de cada remesadora varias veces al día. Lo que ves aquí es lo que obtienes al enviar.",
+    "q3": "Qué remesadoras están incluidas?",
+    "a3": "Comparamos Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram para los corredores USA → Honduras, USA → República Dominicana, USA → Guatemala y USA → El Salvador.",
+    "q4": "Cuánto tarda un envío?",
+    "a4": "Depende de la remesadora y el método. Algunas son instantáneas, otras tardan hasta 1 día hábil. Te mostramos el tiempo estimado en cada resultado.",
+    "q5": "Van a agregar más países?",
+    "a5": "Sí. Empezamos con Honduras, República Dominicana, Guatemala y El Salvador, y planeamos expandir pronto a más corredores de Latinoamérica.",
+    "q6": "¿Por qué algunos operadores aparecen primero?",
+    "a6": "El orden de los resultados considera la tasa de cambio, la velocidad del envío y acuerdos comerciales con algunos operadores. Preenvios.com puede recibir una comisión cuando haces clic y completas una transferencia. Esto no tiene ningún costo adicional para ti."
+  },
+  "footer": {
+    "desc": "Compara remesadoras antes de enviar dinero a Latinoamérica. Ahorra en cada envío.",
+    "product": "Producto",
+    "compare": "Comparar",
+    "ratesToday": "Tasas hoy",
+    "remittanceCompanies": "Remesadoras",
+    "alerts": "Alertas",
+    "company": "Empresa",
+    "aboutUs": "Sobre nosotros",
+    "howItWorks": "Cómo funciona",
+    "contact": "Contacto",
+    "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "cookies": "Cookies",
+    "disclaimerText": "PreEnvios.com es un comparador informativo. No somos una institución financiera, no procesamos pagos, no recibimos ni enviamos dinero. Las tasas publicadas son aproximadas y pueden variar respecto al monto final que ofrezca cada remesadora al momento de la transacción. Los resultados pueden ordenarse según acuerdos de afiliado. Preenvios.com no garantiza que las tasas mostradas sean las definitivas al momento del envío.",
+    "copyright": "© 2026 PreEnvios.com — Hecho con ❤ para la diáspora latinoamericana",
+    "route": "USA → Latinoamérica"
+  },
+  "common": {
+    "usd": "USD",
+    "minutes": "Minutos",
+    "seconds": "Segundos",
+    "hours": "Horas",
+    "days": "Días"
+  }
+}
