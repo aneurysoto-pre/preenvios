@@ -299,29 +299,29 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 
 ### Fase 1 — Migración al stack final (Semana 1–2 post-MVP)
 - [x] Crear proyecto Next.js 14+ con TypeScript en el mismo repositorio (completado 2026-04-16)
-- [ ] Migrar el diseño HTML a componentes React manteniendo línea gráfica exacta
+- [x] Migrar el diseño HTML a componentes React manteniendo línea gráfica exacta (completado 2026-04-16)
 - [x] Configurar Tailwind CSS con las variables de diseño del MVP (completado 2026-04-16)
 - [ ] Conectar repositorio a Vercel — deploy automático desde GitHub
 - [x] Crear proyecto en Supabase — tabla `precios` y tabla `corredores` (completado 2026-04-16)
 - [x] Migrar las tasas manuales del HTML a Supabase (completado 2026-04-16)
 - [x] Crear API route /api/precios que sirve las tasas desde Supabase (completado 2026-04-16)
-- [ ] El landing ahora lee precios de Supabase en lugar del HTML hardcodeado
+- [x] El landing ahora lee precios de Supabase en lugar del HTML hardcodeado (completado 2026-04-16)
 - [ ] Configurar dominio preenvios.com en Vercel (dejar de usar GitHub Pages)
 - [ ] Verificar que Google Analytics sigue midiendo correctamente
-- [ ] Verificar que todos los slots de afiliado y publicidad funcionan
+- [x] Verificar que todos los slots de afiliado y publicidad funcionan (completado 2026-04-16)
 - [ ] Construir sección **"Ofertas destacadas hoy"** (estilo trivago · carrusel horizontal de tarjetas patrocinadas) — estuvo oculta en el MVP porque mostrar promociones sin sponsors reales es publicidad engañosa y pone en riesgo la aplicación a Impact/CJ. Activarla en Fase 1 solo cuando: (a) al menos un afiliado esté aprobado y genere comisión real, (b) las tarjetas muestren únicamente promociones reales verificadas con el operador, (c) cada tarjeta tenga el badge "Patrocinado" visible y link directo con tracking ID. Tabla `ofertas` en Supabase alimenta el carrusel.
-- [ ] Reemplazar el selector nativo del celular para elegir país destino por un buscador web personalizado — debe buscar por nombre del país, código de moneda (DOP, HNL, GTQ, USD) y código de país (DO, HN, GT, SV). Ejemplo: escribir DOP muestra República Dominicana, escribir DOM también la muestra. Referencia visual: RemitFinder.com. El selector nativo del sistema operativo no debe activarse.
-- [ ] Agregar selector horizontal de método de entrega en el comparador principal, exactamente como Monito.com — el usuario solo elige país origen + país destino + monto + método de entrega, nada más. Opciones del selector con iconos claros: Cuenta bancaria, Retiro en efectivo, Domicilio, Billetera móvil. No todos los operadores soportan todos los métodos. Tecnología: estado React con useState para el método seleccionado, filtrado dinámico de resultados
-- [ ] Default inteligente: el primer render preselecciona "Cuenta bancaria" como método de entrega (más común en LatAm moderno). Badge "POPULAR" en el método más usado por corredor y "LA MEJOR OFERTA" en el que entrega más dinero al receptor
+- [x] Reemplazar el selector nativo del celular para elegir país destino por un buscador web personalizado — debe buscar por nombre del país, código de moneda (DOP, HNL, GTQ, USD) y código de país (DO, HN, GT, SV). Ejemplo: escribir DOP muestra República Dominicana, escribir DOM también la muestra. Referencia visual: RemitFinder.com. El selector nativo del sistema operativo no debe activarse. (completado 2026-04-16)
+- [x] Agregar selector horizontal de método de entrega en el comparador principal, exactamente como Monito.com — el usuario solo elige país origen + país destino + monto + método de entrega, nada más. Opciones del selector con iconos claros: Cuenta bancaria, Retiro en efectivo, Domicilio, Billetera móvil. No todos los operadores soportan todos los métodos. Tecnología: estado React con useState para el método seleccionado, filtrado dinámico de resultados (completado 2026-04-16)
+- [x] Default inteligente: el primer render preselecciona "Cuenta bancaria" como método de entrega (más común en LatAm moderno). Badge "POPULAR" en el método más usado por corredor y "LA MEJOR OFERTA" en el que entrega más dinero al receptor (completado 2026-04-16)
 - [x] La tabla precios en Supabase debe soportar el método_entrega como campo. Ejemplo: Remitly + DOP + cuenta_bancaria + $200 = tasa específica, Remitly + DOP + cash_pickup + $200 = tasa distinta (completado 2026-04-16)
 - [x] NO incluir selector de método de pago (ACH, tarjeta débito, tarjeta crédito) — ese lo decide el usuario dentro del sitio del operador después de hacer clic en "Enviar ahora". Monito no se mete en eso y nosotros tampoco. Mantenerlo simple (completado 2026-04-16)
-- [ ] Evento GA4 cambio_metodo_entrega para medir qué métodos usa cada corredor (insight para negociar con operadores después)
+- [x] Evento GA4 cambio_metodo_entrega para medir qué métodos usa cada corredor (insight para negociar con operadores después) (completado 2026-04-16)
 - [x] Expandir el algoritmo de ranking del MVP (hoy tasa 40 + afiliado 35 + velocidad 25) agregando 2 criterios nuevos: confiabilidad (basada en años del operador + licencia en EE.UU., valor fijo por operador) y disponibilidad de métodos de entrega. Nuevos pesos: tasa 35, afiliado 25, velocidad 20, confiabilidad 10, métodos 10. Tecnología: función rankProviders en lib/ranking.ts. Mostrar en la tarjeta de cada operador un badge "Preenvíos Score: X/100" que rompe el tie visual y genera credibilidad sin construir un sistema de 30 criterios como Monito (completado 2026-04-16)
 - [x] Configurar soporte multi-idioma español/inglés desde la migración inicial usando next-intl en Next.js 14 (App Router). Hacerlo en Fase 1 evita reescribir rutas después. Estructura de URLs: preenvios.com/es/ (español, default) y preenvios.com/en/ (inglés). Tecnología: next-intl con middleware de Next.js para detección de locale (completado 2026-04-16)
 - [x] Crear archivos de traducción messages/es.json y messages/en.json con todos los textos de UI — navegación, hero, comparador, resultados, FAQ, footer, formularios (completado 2026-04-16)
 - [x] Middleware next-intl que detecta automáticamente el idioma del navegador en primera visita (header Accept-Language) y redirige a /es o /en. Fallback a español si el navegador reporta otro idioma (completado 2026-04-16)
 - [ ] Cookie NEXT_LOCALE que recuerda la preferencia del usuario 365 días — prioridad sobre Accept-Language en visitas siguientes
-- [ ] Selector de idioma EN/ES en el header del sitio — reemplaza el botón EN actual del MVP. Al cambiar, navega a la misma página en el otro idioma (no pierde la ruta actual)
+- [x] Selector de idioma EN/ES en el header del sitio — reemplaza el botón EN actual del MVP. Al cambiar, navega a la misma página en el otro idioma (no pierde la ruta actual) (completado 2026-04-16)
 - [ ] Meta tags hreflang en cada página: rel="alternate" hreflang="es" y hreflang="en" apuntando a la versión correspondiente — requerido para SEO multi-idioma por Google
 - [ ] Sitemap.xml separado por idioma — sitemap-es.xml y sitemap-en.xml, ambos referenciados en robots.txt
 - [x] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas (completado 2026-04-16)
