@@ -333,7 +333,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Crear archivo .github/dependabot.yml con scan semanal de npm (completado 2026-04-16)
 - [x] Crear README.md técnico del repositorio con instrucciones de setup local (completado 2026-04-16)
 - [x] Verificar deploy automático desde main a preenvios.vercel.app funciona correctamente (completado 2026-04-16 — preenvios.com sigue en GitHub Pages hasta migración DNS)
-- [ ] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel
+- [x] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel (completado 2026-04-16 — verificado con rama test/verify-preview, deploy BBviLHHJY Ready)
 
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
 Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios pagados. Tecnología: LLC via ZenBusiness o LegalZoom, páginas estáticas MDX para documentos legales.
