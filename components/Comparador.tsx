@@ -313,7 +313,7 @@ export default function Comparador() {
                 </h2>
                 <p className="text-ink-2 mt-1.5 text-[15px]">{t('results.subtitle')}</p>
                 <p className="text-xs text-g500 mt-1.5">
-                  {t('results.disclaimer')} <a href="#faq" className="text-blue">{t('results.learnMore')}</a>
+                  {t('disclaimers.d3')} <a href={`/${locale}/como-ganamos-dinero`} className="text-blue">{t('disclaimers.d3Link')}</a>
                 </p>
               </div>
             </div>
@@ -446,29 +446,38 @@ function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
       </div>
 
       {/* CTA */}
-      {p.afiliado ? (
-        <a
-          href={p.link}
-          target="_blank"
-          rel="noopener sponsored"
-          onClick={onClick}
-          className={`${btnBg} text-white py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:translate-x-0.5 col-span-2 md:col-span-1`}
-          data-affiliate-slot={p.operador}
-          data-corredor={p.corredor}
-        >
-          {t('results.sendNow')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </a>
-      ) : (
-        <a
-          href={p.link || `https://www.google.com/search?q=${encodeURIComponent(p.nombre_operador)}`}
-          target="_blank"
-          rel="noopener"
-          onClick={onClick}
-          className="bg-g200 text-g600 py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap col-span-2 md:col-span-1"
-        >
-          {t('results.viewSite')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </a>
-      )}
+      {/* CTA + Disclaimer #4 */}
+      <div className="col-span-2 md:col-span-1 flex flex-col gap-1.5">
+        {p.afiliado ? (
+          <>
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noopener sponsored"
+              onClick={onClick}
+              className={`${btnBg} text-white py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:translate-x-0.5`}
+              data-affiliate-slot={p.operador}
+              data-corredor={p.corredor}
+            >
+              {t('results.sendNow')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </a>
+            <p className="text-[9px] text-g400 text-center leading-tight">{t('disclaimers.d4')}</p>
+          </>
+        ) : (
+          <a
+            href={p.link || `https://www.google.com/search?q=${encodeURIComponent(p.nombre_operador)}`}
+            target="_blank"
+            rel="noopener"
+            onClick={onClick}
+            className="bg-g200 text-g600 py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            {t('results.viewSite')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
+        )}
+      </div>
+
+      {/* Disclaimer #1 — tasas aproximadas */}
+      <p className="col-span-2 md:col-span-5 text-[9px] text-g400 leading-tight mt-1">{t('disclaimers.d1')}</p>
     </article>
   )
 }

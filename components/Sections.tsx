@@ -127,6 +127,8 @@ export function FAQSection() {
 
 export function Footer() {
   const t = useTranslations('footer')
+  const td = useTranslations('disclaimers')
+  const locale = useLocale()
   return (
     <footer className="bg-ink text-g400 pt-[70px] pb-8">
       <div className="max-w-[1240px] mx-auto px-6">
@@ -157,13 +159,15 @@ export function Footer() {
           </div>
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('legal')}</h4>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('privacy')}</a>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('terms')}</a>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('cookies')}</a>
+            <a href={`/${locale}/privacidad`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('privacy')}</a>
+            <a href={`/${locale}/terminos`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('terms')}</a>
+            <a href={`/${locale}/como-ganamos-dinero`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'How we earn' : 'Cómo ganamos dinero'}</a>
+            <a href={`/${locale}/uso-de-marcas`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'Trademarks' : 'Uso de marcas'}</a>
           </div>
         </div>
         <div className="border-t border-ink-2 py-5 text-xs text-g400 leading-relaxed max-w-[900px]">
-          <b className="text-white">{t('disclaimerText').split('.')[0]}.</b> {t('disclaimerText').split('.').slice(1).join('.')}
+          <p className="mb-2"><b className="text-white">{td('d2')}</b></p>
+          <p>{t('disclaimerText')}</p>
         </div>
         <div className="border-t border-ink-2 pt-5 flex justify-between flex-wrap gap-3.5 text-[13px] text-g400">
           <div>{t('copyright')}</div>

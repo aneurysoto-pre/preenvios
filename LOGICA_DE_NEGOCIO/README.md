@@ -43,6 +43,9 @@ Qué hace esta pieza y por qué existe.
 | 05 | [05_i18n_seo.md](05_i18n_seo.md) | Cookie NEXT_LOCALE, hreflang, sitemap, robots, evento cambio_idioma, ofertas ocultas | Fase 1 — Bloque 4 |
 | 06 | [06_deploy_vercel.md](06_deploy_vercel.md) | Deploy Vercel, env vars, GitHub Secrets, preview deployments, DNS diferido | Fase 1 — Bloque 5 |
 
+| 07 | [07_paginas_legales_disclaimers.md](07_paginas_legales_disclaimers.md) | 6 disclaimers, 5 páginas legales, FTC, CCPA/GDPR, footer links | Fase 1.5 + Fase 16 |
+
 ### Fase 1 — cerrada 2026-04-16 (35/36 checkboxes, DNS diferido)
+### Fase 1.5 + Fase 16 — cerrada 2026-04-16 (19/23 checkboxes código, 4 pendientes acción usuario)
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.

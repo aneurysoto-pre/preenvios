@@ -338,17 +338,17 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
 Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios pagados. Tecnología: LLC via ZenBusiness o LegalZoom, páginas estáticas MDX para documentos legales.
 
-- [ ] Constituir LLC en Delaware o Florida para operar el negocio (proteger patrimonio personal)
-- [ ] Obtener EIN (Employer Identification Number) del IRS — requerido para abrir cuenta bancaria del negocio y para aplicar a redes de afiliados
-- [ ] Abrir cuenta bancaria de negocio (Mercury o Relay Bank recomendado por facilidad con LLCs nuevas)
-- [ ] Contratar seguro de E&O (Errors & Omissions) — cobertura $500,000+ para cuando el negocio recomiende un operador y haya disputas
-- [ ] Crear página /terminos — términos y condiciones con cláusula de no-liability por decisiones del usuario basadas en la comparación
-- [ ] Crear página /privacidad — política de privacidad compatible con CCPA (California) y GDPR (usuarios europeos futuros): qué datos se recolectan, cookies, Google Analytics, derecho a solicitar borrado
-- [ ] Crear página /como-ganamos-dinero — divulgación FTC clara: Preenvíos recibe comisión de afiliados cuando el usuario envía con ciertos operadores, esto no afecta el ranking que es basado en datos de tasa y velocidad. Link visible en footer de cada página.
-- [ ] Agregar disclosure FTC corta visible cerca de los botones "Enviar ahora" en el comparador: "Preenvíos puede recibir comisión cuando usas estos enlaces"
-- [ ] Crear página /metodologia — explica el algoritmo de ranking, fuentes de datos, frecuencia de actualización (transparencia genera trust)
-- [ ] Crear página /uso-de-marcas — aclaración legal de que los logos y nombres de operadores son marcas nominativas usadas para comparación informativa (protege ante posibles disputas)
-- [ ] Proceso documentado de eliminación de datos personales a solicitud del usuario (CCPA / GDPR compliance)
+- [ ] Constituir LLC en Delaware o Florida para operar el negocio (proteger patrimonio personal) (pendiente de acción del usuario)
+- [ ] Obtener EIN (Employer Identification Number) del IRS — requerido para abrir cuenta bancaria del negocio y para aplicar a redes de afiliados (pendiente de acción del usuario)
+- [ ] Abrir cuenta bancaria de negocio (Mercury o Relay Bank recomendado por facilidad con LLCs nuevas) (pendiente de acción del usuario)
+- [ ] Contratar seguro de E&O (Errors & Omissions) — cobertura $500,000+ para cuando el negocio recomiende un operador y haya disputas (pendiente de acción del usuario)
+- [x] Crear página /terminos — términos y condiciones con cláusula de no-liability por decisiones del usuario basadas en la comparación (completado 2026-04-16)
+- [x] Crear página /privacidad — política de privacidad compatible con CCPA (California) y GDPR (usuarios europeos futuros): qué datos se recolectan, cookies, Google Analytics, derecho a solicitar borrado (completado 2026-04-16)
+- [x] Crear página /como-ganamos-dinero — divulgación FTC clara: Preenvíos recibe comisión de afiliados cuando el usuario envía con ciertos operadores, esto no afecta el ranking que es basado en datos de tasa y velocidad. Link visible en footer de cada página. (completado 2026-04-16)
+- [x] Agregar disclosure FTC corta visible cerca de los botones "Enviar ahora" en el comparador: "Preenvíos puede recibir comisión cuando usas estos enlaces" (completado 2026-04-16)
+- [x] Crear página /metodologia — explica el algoritmo de ranking, fuentes de datos, frecuencia de actualización (transparencia genera trust) (completado 2026-04-16)
+- [x] Crear página /uso-de-marcas — aclaración legal de que los logos y nombres de operadores son marcas nominativas usadas para comparación informativa (protege ante posibles disputas) (completado 2026-04-16)
+- [x] Proceso documentado de eliminación de datos personales a solicitud del usuario (CCPA / GDPR compliance) (completado 2026-04-16 — incluido en página /privacidad con email contact@preenvios.com y plazo 30 días)
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
 - [ ] Configurar Upstash Redis para cache de precios
@@ -548,18 +548,18 @@ Cuando el volumen referido llegue a $50,000/mes:
 
 ### Fase 16 — Políticas legales
 
-- [ ] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador — texto: "Las tasas mostradas son aproximadas y pueden variar al momento de la transacción. Confirma el monto final directamente con la remesadora antes de enviar."
-- [ ] Implementar Disclaimer #1 también como párrafo debajo del bloque de resultados del comparador
-- [ ] Implementar Disclaimer #2 (institución no financiera) en el footer global — texto: "Preenvíos.com no es una institución financiera. No procesamos pagos, no recibimos ni enviamos dinero. Solo comparamos información pública de las remesadoras."
-- [ ] Implementar Disclaimer #3 (ranking influenciado) debajo del encabezado de resultados — texto: "El orden de los resultados puede estar influenciado por acuerdos comerciales con los operadores. Saber más." con link a /como-ganamos-dinero
-- [ ] Implementar Disclaimer #4 (FTC afiliados) cerca de cada botón "Enviar ahora" — texto: "Preenvíos puede recibir comisión cuando haces clic y completas una transferencia. Esto no tiene costo adicional para ti y no afecta el orden del ranking."
-- [ ] Crear página /terminos con Disclaimer #2 como primer párrafo y Disclaimer #5 (limitación de responsabilidad) como cláusula principal — texto Disclaimer #5: "Preenvíos no es responsable por pérdidas derivadas de decisiones tomadas con base en la información mostrada. Los usuarios deben ejercer su juicio y verificar los datos antes de transferir dinero. Al usar este sitio, aceptas estos términos." Agregar también edad mínima 18 años y jurisdicción Delaware
-- [ ] Crear página /privacidad compatible con CCPA y GDPR — qué datos se recolectan, cookies, Google Analytics, derecho a solicitar borrado
-- [ ] Crear página /como-ganamos-dinero con Disclaimer #4 como primer párrafo — explicar redes de afiliados usadas (Impact, CJ, Partnerize) y que el ranking se basa en tasa + velocidad + afiliado + confiabilidad + métodos
-- [ ] Crear página /metodologia — explica el algoritmo de ranking con los 5 criterios y pesos exactos, fuentes de datos, frecuencia de actualización
-- [ ] Crear página /uso-de-marcas con Disclaimer #6 (marcas nominativas) — texto: "Los logos y nombres de remesadoras mostrados son marcas nominativas usadas con fines informativos de comparación. Preenvíos no está afiliado, patrocinado ni respaldado por dichas empresas salvo que se indique lo contrario."
-- [ ] Footer global debe tener links visibles a /terminos, /privacidad, /como-ganamos-dinero y /uso-de-marcas
-- [ ] Traducir los 6 disclaimers y las 5 páginas legales a inglés cuando next-intl esté activo
+- [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)
+- [x] Implementar Disclaimer #1 también como párrafo debajo del bloque de resultados del comparador (completado 2026-04-16)
+- [x] Implementar Disclaimer #2 (institución no financiera) en el footer global (completado 2026-04-16)
+- [x] Implementar Disclaimer #3 (ranking influenciado) debajo del encabezado de resultados con link a /como-ganamos-dinero (completado 2026-04-16)
+- [x] Implementar Disclaimer #4 (FTC afiliados) cerca de cada botón "Enviar ahora" (completado 2026-04-16)
+- [x] Crear página /terminos con Disclaimer #2 y #5, edad mínima 18, jurisdicción Delaware (completado 2026-04-16)
+- [x] Crear página /privacidad compatible con CCPA y GDPR (completado 2026-04-16)
+- [x] Crear página /como-ganamos-dinero con Disclaimer #4 y detalle de redes de afiliados (completado 2026-04-16)
+- [x] Crear página /metodologia con los 5 criterios y pesos exactos (completado 2026-04-16)
+- [x] Crear página /uso-de-marcas con Disclaimer #6 (completado 2026-04-16)
+- [x] Footer global tiene links visibles a /terminos, /privacidad, /como-ganamos-dinero y /uso-de-marcas (completado 2026-04-16)
+- [x] Traducir los 6 disclaimers y las 5 páginas legales a inglés con next-intl (completado 2026-04-16)
 
 ---
 

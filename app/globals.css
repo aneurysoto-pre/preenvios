@@ -30,3 +30,14 @@
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* Legal pages prose */
+.prose-legal h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 800; margin: 36px 0 14px; color: var(--color-ink); }
+.prose-legal p { font-size: 15px; color: var(--color-ink-2); line-height: 1.7; margin-bottom: 14px; }
+.prose-legal ul { margin: 14px 0 20px 22px; }
+.prose-legal li { font-size: 15px; color: var(--color-ink-2); line-height: 1.7; margin-bottom: 8px; }
+.prose-legal a { color: var(--color-blue); font-weight: 700; border-bottom: 1px solid var(--color-blue-soft); }
+.prose-legal a:hover { border-color: var(--color-blue); }
+.prose-legal strong { color: var(--color-ink); font-weight: 800; }
+.prose-legal .highlight-box { background: var(--color-g50); border: 1.5px solid var(--color-g200); border-radius: 14px; padding: 20px 24px; margin: 20px 0; }
+.prose-legal .highlight-box p { margin-bottom: 0; }
