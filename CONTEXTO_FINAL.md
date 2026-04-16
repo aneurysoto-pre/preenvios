@@ -301,7 +301,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Crear proyecto Next.js 14+ con TypeScript en el mismo repositorio (completado 2026-04-16)
 - [x] Migrar el diseño HTML a componentes React manteniendo línea gráfica exacta (completado 2026-04-16)
 - [x] Configurar Tailwind CSS con las variables de diseño del MVP (completado 2026-04-16)
-- [ ] Conectar repositorio a Vercel — deploy automático desde GitHub
+- [x] Conectar repositorio a Vercel — deploy automático desde GitHub (completado 2026-04-16 — https://preenvios.vercel.app)
 - [x] Crear proyecto en Supabase — tabla `precios` y tabla `corredores` (completado 2026-04-16)
 - [x] Migrar las tasas manuales del HTML a Supabase (completado 2026-04-16)
 - [x] Crear API route /api/precios que sirve las tasas desde Supabase (completado 2026-04-16)
@@ -326,13 +326,13 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Sitemap.xml separado por idioma — sitemap-es.xml y sitemap-en.xml, ambos referenciados en robots.txt (completado 2026-04-16)
 - [x] NO traducir nombres de operadores (Remitly, Wise, Western Union) ni códigos de moneda (DOP, HNL, GTQ, USD) — se quedan igual en ambos idiomas (completado 2026-04-16)
 - [x] Evento GA4 cambio_idioma para medir cuántos usuarios usan cada versión (validar si inglés genera tráfico suficiente para justificar mantener contenido) (completado 2026-04-16)
-- [ ] Configurar Vercel Environment Variables con todas las credenciales del .env.local
+- [x] Configurar Vercel Environment Variables con todas las credenciales del .env.local (completado 2026-04-16 — 4 variables verificadas en producción)
 - [ ] Configurar GitHub Secrets con las mismas credenciales (redundancia por si se usa GitHub Actions futuro)
 - [x] Crear archivo .env.example con nombres de variables sin valores reales (completado 2026-04-16)
 - [x] Verificar que .env.local está en .gitignore antes del primer commit de Next.js (completado 2026-04-16)
 - [x] Crear archivo .github/dependabot.yml con scan semanal de npm (completado 2026-04-16)
 - [x] Crear README.md técnico del repositorio con instrucciones de setup local (completado 2026-04-16)
-- [ ] Verificar deploy automático desde main a preenvios.com funciona correctamente
+- [x] Verificar deploy automático desde main a preenvios.vercel.app funciona correctamente (completado 2026-04-16 — preenvios.com sigue en GitHub Pages hasta migración DNS)
 - [ ] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel
 
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
