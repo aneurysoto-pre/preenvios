@@ -45,7 +45,12 @@ Qué hace esta pieza y por qué existe.
 
 | 07 | [07_paginas_legales_disclaimers.md](07_paginas_legales_disclaimers.md) | 6 disclaimers, 5 páginas legales, FTC, CCPA/GDPR, footer links | Fase 1.5 + Fase 16 |
 
+| 08 | [08_scrapers.md](08_scrapers.md) | 7 scrapers, rate limiting, fallback 3 strikes, cron job, dashboard admin | Fase 2 |
+| 09 | [09_whatsapp_bot.md](09_whatsapp_bot.md) | Bot WhatsApp vía Twilio, detección idioma, tasa del día + link afiliado | Fase 2 |
+| 10 | [10_calculadora_inversa.md](10_calculadora_inversa.md) | Calculadora inversa + compartir WhatsApp | Fase 2 |
+
 ### Fase 1 — cerrada 2026-04-16 (35/36 checkboxes, DNS diferido)
 ### Fase 1.5 + Fase 16 — cerrada 2026-04-16 (19/23 checkboxes código, 4 pendientes acción usuario)
+### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.

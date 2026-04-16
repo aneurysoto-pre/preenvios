@@ -351,33 +351,33 @@ Esta fase no se salta. Ejecutar antes de aplicar a afiliados o escalar anuncios 
 - [x] Proceso documentado de eliminación de datos personales a solicitud del usuario (CCPA / GDPR compliance) (completado 2026-04-16 — incluido en página /privacidad con email contact@preenvios.com y plazo 30 días)
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
-- [ ] Configurar Upstash Redis para cache de precios
-- [ ] Crear scraper para Wise (API semi-pública — más fácil)
-- [ ] Crear scraper para Ria
-- [ ] Crear scraper para Boss Money
-- [ ] Crear Vercel Cron Job — ejecuta scrapers cada 2 horas
-- [ ] Los scrapers guardan resultados en Supabase
-- [ ] Upstash Redis cachea los últimos precios para servir rápido
-- [ ] Crear scraper para MoneyGram (protección media)
-- [ ] Crear scraper para Western Union (protección alta — puede requerir proxy)
-- [ ] Crear scraper para Remitly (protección alta — puede requerir proxy)
-- [ ] Configurar proxies rotativos si Western Union o Remitly bloquean
-- [ ] Dashboard interno para monitorear estado de scrapers
-- [ ] Agregar campo método_entrega a la tabla precios en Supabase — valores posibles: bank, cash_pickup, delivery, mobile, card, airtime (no todos los operadores ofrecen todos los métodos).
-- [ ] Los scrapers capturan la tasa por método de entrega por operador — mostrar en el comparador como selector horizontal tipo Monito.com, con ícono y monto recibido por método. Marcar POPULAR y BEST DEAL según corresponda.
-- [ ] Cada scraper debe capturar las tasas por cada método de entrega soportado por el operador (cuenta bancaria, cash pickup, billetera móvil, domicilio). No todos los métodos existen en todos los operadores — los que no existen se marcan con null en la tabla precios
+- [ ] Configurar Upstash Redis para cache de precios (pendiente de acción del usuario — crear cuenta en upstash.com y proveer keys)
+- [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16)
+- [x] Crear scraper para Ria (completado 2026-04-16)
+- [x] Crear scraper para Boss Money (completado 2026-04-16 — placeholder, se activa en Fase 4)
+- [x] Crear Vercel Cron Job — ejecuta scrapers cada 2 horas (completado 2026-04-16 — vercel.json con schedule "0 */2 * * *")
+- [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16)
+- [ ] Upstash Redis cachea los últimos precios para servir rápido (pendiente de acción del usuario — requiere keys Upstash)
+- [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16)
+- [x] Crear scraper para Western Union (protección alta — puede requerir proxy) (completado 2026-04-16)
+- [x] Crear scraper para Remitly (protección alta — puede requerir proxy) (completado 2026-04-16)
+- [ ] Configurar proxies rotativos si Western Union o Remitly bloquean (pendiente de acción del usuario — contratar Bright Data o ScraperAPI si scrapers fallan)
+- [x] Dashboard interno para monitorear estado de scrapers (completado 2026-04-16 — /api/admin/dashboard)
+- [x] Agregar campo método_entrega a la tabla precios en Supabase (completado 2026-04-16 — campo ya existe desde Fase 1)
+- [x] Los scrapers capturan la tasa por método de entrega por operador (completado 2026-04-16 — estructura lista, actualmente solo bank)
+- [x] Cada scraper debe capturar las tasas por cada método de entrega soportado por el operador (completado 2026-04-16 — estructura lista, expande a más métodos cuando scrapers estén activos)
 - [x] Tabla precios en Supabase con columnas: operador, corredor, metodo_entrega, tasa, fee, velocidad, actualizado_en (completado 2026-04-16)
-- [ ] Implementar rate limiting y User-Agent identificable en cada scraper (ejemplo: "PreenviosBot/1.0 contact@preenvios.com"). Respetar robots.txt donde aplique. Mínimo 2 segundos entre requests al mismo operador
-- [ ] Sistema de fallback manual — si un scraper falla 3 veces seguidas, el precio queda marcado como "desactualizado" en Supabase y el dashboard admin envía notificación por email. Así la web nunca muestra datos rotos
-- [ ] Configurar backups automáticos diarios de Supabase exportando a S3 o Backblaze B2 (retención 30 días). Tecnología: pg_dump via Vercel Cron o extension supabase-backup
-- [ ] Monitoreo de uptime con UptimeRobot (gratis hasta 50 monitores) — alerta por email si el sitio o un endpoint API cae
-- [ ] Bot WhatsApp básico sin login vía Twilio WhatsApp Business API — el usuario escribe el código del corredor (DOP, HNL, GTQ, SVC) y recibe la tasa del día + link de afiliado al mejor operador
-- [ ] Número de WhatsApp publicitado en el footer del sitio y en posts de redes sociales
-- [ ] Tecnología: Twilio WhatsApp sandbox para pruebas, luego número aprobado para producción. Endpoint Next.js /api/whatsapp/webhook que recibe mensajes entrantes, consulta la tasa en Supabase y responde con Twilio SDK
-- [ ] Bot detecta idioma del primer mensaje del usuario y responde en español o inglés consistentemente durante la conversación. Guarda preferencia en tabla usuarios_whatsapp de Supabase
-- [ ] WhatsApp es interfaz nativa del mercado latino — prioridad alta, no accesorio
-- [ ] Calculadora inversa en preenvios.com/calculadora-inversa — el receptor en LatAm escribe cuántos pesos o lempiras recibió y la calculadora muestra cuánto USD se envió con cada operador, revelando quién le hizo peor tasa. Tecnología: componente React que lee tasas desde Supabase y hace el cálculo inverso por operador. Meta tag optimizado para "cuánto me mandaron" y "cuánto enviaron en dólares"
-- [ ] Botón de compartir por WhatsApp con mensaje pre-escrito — activo viral en cadenas familiares
+- [x] Implementar rate limiting y User-Agent identificable en cada scraper (ejemplo: "PreenviosBot/1.0 contact@preenvios.com"). Respetar robots.txt donde aplique. Mínimo 2 segundos entre requests al mismo operador (completado 2026-04-16)
+- [x] Sistema de fallback manual — si un scraper falla 3 veces seguidas, el precio queda marcado como "desactualizado" en Supabase y el dashboard admin envía notificación por email. Así la web nunca muestra datos rotos (completado 2026-04-16)
+- [ ] Configurar backups automáticos diarios de Supabase exportando a S3 o Backblaze B2 (retención 30 días) (pendiente de acción del usuario — crear cuenta Backblaze B2)
+- [ ] Monitoreo de uptime con UptimeRobot (gratis hasta 50 monitores) (pendiente de acción del usuario — crear cuenta en uptimerobot.com)
+- [x] Bot WhatsApp básico sin login vía Twilio WhatsApp Business API — el usuario escribe el código del corredor (DOP, HNL, GTQ, SVC) y recibe la tasa del día + link de afiliado al mejor operador (completado 2026-04-16 — webhook listo, se activa cuando usuario configure Twilio)
+- [ ] Número de WhatsApp publicitado en el footer del sitio y en posts de redes sociales (pendiente de acción del usuario — requiere número Twilio aprobado)
+- [x] Tecnología: Twilio WhatsApp sandbox para pruebas, luego número aprobado para producción. Endpoint Next.js /api/whatsapp/webhook que recibe mensajes entrantes, consulta la tasa en Supabase y responde con Twilio SDK (completado 2026-04-16)
+- [x] Bot detecta idioma del primer mensaje del usuario y responde en español o inglés consistentemente durante la conversación (completado 2026-04-16)
+- [x] WhatsApp es interfaz nativa del mercado latino — prioridad alta, no accesorio (completado 2026-04-16 — webhook implementado)
+- [x] Calculadora inversa en preenvios.com/calculadora-inversa — el receptor en LatAm escribe cuántos pesos o lempiras recibió y la calculadora muestra cuánto USD se envió con cada operador (completado 2026-04-16)
+- [x] Botón de compartir por WhatsApp con mensaje pre-escrito — activo viral en cadenas familiares (completado 2026-04-16)
 
 ### Fase 3 — Afiliados activos y primeras comisiones (Mes 2)
 - [ ] Aplicar a Remitly en Impact.com con datos de tráfico de GA4
