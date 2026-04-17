@@ -615,3 +615,56 @@ Cuando el volumen referido llegue a $50,000/mes:
 14. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
 15. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
 16. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
+
+---
+
+## Acciones pendientes del usuario (no bloquean lanzamiento)
+
+Estas tareas son responsabilidad del usuario, no de Claude Code. Se completan en paralelo al desarrollo o después del lanzamiento.
+
+### Redes sociales de Preenvios
+- [ ] Crear Instagram @preenviosdotcom
+- [ ] Crear TikTok @preenvios
+- [ ] Crear Facebook Page Preenvios.com
+- [ ] Crear cuenta X/Twitter @preenviosdotcom
+- [ ] Logo versión cuadrada 1080x1080 para redes (Canva gratis)
+- [ ] Bio unificada en las 4 redes con link a preenvios.com
+
+### Cuentas financieras y pago de afiliados
+- [ ] Crear cuenta Wise Personal (https://wise.com) — para recibir Impact.com y Partnerize
+- [ ] Activar funcionalidad de recibir pagos en Payoneer (actualmente solo envía) — contactar soporte o crear cuenta nueva
+- [ ] Completar Payment Information en CJ Affiliate una vez Payoneer reciba
+
+### Email profesional
+- [ ] Evaluar alternativas a Zoho actual — considerar Google Workspace ($6/mes) o Proton Mail
+- [ ] Asegurar que contact@preenvios.com responde correctamente
+
+### Aplicaciones a redes de afiliados
+- [x] Impact.com — aplicación enviada (RECHAZADA 2026-04-17, reaplicar en 30-60 días cuando haya más tráfico)
+- [ ] CJ Affiliate — cuenta creada, bloqueada hasta completar Payment Information con Payoneer
+- [x] FlexOffers — aplicación enviada 2026-04-17, respuesta en 5 días hábiles
+- [ ] Partnerize (Wise) — pendiente aplicar
+- [ ] Remitly directo — pendiente, puede ser vía FlexOffers una vez aprobados
+
+### Legal y fiscal (parallel a lanzamiento)
+- [ ] Constituir LLC en Delaware o Florida
+- [ ] Obtener EIN del IRS
+- [ ] Abrir cuenta bancaria Mercury o Relay Bank
+- [ ] Contratar seguro E&O $500,000+
+
+### Contenido editorial real (post-estructura SEO)
+- [ ] Escribir los 10 artículos fundacionales del wiki (uno por semana)
+- [ ] Escribir 3 artículos iniciales del blog por corredor activo
+- [ ] Revisar y actualizar meta descriptions de las páginas SEO cuando haya tráfico real
+
+### Publicidad directa con bancos y operadores (Fase 4.3)
+- [ ] Reunión con Banreservas NY (Washington Heights) para widget de tasa
+- [ ] Contactar Banco Popular RD para widget patrocinado
+- [ ] Contactar Viamericas para acuerdo $500-$1,500/mes
+- [ ] Contactar Boss Money directamente para CPA directo
+
+### Pre-lanzamiento
+- [ ] Completar CHECKLIST_PRE_LANZAMIENTO.md (13 bloques QA)
+- [ ] Upgrade Vercel Pro ($20/mes)
+- [ ] Cambio DNS de GitHub Pages a Vercel en Namecheap
+- [ ] Cambiar cron de scrapers a cada 2h (después de Vercel Pro)
