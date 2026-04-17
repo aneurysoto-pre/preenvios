@@ -334,6 +334,7 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - [x] Crear README.md técnico del repositorio con instrucciones de setup local (completado 2026-04-16)
 - [x] Verificar deploy automático desde main a preenvios.vercel.app funciona correctamente (completado 2026-04-16 — preenvios.com sigue en GitHub Pages hasta migración DNS)
 - [x] Verificar preview deployments en ramas no-main funcionan con URL única de Vercel (completado 2026-04-16 — verificado con rama test/verify-preview, deploy BBviLHHJY Ready)
+- [x] Sección "Tasas de referencia" con tarjetas de bancos centrales — datos de Supabase, tabla tasas_bancos_centrales, API /api/tasas-banco-central, componente TasasReferencia.tsx bilingüe (completado 2026-04-17)
 
 ### Fase 1.5 — Cumplimiento legal y estructura de negocio (Semana 2–3 post-MVP)
 Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Plazo realista: 4-8 semanas (depende del proveedor de LLC). Durante ese tiempo se puede operar como individuo usando Payoneer (para CJ Affiliate) y Wise Personal (para Impact.com y Partnerize). Los pagos llegarán al nombre personal del founder hasta que la LLC esté activa, y después se migran los datos bancarios de las redes a la cuenta de la LLC.

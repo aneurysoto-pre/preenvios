@@ -123,6 +123,12 @@
     "hours": "Hours",
     "days": "Days"
   },
+  "banks": {
+    "title": "Reference rates",
+    "subtitle": "Weekly update",
+    "note": "Reference rates published by each country's Central Bank. El Salvador has been dollarized since 2001.",
+    "perUsd": "/USD"
+  },
   "disclaimers": {
     "d1": "Rates shown are approximate and may vary at the time of transaction. Always confirm the final amount directly with the remittance provider before sending.",
     "d2": "PreEnvios.com is not a financial institution. We do not process payments, receive or send money. We only compare public information from remittance providers.",

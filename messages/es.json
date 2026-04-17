@@ -123,6 +123,12 @@
     "hours": "Horas",
     "days": "Días"
   },
+  "banks": {
+    "title": "Tasas de referencia",
+    "subtitle": "Actualización semanal",
+    "note": "Tasas de referencia publicadas por el Banco Central de cada país. El Salvador está dolarizado desde 2001.",
+    "perUsd": "/USD"
+  },
   "disclaimers": {
     "d1": "Las tasas mostradas son aproximadas y pueden variar al momento de la transacción. Confirma el monto final directamente con la remesadora antes de enviar.",
     "d2": "Preenvíos.com no es una institución financiera. No procesamos pagos, no recibimos ni enviamos dinero. Solo comparamos información pública de las remesadoras.",
