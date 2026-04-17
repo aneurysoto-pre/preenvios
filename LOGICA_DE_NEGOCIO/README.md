@@ -58,8 +58,11 @@ Qué hace esta pieza y por qué existe.
 | 14 | [14_tasas_bancos_centrales.md](14_tasas_bancos_centrales.md) | Tasas de referencia de bancos centrales — tabla, API, componente visual | Fase 1 |
 | 15 | [15_estructura_seo.md](15_estructura_seo.md) | Blog, tasas históricas, páginas operador, wiki, sitemap dinámico, Schema.org | Fase 4.1 |
 
+| 16 | [16_alertas_gratis.md](16_alertas_gratis.md) | Alertas gratis por email: double opt-in, diario, semanal, CAN-SPAM | Fase 4.4.A |
+
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)
 ### Fase 4.5 — cerrada 2026-04-16 (6/6 checkboxes completados)
+### Fase 4.4.A — cerrada 2026-04-17 (9/9 checkboxes completados)
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.

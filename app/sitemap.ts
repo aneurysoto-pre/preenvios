@@ -56,5 +56,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   pages.push({ url: `${BASE_URL}/es/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
   pages.push({ url: `${BASE_URL}/en/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
 
+  // Baja (unsubscribe)
+  pages.push({ url: `${BASE_URL}/es/baja`, lastModified: now, changeFrequency: 'yearly', priority: 0.1, alternates: altLangs('/baja') })
+  pages.push({ url: `${BASE_URL}/en/baja`, lastModified: now, changeFrequency: 'yearly', priority: 0.1, alternates: altLangs('/baja') })
+
   return pages
 }

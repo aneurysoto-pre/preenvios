@@ -479,15 +479,15 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.4.A — Alertas gratuitas y captura de email (lead-gen) — se construye ANTES que el panel premium
 Propósito: capturar emails de usuarios no pagos para newsletter con links de afiliado. Tecnología: Supabase (tabla suscriptores_free), Resend (envío de emails), Next.js API Routes (endpoint de suscripción), double opt-in para cumplir CAN-SPAM.
 
-- [ ] Crear tabla suscriptores_free en Supabase con campos email, corredor_favorito, idioma (es/en), fecha_alta, confirmado, token_confirmacion
-- [ ] Formulario de suscripción inline en cada página de corredor ("Recibe la tasa de hoy cada mañana en tu email")
-- [ ] Flujo de double opt-in con Resend — email de confirmación con token único antes de activar suscripción
-- [ ] Email diario automático con la tasa del día del corredor elegido + link afiliado al mejor operador (cron en Vercel a las 7 AM hora EST)
-- [ ] Newsletter semanal con el mejor operador de la semana por corredor — misma infraestructura Resend
-- [ ] Templates de email en Resend separados por idioma — el usuario recibe emails en español o inglés según la columna idioma de su registro
-- [ ] Página de baja (unsubscribe) obligatoria por ley CAN-SPAM con token único en cada email, renderizada en el idioma del email original
-- [ ] Endpoint API /api/suscripcion-free para alta y baja
-- [ ] Evento GA4 suscripcion_free cuando el usuario confirma (medir conversión del landing)
+- [x] Crear tabla suscriptores_free en Supabase con campos email, corredor_favorito, idioma (es/en), fecha_alta, confirmado, token_confirmacion (completado 2026-04-17 — SQL entregado al usuario)
+- [x] Formulario de suscripción inline en cada página de corredor ("Recibe la tasa de hoy cada mañana en tu email") (completado 2026-04-17)
+- [x] Flujo de double opt-in con Resend — email de confirmación con token único antes de activar suscripción (completado 2026-04-17)
+- [x] Email diario automático con la tasa del día del corredor elegido + link afiliado al mejor operador (cron en Vercel a las 7 AM hora EST) (completado 2026-04-17 — integrado en cron existente /api/scrape)
+- [x] Newsletter semanal con el mejor operador de la semana por corredor — misma infraestructura Resend (completado 2026-04-17 — se envía los lunes)
+- [x] Templates de email en Resend separados por idioma — el usuario recibe emails en español o inglés según la columna idioma de su registro (completado 2026-04-17)
+- [x] Página de baja (unsubscribe) obligatoria por ley CAN-SPAM con token único en cada email, renderizada en el idioma del email original (completado 2026-04-17)
+- [x] Endpoint API /api/suscripcion-free para alta y baja (completado 2026-04-17)
+- [x] Evento GA4 suscripcion_free cuando el usuario confirma (medir conversión del landing) (completado 2026-04-17)
 
 #### 4.4.B — Panel del cliente premium con Stripe — se construye DESPUÉS del 4.4.A
 Propósito: monetización recurrente de usuarios avanzados. Tecnología: Supabase Auth, Stripe Subscriptions + webhooks, Twilio WhatsApp Business API, Next.js middleware para proteger rutas premium.
