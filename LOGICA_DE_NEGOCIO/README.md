@@ -56,6 +56,7 @@ Qué hace esta pieza y por qué existe.
 | 12 | [12_panel_admin.md](12_panel_admin.md) | Panel admin: login, monitor scrapers, editor tasas, alertas, ingresos | Fase 4.5 |
 | 13 | [13_flujo_precios_end_to_end.md](13_flujo_precios_end_to_end.md) | Flujo completo: operador → scraper → Supabase → API → ranking → usuario | Transversal |
 | 14 | [14_tasas_bancos_centrales.md](14_tasas_bancos_centrales.md) | Tasas de referencia de bancos centrales — tabla, API, componente visual | Fase 1 |
+| 15 | [15_estructura_seo.md](15_estructura_seo.md) | Blog, tasas históricas, páginas operador, wiki, sitemap dinámico, Schema.org | Fase 4.1 |
 
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)

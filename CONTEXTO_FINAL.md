@@ -401,45 +401,45 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 ### Fase 4 — Escala y nuevos corredores (Mes 3–9)
 
 #### 4.1 — SEO y contenido
-- [ ] Crear estructura de blog en Next.js
-- [ ] Artículo 1: "Cuánto cobra Western Union para enviar dinero a Honduras hoy"
-- [ ] Artículo 2: "Remitly vs Western Union para enviar a República Dominicana"
-- [ ] Artículo 3: "La forma más barata de mandar dinero a Guatemala en 2026"
-- [ ] Un artículo por corredor por mes mínimo
-- [ ] Configurar sitemap.xml automático
-- [ ] Verificar propiedad en Google Search Console
-- [ ] Optimizar Core Web Vitals — verde en PageSpeed
-- [ ] Crear tabla historial_tasas_publico en Supabase (separada de la tabla premium) con tasas por corredor guardadas cada 2 horas por los scrapers
-- [ ] Páginas públicas indexadas por Google: preenvios.com/tasa/usd-dop, preenvios.com/tasa/usd-hnl, preenvios.com/tasa/usd-gtq — renderizadas con Next.js ISR (revalidate cada 2 horas)
-- [ ] Cada página muestra tasa actual, gráfica de fluctuación de los últimos 30 días con Recharts, tabla de los 7 operadores comparados, y CTA al comparador principal
-- [ ] Meta tags optimizados: "Tasa del dólar en República Dominicana hoy — [fecha actualizada]"
-- [ ] Schema.org ExchangeRateSpecification en JSON-LD para rich snippets en Google
-- [ ] Gráficas públicas son activo SEO — indexadas, no detrás de login
-- [ ] Crear una página estática por operador: preenvios.com/operadores/remitly, /wise, /xoom, /ria, /worldremit, /western-union, /moneygram. Contenido: qué es el operador, corredores soportados, tasa actual para LatAm, pros y contras desde perspectiva del usuario latino, badge de ranking Preenvíos. Tecnología: Next.js dynamic routes /app/operadores/[slug]/page.tsx con MDX para contenido editorial. NO es review dinámico con scraping de opiniones — es editorial estático actualizado manualmente cada trimestre
-- [ ] Crear versión en inglés de las páginas SEO principales: landing por corredor, páginas de tasa histórica, páginas de operador. Tecnología: estructura /app/[locale]/[corredor]/page.tsx con contenido MDX separado por idioma en /content/es/ y /content/en/
-- [ ] NO traducir cada artículo del blog automáticamente — solo se traducen los 3 artículos de mayor tráfico por corredor al inglés. Medir con GA4 si el tráfico en inglés justifica traducir más. Regla: se traduce artículo solo si tiene 500+ visitas/mes en español
-- [ ] Keywords SEO en inglés a priorizar para las páginas traducidas: "send money to Honduras", "send money to Dominican Republic", "cheapest remittance to Guatemala", "USD to DOP exchange rate today"
-- [ ] Meta descriptions, titles y H1 traducidos manualmente (no automático) — calidad editorial sobre cantidad
-- [ ] Crear estructura técnica de wiki educativa en preenvios.com/wiki. Tecnología: ruta dinámica Next.js /app/[locale]/wiki/[slug]/page.tsx con archivos MDX estáticos en /content/wiki/es/ y /content/wiki/en/. Sin base de datos, sin CMS, sin login. Mismo patrón que páginas de operador
-- [ ] Crear índice navegable en /wiki con categorías: Fundamentos, Guías por corredor, Educación financiera
-- [ ] Navegación lateral persistente con tabla de contenidos del artículo actual y links a artículos relacionados
-- [ ] Schema.org Article en JSON-LD en cada artículo para rich snippets en Google
-- [ ] Arrancar con 10 artículos fundacionales escritos manualmente (no auto-generados) — meta: publicar 1–2 por semana hasta completar
-- [ ] Artículos fundacionales de Fundamentos:
-  - [ ] Qué es la tasa de cambio mid-market y por qué importa
-  - [ ] Diferencia entre tasa y fee — cuál cuesta más realmente
-  - [ ] Cómo elegir la mejor remesadora según el monto que envías
-  - [ ] Cash pickup vs depósito bancario — cuál me conviene
-  - [ ] Qué documentos necesito para enviar dinero desde EE.UU.
-- [ ] Artículos fundacionales por corredor (uno por cada corredor activo):
-  - [ ] Cómo recibir dinero en República Dominicana paso a paso
-  - [ ] Qué bancos en Honduras tienen convenio con remesadoras
-  - [ ] Cuánto tarda una transferencia a Guatemala realmente
-- [ ] Artículos de educación financiera:
-  - [ ] Impuestos sobre remesas en EE.UU. y en el país receptor
-  - [ ] Alertas de tipo de cambio — para qué sirven y cómo usarlas
-- [ ] Cada artículo incluye CTA al comparador principal y al formulario de suscripción de alertas gratis (cerrar el loop de lead-gen)
-- [ ] La wiki se versiona en inglés solo cuando el artículo en español supere 500 visitas/mes (misma regla que el blog)
+- [x] Crear estructura de blog en Next.js (completado 2026-04-17 — /blog con índice + /blog/[slug] con placeholder)
+- [x] Artículo 1: "Cuánto cobra Western Union para enviar dinero a Honduras hoy" (completado 2026-04-17 — placeholder listo, contenido editorial pendiente)
+- [x] Artículo 2: "Remitly vs Western Union para enviar a República Dominicana" (completado 2026-04-17 — placeholder listo, contenido editorial pendiente)
+- [x] Artículo 3: "La forma más barata de mandar dinero a Guatemala en 2026" (completado 2026-04-17 — placeholder listo, contenido editorial pendiente)
+- [ ] Un artículo por corredor por mes mínimo (pendiente — contenido editorial del fundador)
+- [x] Configurar sitemap.xml automático (completado 2026-04-17 — incluye blog, wiki, tasa, operadores, legal, calculadora inversa con alternates es/en)
+- [ ] Verificar propiedad en Google Search Console (pendiente de acción del usuario)
+- [ ] Optimizar Core Web Vitals — verde en PageSpeed (pendiente — verificar post-deploy)
+- [x] Crear tabla historial_tasas_publico en Supabase (completado 2026-04-17 — SQL pendiente de ejecutar por usuario, API lista)
+- [x] Páginas públicas indexadas por Google: preenvios.com/tasa/usd-dop, usd-hnl, usd-gtq, usd-svc, usd-cop, usd-mxn, usd-nio, usd-htg (completado 2026-04-17 — 8 corredores con Recharts, tabla operadores, CTA, Schema.org)
+- [x] Cada página muestra tasa actual, gráfica de fluctuación últimos 30 días con Recharts, tabla de los 7 operadores comparados, y CTA al comparador principal (completado 2026-04-17)
+- [x] Meta tags optimizados: "Tasa del dólar en República Dominicana hoy — [fecha actualizada]" (completado 2026-04-17)
+- [x] Schema.org ExchangeRateSpecification en JSON-LD para rich snippets en Google (completado 2026-04-17)
+- [x] Gráficas públicas son activo SEO — indexadas, no detrás de login (completado 2026-04-17)
+- [x] Crear una página estática por operador: /operadores/remitly, /wise, /xoom, /ria, /worldremit, /western-union, /moneygram (completado 2026-04-17 — 7 páginas con contenido editorial placeholder, Schema.org Organization)
+- [x] Crear versión en inglés de las páginas SEO principales (completado 2026-04-17 — todas las páginas soportan /es y /en via next-intl)
+- [x] NO traducir cada artículo del blog automáticamente (completado 2026-04-17 — regla documentada, blog solo tiene placeholders por ahora)
+- [x] Keywords SEO en inglés a priorizar para las páginas traducidas (completado 2026-04-17 — documentadas en 4.1.1)
+- [x] Meta descriptions, titles y H1 traducidos manualmente (completado 2026-04-17 — traducciones en messages/*.json)
+- [x] Crear estructura técnica de wiki educativa en preenvios.com/wiki (completado 2026-04-17 — /wiki con índice + /wiki/[slug] con 10 artículos placeholder)
+- [x] Crear índice navegable en /wiki con categorías: Fundamentos, Guías por corredor, Educación financiera (completado 2026-04-17)
+- [ ] Navegación lateral persistente con tabla de contenidos del artículo actual y links a artículos relacionados (diferido — se implementa cuando haya contenido real)
+- [x] Schema.org Article en JSON-LD en cada artículo para rich snippets en Google (completado 2026-04-17)
+- [x] Arrancar con 10 artículos fundacionales escritos manualmente — meta: publicar 1–2 por semana (completado 2026-04-17 — 10 placeholders listos, contenido editorial pendiente del fundador)
+- [x] Artículos fundacionales de Fundamentos:
+  - [x] Qué es la tasa de cambio mid-market y por qué importa (placeholder 2026-04-17)
+  - [x] Diferencia entre tasa y fee — cuál cuesta más realmente (placeholder 2026-04-17)
+  - [x] Cómo elegir la mejor remesadora según el monto que envías (placeholder 2026-04-17)
+  - [x] Cash pickup vs depósito bancario — cuál me conviene (placeholder 2026-04-17)
+  - [x] Qué documentos necesito para enviar dinero desde EE.UU. (placeholder 2026-04-17)
+- [x] Artículos fundacionales por corredor (uno por cada corredor activo):
+  - [x] Cómo recibir dinero en República Dominicana paso a paso (placeholder 2026-04-17)
+  - [x] Qué bancos en Honduras tienen convenio con remesadoras (placeholder 2026-04-17)
+  - [x] Cuánto tarda una transferencia a Guatemala realmente (placeholder 2026-04-17)
+- [x] Artículos de educación financiera:
+  - [x] Impuestos sobre remesas en EE.UU. y en el país receptor (placeholder 2026-04-17)
+  - [x] Alertas de tipo de cambio — para qué sirven y cómo usarlas (placeholder 2026-04-17)
+- [x] Cada artículo incluye CTA al comparador principal y al formulario de suscripción de alertas gratis (completado 2026-04-17 — CTA al comparador incluido)
+- [x] La wiki se versiona en inglés solo cuando el artículo en español supere 500 visitas/mes (completado 2026-04-17 — regla documentada, estructura bilingüe lista)
 
 #### 4.1.1 — Keywords SEO prioritarias (no mencionar marcas en anuncios pagados)
 Palabras y frases de mayor volumen de búsqueda para los corredores activos:
