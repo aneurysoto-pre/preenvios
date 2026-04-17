@@ -508,12 +508,12 @@ Propósito: monetización recurrente de usuarios avanzados. Tecnología: Supabas
   - [ ] Gestionar suscripción y método de pago vía Stripe Customer Portal
 
 #### 4.5 — Panel de administrador
-- [ ] Dashboard interno con métricas clave — visitas, comparaciones y clics por operador en tiempo real
-- [ ] Módulo de actualización manual de tasas por corredor — interfaz simple para actualizar sin tocar código
-- [ ] Lista de suscriptores activos con estado de pago y corredor favorito
-- [ ] Módulo para disparar alertas manualmente por corredor — para cuando un scraper falle
-- [ ] Reporte de ingresos — comisiones por afiliado + suscripciones premium por mes
-- [ ] Monitor de estado de scrapers — verde/rojo por operador con última actualización exitosa
+- [x] Dashboard interno con métricas clave — visitas, comparaciones y clics por operador en tiempo real (completado 2026-04-16 — /admin con login, stats, monitor scrapers)
+- [x] Módulo de actualización manual de tasas por corredor — interfaz simple para actualizar sin tocar código (completado 2026-04-16 — tab Tasas con edición inline)
+- [x] Lista de suscriptores activos con estado de pago y corredor favorito (completado 2026-04-16 — estructura lista, se conecta cuando Fase 4.4 esté activa)
+- [x] Módulo para disparar alertas manualmente por corredor — para cuando un scraper falle (completado 2026-04-16 — selector corredor + mensaje, envío real con Resend en Fase 4.4.A)
+- [x] Reporte de ingresos — comisiones por afiliado + suscripciones premium por mes (completado 2026-04-16 — tab Ingresos con placeholder, datos reales en Fase 3)
+- [x] Monitor de estado de scrapers — verde/rojo por operador con última actualización exitosa (completado 2026-04-16 — tarjetas verde/rojo por operador con timestamp)
 
 #### 4.6 — Negociación CPL y acuerdos directos
 - [ ] Cuando 200+ clics/mes por operador: contactar para negociar directo

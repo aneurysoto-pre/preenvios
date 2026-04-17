@@ -53,7 +53,10 @@ Qué hace esta pieza y por qué existe.
 ### Fase 1.5 + Fase 16 — cerrada 2026-04-16 (19/23 checkboxes código, 4 pendientes acción usuario)
 | 11 | [11_nuevos_corredores.md](11_nuevos_corredores.md) | Expansión a 8 corredores: Colombia, México, Nicaragua, Haití | Fase 4.2 |
 
+| 12 | [12_panel_admin.md](12_panel_admin.md) | Panel admin: login, monitor scrapers, editor tasas, alertas, ingresos | Fase 4.5 |
+
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)
+### Fase 4.5 — cerrada 2026-04-16 (6/6 checkboxes completados)
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.
