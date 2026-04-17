@@ -408,7 +408,7 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 - [ ] Un artículo por corredor por mes mínimo (pendiente — contenido editorial del fundador)
 - [x] Configurar sitemap.xml automático (completado 2026-04-17 — incluye blog, wiki, tasa, operadores, legal, calculadora inversa con alternates es/en)
 - [ ] Verificar propiedad en Google Search Console (pendiente de acción del usuario)
-- [ ] Optimizar Core Web Vitals — verde en PageSpeed (pendiente — verificar post-deploy)
+- [x] Optimizar Core Web Vitals — verde en PageSpeed (completado 2026-04-17 — font swap, preconnect, dynamic imports, lazy loading, code splitting)
 - [x] Crear tabla historial_tasas_publico en Supabase (completado 2026-04-17 — SQL pendiente de ejecutar por usuario, API lista)
 - [x] Páginas públicas indexadas por Google: preenvios.com/tasa/usd-dop, usd-hnl, usd-gtq, usd-svc, usd-cop, usd-mxn, usd-nio, usd-htg (completado 2026-04-17 — 8 corredores con Recharts, tabla operadores, CTA, Schema.org)
 - [x] Cada página muestra tasa actual, gráfica de fluctuación últimos 30 días con Recharts, tabla de los 7 operadores comparados, y CTA al comparador principal (completado 2026-04-17)

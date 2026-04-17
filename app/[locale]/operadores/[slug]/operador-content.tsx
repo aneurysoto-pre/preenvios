@@ -2,6 +2,8 @@
 
 import { useLocale } from 'next-intl'
 import { OPERADORES_DATA, CORREDORES_DATA } from '@/lib/corredores'
+import { PAISES_MVP } from '@/lib/paises'
+import { OPERATOR_COMPETITORS, BLOG_LINKS } from '@/lib/cross-links'
 import LegalPage from '@/components/LegalPage'
 
 export default function OperadorContent({ slug }: { slug: string }) {
@@ -10,6 +12,9 @@ export default function OperadorContent({ slug }: { slug: string }) {
   const op = OPERADORES_DATA.find(o => o.slug === slug)
 
   if (!op) return <div className="min-h-screen flex items-center justify-center">404</div>
+
+  const competitors = (OPERATOR_COMPETITORS[slug] || []).map(s => OPERADORES_DATA.find(o => o.slug === s)).filter(Boolean)
+  const relatedBlogs = Object.entries(BLOG_LINKS).filter(([, v]) => v.operadores.includes(slug)).map(([blogSlug]) => blogSlug)
 
   return (
     <LegalPage
@@ -22,7 +27,14 @@ export default function OperadorContent({ slug }: { slug: string }) {
 
       <h2>{en ? 'Corridors supported' : 'Corredores soportados'}</h2>
       <ul>
-        {CORREDORES_DATA.map(c => (
+        {PAISES_MVP.map(p => (
+          <li key={p.corredorId}>
+            <a href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-[var(--color-blue)] font-semibold hover:underline">
+              {p.bandera} {en ? p.nombreEn : p.nombre}
+            </a> ({CORREDORES_DATA.find(c => c.id === p.corredorId)?.moneda})
+          </li>
+        ))}
+        {CORREDORES_DATA.filter(c => !PAISES_MVP.some(p => p.corredorId === c.id)).map(c => (
           <li key={c.id}>{c.bandera} {en ? c.nombre_en : c.nombre} ({c.moneda})</li>
         ))}
       </ul>
@@ -31,6 +43,38 @@ export default function OperadorContent({ slug }: { slug: string }) {
       <p>{en
         ? `Check the current ${op.nombre} exchange rate for all corridors in our comparator.`
         : `Consulta la tasa actual de ${op.nombre} para todos los corredores en nuestro comparador.`}</p>
+
+      {/* Compare with competitors */}
+      {competitors.length > 0 && (
+        <>
+          <h2>{en ? `Compare ${op.nombre} with` : `Compara ${op.nombre} con`}</h2>
+          <ul>
+            {competitors.map(comp => comp && (
+              <li key={comp.slug}>
+                <a href={`/${locale}/operadores/${comp.slug}`} className="text-[var(--color-blue)] font-semibold hover:underline">
+                  {op.nombre} vs {comp.nombre}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {/* Related blog articles */}
+      {relatedBlogs.length > 0 && (
+        <>
+          <h2>{en ? 'Related articles' : 'Artículos relacionados'}</h2>
+          <ul>
+            {relatedBlogs.map(blogSlug => (
+              <li key={blogSlug}>
+                <a href={`/${locale}/blog/${blogSlug}`} className="text-[var(--color-blue)] font-semibold hover:underline">
+                  {blogSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <div className="text-center mt-8">
         <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-8 py-4 rounded-full font-extrabold text-base">

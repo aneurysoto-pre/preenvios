@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
-import { findPaisBySlug } from '@/lib/paises'
-import { CORREDORES_DATA } from '@/lib/corredores'
+import { findPaisBySlug, PAISES_MVP } from '@/lib/paises'
+import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES } from '@/lib/corredores'
+import { CORRIDOR_BLOGS, CORRIDOR_WIKIS, CORRIDOR_TOP_OPERATORS } from '@/lib/cross-links'
 import Nav from '@/components/Nav'
 import Comparador from '@/components/Comparador'
 import AlertaForm from '@/components/AlertaForm'
@@ -167,16 +168,89 @@ export default function PaisContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* Cross-link to tasa page */}
-      {tasaSlug && (
-        <section className="pb-12">
-          <div className="max-w-[920px] mx-auto px-6 text-center">
-            <a href={`/${locale}/tasa/${tasaSlug}`} className="text-[var(--color-blue)] font-bold hover:underline">
-              {en ? `See USD to ${pais.moneda} historical rate chart →` : `Ver gráfica histórica USD a ${pais.moneda} →`}
-            </a>
+      {/* Cross-links SEO */}
+      <section className="pb-12">
+        <div className="max-w-[920px] mx-auto px-6">
+          <div className="bg-[var(--color-g50)] rounded-[22px] p-8 border border-[var(--color-g200)]">
+            <h2 className="font-heading font-extrabold text-lg mb-5">
+              {en ? 'Related resources' : 'Recursos relacionados'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Tasa técnica */}
+              {tasaSlug && (
+                <div>
+                  <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
+                    {en ? 'Exchange rate' : 'Tasa de cambio'}
+                  </h3>
+                  <a href={`/${locale}/tasa/${tasaSlug}`} className="text-sm text-[var(--color-blue)] font-bold hover:underline block">
+                    {en ? `USD to ${pais.moneda} rate chart →` : `Gráfica USD a ${pais.moneda} →`}
+                  </a>
+                </div>
+              )}
+
+              {/* Top operators for this corridor */}
+              {(CORRIDOR_TOP_OPERATORS[pais.corredorId] || []).length > 0 && (
+                <div>
+                  <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
+                    {en ? 'Popular providers' : 'Remesadoras populares'}
+                  </h3>
+                  {(CORRIDOR_TOP_OPERATORS[pais.corredorId] || []).map(opSlug => {
+                    const op = OPERADORES_DATA.find(o => o.slug === opSlug)
+                    return op ? (
+                      <a key={opSlug} href={`/${locale}/operadores/${opSlug}`} className="text-sm text-[var(--color-blue)] font-semibold hover:underline block mb-1">
+                        {op.nombre}
+                      </a>
+                    ) : null
+                  })}
+                </div>
+              )}
+
+              {/* Related blog articles */}
+              {(CORRIDOR_BLOGS[pais.corredorId] || []).length > 0 && (
+                <div>
+                  <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
+                    {en ? 'Blog articles' : 'Artículos del blog'}
+                  </h3>
+                  {(CORRIDOR_BLOGS[pais.corredorId] || []).map(blogSlug => (
+                    <a key={blogSlug} href={`/${locale}/blog/${blogSlug}`} className="text-sm text-[var(--color-blue)] font-semibold hover:underline block mb-1">
+                      {blogSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* Related wiki articles */}
+              {(CORRIDOR_WIKIS[pais.corredorId] || []).length > 0 && (
+                <div>
+                  <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
+                    {en ? 'Guides' : 'Guías'}
+                  </h3>
+                  {(CORRIDOR_WIKIS[pais.corredorId] || []).map(wikiSlug => {
+                    const wa = WIKI_ARTICLES.find(a => a.slug === wikiSlug)
+                    return wa ? (
+                      <a key={wikiSlug} href={`/${locale}/wiki/${wikiSlug}`} className="text-sm text-[var(--color-blue)] font-semibold hover:underline block mb-1">
+                        {en ? wa.titulo_en : wa.titulo}
+                      </a>
+                    ) : null
+                  })}
+                </div>
+              )}
+
+              {/* Other corridors */}
+              <div>
+                <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
+                  {en ? 'Other countries' : 'Otros países'}
+                </h3>
+                {PAISES_MVP.filter(p => p.corredorId !== pais.corredorId).map(p => (
+                  <a key={p.corredorId} href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-sm text-[var(--color-blue)] font-semibold hover:underline block mb-1">
+                    {p.bandera} {en ? p.nombreEn : p.nombre}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="pb-20">

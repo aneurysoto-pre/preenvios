@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
+import { PAISES_MVP } from '@/lib/paises'
 
 const BRANDS = ['Remitly', 'Wise', 'Xoom', 'Ria', 'WorldRemit', 'Western Union', 'MoneyGram']
 const BRAND_DOMAINS: Record<string, string> = {
@@ -18,7 +19,7 @@ export function LogoStrip() {
         <div className="flex justify-center items-center gap-4 sm:gap-8 flex-wrap">
           {BRANDS.map(b => (
             <div key={b} className="flex items-center gap-2 h-9 transition-transform hover:-translate-y-0.5">
-              <img src={`https://cdn.brandfetch.io/${BRAND_DOMAINS[b]}/w/120/h/120`} alt="" className="h-7 w-7 object-contain rounded-md shrink-0" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <img src={`https://cdn.brandfetch.io/${BRAND_DOMAINS[b]}/w/120/h/120`} alt="" width={28} height={28} loading="lazy" decoding="async" className="h-7 w-7 object-contain rounded-md shrink-0" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
               <span className="font-heading font-extrabold text-[15px] text-ink whitespace-nowrap">{b}</span>
             </div>
           ))}
@@ -147,14 +148,19 @@ export function Footer() {
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('product')}</h4>
             <a href="#comparar" className="block py-1.5 text-sm hover:text-white transition-colors">{t('compare')}</a>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('ratesToday')}</a>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('remittanceCompanies')}</a>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('alerts')}</a>
+            {PAISES_MVP.map(p => (
+              <a key={p.corredorId} href={`/${locale}/${locale === 'en' ? p.slugEn : p.slugEs}`} className="block py-1.5 text-sm hover:text-white transition-colors">
+                {p.bandera} {locale === 'en' ? p.nombreEn : p.nombre}
+              </a>
+            ))}
           </div>
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('company')}</h4>
-            <a href="#" className="block py-1.5 text-sm hover:text-white transition-colors">{t('aboutUs')}</a>
-            <a href="#como" className="block py-1.5 text-sm hover:text-white transition-colors">{t('howItWorks')}</a>
+            <a href={`/${locale}/operadores/remitly`} className="block py-1.5 text-sm hover:text-white transition-colors">Remitly</a>
+            <a href={`/${locale}/operadores/wise`} className="block py-1.5 text-sm hover:text-white transition-colors">Wise</a>
+            <a href={`/${locale}/operadores/western-union`} className="block py-1.5 text-sm hover:text-white transition-colors">Western Union</a>
+            <a href={`/${locale}/wiki`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'Guides' : 'Guías'}</a>
+            <a href={`/${locale}/blog`} className="block py-1.5 text-sm hover:text-white transition-colors">Blog</a>
             <a href="mailto:contact@preenvios.com" className="block py-1.5 text-sm hover:text-white transition-colors">{t('contact')}</a>
           </div>
           <div>

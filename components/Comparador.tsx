@@ -408,7 +408,7 @@ function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
       {/* Brand */}
       <div className="flex items-center gap-3 md:gap-4 col-span-2 md:col-span-1 min-w-0">
         <div className="w-[42px] h-[42px] md:w-12 md:h-12 rounded-[10px] bg-g50 border border-g200 flex items-center justify-center shrink-0 overflow-hidden">
-          <img src={LOGOS[p.operador]} alt={p.nombre_operador} className="w-9 h-9 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+          <img src={LOGOS[p.operador]} alt={p.nombre_operador} width={36} height={36} loading="lazy" decoding="async" className="w-9 h-9 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
         </div>
         <div className="min-w-0">
           <div className="font-extrabold text-[15px] md:text-base text-ink truncate">{p.nombre_operador}</div>

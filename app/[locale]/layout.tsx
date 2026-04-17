@@ -36,8 +36,9 @@ export default async function LocaleLayout({
         <meta name="impact-site-verification" content="55a6cc64-e7c0-42c2-9995-7b243cc91810" />
         <meta name="fo-verify" content="2ac0d22d-e981-4a57-98c0-8a7ca20bd9fb" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Quicksand:wght@700&display=swap"
           rel="stylesheet"
         />
         <link rel="alternate" hrefLang="es" href="https://preenvios.com/es" />

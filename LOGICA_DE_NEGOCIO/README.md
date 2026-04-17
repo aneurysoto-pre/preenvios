@@ -60,6 +60,7 @@ Qué hace esta pieza y por qué existe.
 
 | 16 | [16_alertas_gratis.md](16_alertas_gratis.md) | Alertas gratis por email: double opt-in, diario, semanal, CAN-SPAM | Fase 4.4.A |
 | 17 | [17_paginas_por_corredor.md](17_paginas_por_corredor.md) | Páginas editoriales por país: HN, DO, GT, SV con comparador, FAQ, SEO | Fase 4.1.2 |
+| 18 | [18_core_web_vitals.md](18_core_web_vitals.md) | Core Web Vitals + cross-links internos SEO | Fase 4.1 |
 
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)
