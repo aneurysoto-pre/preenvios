@@ -18,7 +18,7 @@ Flujo completo desde que un operador publica su tasa en su web hasta que el usua
                                │
                                ▼
 ┌──────────────────────────────────────────────────────────────────────┐
-│  VERCEL CRON JOB (una vez al día a las 7:00 AM UTC)                                     │
+│  VERCEL CRON JOB (1x/día 7AM UTC — TEMPORAL Hobby, 2h con Pro)  │
 │  vercel.json → GET /api/scrape                                      │
 │                                                                      │
 │  ┌─────────────────────────────────────┐                            │
@@ -116,7 +116,7 @@ Flujo completo desde que un operador publica su tasa en su web hasta que el usua
 Cada remesadora publica su tasa de cambio y fees en su sitio web. Algunas exponen APIs semi-públicas (Wise), otras requieren scraping de HTML (WU, Remitly).
 
 ### 2. Cron job ejecuta
-Vercel ejecuta `GET /api/scrape` una vez al día a las 7:00 AM UTC según `vercel.json`. El endpoint verifica `CRON_SECRET` para seguridad.
+Vercel ejecuta `GET /api/scrape` una vez al día a las 7:00 AM UTC según `vercel.json` (TEMPORAL — Vercel Hobby plan solo permite 1 cron/día. Al activar Vercel Pro $20/mes se volverá a cada 2 horas según el diseño original). El endpoint verifica `CRON_SECRET` para seguridad. El admin también puede ejecutar scrapers manualmente desde el panel.
 
 ### 3. Orquestador corre scrapers
 `lib/scrapers/index.ts` ejecuta los 7 scrapers en secuencia. Cada scraper procesa los 8 corredores con rate limiting de 2 segundos mínimo entre requests.

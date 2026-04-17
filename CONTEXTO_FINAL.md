@@ -570,6 +570,20 @@ Cuando el volumen referido llegue a $50,000/mes:
 
 ---
 
+## Costos mensuales estimados por fase
+
+| Servicio | Plan actual | Costo | Cuándo upgradear |
+|----------|-------------|-------|------------------|
+| Vercel | Hobby (gratis) | $0 | Vercel Pro $20/mes es REQUERIDO al lanzar el producto para activar cron cada 2 horas y quitar límites de funciones |
+| Supabase | Free | $0 | Pro $25/mes cuando supere límites del plan gratis o proyecto se pause por inactividad |
+| Upstash Redis | No activado | $0 | ~$10/mes cuando se necesite cache (diferido) |
+| Proxies rotativos | No activado | $0 | $10-30/mes si WU/Remitly bloquean scrapers |
+| Dominio preenvios.com | Namecheap | ~$12/año | Ya activo |
+| **Total actual** | | **$0/mes** | |
+| **Total post-lanzamiento** | Vercel Pro + Supabase Pro | **$45/mes** | Cuando haya tráfico real |
+
+---
+
 ## Métricas por fase
 
 | Fase | Visitas/mes | Emails free | Ingresos/mes | Meta clave |

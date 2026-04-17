@@ -9,9 +9,10 @@ Completado el 2026-04-16 como parte de Fase 2.
 ## Pasos del flujo
 
 ### 1. Ejecución automática
-1. Vercel Cron Job ejecuta `GET /api/scrape` una vez al día a las 7:00 AM UTC (config en `vercel.json`)
+1. Vercel Cron Job ejecuta `GET /api/scrape` una vez al día a las 7:00 AM UTC (TEMPORAL — Vercel Hobby plan solo permite 1 cron/día. Al activar Vercel Pro se volverá a cada 2 horas según el diseño original)
 2. El endpoint está protegido por `CRON_SECRET` — solo Vercel puede invocarlo
 3. El orquestador (`lib/scrapers/index.ts`) ejecuta los 7 scrapers en secuencia
+4. El admin también puede ejecutar scrapers manualmente desde el panel admin → "Ejecutar scrapers ahora"
 
 ### 2. Orden de ejecución
 1. Wise (API semi-pública — más confiable)
