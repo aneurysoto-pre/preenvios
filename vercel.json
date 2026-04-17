@@ -1,5 +1,4 @@
 {
-  "$comment": "TEMPORAL: Hobby plan solo permite 1 cron/día. Al activar Vercel Pro ($20/mes), cambiar schedule a '0 */2 * * *' para ejecutar cada 2 horas según diseño original.",
   "crons": [
     {
       "path": "/api/scrape",
