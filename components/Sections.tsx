@@ -29,20 +29,28 @@ export function LogoStrip() {
   )
 }
 
-export function WhySection() {
+/** @param region — replaces "Latinoamérica"/"Latin America" in title/subtitle (e.g. "Guatemala") */
+export function WhySection({ region }: { region?: string } = {}) {
   const t = useTranslations('why')
+  const locale = useLocale()
   const items = [
     { key: 'bestRate', icon: '💰', cls: 'bg-blue-soft text-blue' },
     { key: 'instant', icon: '⚡', cls: 'bg-green-soft text-green-dark' },
     { key: 'trusted', icon: '🔒', cls: 'bg-[#FEF3C7] text-[#B45309]' },
   ]
+  const title = region
+    ? t('title').replace(locale === 'en' ? 'Latin America' : 'Latinoamérica', region)
+    : t('title')
+  const subtitle = region
+    ? t('subtitle').replace(locale === 'en' ? 'all providers' : 'todas las remesadoras', locale === 'en' ? `all providers to ${region}` : `todas las remesadoras a ${region}`)
+    : t('subtitle')
   return (
     <section className="py-[90px] bg-white">
       <div className="max-w-[1240px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto mb-14">
           <span className="inline-block text-xs font-extrabold text-blue uppercase tracking-[2px] mb-3.5 px-3.5 py-1.5 bg-blue-soft rounded-full">{t('tag')}</span>
-          <h2 className="font-heading text-[clamp(30px,4vw,46px)] font-black leading-[1.1] mb-3.5">{t('title')}</h2>
-          <p className="text-ink-2 text-[17px]">{t('subtitle')}</p>
+          <h2 className="font-heading text-[clamp(30px,4vw,46px)] font-black leading-[1.1] mb-3.5">{title}</h2>
+          <p className="text-ink-2 text-[17px]">{subtitle}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {items.map(it => (

@@ -37,7 +37,17 @@ const LOGOS: Record<string, string> = {
 
 declare function gtag(...args: unknown[]): void
 
-export default function Comparador({ defaultCorredor }: { defaultCorredor?: string } = {}) {
+type ComparadorProps = {
+  defaultCorredor?: string
+  /** Override hero title line 1 (default: from translations) */
+  heroTitle?: string
+  /** Override hero highlight line 2 (default: from translations) */
+  heroHighlight?: string
+  /** Override hero subtitle (default: from translations) */
+  heroLede?: string
+}
+
+export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede }: ComparadorProps = {}) {
   const t = useTranslations()
   const locale = useLocale()
   const [corredor, setCorredor] = useState(defaultCorredor || 'dominican_republic')
@@ -192,10 +202,10 @@ export default function Comparador({ defaultCorredor }: { defaultCorredor?: stri
               {t('hero.badge')}
             </div>
             <h1 className="font-heading text-[clamp(32px,4.2vw,52px)] font-black leading-[1.05] mb-3.5">
-              {t('hero.title')}<br />
-              <span className="bg-gradient-to-r from-blue to-green bg-clip-text text-transparent">{t('hero.titleHighlight')}</span>
+              {heroTitle || t('hero.title')}<br />
+              <span className="bg-gradient-to-r from-blue to-green bg-clip-text text-transparent">{heroHighlight || t('hero.titleHighlight')}</span>
             </h1>
-            <p className="text-[17px] text-ink-2 max-w-[540px] mb-4">{t('hero.lede')}</p>
+            <p className="text-[17px] text-ink-2 max-w-[540px] mb-4">{heroLede || t('hero.lede')}</p>
             <div className="flex gap-5 flex-wrap mt-4">
               {['noSignup', 'free'].map(k => (
                 <span key={k} className="flex items-center gap-2 text-[13px] text-ink-2 font-bold">

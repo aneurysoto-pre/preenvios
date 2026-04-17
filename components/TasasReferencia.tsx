@@ -42,7 +42,8 @@ const COUNTRY_NAMES: Record<string, Record<string, string>> = {
   ht: { es: 'Haití', en: 'Haiti' },
 }
 
-export default function TasasReferencia() {
+/** @param filterCodigoPais — if set, show only this country's rate card (e.g. 'gt') */
+export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais?: string } = {}) {
   const t = useTranslations('banks')
   const locale = useLocale()
   const en = locale === 'en'
@@ -54,8 +55,10 @@ export default function TasasReferencia() {
       .then(data => { if (Array.isArray(data)) setTasas(data) })
   }, [])
 
-  // Show first 4 (MVP original corridors) by default
-  const visibles = tasas.slice(0, 4)
+  // If filtering by country, show only that one; otherwise show first 4
+  const visibles = filterCodigoPais
+    ? tasas.filter(t => t.codigo_pais === filterCodigoPais)
+    : tasas.slice(0, 4)
 
   if (visibles.length === 0) return null
 
