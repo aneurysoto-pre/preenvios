@@ -1,16 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { findPaisBySlug, PAISES_MVP } from '@/lib/paises'
 import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES } from '@/lib/corredores'
 import { CORRIDOR_BLOGS, CORRIDOR_WIKIS, CORRIDOR_TOP_OPERATORS } from '@/lib/cross-links'
 import Nav from '@/components/Nav'
 import Comparador from '@/components/Comparador'
 import AlertaForm from '@/components/AlertaForm'
-import { Footer } from '@/components/Sections'
+import { WhySection, StepsSection, Footer } from '@/components/Sections'
 
-type BankRate = { corredor: string; tasa: number; moneda: string; actualizado_en: string }
+type TasaBC = { codigo_pais: string; tasa: number; moneda: string; siglas: string }
 
 export default function PaisContent({ slug }: { slug: string }) {
   const locale = useLocale()
@@ -20,17 +20,19 @@ export default function PaisContent({ slug }: { slug: string }) {
   const corredorData = CORREDORES_DATA.find(c => c.id === pais.corredorId)
   const tasaSlug = corredorData?.slug || ''
 
-  const [bankRate, setBankRate] = useState<BankRate | null>(null)
+  const [bankRate, setBankRate] = useState<TasaBC | null>(null)
+  const [openFaq, setOpenFaq] = useState<number>(0)
 
   useEffect(() => {
     fetch('/api/tasas-banco-central')
       .then(r => r.json())
-      .then((data: BankRate[]) => {
-        const rate = data.find(d => d.corredor === pais.corredorId)
+      .then((data: TasaBC[]) => {
+        if (!Array.isArray(data)) return
+        const rate = data.find(d => d.codigo_pais === pais.codigoPais)
         if (rate) setBankRate(rate)
       })
       .catch(() => {})
-  }, [pais.corredorId])
+  }, [pais.codigoPais])
 
   const today = new Date().toLocaleDateString(en ? 'en-US' : 'es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
   const bancos = en ? pais.bancosEn : pais.bancosEs
@@ -49,47 +51,67 @@ export default function PaisContent({ slug }: { slug: string }) {
     <main>
       <Nav />
 
-      {/* Hero */}
-      <section className="pt-24 pb-12 bg-gradient-to-b from-white to-[var(--color-g50)]">
-        <div className="max-w-[920px] mx-auto px-6 text-center">
-          <div className="text-6xl mb-4">{pais.bandera}</div>
-          <h1 className="font-heading text-[clamp(28px,4vw,44px)] font-black leading-[1.1] mb-4">
-            {en ? `Send money to ${nombre}` : `Enviar dinero a ${nombre}`}
-          </h1>
-          <p className="text-lg text-[var(--color-g600)] max-w-xl mx-auto">
-            {en
-              ? `Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram. Find the best rate to ${nombre} today.`
-              : `Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Encuentra la mejor tasa a ${nombre} hoy.`}
-          </p>
+      {/* ═══ 1. HERO with country gradient + flag image + comparador ═══ */}
+      <section className={`pt-24 pb-16 bg-gradient-to-b ${pais.heroGradient}`}>
+        <div className="max-w-[1240px] mx-auto px-6">
+          <div className="text-center mb-10">
+            <img
+              src={`https://flagcdn.com/w160/${pais.codigoPais}.png`}
+              alt={nombre}
+              width={160}
+              height={120}
+              className="mx-auto rounded-lg shadow-md mb-6"
+            />
+            <h1 className="font-heading text-[clamp(28px,4vw,44px)] font-black leading-[1.1] mb-4">
+              {en ? `Send money to ${nombre}` : `Enviar dinero a ${nombre}`}
+            </h1>
+            <p className="text-lg text-[var(--color-g600)] max-w-xl mx-auto">
+              {en
+                ? `Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram. Find the best rate to ${nombre} today.`
+                : `Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Encuentra la mejor tasa a ${nombre} hoy.`}
+            </p>
+          </div>
+          {/* Comparador integrated in hero */}
+          <Comparador defaultCorredor={pais.corredorId} />
         </div>
       </section>
 
-      {/* Current rate block */}
+      {/* ═══ 2. TASA BANCO CENTRAL (card destacada) ═══ */}
       {pais.moneda !== 'USD' && (
-        <section className="pb-8">
+        <section className="py-16">
           <div className="max-w-[920px] mx-auto px-6">
-            <div className="bg-[var(--color-blue-soft)] rounded-[22px] p-6 text-center">
-              <p className="text-sm text-[var(--color-g600)] mb-1">
+            <div className="bg-gradient-to-br from-[var(--color-blue-soft)] to-white rounded-[22px] p-8 text-center border border-[var(--color-g200)] shadow-sm">
+              <p className="text-sm text-[var(--color-g600)] mb-2">
                 {en ? `Central bank reference rate — ${today}` : `Tasa de referencia del banco central — ${today}`}
               </p>
-              <p className="text-3xl font-black text-[var(--color-blue)]">
+              <p className="text-[clamp(36px,5vw,52px)] font-black text-[var(--color-blue)] leading-tight">
                 1 USD = {bankRate ? bankRate.tasa.toFixed(2) : '—'} {pais.moneda}
               </p>
-              <p className="text-xs text-[var(--color-g500)] mt-2">
+              {bankRate && (
+                <p className="text-xs text-[var(--color-g500)] mt-3">
+                  {en ? `Source: ${bankRate.siglas}` : `Fuente: ${bankRate.siglas}`}
+                </p>
+              )}
+              <p className="text-xs text-[var(--color-g400)] mt-1">
                 {en
-                  ? 'Remittance providers may offer different rates. Compare below.'
-                  : 'Las remesadoras pueden ofrecer tasas diferentes. Compara abajo.'}
+                  ? 'Remittance providers may offer different rates. Compare above.'
+                  : 'Las remesadoras pueden ofrecer tasas diferentes. Compara arriba.'}
               </p>
+              {tasaSlug && (
+                <a href={`/${locale}/tasa/${tasaSlug}`} className="inline-block mt-4 text-sm text-[var(--color-blue)] font-bold hover:underline">
+                  {en ? `See ${pais.moneda} historical chart →` : `Ver gráfica histórica ${pais.moneda} →`}
+                </a>
+              )}
             </div>
           </div>
         </section>
       )}
 
       {pais.moneda === 'USD' && (
-        <section className="pb-8">
+        <section className="py-16">
           <div className="max-w-[920px] mx-auto px-6">
-            <div className="bg-[var(--color-green-soft)] rounded-[22px] p-6 text-center">
-              <p className="text-lg font-bold text-[var(--color-green-dark)]">
+            <div className="bg-[var(--color-green-soft)] rounded-[22px] p-8 text-center border border-[var(--color-green)]">
+              <p className="text-xl font-bold text-[var(--color-green-dark)]">
                 {en
                   ? 'El Salvador uses USD — no currency conversion needed. Compare fees only.'
                   : 'El Salvador usa USD — no hay conversión de moneda. Compara solo comisiones.'}
@@ -99,31 +121,20 @@ export default function PaisContent({ slug }: { slug: string }) {
         </section>
       )}
 
-      {/* Comparador preset to this corridor */}
-      <section className="pb-12">
-        <div className="max-w-[1240px] mx-auto px-6">
-          <h2 className="font-heading font-extrabold text-xl mb-6 text-center">
-            {en ? `Compare 7 providers to ${nombre}` : `Compara 7 remesadoras a ${nombre}`}
-          </h2>
-          <Comparador defaultCorredor={pais.corredorId} />
-        </div>
-      </section>
+      {/* ═══ 3. WHY PreEnvios (reutilizado del landing) ═══ */}
+      <WhySection />
 
-      {/* Alert form */}
-      <section className="pb-12">
-        <div className="max-w-[700px] mx-auto px-6">
-          <AlertaForm corredorId={pais.corredorId} corredorNombre={nombre} />
-        </div>
-      </section>
+      {/* ═══ 4. STEPS — cómo funciona (reutilizado del landing) ═══ */}
+      <StepsSection />
 
-      {/* How to receive money */}
-      <section className="pb-12">
+      {/* ═══ 5. CÓMO RECIBIR DINERO (editorial placeholder) ═══ */}
+      <section className="py-16 bg-white">
         <div className="max-w-[920px] mx-auto px-6">
-          <div className="bg-white rounded-[22px] p-8 border border-[var(--color-g200)] shadow-sm">
-            <h2 className="font-heading font-extrabold text-xl mb-4">
+          <div className="bg-gradient-to-br from-[var(--color-g50)] to-white rounded-[22px] p-10 border border-[var(--color-g200)] shadow-sm">
+            <h2 className="font-heading font-extrabold text-2xl mb-4">
               {en ? `How to receive money in ${nombre}` : `Cómo recibir dinero en ${nombre}`}
             </h2>
-            <p className="text-[var(--color-g600)]">
+            <p className="text-[var(--color-g600)] text-base leading-relaxed">
               {en
                 ? 'Coming soon: complete step-by-step guide for receiving remittances, including bank requirements, cash pickup locations, and mobile wallet options.'
                 : 'Próximamente: guía completa paso a paso para recibir remesas, incluyendo requisitos bancarios, puntos de retiro en efectivo y opciones de billetera móvil.'}
@@ -132,44 +143,62 @@ export default function PaisContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* Banks and wallets */}
-      <section className="pb-12">
+      {/* ═══ 6. BANCOS Y BILLETERAS (grid de cards) ═══ */}
+      <section className="py-16 bg-[var(--color-g50)]">
         <div className="max-w-[920px] mx-auto px-6">
-          <div className="bg-white rounded-[22px] p-8 border border-[var(--color-g200)] shadow-sm">
-            <h2 className="font-heading font-extrabold text-xl mb-4">
-              {en ? `Popular banks and wallets in ${nombre}` : `Bancos y billeteras más usados en ${nombre}`}
-            </h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {bancos.map(b => (
-                <li key={b} className="flex items-center gap-2 text-[var(--color-ink-2)]">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-blue)] shrink-0" />
-                  {b}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="pb-12">
-        <div className="max-w-[920px] mx-auto px-6">
-          <h2 className="font-heading font-extrabold text-xl mb-6 text-center">
-            {en ? 'Frequently asked questions' : 'Preguntas frecuentes'}
+          <h2 className="font-heading font-extrabold text-2xl mb-8 text-center">
+            {en ? `Popular banks and wallets in ${nombre}` : `Bancos y billeteras más usados en ${nombre}`}
           </h2>
-          <div className="space-y-4">
-            {faqItems.map((item, i) => (
-              <div key={i} className="bg-white rounded-[18px] p-6 border border-[var(--color-g200)] shadow-sm">
-                <h3 className="font-bold text-[var(--color-ink)] mb-2">{item.q}</h3>
-                <p className="text-sm text-[var(--color-g600)]">{item.a}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {bancos.map(b => (
+              <div key={b} className="bg-white rounded-[16px] p-5 border border-[var(--color-g200)] shadow-sm transition-all hover:-translate-y-1 hover:shadow-md flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-[var(--color-blue-soft)] flex items-center justify-center text-xl shrink-0">
+                  🏦
+                </div>
+                <span className="font-bold text-[var(--color-ink)] text-sm">{b}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Cross-links SEO */}
-      <section className="pb-12">
+      {/* ═══ 7. ALERTA FORM ═══ */}
+      <section className="py-16">
+        <div className="max-w-[700px] mx-auto px-6">
+          <AlertaForm corredorId={pais.corredorId} corredorNombre={nombre} />
+        </div>
+      </section>
+
+      {/* ═══ 8. FAQ (acordeón) ═══ */}
+      <section className="py-16 bg-[var(--color-g50)]">
+        <div className="max-w-[760px] mx-auto px-6">
+          <h2 className="font-heading font-extrabold text-2xl mb-8 text-center">
+            {en ? 'Frequently asked questions' : 'Preguntas frecuentes'}
+          </h2>
+          <div className="flex flex-col gap-3">
+            {faqItems.map((item, i) => (
+              <div
+                key={i}
+                className={`bg-white border rounded-[14px] overflow-hidden transition-colors ${openFaq === i ? 'border-[var(--color-blue-soft)]' : 'border-[var(--color-g200)]'} hover:border-[var(--color-blue-soft)]`}
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+                  className="w-full px-6 py-5 text-left font-bold text-base flex justify-between items-center text-[var(--color-ink)]"
+                >
+                  {item.q}
+                  <span className={`text-2xl text-[var(--color-blue)] font-normal transition-transform duration-200 ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
+                </button>
+                {openFaq === i && (
+                  <p className="px-6 pb-5 text-[var(--color-ink-2)] text-[15px] leading-relaxed">{item.a}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 9. CROSS-LINKS SEO ═══ */}
+      <section className="py-16">
         <div className="max-w-[920px] mx-auto px-6">
           <div className="bg-[var(--color-g50)] rounded-[22px] p-8 border border-[var(--color-g200)]">
             <h2 className="font-heading font-extrabold text-lg mb-5">
@@ -188,7 +217,7 @@ export default function PaisContent({ slug }: { slug: string }) {
                 </div>
               )}
 
-              {/* Top operators for this corridor */}
+              {/* Top operators */}
               {(CORRIDOR_TOP_OPERATORS[pais.corredorId] || []).length > 0 && (
                 <div>
                   <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
@@ -205,7 +234,7 @@ export default function PaisContent({ slug }: { slug: string }) {
                 </div>
               )}
 
-              {/* Related blog articles */}
+              {/* Related blog */}
               {(CORRIDOR_BLOGS[pais.corredorId] || []).length > 0 && (
                 <div>
                   <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
@@ -219,7 +248,7 @@ export default function PaisContent({ slug }: { slug: string }) {
                 </div>
               )}
 
-              {/* Related wiki articles */}
+              {/* Related wiki */}
               {(CORRIDOR_WIKIS[pais.corredorId] || []).length > 0 && (
                 <div>
                   <h3 className="text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider mb-2">
@@ -243,7 +272,8 @@ export default function PaisContent({ slug }: { slug: string }) {
                 </h3>
                 {PAISES_MVP.filter(p => p.corredorId !== pais.corredorId).map(p => (
                   <a key={p.corredorId} href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-sm text-[var(--color-blue)] font-semibold hover:underline block mb-1">
-                    {p.bandera} {en ? p.nombreEn : p.nombre}
+                    <img src={`https://flagcdn.com/w20/${p.codigoPais}.png`} alt="" width={20} height={15} className="inline mr-1.5 rounded-sm" loading="lazy" />
+                    {en ? p.nombreEn : p.nombre}
                   </a>
                 ))}
               </div>
@@ -252,9 +282,15 @@ export default function PaisContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="pb-20">
+      {/* ═══ 10. CTA FINAL ═══ */}
+      <section className="py-20">
         <div className="max-w-[920px] mx-auto px-6 text-center">
+          <h2 className="font-heading text-[clamp(24px,3vw,36px)] font-black mb-4">
+            {en ? `Ready to send money to ${nombre}?` : `Listo para enviar dinero a ${nombre}?`}
+          </h2>
+          <p className="text-[var(--color-g600)] mb-6 max-w-md mx-auto">
+            {en ? 'Compare 7 providers in seconds. Find the best rate today.' : 'Compara 7 remesadoras en segundos. Encuentra la mejor tasa hoy.'}
+          </p>
           <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-8 py-4 rounded-full font-extrabold text-base hover:-translate-y-0.5 transition-transform shadow-lg">
             {en ? 'Compare all providers now' : 'Comparar todas las remesadoras ahora'} →
           </a>
