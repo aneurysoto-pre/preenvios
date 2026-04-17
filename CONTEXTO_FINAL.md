@@ -76,11 +76,11 @@ negociar Revenue Share directo con Remitly y Wise.
 ### Backend
 - Supabase — base de datos PostgreSQL + auth + storage
 - Vercel — hosting con deploy automático desde GitHub
-- Upstash Redis — cache de precios (actualización cada 2 horas)
+- Upstash Redis — cache de precios (actualización diaria, cada 2 horas en plan Pro)
 
 ### Scrapers automáticos
 - Playwright o Puppeteer — scraping de tasas
-- Vercel Cron Jobs — ejecución cada 2 horas
+- Vercel Cron Jobs — ejecución diaria en Hobby, cada 2 horas en Pro
 - Proxies rotativos — para operadores con protección avanzada ($10–30/mes)
 - Wise API semi-pública — datos directos sin scraping
 - APIs de afiliados (Impact, CJ, Partnerize) — tasas en tiempo real para operadores aprobados
@@ -355,7 +355,7 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 - [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16)
 - [x] Crear scraper para Ria (completado 2026-04-16)
 - [x] Crear scraper para Boss Money (completado 2026-04-16 — placeholder, se activa en Fase 4)
-- [x] Crear Vercel Cron Job — ejecuta scrapers cada 2 horas (completado 2026-04-16 — vercel.json con schedule "0 */2 * * *")
+- [x] Crear Vercel Cron Job — ejecuta scrapers una vez al día a las 7:00 AM UTC (completado 2026-04-16 — vercel.json con schedule "0 7 * * *", Hobby plan permite 1 cron/día)
 - [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16)
 - [ ] Upstash Redis cachea los últimos precios para servir rápido (diferido — se activa cuando sea necesario)
 - [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16)

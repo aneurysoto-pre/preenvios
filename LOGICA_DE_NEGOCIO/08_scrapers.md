@@ -2,14 +2,14 @@
 
 ## Descripción
 
-Sistema de 7 scrapers que obtienen tasas de cambio y comisiones de cada remesadora para los 4 corredores. Ejecutan cada 2 horas via Vercel Cron Job. Incluyen rate limiting, User-Agent identificable, y sistema de fallback cuando un scraper falla.
+Sistema de 7 scrapers que obtienen tasas de cambio y comisiones de cada remesadora para los 4 corredores. Ejecutan una vez al día a las 7:00 AM UTC via Vercel Cron Job. Incluyen rate limiting, User-Agent identificable, y sistema de fallback cuando un scraper falla.
 
 Completado el 2026-04-16 como parte de Fase 2.
 
 ## Pasos del flujo
 
 ### 1. Ejecución automática
-1. Vercel Cron Job ejecuta `GET /api/scrape` cada 2 horas (config en `vercel.json`)
+1. Vercel Cron Job ejecuta `GET /api/scrape` una vez al día a las 7:00 AM UTC (config en `vercel.json`)
 2. El endpoint está protegido por `CRON_SECRET` — solo Vercel puede invocarlo
 3. El orquestador (`lib/scrapers/index.ts`) ejecuta los 7 scrapers en secuencia
 
@@ -69,7 +69,7 @@ Todos los scrapers envían: `PreenviosBot/1.0 contact@preenvios.com`
 | `lib/scrapers/index.ts` | Orquestador |
 | `app/api/scrape/route.ts` | Cron endpoint |
 | `app/api/admin/dashboard/route.ts` | Dashboard admin |
-| `vercel.json` | Cron schedule cada 2 horas |
+| `vercel.json` | Cron schedule una vez al día a las 7:00 AM UTC |
 
 ## Pendiente de acción del usuario
 - Upstash Redis (crear cuenta, proveer keys)
