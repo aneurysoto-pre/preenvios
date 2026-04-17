@@ -4,7 +4,11 @@
 
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let _resend: Resend | null = null
+function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY)
+  return _resend
+}
 const FROM_EMAIL = 'PreEnvios <onboarding@resend.dev>'
 const BASE_URL = 'https://preenvios.com'
 
@@ -105,7 +109,7 @@ function weeklyDigestHtml(d: WeeklyDigestData): string {
 
 export async function sendConfirmationEmail(email: string, data: ConfirmEmailData) {
   const en = data.idioma === 'en'
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: en ? 'Confirm your PreEnvios subscription' : 'Confirma tu suscripción en PreEnvios',
@@ -115,7 +119,7 @@ export async function sendConfirmationEmail(email: string, data: ConfirmEmailDat
 
 export async function sendDailyAlert(email: string, data: DailyAlertData) {
   const en = data.idioma === 'en'
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: en
@@ -127,7 +131,7 @@ export async function sendDailyAlert(email: string, data: DailyAlertData) {
 
 export async function sendWeeklyDigest(email: string, data: WeeklyDigestData) {
   const en = data.idioma === 'en'
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to: email,
     subject: en ? 'PreEnvios — Weekly rate summary' : 'PreEnvios — Resumen semanal de tasas',
