@@ -462,6 +462,19 @@ Palabras y frases de mayor volumen de búsqueda para los corredores activos:
 
 Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del blog por corredor.
 
+#### 4.1.2 — Páginas editoriales por corredor (MVP: 4 países)
+- [x] Crear ruta dinámica app/[locale]/[pais] con generateStaticParams para los 4 corredores del MVP (completado 2026-04-17)
+- [x] Página /es/honduras + /en/honduras con hero, tasa actual, comparador, FAQ, bancos, Schema.org (completado 2026-04-17)
+- [x] Página /es/republica-dominicana + /en/dominican-republic (completado 2026-04-17)
+- [x] Página /es/guatemala + /en/guatemala (completado 2026-04-17)
+- [x] Página /es/el-salvador + /en/el-salvador (completado 2026-04-17)
+- [x] Comparador reutilizado con prop defaultCorredor preset al corredor del país (completado 2026-04-17)
+- [x] Formulario de suscripción AlertaForm integrado en cada página de país (completado 2026-04-17)
+- [x] Menú "Corredores" con dropdown en Nav desktop y lista en Nav mobile (completado 2026-04-17)
+- [x] Sitemap actualizado con 8 URLs nuevas con hreflang alternates (completado 2026-04-17)
+- [x] Schema.org WebPage + BreadcrumbList + FAQPage en cada página (completado 2026-04-17)
+- [x] Cross-link bidireccional entre /[pais] (editorial) y /tasa/[pair] (técnica) (completado 2026-04-17)
+
 #### 4.2 — Nuevos corredores
 - [x] Agregar corredor USA → Colombia con operadores y afiliados (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
 - [x] Agregar corredor USA → México (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)

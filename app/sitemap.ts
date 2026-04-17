@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES } from '@/lib/corredores'
+import { PAISES_MVP } from '@/lib/paises'
 
 const BASE_URL = 'https://preenvios.com'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas']
@@ -55,6 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Calculadora inversa
   pages.push({ url: `${BASE_URL}/es/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
   pages.push({ url: `${BASE_URL}/en/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
+
+  // Páginas editoriales por país
+  for (const p of PAISES_MVP) {
+    pages.push({ url: `${BASE_URL}/es/${p.slugEs}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}`, en: `${BASE_URL}/en/${p.slugEn}` } } })
+    pages.push({ url: `${BASE_URL}/en/${p.slugEn}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}`, en: `${BASE_URL}/en/${p.slugEn}` } } })
+  }
 
   // Baja (unsubscribe)
   pages.push({ url: `${BASE_URL}/es/baja`, lastModified: now, changeFrequency: 'yearly', priority: 0.1, alternates: altLangs('/baja') })

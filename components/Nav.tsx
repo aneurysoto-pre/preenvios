@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
+import { PAISES_MVP } from '@/lib/paises'
 
 export default function Nav() {
   const t = useTranslations('nav')
@@ -11,11 +12,26 @@ export default function Nav() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [corridorOpen, setCorridorOpen] = useState(false)
+  const corridorRef = useRef<HTMLDivElement>(null)
+
+  const en = locale === 'en'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close corridor dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (corridorRef.current && !corridorRef.current.contains(e.target as Node)) {
+        setCorridorOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
   function switchLocale() {
@@ -48,6 +64,31 @@ export default function Nav() {
         {/* Desktop links */}
         <div className="hidden md:flex gap-8 items-center">
           <a href="#comparar" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('compare')}</a>
+          {/* Corredores dropdown */}
+          <div ref={corridorRef} className="relative">
+            <button
+              onClick={() => setCorridorOpen(!corridorOpen)}
+              className="text-sm font-semibold text-g600 hover:text-blue transition-colors flex items-center gap-1"
+            >
+              {t('corridors')}
+              <svg className={`w-3.5 h-3.5 transition-transform ${corridorOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {corridorOpen && (
+              <div className="absolute top-full mt-2 left-0 bg-white rounded-xl border border-[var(--color-g200)] shadow-lg py-2 min-w-[220px] z-50">
+                {PAISES_MVP.map(p => (
+                  <a
+                    key={p.corredorId}
+                    href={`/${locale}/${en ? p.slugEn : p.slugEs}`}
+                    onClick={() => setCorridorOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] hover:bg-[var(--color-g50)] transition-colors"
+                  >
+                    <span className="text-lg">{p.bandera}</span>
+                    <span>{en ? p.nombreEn : p.nombre}</span>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
           <a href="#como" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('howItWorks')}</a>
           <a href="#faq" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('faq')}</a>
           <button onClick={switchLocale} className="text-sm font-bold text-g600 hover:text-blue border border-g200 rounded-full px-3 py-1.5 transition-colors">
@@ -65,8 +106,19 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden fixed top-[72px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1">
+        <div className="md:hidden fixed top-[72px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1 max-h-[calc(100vh-72px)] overflow-y-auto">
           <a href="#comparar" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('compare')}</a>
+          <p className="pt-3 pb-1 px-1 text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider">{t('corridors')}</p>
+          {PAISES_MVP.map(p => (
+            <a
+              key={p.corredorId}
+              href={`/${locale}/${en ? p.slugEn : p.slugEs}`}
+              onClick={closeMenu}
+              className="py-3 px-1 text-base font-bold text-ink border-b border-g100 flex items-center gap-3"
+            >
+              <span>{p.bandera}</span> {en ? p.nombreEn : p.nombre}
+            </a>
+          ))}
           <a href="#como" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
           <a href="#faq" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
           <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left">

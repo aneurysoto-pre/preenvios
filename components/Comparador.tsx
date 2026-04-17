@@ -37,10 +37,10 @@ const LOGOS: Record<string, string> = {
 
 declare function gtag(...args: unknown[]): void
 
-export default function Comparador() {
+export default function Comparador({ defaultCorredor }: { defaultCorredor?: string } = {}) {
   const t = useTranslations()
   const locale = useLocale()
-  const [corredor, setCorredor] = useState('dominican_republic')
+  const [corredor, setCorredor] = useState(defaultCorredor || 'dominican_republic')
   const [monto, setMonto] = useState('')
   const [metodo, setMetodo] = useState('bank')
   const [precios, setPrecios] = useState<Precio[]>([])

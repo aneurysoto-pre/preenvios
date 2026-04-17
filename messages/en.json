@@ -3,7 +3,9 @@
     "compare": "Compare",
     "howItWorks": "How it works",
     "faq": "FAQ",
-    "login": "Sign in"
+    "login": "Sign in",
+    "corridors": "Countries",
+    "sendTo": "Send to"
   },
   "hero": {
     "badge": "Exchange rates updated in real time",

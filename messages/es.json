@@ -3,7 +3,9 @@
     "compare": "Comparar",
     "howItWorks": "Cómo funciona",
     "faq": "FAQ",
-    "login": "Ingresar"
+    "login": "Ingresar",
+    "corridors": "Corredores",
+    "sendTo": "Enviar a"
   },
   "hero": {
     "badge": "Tasas actualizadas en tiempo real",
