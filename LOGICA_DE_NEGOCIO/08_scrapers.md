@@ -76,3 +76,8 @@ Todos los scrapers envían: `PreenviosBot/1.0 contact@preenvios.com`
 - Proxies rotativos (si WU/Remitly bloquean)
 - Backups Supabase (crear cuenta Backblaze B2)
 - UptimeRobot (crear cuenta gratuita)
+
+## Relacionado
+- Ver flujo end-to-end de precios: [LOGICA_DE_NEGOCIO/13_flujo_precios_end_to_end.md](13_flujo_precios_end_to_end.md)
+- Resolución de problemas de un scraper: [TROUBLESHOOTING/01_scraper_individual_falla.md](../TROUBLESHOOTING/01_scraper_individual_falla.md)
+- Resolución cuando todos fallan: [TROUBLESHOOTING/02_todos_scrapers_fallan.md](../TROUBLESHOOTING/02_todos_scrapers_fallan.md)
