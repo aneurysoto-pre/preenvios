@@ -9,6 +9,10 @@ const CORREDORES = [
   { id: 'dominican_republic', moneda: 'DOP', country: 'DO', link: 'https://www.xoom.com/dominican-republic/send-money' },
   { id: 'guatemala',          moneda: 'GTQ', country: 'GT', link: 'https://www.xoom.com/guatemala/send-money' },
   { id: 'el_salvador',        moneda: 'USD', country: 'SV', link: 'https://www.xoom.com' },
+  { id: 'colombia',           moneda: 'COP', country: 'CO', link: 'https://www.xoom.com/colombia/send-money' },
+  { id: 'mexico',             moneda: 'MXN', country: 'MX', link: 'https://www.xoom.com/mexico/send-money' },
+  { id: 'nicaragua',          moneda: 'NIO', country: 'NI', link: 'https://www.xoom.com/nicaragua/send-money' },
+  { id: 'haiti',              moneda: 'HTG', country: 'HT', link: 'https://www.xoom.com/haiti/send-money' },
 ]
 
 export async function scrapeXoom(): Promise<{ saved: number; errors: string[] }> {

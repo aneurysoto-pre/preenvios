@@ -462,10 +462,10 @@ Palabras y frases de mayor volumen de búsqueda para los corredores activos:
 Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del blog por corredor.
 
 #### 4.2 — Nuevos corredores
-- [ ] Agregar corredor USA → Colombia con operadores y afiliados
-- [ ] Agregar corredor USA → México
-- [ ] Agregar corredor USA → Nicaragua
-- [ ] Agregar corredor USA → Haití
+- [x] Agregar corredor USA → Colombia con operadores y afiliados (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
+- [x] Agregar corredor USA → México (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
+- [x] Agregar corredor USA → Nicaragua (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
+- [x] Agregar corredor USA → Haití (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
 - [ ] Crear contenido SEO específico por cada nuevo corredor
 
 #### 4.3 — Publicidad directa con bancos

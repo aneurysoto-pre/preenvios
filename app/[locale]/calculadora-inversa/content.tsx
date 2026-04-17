@@ -9,6 +9,10 @@ const CORREDORES = [
   { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴' },
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳' },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹' },
+  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    bandera: '🇨🇴' },
+  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    bandera: '🇲🇽' },
+  { id: 'nicaragua',          nombre: 'Nicaragua',        nombre_en: 'Nicaragua',          moneda: 'NIO', simbolo: 'C$',   bandera: '🇳🇮' },
+  { id: 'haiti',              nombre: 'Haití',            nombre_en: 'Haiti',              moneda: 'HTG', simbolo: 'G',    bandera: '🇭🇹' },
 ]
 
 type Precio = { operador: string; nombre_operador: string; tasa: number; fee: number }

@@ -12,6 +12,10 @@ const CORREDORES = [
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳', codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹', codigo_pais: 'gt', aliases: ['gt','gtq','guat','guate','chapín'] },
   { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻', codigo_pais: 'sv', aliases: ['sv','slv','salv','salvador','guanaco'] },
+  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    bandera: '🇨🇴', codigo_pais: 'co', aliases: ['co','cop','col','colom','paisa'] },
+  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    bandera: '🇲🇽', codigo_pais: 'mx', aliases: ['mx','mxn','mex','mexi','mexico'] },
+  { id: 'nicaragua',          nombre: 'Nicaragua',        nombre_en: 'Nicaragua',          moneda: 'NIO', simbolo: 'C$',   bandera: '🇳🇮', codigo_pais: 'ni', aliases: ['ni','nio','nic','nicar','nica'] },
+  { id: 'haiti',              nombre: 'Haití',            nombre_en: 'Haiti',              moneda: 'HTG', simbolo: 'G',    bandera: '🇭🇹', codigo_pais: 'ht', aliases: ['ht','htg','hai','haiti','ayiti'] },
 ]
 
 const METODOS = [

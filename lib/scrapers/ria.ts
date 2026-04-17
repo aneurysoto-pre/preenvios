@@ -10,6 +10,10 @@ const CORREDORES = [
   { id: 'dominican_republic', moneda: 'DOP', country: 'dominican-republic',  link: 'https://www.riamoneytransfer.com/us/en/send-money-to/dominican-republic' },
   { id: 'guatemala',          moneda: 'GTQ', country: 'guatemala',           link: 'https://www.riamoneytransfer.com/us/en/send-money-to/guatemala' },
   { id: 'el_salvador',        moneda: 'USD', country: 'el-salvador',         link: 'https://www.riamoneytransfer.com' },
+  { id: 'colombia',           moneda: 'COP', country: 'colombia',            link: 'https://www.riamoneytransfer.com/us/en/send-money-to/colombia' },
+  { id: 'mexico',             moneda: 'MXN', country: 'mexico',              link: 'https://www.riamoneytransfer.com/us/en/send-money-to/mexico' },
+  { id: 'nicaragua',          moneda: 'NIO', country: 'nicaragua',           link: 'https://www.riamoneytransfer.com/us/en/send-money-to/nicaragua' },
+  { id: 'haiti',              moneda: 'HTG', country: 'haiti',               link: 'https://www.riamoneytransfer.com/us/en/send-money-to/haiti' },
 ]
 
 export async function scrapeRia(): Promise<{ saved: number; errors: string[] }> {
