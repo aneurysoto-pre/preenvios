@@ -409,7 +409,7 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 - [x] Configurar sitemap.xml automático (completado 2026-04-17 — incluye blog, wiki, tasa, operadores, legal, calculadora inversa con alternates es/en)
 - [ ] Verificar propiedad en Google Search Console (pendiente de acción del usuario)
 - [x] Optimizar Core Web Vitals — verde en PageSpeed (completado 2026-04-17 — font swap, preconnect, dynamic imports, lazy loading, code splitting)
-- [x] Crear tabla historial_tasas_publico en Supabase (completado 2026-04-17 — SQL pendiente de ejecutar por usuario, API lista)
+- [x] Crear tabla historial_tasas_publico en Supabase (completado 2026-04-17 — SQL ejecutado en Supabase)
 - [x] Páginas públicas indexadas por Google: preenvios.com/tasa/usd-dop, usd-hnl, usd-gtq, usd-svc, usd-cop, usd-mxn, usd-nio, usd-htg (completado 2026-04-17 — 8 corredores con Recharts, tabla operadores, CTA, Schema.org)
 - [x] Cada página muestra tasa actual, gráfica de fluctuación últimos 30 días con Recharts, tabla de los 7 operadores comparados, y CTA al comparador principal (completado 2026-04-17)
 - [x] Meta tags optimizados: "Tasa del dólar en República Dominicana hoy — [fecha actualizada]" (completado 2026-04-17)
@@ -492,7 +492,7 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.4.A — Alertas gratuitas y captura de email (lead-gen) — se construye ANTES que el panel premium
 Propósito: capturar emails de usuarios no pagos para newsletter con links de afiliado. Tecnología: Supabase (tabla suscriptores_free), Resend (envío de emails), Next.js API Routes (endpoint de suscripción), double opt-in para cumplir CAN-SPAM.
 
-- [x] Crear tabla suscriptores_free en Supabase con campos email, corredor_favorito, idioma (es/en), fecha_alta, confirmado, token_confirmacion (completado 2026-04-17 — SQL entregado al usuario)
+- [x] Crear tabla suscriptores_free en Supabase con campos email, corredor_favorito, idioma (es/en), fecha_alta, confirmado, token_confirmacion (completado 2026-04-17 — SQL ejecutado en Supabase)
 - [x] Formulario de suscripción inline en cada página de corredor ("Recibe la tasa de hoy cada mañana en tu email") (completado 2026-04-17)
 - [x] Flujo de double opt-in con Resend — email de confirmación con token único antes de activar suscripción (completado 2026-04-17)
 - [x] Email diario automático con la tasa del día del corredor elegido + link afiliado al mejor operador (cron en Vercel a las 7 AM hora EST) (completado 2026-04-17 — integrado en cron existente /api/scrape)
