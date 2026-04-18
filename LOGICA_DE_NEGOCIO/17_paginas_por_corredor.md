@@ -29,7 +29,7 @@ Completado el 2026-04-17 como Fase 4.1.2 del roadmap.
 
 1. **Hero**: bandera grande + "Enviar dinero a [País]" + subtítulo descriptivo
 2. **Tasa actual**: bloque con tasa de referencia del banco central (fetch /api/tasas-banco-central). El Salvador muestra "usa USD — sin conversión"
-3. **Comparador**: componente Comparador reutilizado con `defaultCorredor` preset al corredor del país
+3. **Comparador**: componente Comparador reutilizado con `defaultCorredor` preset al corredor del país. **Regla (desde 2026-04-18):** cuando `defaultCorredor` está presente, el prop gana sobre la cookie `preenvios_corredor`. Antes el efecto de cookie sobreescribía el prop al montar y siempre volvía a la última selección del usuario; ahora el prop se respeta siempre en páginas de país
 4. **Formulario de alertas**: AlertaForm integrado
 5. **Cómo recibir dinero**: placeholder "Próximamente: guía completa"
 6. **Bancos y billeteras**: lista de los 5 bancos/billeteras más populares del país

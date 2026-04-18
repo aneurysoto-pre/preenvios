@@ -8,26 +8,28 @@ Completado el 2026-04-16 como Bloque 4 de la Fase 1.
 
 ## Pasos del flujo
 
-### 1. Detección de idioma en primera visita
+### 1. Detección de idioma en primera visita (2026-04-18 — simplificado)
+**Regla: el idioma por defecto del sitio siempre es español.** El header `Accept-Language` del navegador NO se usa. El usuario solo ve inglés si lo elige explícitamente.
+
 1. El usuario llega a preenvios.com
 2. El middleware de next-intl intercepta la request
-3. Revisa si existe cookie `NEXT_LOCALE` — si existe, usa ese idioma
-4. Si no hay cookie, lee el header `Accept-Language` del navegador
-5. Si el navegador reporta español → redirige a `/es`
-6. Si reporta inglés → redirige a `/en`
-7. Cualquier otro idioma → fallback a `/es`
+3. Si existe cookie `NEXT_LOCALE=en` (puesta por una elección previa del usuario) → redirige a `/en`
+4. Si existe cookie `NEXT_LOCALE=es` o no hay cookie → redirige a `/es`
+5. Configurado en `i18n/routing.ts` con `localeDetection: false` — esto desactiva la lectura de Accept-Language
+
+Motivación: el público objetivo es diáspora latina en EE.UU. Muchos tienen el Android/iPhone en inglés de fábrica pero consumen contenido en español. Dejar que Accept-Language decida producía que usuarios hispanohablantes viesen el sitio en inglés por defecto. Español como default hard-codeado elimina esa fricción.
 
 ### 2. Cookie NEXT_LOCALE
-- Se guarda automáticamente por next-intl cuando el usuario visita una ruta con locale
+- Se guarda automáticamente por next-intl cuando el usuario cambia manualmente de idioma via el botón EN/ES
 - Duración: 365 días
 - Configurada en `i18n/routing.ts` con `localeCookie.maxAge`
-- Tiene prioridad sobre Accept-Language en visitas siguientes
+- Es la única señal que hace que un visitante vea `/en` en lugar de `/es`
 
 ### 3. Cambio manual de idioma
 1. El usuario hace clic en botón EN/ES en el nav
 2. Se dispara evento GA4 `cambio_idioma` con idioma anterior y nuevo
 3. `router.push()` navega a la misma ruta en el otro locale (ej: `/es` → `/en`)
-4. next-intl actualiza la cookie automáticamente
+4. next-intl actualiza la cookie `NEXT_LOCALE` automáticamente para próximas visitas
 
 ### 4. Meta tags hreflang
 En `app/[locale]/layout.tsx` se incluyen 3 tags `<link rel="alternate">`:
@@ -53,7 +55,7 @@ Esto le dice a Google que existen 2 versiones del sitio y cuál mostrar según e
 ## Archivos modificados/creados
 | Archivo | Cambio |
 |---------|--------|
-| `i18n/routing.ts` | Cookie NEXT_LOCALE con maxAge 365 días |
+| `i18n/routing.ts` | Cookie NEXT_LOCALE con maxAge 365 días + `localeDetection: false` (siempre ES por defecto desde 2026-04-18) |
 | `app/[locale]/layout.tsx` | Meta tags hreflang es/en/x-default |
 | `components/Nav.tsx` | Evento GA4 `cambio_idioma` en switchLocale |
 | `app/sitemap.ts` | Sitemap con alternates por idioma |

@@ -24,6 +24,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [13](13_formulario_suscripcion_stuck.md) | Formulario suscripción stuck | 🟢 | 5-15m |
 | [19](19_ranking_orden_inesperado.md) | Ranking devuelve un orden inesperado | 🟡 | 10-20m |
 | [20](20_comparador_ui_roto.md) | Comparador UI roto tras rediseño | 🟡 | 10-20m |
+| [21](21_comparador_pais_y_locale.md) | País o idioma equivocados al cargar | 🟡 | 5-15m |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

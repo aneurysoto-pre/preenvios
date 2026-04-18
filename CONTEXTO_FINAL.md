@@ -652,6 +652,9 @@ Cuando el volumen referido llegue a $50,000/mes:
 4. No rediseñar el landing — solo agregar contenido a los slots vacíos
 5. Publicar tasa de cambio todos los días hábiles en redes sociales — sin excepción
 6. Nunca esconder que somos un comparador independiente — es el activo más valioso
+7. Idioma por defecto siempre ES (2026-04-18). No detectar Accept-Language — solo cambiar a EN si el usuario lo elige manualmente desde el botón EN/ES del nav. La cookie `NEXT_LOCALE` persiste esa elección
+8. El nav usa el label "Destinos" (ES) / "Destinations" (EN) para la sección de países soportados — no "Corredores" ni "Countries"
+9. En páginas de país (`/[locale]/[pais]`), el `defaultCorredor` que recibe el Comparador siempre gana sobre la cookie `preenvios_corredor`. La cookie solo aplica en la home
 7. Revisar métricas una vez por semana — no todos los días
 8. El número que importa cada semana: clics en "Enviar ahora"
 9. Ninguna decisión de dirección estratégica antes del mes 18

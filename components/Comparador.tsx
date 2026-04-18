@@ -86,12 +86,14 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   }, [corredor, metodo])
 
   // ═══════════════════════════════════════
-  // COOKIE corredor
+  // COOKIE corredor — solo se respeta cuando NO hay defaultCorredor explícito.
+  // En páginas de país (/honduras, /guatemala...) el prop gana sobre la cookie.
   // ═══════════════════════════════════════
   useEffect(() => {
+    if (defaultCorredor) return
     const saved = document.cookie.match(/preenvios_corredor=([^;]*)/)?.[1]
     if (saved && CORREDORES.some(c => c.id === saved)) setCorredor(saved)
-  }, [])
+  }, [defaultCorredor])
 
   useEffect(() => {
     const d = new Date(); d.setTime(d.getTime() + 30*24*60*60*1000)
