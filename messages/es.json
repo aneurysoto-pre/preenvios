@@ -51,7 +51,8 @@
     "home": "Domicilio",
     "wallet": "Billetera móvil",
     "popular": "POPULAR",
-    "bestDeal": "LA MEJOR OFERTA"
+    "bestDeal": "LA MEJOR OFERTA",
+    "methodLabel": "Método: Cuenta bancaria"
   },
   "strip": {
     "title": "Comparamos las remesadoras más confiables"
@@ -138,7 +139,12 @@
     "d3Link": "Saber más",
     "d4": "Preenvíos puede recibir comisión cuando haces clic y completas una transferencia. Esto no tiene costo adicional para ti y no afecta el orden del ranking.",
     "d5": "Preenvíos no es responsable por pérdidas derivadas de decisiones tomadas con base en la información mostrada. Los usuarios deben ejercer su juicio y verificar los datos antes de transferir dinero. Al usar este sitio, aceptas estos términos.",
-    "d6": "Los logos y nombres de remesadoras mostrados son marcas nominativas usadas con fines informativos de comparación. Preenvíos no está afiliado, patrocinado ni respaldado por dichas empresas salvo que se indique lo contrario."
+    "d6": "Los logos y nombres de remesadoras mostrados son marcas nominativas usadas con fines informativos de comparación. Preenvíos no está afiliado, patrocinado ni respaldado por dichas empresas salvo que se indique lo contrario.",
+    "topShort": "El orden considera tasa, velocidad y acuerdos comerciales.",
+    "topShortLink": "Saber más",
+    "bottomShort": "Las tasas son estimaciones. Confirma el monto final con la remesadora antes de enviar.",
+    "bottomShortLink": "Ver disclaimers completos",
+    "footerLink": "Disclaimers"
   },
   "legal": {
     "backToHome": "← Volver al inicio",

@@ -489,6 +489,23 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 - [x] Sección "Configuración de afiliado por operador" en panel admin → Tasas con bulk update PATCH /api/admin/precios (completado 2026-04-18)
 - [x] Retrocompatibilidad: si las columnas son null, se usan defaults (comision=0, cookie=30, trafico=1.0) (completado 2026-04-18)
 
+#### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18)
+Motivo: el usuario es diáspora latina en EE.UU. que decide en 10 segundos desde el celular. Competidores (Monito, RemitFinder, CompareRemit) muestran 0–1 disclaimers visibles por pantalla; Preenvios mostraba 14 (2 × 7 operadores). Se redujo el ruido para ganar confianza.
+- [x] Selector de 4 métodos (bank/cash_pickup/delivery/mobile) removido del UI. Se reemplazó por una etiqueta gris informativa "Método: Cuenta bancaria". Infraestructura (constante METODOS, estado `metodo`, campo `metodo_entrega` en tabla `precios`, scrapers, parámetro `metodo` en `/api/precios`) permanece intacta para reactivar cuando haya datos (completado 2026-04-18)
+- [x] ResultCard rediseñada estilo trivago: logo 48×48 izq, nombre + rating + badge Score en una columna, RECIBEN + monto verde grande a la derecha, línea inferior con Tasa · Fee · Velocidad · botón Enviar → (completado 2026-04-18)
+- [x] Color del badge Preenvíos Score según valor: verde ≥80, amarillo 60–79, rojo <60 (completado 2026-04-18)
+- [x] Botón CTA cambió de "Enviar ahora →" a "Enviar →" (más corto, más limpio), verde sólido #10B981 con hover más oscuro y sombra (completado 2026-04-18)
+- [x] Eliminados de cada tarjeta: disclaimer d1 (tasas aproximadas) y disclaimer d4 (afiliado). Antes se repetían 14 veces; ahora 0 (completado 2026-04-18)
+- [x] Arriba del listado: 1 línea gris pequeña "El orden considera tasa, velocidad y acuerdos comerciales. Saber más →" con link a /como-ganamos-dinero (completado 2026-04-18)
+- [x] Al final del listado: caja amarilla acortada con link a nueva página /disclaimers donde viven los 6 disclaimers FTC completos (completado 2026-04-18)
+- [x] Página nueva /es/disclaimers y /en/disclaimers con los 6 disclaimers completos + meta noindex (completado 2026-04-18)
+- [x] Link "Disclaimers" agregado al footer en sección Legal entre "Cómo ganamos dinero" y "Uso de marcas" (completado 2026-04-18)
+- [x] Subtítulo redundante "Tasas comparadas en tiempo real" eliminado del encabezado de resultados (completado 2026-04-18)
+- [x] Lista de resultados con max-width 900px centrada para legibilidad mobile-first (completado 2026-04-18)
+
+**Features diferidas a post-lanzamiento:**
+Selector de método de entrega (Retiro efectivo, Domicilio, Billetera móvil): el UI fue simplificado pre-lanzamiento. Reactivar cuando los scrapers capturen tasas reales por método para los 4 corredores del MVP y se tengan datos de al menos 3 operadores por método. No hay fecha fija — depende de capacidad de scrapers y de feedback del usuario post-lanzamiento. Para reactivar: descomentar el bloque de tabs en components/Comparador.tsx donde hoy vive la etiqueta "Método: Cuenta bancaria", y volver a llamar `selectMetodo` desde los botones.
+
 #### 4.3 — Publicidad directa con bancos
 - [ ] Reunión con Banreservas NY (Washington Heights)
 - [ ] Propuesta: widget de tasa de cambio patrocinado en el landing

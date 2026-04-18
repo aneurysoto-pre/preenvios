@@ -319,68 +319,56 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       {montoNum > 0 && (
         <section className="py-20 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
           <div className="max-w-[1240px] mx-auto px-6">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-5 mb-8">
-              <div>
-                <h2 className="font-heading text-[clamp(22px,3.5vw,40px)] font-black leading-[1.1]">
-                  {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-                </h2>
-                <p className="text-ink-2 mt-1.5 text-[15px]">{t('results.subtitle')}</p>
-                <p className="text-xs text-g500 mt-1.5">
-                  {t('disclaimers.d3')} <a href={`/${locale}/como-ganamos-dinero`} className="text-blue">{t('disclaimers.d3Link')}</a>
-                </p>
-              </div>
-            </div>
-
-            {/* Delivery method tabs */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-              {METODOS.map(m => (
-                <button
-                  key={m.id}
-                  onClick={() => selectMetodo(m.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${
-                    metodo === m.id
-                      ? 'bg-ink text-white border-ink'
-                      : 'bg-white text-g600 border-g200 hover:border-blue'
-                  }`}
-                >
-                  <span>{m.icon}</span>
-                  {locale === 'en' ? m.en : m.es}
-                  {m.id === 'bank' && <span className="text-[10px] bg-green text-white px-1.5 py-0.5 rounded-full font-extrabold uppercase">{t('delivery.popular')}</span>}
-                </button>
-              ))}
-            </div>
-
-            {/* Results cards */}
-            {loading ? (
-              <div className="text-center py-16 text-g500">Loading...</div>
-            ) : ranked.length === 0 ? (
-              <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
-                <div className="text-[40px] mb-3">🕑</div>
-                <h3 className="font-heading text-xl font-extrabold mb-2">{locale === 'en' ? 'Rates coming soon' : 'Tasas disponibles pronto'}</h3>
-                <p className="text-ink-2 text-[15px] max-w-[420px] mx-auto">
-                  {locale === 'en'
-                    ? `We're verifying rates for ${corredorData.nombre_en} with this delivery method.`
-                    : `Estamos verificando las tasas para ${corredorData.nombre} con este método de entrega.`}
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {ranked.map((p, i) => (
-                  <ResultCard key={p.operador} p={p} i={i} esUSD={esUSD} moneda={corredorData.moneda} locale={locale} t={t} onClick={() => onOperadorClick(p, i)} />
-                ))}
-              </div>
-            )}
-
-            {/* Disclaimer */}
-            <div className="mt-7 flex gap-3 items-start bg-[#FFFBEB] border border-[#FDE68A] border-l-4 border-l-[#F59E0B] rounded-xl p-4">
-              <svg className="w-[18px] h-[18px] text-[#B45309] shrink-0 mt-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
-              <p className="text-[13px] text-[#78350F] leading-relaxed">
-                <b>{locale === 'en' ? 'Important:' : 'Importante:'}</b>{' '}
-                {locale === 'en'
-                  ? 'Rates shown are approximate estimates for comparison purposes. PreEnvios does not handle, receive or transfer money — we only compare public information from remittance providers. Always confirm the final amount directly with the provider before sending.'
-                  : 'Las tasas mostradas son estimaciones aproximadas con fines comparativos. PreEnvios no maneja, recibe ni transfiere dinero — solo comparamos información pública de las remesadoras. Confirma siempre el monto final directamente con la remesadora antes de enviar.'}
+            {/* Header — centered, single line */}
+            <div className="mb-6 text-center">
+              <h2 className="font-heading text-[clamp(22px,3.5vw,40px)] font-black leading-[1.1]">
+                {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
+              </h2>
+              <p className="text-xs text-g500 mt-3">
+                {t('disclaimers.topShort')}{' '}
+                <a href={`/${locale}/como-ganamos-dinero`} className="text-blue underline">{t('disclaimers.topShortLink')} →</a>
               </p>
+            </div>
+
+            {/* Method tag (informative only — other methods deferred post-launch) */}
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-1.5 text-xs text-g500 bg-g100 px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 bg-g400 rounded-full" />
+                {t('delivery.methodLabel')}
+              </span>
+            </div>
+
+            {/* Results cards — centered narrow list for mobile-first readability */}
+            <div className="max-w-[900px] mx-auto">
+              {loading ? (
+                <div className="text-center py-16 text-g500">Loading...</div>
+              ) : ranked.length === 0 ? (
+                <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
+                  <div className="text-[40px] mb-3">🕑</div>
+                  <h3 className="font-heading text-xl font-extrabold mb-2">{locale === 'en' ? 'Rates coming soon' : 'Tasas disponibles pronto'}</h3>
+                  <p className="text-ink-2 text-[15px] max-w-[420px] mx-auto">
+                    {locale === 'en'
+                      ? `We're verifying rates for ${corredorData.nombre_en}.`
+                      : `Estamos verificando las tasas para ${corredorData.nombre}.`}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {ranked.map((p, i) => (
+                    <ResultCard key={p.operador} p={p} i={i} esUSD={esUSD} moneda={corredorData.moneda} locale={locale} t={t} onClick={() => onOperadorClick(p, i)} />
+                  ))}
+                </div>
+              )}
+
+              {/* Single condensed disclaimer at bottom */}
+              <div className="mt-6 flex gap-2.5 items-start bg-[#FFFBEB] border border-[#FDE68A] border-l-4 border-l-[#F59E0B] rounded-xl p-3.5">
+                <svg className="w-[16px] h-[16px] text-[#B45309] shrink-0 mt-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
+                <p className="text-[12.5px] text-[#78350F] leading-relaxed">
+                  <b>{locale === 'en' ? 'Important:' : 'Importante:'}</b>{' '}
+                  {t('disclaimers.bottomShort')}{' '}
+                  <a href={`/${locale}/disclaimers`} className="underline font-semibold">{t('disclaimers.bottomShortLink')} →</a>
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -390,7 +378,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 }
 
 // ═══════════════════════════════════════
-// RESULT CARD
+// RESULT CARD — simplified trivago-style layout
 // ═══════════════════════════════════════
 function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
   p: PrecioRanked; i: number; esUSD: boolean; moneda: string; locale: string
@@ -400,98 +388,92 @@ function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
     ? `$${p.recibe.toFixed(2)}`
     : `${Math.round(p.recibe).toLocaleString()} ${moneda}`
 
-  const tag = i === 0 ? 'best' : i === 1 ? 'second' : ''
   const tagLabel = i === 0 ? t('results.bestOption') : i === 1 ? t('results.secondOption') : ''
   const tagBg = i === 0 ? 'bg-green' : 'bg-blue'
-  const cardBorder = i === 0 ? 'border-green' : i === 1 ? 'border-blue' : 'border-g200'
-  const cardBg = i === 0 ? 'bg-gradient-to-br from-white to-[#F0FDF4]' : i === 1 ? 'bg-gradient-to-br from-white to-[#F0F6FF]' : 'bg-white'
-  const btnBg = i === 0 ? 'bg-green hover:bg-green-dark' : 'bg-blue hover:bg-blue-dark'
+
+  const scoreColor = p.score >= 80 ? 'bg-green' : p.score >= 60 ? 'bg-yellow text-ink' : 'bg-red'
+
+  const rateText = esUSD ? (locale === 'en' ? 'No conversion' : 'Sin conversión') : p.tasa.toFixed(2)
+  const feeText = p.fee === 0 ? t('results.free') : `$${p.fee.toFixed(2)}`
 
   return (
-    <article className={`${cardBg} rounded-[22px] p-5 md:p-[22px_26px] grid grid-cols-[1fr_1fr] md:grid-cols-[1.4fr_1fr_1fr_1fr_auto] gap-4 md:gap-6 items-center border-[1.5px] ${cardBorder} transition-all hover:shadow-lg hover:-translate-y-0.5 relative overflow-hidden`}>
-      {tag && (
-        <span className={`absolute top-0 right-0 ${tagBg} text-white text-[10px] font-black px-3.5 py-1.5 rounded-bl-xl tracking-wider`}>
+    <article className="bg-white rounded-[12px] p-4 sm:p-5 border border-g200 hover:border-green transition-all relative">
+      {tagLabel && (
+        <span className={`absolute top-0 right-0 ${tagBg} text-white text-[10px] font-extrabold px-2.5 py-1 rounded-bl-xl rounded-tr-[12px] tracking-wider`}>
           {i === 0 ? '★ ' : ''}{tagLabel}
         </span>
       )}
 
-      {/* Brand */}
-      <div className="flex items-center gap-3 md:gap-4 col-span-2 md:col-span-1 min-w-0">
-        <div className="w-[42px] h-[42px] md:w-12 md:h-12 rounded-[10px] bg-g50 border border-g200 flex items-center justify-center shrink-0 overflow-hidden">
-          <img src={LOGOS[p.operador]} alt={p.nombre_operador} width={36} height={36} loading="lazy" decoding="async" className="w-9 h-9 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+      {/* Top row: Brand (left) · Recibe (right) */}
+      <div className="flex items-start gap-3 sm:gap-4">
+        {/* Logo */}
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[10px] bg-g50 border border-g200 flex items-center justify-center shrink-0 overflow-hidden">
+          <img
+            src={LOGOS[p.operador]}
+            alt={p.nombre_operador}
+            width={36}
+            height={36}
+            loading="lazy"
+            decoding="async"
+            className="w-9 h-9 object-contain"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+          />
         </div>
-        <div className="min-w-0">
-          <div className="font-extrabold text-[15px] md:text-base text-ink truncate">{p.nombre_operador}</div>
-          <div className="flex items-center gap-1.5 text-xs text-g500">
-            <span className="text-yellow tracking-tight">{'★'.repeat(Math.round(p.rating))}</span>
-            {p.rating} · {p.reviews.toLocaleString()} {t('results.reviews')}
+
+        {/* Name + rating + score badge */}
+        <div className="min-w-0 flex-1">
+          <div className="font-extrabold text-[16px] sm:text-[18px] text-ink leading-tight truncate">{p.nombre_operador}</div>
+          <div className="text-[13px] text-g500 mt-0.5 truncate">
+            <span className="text-yellow">★</span> {p.rating} <span className="text-g400">({p.reviews.toLocaleString()})</span>
           </div>
-          <div className="text-[10px] font-bold text-blue mt-0.5">{t('results.score')}: {p.score}/100</div>
+          <span className={`inline-block mt-1.5 ${scoreColor} text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider`}>
+            {t('results.score')} {p.score}/100
+          </span>
+        </div>
+
+        {/* Recibe (right-aligned) */}
+        <div className="text-right shrink-0">
+          <div className="text-[10px] font-bold text-g500 uppercase tracking-wider">{t('results.theyReceive')}</div>
+          <div className="font-heading text-[20px] sm:text-[24px] font-black text-green-dark leading-tight">{receiveFmt}</div>
         </div>
       </div>
 
-      {/* Rate */}
-      <div className="min-w-0">
-        <div className="text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('results.rate')}</div>
-        {esUSD ? (
-          <>
-            <div className="text-sm font-bold text-blue">{locale === 'en' ? 'No conversion' : 'Sin conversión'}</div>
-            <div className="text-[11px] text-g500">USD → USD</div>
-          </>
-        ) : (
-          <>
-            <div className="text-sm font-bold text-blue">{p.tasa.toFixed(2)}</div>
-            <div className="text-[11px] text-g500">{moneda} {t('results.perUsd')}</div>
-          </>
-        )}
-      </div>
+      {/* Bottom row: Tasa · Fee · Velocidad (left) | CTA (right) */}
+      <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-g100 flex-wrap">
+        <div className="text-[13px] text-g600 flex items-center gap-1.5 flex-wrap">
+          <span><span className="text-g500">{t('results.rate')}</span> <b className="text-ink">{rateText}</b></span>
+          <span className="text-g300">·</span>
+          <span><span className="text-g500">{t('results.fee')}</span> <b className="text-ink">{feeText}</b></span>
+          <span className="text-g300">·</span>
+          <span className="text-ink font-semibold">{p.velocidad}</span>
+        </div>
 
-      {/* Fee */}
-      <div className="min-w-0">
-        <div className="text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('results.fee')}</div>
-        <div className="text-sm font-bold">{p.fee === 0 ? t('results.free') : `$${p.fee.toFixed(2)}`}</div>
-        <div className="text-[11px] text-g500">{p.velocidad}</div>
-      </div>
-
-      {/* Receive */}
-      <div className="min-w-0">
-        <div className="text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('results.theyReceive')}</div>
-        <div className="font-heading text-lg md:text-[22px] font-black text-green-dark truncate">{receiveFmt}</div>
-      </div>
-
-      {/* CTA */}
-      {/* CTA + Disclaimer #4 */}
-      <div className="col-span-2 md:col-span-1 flex flex-col gap-1.5">
         {p.afiliado ? (
-          <>
-            <a
-              href={p.link}
-              target="_blank"
-              rel="noopener sponsored"
-              onClick={onClick}
-              className={`${btnBg} text-white py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:translate-x-0.5`}
-              data-affiliate-slot={p.operador}
-              data-corredor={p.corredor}
-            >
-              {t('results.sendNow')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
-            <p className="text-[9px] text-g400 text-center leading-tight">{t('disclaimers.d4')}</p>
-          </>
+          <a
+            href={p.link}
+            target="_blank"
+            rel="noopener sponsored"
+            onClick={onClick}
+            className="bg-green hover:bg-green-dark text-white py-3 px-6 rounded-lg font-semibold text-[15px] inline-flex items-center gap-2 whitespace-nowrap transition-all hover:shadow-md duration-150"
+            data-affiliate-slot={p.operador}
+            data-corredor={p.corredor}
+          >
+            {locale === 'en' ? 'Send' : 'Enviar'}
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
         ) : (
           <a
             href={p.link || `https://www.google.com/search?q=${encodeURIComponent(p.nombre_operador)}`}
             target="_blank"
             rel="noopener"
             onClick={onClick}
-            className="bg-g200 text-g600 py-3 px-5 rounded-[10px] font-extrabold text-sm flex items-center justify-center gap-2 whitespace-nowrap"
+            className="bg-g100 hover:bg-g200 text-g700 py-3 px-6 rounded-lg font-semibold text-[15px] inline-flex items-center gap-2 whitespace-nowrap transition-colors"
           >
-            {t('results.viewSite')} <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            {t('results.viewSite')}
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </a>
         )}
       </div>
-
-      {/* Disclaimer #1 — tasas aproximadas */}
-      <p className="col-span-2 md:col-span-5 text-[9px] text-g400 leading-tight mt-1">{t('disclaimers.d1')}</p>
     </article>
   )
 }

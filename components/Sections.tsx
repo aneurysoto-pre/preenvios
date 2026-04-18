@@ -176,6 +176,7 @@ export function Footer() {
             <a href={`/${locale}/privacidad`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('privacy')}</a>
             <a href={`/${locale}/terminos`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('terms')}</a>
             <a href={`/${locale}/como-ganamos-dinero`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'How we earn' : 'Cómo ganamos dinero'}</a>
+            <a href={`/${locale}/disclaimers`} className="block py-1.5 text-sm hover:text-white transition-colors">{td('footerLink')}</a>
             <a href={`/${locale}/uso-de-marcas`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'Trademarks' : 'Uso de marcas'}</a>
           </div>
         </div>

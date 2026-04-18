@@ -32,23 +32,22 @@ El Comparador es el componente principal del sitio. Contiene:
 4. Al seleccionar, se cierra el dropdown y se actualiza el corredor
 5. Click fuera del dropdown lo cierra
 
-**Selector de método de entrega (estilo Monito):**
-1. 4 botones horizontales: Cuenta bancaria, Retiro en efectivo, Domicilio, Billetera móvil
-2. Default: "Cuenta bancaria" preseleccionado
-3. Badge "POPULAR" en Cuenta bancaria
-4. Al cambiar método, se re-fetch precios filtrados por ese método desde la API
-5. Evento GA4 `cambio_metodo_entrega` al cambiar
+**Selector de método de entrega (simplificado 2026-04-18):**
+1. UI actual: solo se muestra una etiqueta gris informativa "Método: Cuenta bancaria" — los 4 botones fueron ocultos pre-lanzamiento porque solo `bank` tiene datos reales y los otros 3 generan un callejón sin salida ("Tasas disponibles pronto")
+2. Infraestructura intacta: la constante `METODOS` de 4 elementos, el estado `metodo` con default `bank`, el campo `metodo_entrega` en Supabase y el parámetro `metodo` en `/api/precios` siguen todos activos
+3. Para reactivar post-lanzamiento: descomentar el bloque de tabs en `components/Comparador.tsx` y volver a llamar `selectMetodo` desde los botones. Requisito: los scrapers deben capturar tasas reales por método para los 4 corredores MVP con al menos 3 operadores por método
+4. Evento GA4 `cambio_metodo_entrega`: temporalmente no se dispara porque la UI no lo activa; el código en `selectMetodo()` se conserva
 
 **Cálculo y resultados:**
 1. El usuario escribe monto en USD
-2. Se hace fetch a `/api/precios?corredor=X&metodo=Y`
+2. Se hace fetch a `/api/precios?corredor=X&metodo=bank` (método siempre bank hasta reactivar selector)
 3. Los precios pasan por `rankProviders()` que devuelve la lista rankeada con Preenvíos Score
-4. Se renderizan las tarjetas de resultado
-5. Tarjeta #1: badge "MEJOR OPCIÓN" (verde)
-6. Tarjeta #2: badge "SEGUNDA OPCIÓN" (azul)
-7. Cada tarjeta muestra: logo, nombre, rating, Preenvíos Score, tasa, fee, velocidad, monto que recibe el destinatario
-8. Operadores con afiliado: botón "Enviar ahora" (link con `data-affiliate-slot`)
-9. Operadores sin afiliado: botón "Ver en sitio" (gris)
+4. Se renderizan las tarjetas de resultado en una columna de max-width 900px centrada (mobile-first)
+5. Tarjeta #1: badge "MEJOR OPCIÓN" (verde). Tarjeta #2: badge "SEGUNDA OPCIÓN" (azul)
+6. ResultCard rediseñada 2026-04-18 estilo trivago: logo 48×48 izquierda, nombre + rating (★ 4.9 (12,043)) + badge Score coloreado por valor (verde ≥80, amarillo 60–79, rojo <60), bloque RECIBEN + monto verde grande 24px a la derecha. Línea inferior con Tasa · Fee · Velocidad · botón "Enviar →"
+7. Operadores con afiliado: botón verde sólido "Enviar →" (link con `data-affiliate-slot`, `rel="noopener sponsored"`)
+8. Operadores sin afiliado: botón gris "Ver en sitio"
+9. Sin disclaimers por tarjeta (se eliminaron los 2 disclaimers d1 y d4 que se repetían por operador). Solo hay 1 línea gris arriba del listado y 1 caja amarilla condensada al final con link a `/disclaimers`
 
 **Analytics (GA4):**
 - `inicio_uso`: cuando el usuario empieza a escribir el monto

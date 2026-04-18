@@ -8,16 +8,23 @@ Completado el 2026-04-16 (Fase 1.5 + Fase 16 del roadmap).
 
 ## Pasos del flujo
 
-### 1. Los 6 disclaimers y dónde aparecen
+### 1. Los 6 disclaimers y dónde aparecen (actualizado 2026-04-18)
 
-| # | Nombre | Dónde se muestra | Componente |
-|---|--------|------------------|------------|
-| #1 | Tasas aproximadas | Debajo de cada tarjeta de operador + disclaimer general debajo de resultados | Comparador.tsx (ResultCard) |
-| #2 | Institución no financiera | Footer global como primer párrafo bold | Sections.tsx (Footer) |
-| #3 | Ranking influenciado | Debajo del encabezado de resultados, con link a /como-ganamos-dinero | Comparador.tsx |
-| #4 | FTC afiliados | Debajo de cada botón "Enviar ahora" en operadores con afiliado | Comparador.tsx (ResultCard) |
-| #5 | Limitación de responsabilidad | Cláusula principal en página /terminos | terminos/content.tsx |
-| #6 | Marcas nominativas | Highlight box en página /uso-de-marcas | uso-de-marcas/content.tsx |
+Tras el rediseño del 2026-04-18 orientado a simplicidad radical, los disclaimers por tarjeta fueron eliminados del comparador. Ahora hay una sola línea gris arriba del listado y una caja amarilla condensada al final, ambos con link a la página nueva `/disclaimers` donde viven los 6 textos FTC completos.
+
+| # | Nombre | Dónde se muestra hoy | Componente |
+|---|--------|------------------------|------------|
+| #1 | Tasas aproximadas | Página /disclaimers (sección 1) + caja amarilla al final del comparador en versión acortada | app/[locale]/disclaimers/content.tsx + Comparador.tsx |
+| #2 | Institución no financiera | Footer global como primer párrafo bold + página /disclaimers (sección 2) | Sections.tsx (Footer) + app/[locale]/disclaimers/content.tsx |
+| #3 | Ranking influenciado | Arriba del listado en 1 línea gris pequeña con link a /como-ganamos-dinero + página /disclaimers (sección 3) | Comparador.tsx + app/[locale]/disclaimers/content.tsx |
+| #4 | FTC afiliados | Highlight box en /como-ganamos-dinero + página /disclaimers (sección 4) | como-ganamos-dinero/content.tsx + disclaimers/content.tsx |
+| #5 | Limitación de responsabilidad | Cláusula principal en /terminos + página /disclaimers (sección 5) | terminos/content.tsx + disclaimers/content.tsx |
+| #6 | Marcas nominativas | Highlight box en /uso-de-marcas + página /disclaimers (sección 6) | uso-de-marcas/content.tsx + disclaimers/content.tsx |
+
+Cambios clave del 2026-04-18:
+- Eliminados de cada ResultCard: disclaimer d1 (tasas aproximadas) y disclaimer d4 (afiliado). Antes aparecían 14 veces (2 × 7 operadores); ahora 0
+- Nueva página `/es/disclaimers` y `/en/disclaimers` con `noindex,nofollow` — es legal, no SEO
+- Nuevas claves en `messages/*.json`: `disclaimers.topShort`, `topShortLink`, `bottomShort`, `bottomShortLink`, `footerLink`
 
 ### 2. Las 5 páginas legales
 
@@ -35,12 +42,13 @@ Todas usan el componente reutilizable `LegalPage.tsx` que proporciona: nav con l
 
 Los 6 disclaimers están en `messages/es.json` y `messages/en.json` bajo la clave `disclaimers` (d1-d6). Las páginas legales usan `useLocale()` para renderizar contenido condicional en español o inglés.
 
-### 4. Footer actualizado
+### 4. Footer actualizado (2026-04-18)
 
-El footer ahora tiene 4 links visibles en la columna "Legal":
+El footer ahora tiene 5 links visibles en la columna "Legal":
 - Privacidad → `/[locale]/privacidad`
 - Términos → `/[locale]/terminos`
 - Cómo ganamos dinero → `/[locale]/como-ganamos-dinero`
+- Disclaimers → `/[locale]/disclaimers` (agregado 2026-04-18)
 - Uso de marcas → `/[locale]/uso-de-marcas`
 
 Disclaimer #2 aparece como primer párrafo bold antes del disclaimer genérico.
