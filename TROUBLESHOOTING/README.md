@@ -22,6 +22,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [11](11_logos_banderas_rotas.md) | Logos/banderas rotas | 🟢 | 5m |
 | [12](12_i18n_locale_rutas_rotas.md) | i18n / locale / rutas rotas | 🟡 | 10-20m |
 | [13](13_formulario_suscripcion_stuck.md) | Formulario suscripción stuck | 🟢 | 5-15m |
+| [19](19_ranking_orden_inesperado.md) | Ranking devuelve un orden inesperado | 🟡 | 10-20m |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

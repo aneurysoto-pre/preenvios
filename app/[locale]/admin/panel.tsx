@@ -6,6 +6,7 @@ type Precio = {
   id: number; operador: string; corredor: string; metodo_entrega: string
   tasa: number; fee: number; velocidad: string; nombre_operador: string
   actualizado_en: string; afiliado: boolean
+  comision_usd?: number | null; cookie_dias?: number | null; trafico_calificable?: number | null
 }
 type DashboardData = {
   timestamp: string; totalPrices: number; healthy: boolean
@@ -33,6 +34,12 @@ export default function AdminPanel() {
   const [saving, setSaving] = useState(false)
   const [alertaCorredor, setAlertaCorredor] = useState('')
   const [alertaMsg, setAlertaMsg] = useState('')
+  const [opEdit, setOpEdit] = useState('')
+  const [opComision, setOpComision] = useState('')
+  const [opCookie, setOpCookie] = useState('')
+  const [opTrafico, setOpTrafico] = useState('')
+  const [opSaving, setOpSaving] = useState(false)
+  const [opSaveMsg, setOpSaveMsg] = useState('')
 
   async function login() {
     setLoginError('')
@@ -91,6 +98,38 @@ export default function AdminPanel() {
   async function runScrapers() {
     await fetch('/api/scrape')
     loadDashboard()
+  }
+
+  function selectOperador(op: string) {
+    setOpEdit(op)
+    setOpSaveMsg('')
+    const row = precios.find(p => p.operador === op)
+    if (row) {
+      setOpComision(row.comision_usd != null ? String(row.comision_usd) : '')
+      setOpCookie(row.cookie_dias != null ? String(row.cookie_dias) : '')
+      setOpTrafico(row.trafico_calificable != null ? String(row.trafico_calificable) : '')
+    } else {
+      setOpComision(''); setOpCookie(''); setOpTrafico('')
+    }
+  }
+
+  async function saveOperadorMeta() {
+    if (!opEdit) return
+    setOpSaving(true)
+    setOpSaveMsg('')
+    const res = await fetch('/api/admin/precios', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        operador: opEdit,
+        comision_usd: opComision ? Number(opComision) : undefined,
+        cookie_dias: opCookie ? Number(opCookie) : undefined,
+        trafico_calificable: opTrafico ? Number(opTrafico) : undefined,
+      }),
+    })
+    setOpSaving(false)
+    if (res.ok) { setOpSaveMsg('Guardado en todas las filas del operador'); loadPrecios() }
+    else setOpSaveMsg('Error al guardar')
   }
 
   useEffect(() => { if (tab === 'precios') loadPrecios() }, [tab])
@@ -221,6 +260,43 @@ export default function AdminPanel() {
         {/* ═══ PRECIOS TAB ═══ */}
         {tab === 'precios' && (
           <div>
+            {/* Operator metadata editor (valor_afiliado) */}
+            <h3 className="font-heading font-extrabold text-lg mb-4">Configuración de afiliado por operador</h3>
+            <p className="text-xs text-g500 mb-3">comisión USD × (cookie_dias/30 cap 3x) × trafico_calificable — usado por el algoritmo de ranking</p>
+            <div className="bg-white rounded-[14px] p-4 border border-g200 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+                <div>
+                  <label className="block text-[11px] font-bold text-g500 uppercase mb-1">Operador</label>
+                  <select value={opEdit} onChange={e => selectOperador(e.target.value)} className="w-full border border-g200 rounded-[10px] px-3 py-2 text-sm">
+                    <option value="">Seleccionar</option>
+                    {['remitly','wise','xoom','ria','worldremit','westernunion','moneygram'].map(o =>
+                      <option key={o} value={o}>{o}</option>
+                    )}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-g500 uppercase mb-1">Comisión USD</label>
+                  <input type="number" step="0.5" value={opComision} onChange={e => setOpComision(e.target.value)} className="w-full border border-g200 rounded-[10px] px-3 py-2 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-g500 uppercase mb-1">Cookie días</label>
+                  <input type="number" value={opCookie} onChange={e => setOpCookie(e.target.value)} placeholder="9999 = lifetime" className="w-full border border-g200 rounded-[10px] px-3 py-2 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-g500 uppercase mb-1">Tráfico calificable</label>
+                  <input type="number" step="0.1" min="0" max="1" value={opTrafico} onChange={e => setOpTrafico(e.target.value)} placeholder="0.0 - 1.0" className="w-full border border-g200 rounded-[10px] px-3 py-2 text-sm" />
+                </div>
+                <button
+                  onClick={saveOperadorMeta}
+                  disabled={!opEdit || opSaving}
+                  className="bg-blue text-white px-4 py-2 rounded-[10px] text-sm font-bold hover:bg-blue-dark disabled:opacity-60"
+                >
+                  {opSaving ? 'Guardando…' : 'Aplicar a todos los corredores'}
+                </button>
+              </div>
+              {opSaveMsg && <p className="text-xs mt-2 text-green-dark font-bold">{opSaveMsg}</p>}
+            </div>
+
             <h3 className="font-heading font-extrabold text-lg mb-4">Actualización manual de tasas</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm bg-white rounded-[14px] border border-g200 overflow-hidden">

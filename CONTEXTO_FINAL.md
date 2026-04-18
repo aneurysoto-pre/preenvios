@@ -482,6 +482,13 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 - [x] Agregar corredor USA → Haití (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
 - [ ] Crear contenido SEO específico por cada nuevo corredor
 
+#### 4.2.1 — Factor valor_afiliado en algoritmo de ranking (2026-04-18)
+- [x] Agregar 3 columnas a tabla precios: comision_usd, cookie_dias, trafico_calificable (completado 2026-04-18 — SQL migración 003 pendiente de ejecutar por usuario)
+- [x] Implementar calcularValorAfiliado() en lib/ranking.ts con fórmula comision × cookie × tráfico (completado 2026-04-18)
+- [x] Nuevos pesos: tasa 35%, valor_afiliado 25%, velocidad 15%, confiabilidad 15%, métodos 10% (completado 2026-04-18)
+- [x] Sección "Configuración de afiliado por operador" en panel admin → Tasas con bulk update PATCH /api/admin/precios (completado 2026-04-18)
+- [x] Retrocompatibilidad: si las columnas son null, se usan defaults (comision=0, cookie=30, trafico=1.0) (completado 2026-04-18)
+
 #### 4.3 — Publicidad directa con bancos
 - [ ] Reunión con Banreservas NY (Washington Heights)
 - [ ] Propuesta: widget de tasa de cambio patrocinado en el landing
