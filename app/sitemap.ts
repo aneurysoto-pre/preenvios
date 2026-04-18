@@ -3,7 +3,8 @@ import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES } from '@/lib/corredore
 import { PAISES_MVP } from '@/lib/paises'
 
 const BASE_URL = 'https://preenvios.com'
-const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas']
+const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
+const INSTITUTIONAL_PAGES = ['nosotros', 'contacto']
 const BLOG_SLUGS = ['cuanto-cobra-western-union-honduras', 'remitly-vs-western-union-dominicana', 'forma-mas-barata-enviar-guatemala']
 
 function altLangs(path: string) {
@@ -23,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const page of LEGAL_PAGES) {
     pages.push({ url: `${BASE_URL}/es/${page}`, lastModified: now, changeFrequency: 'monthly', priority: 0.3, alternates: altLangs(`/${page}`) })
     pages.push({ url: `${BASE_URL}/en/${page}`, lastModified: now, changeFrequency: 'monthly', priority: 0.3, alternates: altLangs(`/${page}`) })
+  }
+
+  // Institutional pages
+  for (const page of INSTITUTIONAL_PAGES) {
+    pages.push({ url: `${BASE_URL}/es/${page}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/${page}`) })
+    pages.push({ url: `${BASE_URL}/en/${page}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/${page}`) })
   }
 
   // Tasa histórica por corredor

@@ -19,7 +19,10 @@ Completado el 2026-04-16 como Bloque 3 de la Fase 1.
 | StepsSection | Client | `components/Sections.tsx` | "Cómo funciona" — 3 pasos |
 | CTASection | Client | `components/Sections.tsx` | Call to action con botón "Comparar ahora" |
 | FAQSection | Client | `components/Sections.tsx` | 6 preguntas frecuentes con acordeón |
-| Footer | Client | `components/Sections.tsx` | Footer completo con links, disclaimer legal, copyright |
+| Footer | Client | `components/Sections.tsx` | Footer 3 columnas (Producto/Empresa/Legal) + brand + disclaimer legal + copyright. Desde 2026-04-18 |
+| LegalPage | Client | `components/LegalPage.tsx` | Wrapper reutilizable para páginas legales e institucionales. Renderiza `<Nav />` arriba, contenido centrado con max-width 820px, y `<Footer />` abajo. Usado por 11 páginas (terminos, privacidad, como-ganamos-dinero, metodologia, uso-de-marcas, disclaimers, blog, wiki, operadores...) para garantizar header/footer globales |
+| NosotrosContent | Client | `app/[locale]/nosotros/content.tsx` | Página institucional con hero + historia + misión + 4 valores + cómo ganamos dinero + sección del fundador + CTA a /contacto |
+| ContactoContent | Client | `app/[locale]/contacto/content.tsx` | Formulario de contacto (nombre/email/asunto dropdown/mensaje) que POSTea a `/api/contactos`. Sidebar con emails directos (contact@ y partnerships@) + tiempo de respuesta + link a FAQ |
 
 ### 2. Componente Comparador — flujo completo
 
@@ -67,13 +70,15 @@ El Comparador es el componente principal del sitio. Contiene:
 - Al cargar, lee `preenvios_corredor` del cookie
 - Al cambiar corredor, guarda en cookie con expiración 30 días
 
-### 3. Nav — menú hamburguesa + selector de idioma
+### 3. Nav — menú hamburguesa + selector de idioma (2026-04-18)
 
-- Desktop: links Comparar, Cómo funciona, FAQ + botón EN/ES
+- Desktop: Destinos (dropdown de países) · Cómo funciona · FAQ · Contacto · botón EN/ES
 - Mobile (< md): burger animado (3 líneas → X)
-- Al abrir: panel fijo bajo el nav con links + opción de cambio de idioma
+- Al abrir: panel fijo bajo el nav con los mismos links + opción de cambio de idioma
 - Selector EN/ES usa `router.push()` para navegar a la misma ruta en el otro locale
 - Sombra en el nav aparece al hacer scroll (> 10px)
+- **Regla:** los anchors `#como` y `#faq` se prefijan con `/${locale}` cuando pathname != home, para que desde páginas legales/institucionales naveguen correctamente a la home + scroll
+- Se removió el link "Comparar" (redundante con el hero ya visible en la home) y se agregó "Contacto" como página dedicada `/contacto`
 
 ### 4. Secciones estáticas
 

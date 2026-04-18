@@ -49,6 +49,11 @@ export default function Nav() {
 
   function closeMenu() { setMenuOpen(false) }
 
+  // Anchors that only exist on the home. From any other page, prefix with /${locale}
+  // so the browser navigates home and then scrolls.
+  const isHome = pathname === `/${locale}` || pathname === `/${locale}/`
+  const homeAnchor = (hash: string) => (isHome ? hash : `/${locale}${hash}`)
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-[14px] border-b border-g200 transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_14px_rgba(15,23,42,.08)]' : ''}`}>
       <div className="max-w-[1240px] mx-auto px-6 h-[72px] flex items-center justify-between">
@@ -61,10 +66,9 @@ export default function Nav() {
           <span><span className="text-green">pre</span><span className="text-ink">envios</span><span className="text-ink font-bold">.com</span></span>
         </a>
 
-        {/* Desktop links */}
+        {/* Desktop links — order: Destinos, Como funciona, FAQ, Contacto, ES/EN */}
         <div className="hidden md:flex gap-8 items-center">
-          <a href="#comparar" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('compare')}</a>
-          {/* Corredores dropdown */}
+          {/* Destinos dropdown */}
           <div ref={corridorRef} className="relative">
             <button
               onClick={() => setCorridorOpen(!corridorOpen)}
@@ -89,8 +93,9 @@ export default function Nav() {
               </div>
             )}
           </div>
-          <a href="#como" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('howItWorks')}</a>
-          <a href="#faq" className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('faq')}</a>
+          <a href={homeAnchor('#como')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('howItWorks')}</a>
+          <a href={homeAnchor('#faq')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('faq')}</a>
+          <a href={`/${locale}/contacto`} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('contact')}</a>
           <button onClick={switchLocale} className="text-sm font-bold text-g600 hover:text-blue border border-g200 rounded-full px-3 py-1.5 transition-colors">
             {locale === 'es' ? 'EN' : 'ES'}
           </button>
@@ -107,8 +112,7 @@ export default function Nav() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden fixed top-[72px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1 max-h-[calc(100vh-72px)] overflow-y-auto">
-          <a href="#comparar" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('compare')}</a>
-          <p className="pt-3 pb-1 px-1 text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider">{t('corridors')}</p>
+          <p className="pt-1 pb-1 px-1 text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider">{t('corridors')}</p>
           {PAISES_MVP.map(p => (
             <a
               key={p.corredorId}
@@ -119,8 +123,9 @@ export default function Nav() {
               <span>{p.bandera}</span> {en ? p.nombreEn : p.nombre}
             </a>
           ))}
-          <a href="#como" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
-          <a href="#faq" onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
+          <a href={homeAnchor('#como')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
+          <a href={homeAnchor('#faq')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
+          <a href={`/${locale}/contacto`} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('contact')}</a>
           <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left">
             {locale === 'es' ? '🌐 English' : '🌐 Español'}
           </button>

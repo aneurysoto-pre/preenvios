@@ -45,7 +45,7 @@ export function WhySection({ region }: { region?: string } = {}) {
     ? t('subtitle').replace(locale === 'en' ? 'all providers' : 'todas las remesadoras', locale === 'en' ? `all providers to ${region}` : `todas las remesadoras a ${region}`)
     : t('subtitle')
   return (
-    <section className="py-[90px] bg-white">
+    <section className="pt-[90px] pb-[50px] bg-white">
       <div className="max-w-[1240px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto mb-14">
           <span className="inline-block text-xs font-extrabold text-blue uppercase tracking-[2px] mb-3.5 px-3.5 py-1.5 bg-blue-soft rounded-full">{t('tag')}</span>
@@ -69,7 +69,7 @@ export function WhySection({ region }: { region?: string } = {}) {
 export function StepsSection() {
   const t = useTranslations('steps')
   return (
-    <section className="py-[90px] bg-gradient-to-b from-g50 to-white" id="como">
+    <section className="pt-[50px] pb-[90px] bg-gradient-to-b from-g50 to-white" id="como">
       <div className="max-w-[1240px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto mb-14">
           <span className="inline-block text-xs font-extrabold text-blue uppercase tracking-[2px] mb-3.5 px-3.5 py-1.5 bg-blue-soft rounded-full">{t('tag')}</span>
@@ -137,7 +137,9 @@ export function FAQSection() {
 export function Footer() {
   const t = useTranslations('footer')
   const td = useTranslations('disclaimers')
+  const tn = useTranslations('nav')
   const locale = useLocale()
+  const en = locale === 'en'
   return (
     <footer className="bg-ink text-g400 pt-[70px] pb-8">
       <div className="max-w-[1240px] mx-auto px-6">
@@ -153,31 +155,31 @@ export function Footer() {
             </div>
             <p className="text-sm max-w-[300px] mb-5">{t('desc')}</p>
           </div>
+
+          {/* Producto */}
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('product')}</h4>
-            <a href="#comparar" className="block py-1.5 text-sm hover:text-white transition-colors">{t('compare')}</a>
-            {PAISES_MVP.map(p => (
-              <a key={p.corredorId} href={`/${locale}/${locale === 'en' ? p.slugEn : p.slugEs}`} className="block py-1.5 text-sm hover:text-white transition-colors">
-                {p.bandera} {locale === 'en' ? p.nombreEn : p.nombre}
-              </a>
-            ))}
+            <a href={`/${locale}/#comparar`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('corridors')}</a>
+            <a href={`/${locale}/#como`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('howItWorks')}</a>
+            <a href={`/${locale}/#faq`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('faq')}</a>
           </div>
+
+          {/* Empresa */}
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('company')}</h4>
-            <a href={`/${locale}/operadores/remitly`} className="block py-1.5 text-sm hover:text-white transition-colors">Remitly</a>
-            <a href={`/${locale}/operadores/wise`} className="block py-1.5 text-sm hover:text-white transition-colors">Wise</a>
-            <a href={`/${locale}/operadores/western-union`} className="block py-1.5 text-sm hover:text-white transition-colors">Western Union</a>
-            <a href={`/${locale}/wiki`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'Guides' : 'Guías'}</a>
-            <a href={`/${locale}/blog`} className="block py-1.5 text-sm hover:text-white transition-colors">Blog</a>
-            <a href="mailto:contact@preenvios.com" className="block py-1.5 text-sm hover:text-white transition-colors">{t('contact')}</a>
+            <a href={`/${locale}/nosotros`} className="block py-1.5 text-sm hover:text-white transition-colors">{en ? 'About us' : 'Nosotros'}</a>
+            <a href={`/${locale}/contacto`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('contact')}</a>
+            <a href={`/${locale}/como-ganamos-dinero`} className="block py-1.5 text-sm hover:text-white transition-colors">{en ? 'How we earn' : 'Cómo ganamos dinero'}</a>
           </div>
+
+          {/* Legal */}
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('legal')}</h4>
-            <a href={`/${locale}/privacidad`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('privacy')}</a>
             <a href={`/${locale}/terminos`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('terms')}</a>
-            <a href={`/${locale}/como-ganamos-dinero`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'How we earn' : 'Cómo ganamos dinero'}</a>
+            <a href={`/${locale}/privacidad`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('privacy')}</a>
             <a href={`/${locale}/disclaimers`} className="block py-1.5 text-sm hover:text-white transition-colors">{td('footerLink')}</a>
-            <a href={`/${locale}/uso-de-marcas`} className="block py-1.5 text-sm hover:text-white transition-colors">{locale === 'en' ? 'Trademarks' : 'Uso de marcas'}</a>
+            <a href={`/${locale}/uso-de-marcas`} className="block py-1.5 text-sm hover:text-white transition-colors">{en ? 'Trademarks' : 'Uso de marcas'}</a>
+            <a href={`/${locale}/metodologia`} className="block py-1.5 text-sm hover:text-white transition-colors">{en ? 'Methodology' : 'Metodología'}</a>
           </div>
         </div>
         <div className="border-t border-ink-2 py-5 text-xs text-g400 leading-relaxed max-w-[900px]">

@@ -55,6 +55,24 @@ El script `scripts/seed.mjs` usa la service_role key para insertar:
 - 28 precios con tasa, fee, velocidad, rating, reviews, afiliado, link, confiabilidad, metodos_disponibles
 - Todos los datos coinciden con los del MVP (index.html)
 
+### 4bis. Tabla contactos (2026-04-18)
+
+**Tabla `contactos`** — mensajes enviados desde `/contacto`:
+- `id` (uuid, default gen_random_uuid())
+- `nombre` (text, 2-120 chars)
+- `email` (text, validado por regex en API)
+- `asunto` (text CHECK: general | rate | partnership | other)
+- `mensaje` (text, 10-4000 chars)
+- `idioma` (text DEFAULT 'es' CHECK: es | en)
+- `created_at` (timestamptz, default now())
+- `respondido`, `respondido_at`, `notas_admin`: flags y notas para tracking admin
+
+**Seguridad:** RLS activado con 4 políticas explícitas que niegan cualquier SELECT/INSERT/UPDATE/DELETE al `anon` role. El INSERT pasa por `/api/contactos` que usa `SUPABASE_SERVICE_ROLE_KEY` (bypass de RLS). Lectura solo desde panel admin (pendiente) con el service role. El formulario público NUNCA toca Supabase directo — siempre pasa por la API que valida longitudes, email regex y whitelist de asuntos.
+
+**Índices:** `created_at DESC` (listado admin), `email` (lookup), `asunto`, `respondido WHERE false` (partial index para bandeja sin responder).
+
+**SQL:** `supabase/migrations/004_contactos.sql`.
+
 ### 5. Migración del MVP al producto final
 | Antes (MVP) | Después (Producto final) |
 |---|---|

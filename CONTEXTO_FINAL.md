@@ -492,6 +492,22 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
 Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
 
+#### 4.2.4 — Páginas institucionales + header/footer globales (2026-04-18)
+Motivo: varias páginas legales no tenían el nav global ni el footer — se veían desconectadas del resto del sitio. A la vez faltaban /nosotros y /contacto que aparecían en footer pero no existían. Se unifica la experiencia: header completo (logo + Destinos + Cómo funciona + FAQ + Contacto + ES/EN) y footer en 3 columnas en toda la navegación pública.
+- [x] `components/LegalPage.tsx` ahora renderiza `<Nav />` arriba y `<Footer />` abajo en lugar del mini-header custom. Un solo cambio propaga header/footer globales a las 11 páginas que usaban el wrapper (terminos, privacidad, como-ganamos-dinero, metodologia, uso-de-marcas, disclaimers, blog, wiki, operadores, wiki/[slug], blog/[slug]) (completado 2026-04-18)
+- [x] Nav: elimina "Comparar", agrega "Contacto". Orden final: Destinos (dropdown) · Cómo funciona · FAQ · Contacto · ES/EN. Los anchors `#como` y `#faq` se prefijan con `/${locale}` cuando el usuario NO está en la home, para que navegue y scrollee (completado 2026-04-18)
+- [x] Footer reorganizado de 4 columnas a 3 (+ brand): Producto (Destinos, Cómo funciona, FAQ) · Empresa (Nosotros, Contacto, Cómo ganamos dinero) · Legal (Términos, Privacidad, Disclaimers, Uso de marcas, Metodología) (completado 2026-04-18)
+- [x] Nueva página `/es/nosotros` y `/en/nosotros` con hero pequeño, Nuestra historia, Nuestra misión, 4 valores (transparencia, independencia, simplicidad, gratis), sección cómo ganamos dinero con link a /como-ganamos-dinero, sección del fundador con avatar placeholder (iniciales AS) y bio de Aneury Soto, CTA a /contacto (completado 2026-04-18)
+- [x] Nueva página `/es/contacto` y `/en/contacto` con formulario (nombre, email, asunto dropdown de 4 opciones, mensaje) + sidebar con contact@preenvios.com, partnerships@preenvios.com, tiempo de respuesta y link a FAQ. Al enviar muestra pantalla de éxito (completado 2026-04-18)
+- [x] Tabla Supabase `contactos` con columnas id, nombre, email, asunto (CHECK: general/rate/partnership/other), mensaje, idioma, created_at, respondido, respondido_at, notas_admin. RLS: niega cualquier SELECT/INSERT/UPDATE/DELETE del anon key — solo service_role (API route) puede insertar. SQL: `supabase/migrations/004_contactos.sql` (completado 2026-04-18 — SQL pendiente de ejecutar por usuario)
+- [x] API route `/api/contactos` POST con validación server-side (regex email, length nombre 2-120 / mensaje 10-4000, asunto whitelist, idioma normalizado a es/en) (completado 2026-04-18)
+- [x] Evento GA4 `contacto_enviado` disparado al recibir status 200 (completado 2026-04-18)
+- [x] Espaciado entre sección "Por qué Preenvíos" y "Cómo funciona" reducido: WhySection `pt-90 pb-50`, StepsSection `pt-50 pb-90`. Gap total 100px en lugar de 180px (completado 2026-04-18)
+- [x] Sitemap actualizado con /disclaimers, /nosotros, /contacto en es/en con priority 0.3 (legal) y 0.5 (institucional) (completado 2026-04-18)
+- [x] Traducciones `nosotros.*` y `contacto.*` en es.json y en.json + `nav.contact` (completado 2026-04-18)
+
+**SQL pendiente de ejecutar por el usuario en Supabase SQL Editor:** `supabase/migrations/004_contactos.sql`. Sin ejecutarlo, el formulario de /contacto devolverá 500 al insertar.
+
 #### 4.2.3 — Restauración del diseño original del Comparador + score discreto (2026-04-18)
 Motivo: el rediseño trivago-style del 4.2.2 fue considerado "feo" comparado con el HTML de preenvios.com. Se volvió al diseño exacto del index.html MVP, añadiendo únicamente el Preenvíos Score como línea pequeña debajo del rating.
 - [x] Card reinstaurada con `grid-template-columns: 1.4fr 1fr 1fr 1fr auto` (brand | Tasa | Comisión | Reciben | botón), padding 22px 26px, border-radius 22px (completado 2026-04-18)
