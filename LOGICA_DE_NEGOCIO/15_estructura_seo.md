@@ -46,8 +46,10 @@ Categorías: Fundamentos (5), Guías por corredor (3), Educación financiera (2)
 ### Páginas de tasa histórica
 1. Página se carga → fetch `/api/precios?corredor=X&metodo=bank` para tabla actual
 2. Fetch `/api/historial-tasas?corredor=X` para gráfica de 30 días
-3. Si no hay datos históricos: muestra mensaje "disponible cuando scrapers estén activos"
+3. Si aún no hay registros en `historial_tasas_publico`: muestra mensaje "disponible cuando scrapers llenen la tabla"
 4. Recharts renderiza LineChart con datos
+
+Tabla `historial_tasas_publico` está **activa en Supabase desde 2026-04-17** con índices y RLS. `/api/historial-tasas` la consulta sin errores; solo falta que los scrapers escriban snapshots diarios para poblar las gráficas.
 
 ### Sitemap dinámico
 `app/sitemap.ts` genera todas las URLs con alternates es/en:
@@ -66,9 +68,7 @@ Categorías: Fundamentos (5), Guías por corredor (3), Educación financiera (2)
 | Datos | `lib/corredores.ts` (datos compartidos) |
 | Sitemap | `app/sitemap.ts` (actualizado) |
 
-## SQL pendiente de ejecutar por el usuario
-
-Tabla `historial_tasas_publico` para guardar snapshots diarios:
+## Esquema de `historial_tasas_publico` (activa desde 2026-04-17)
 
 ```sql
 CREATE TABLE IF NOT EXISTS historial_tasas_publico (
@@ -81,15 +81,18 @@ CREATE TABLE IF NOT EXISTS historial_tasas_publico (
   UNIQUE(corredor, fecha)
 );
 
+CREATE INDEX idx_historial_tasas_corredor_fecha
+  ON historial_tasas_publico(corredor, fecha DESC);
+
 ALTER TABLE historial_tasas_publico ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "historial_public_read" ON historial_tasas_publico FOR SELECT USING (true);
 ```
 
-Los scrapers deben insertar un registro diario por corredor. Por ahora la gráfica muestra "datos disponibles cuando scrapers estén activos".
+Los scrapers deben insertar un registro diario por corredor (aún pendiente de implementar la escritura en el flujo `/api/scrape`). La gráfica muestra "datos disponibles cuando scrapers llenen la tabla" hasta que se acumulen filas.
 
 ## Pendiente de acción del usuario
 - Verificar propiedad en Google Search Console
 - Optimizar Core Web Vitals (post-deploy)
 - Escribir contenido editorial real de blog y wiki (los placeholders están listos)
-- Ejecutar SQL de historial_tasas_publico en Supabase
+- ✅ ~~Ejecutar SQL de historial_tasas_publico en Supabase~~ (completado 2026-04-17)
 - Navegación lateral de wiki (se implementa cuando haya contenido real)

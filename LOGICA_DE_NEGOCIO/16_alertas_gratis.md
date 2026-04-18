@@ -6,6 +6,17 @@ Sistema de alertas gratuitas por email que captura leads y genera ingresos por a
 
 Completado el 2026-04-17 como Fase 4.4.A del roadmap.
 
+## Estado: OPERATIVO (activado 2026-04-17)
+
+Infraestructura 100% activa end-to-end:
+- ✅ Tabla `suscriptores_free` creada en Supabase con índices y RLS
+- ✅ Endpoint `/api/suscripcion-free` desplegado (POST alta, GET confirmar/baja)
+- ✅ Templates Resend bilingües operativos
+- ✅ Flujo double opt-in funcional: formulario → email confirmación → token → activación
+- ✅ Cron diario en `/api/scrape` envía alertas diarias + newsletter semanal los lunes
+- ✅ Página `/[locale]/baja` con CAN-SPAM unsubscribe funcional
+- ✅ GA4 evento `suscripcion_free` trackeando conversiones
+
 ## Flujo de suscripción (double opt-in)
 
 1. Usuario visita `/[locale]/tasa/usd-hnl` (o cualquier corredor)
@@ -42,7 +53,7 @@ Completado el 2026-04-17 como Fase 4.4.A del roadmap.
 4. Backend marca `activo=false` — no elimina el registro
 5. Página muestra confirmación en el idioma del suscriptor
 
-## Tabla Supabase
+## Tabla Supabase (activa desde 2026-04-17)
 
 ```
 suscriptores_free
@@ -59,7 +70,13 @@ suscriptores_free
 └── UNIQUE(email, corredor_favorito)
 ```
 
-RLS habilitado con policy de solo lectura pública. Escritura vía service_role.
+Índices activos:
+- `idx_suscriptores_free_token_confirmacion` (lookup para confirmar)
+- `idx_suscriptores_free_token_baja` (lookup para unsubscribe)
+- `idx_suscriptores_free_confirmado_activo` (parcial, filtra suscriptores activos en cron)
+- `idx_suscriptores_free_corredor` (segmentación por corredor)
+
+RLS habilitado con policy `suscriptores_public_read` de solo lectura pública. Escritura vía `SUPABASE_SERVICE_ROLE_KEY` que bypasea RLS desde el backend.
 
 ## Templates de email
 
@@ -101,6 +118,6 @@ No se usa un cron separado (Vercel Hobby = 1 cron/día). El cron existente `0 7 
 
 ## Pendiente de acción del usuario
 
-- Ejecutar SQL de `suscriptores_free` en Supabase SQL Editor
-- Verificar dominio `preenvios.com` en Resend para enviar desde `alertas@preenvios.com`
+- ✅ ~~Ejecutar SQL de `suscriptores_free` en Supabase SQL Editor~~ (completado 2026-04-17)
+- Verificar dominio `preenvios.com` en Resend para enviar desde `alertas@preenvios.com` (opcional — actualmente se usa `onboarding@resend.dev` que funciona sin verificación de dominio)
 - Agregar RESEND_API_KEY en `.env.local` para desarrollo local
