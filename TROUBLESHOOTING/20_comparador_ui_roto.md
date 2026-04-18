@@ -1,94 +1,102 @@
-# 20 — Comparador UI roto tras rediseño simplicidad radical (2026-04-18)
+# 20 — Comparador UI no replica el HTML original
 
 ## Gravedad · Tiempo al fix
 🟡 Importante
 ⏱ Fix típico: 10-20 min
 
 ## Síntoma
-Síntomas posibles del rediseño del 2026-04-18:
-- Usuario ve los 4 tabs viejos (Cuenta bancaria / Retiro efectivo / Domicilio / Billetera móvil) en lugar de la etiqueta gris "Método: Cuenta bancaria"
-- Falta el link "Disclaimers" en el footer columna Legal
-- La página `/es/disclaimers` o `/en/disclaimers` devuelve 404
-- La tarjeta de operador muestra el layout viejo (grid 5 columnas con TASA/COMISIÓN/RECIBEN amontonados arriba)
-- Disclaimer repetido 14 veces en el listado (2 por operador)
-- Falta el badge colorizado de Preenvíos Score (verde/amarillo/rojo según valor)
-- El listado se ve ancho hasta el borde de la pantalla en desktop (debería limitarse a 900px)
-- La caja amarilla al final muestra el texto largo en vez del acortado con link
+La regla del proyecto (CONTEXTO_FINAL 4.2.3) es que el Comparador debe verse idéntico al HTML original de preenvios.com — solo se permite agregar el Preenvíos Score como línea pequeña debajo del rating. Síntomas que indican regresión:
+- La tarjeta se ve en 2 filas (logo+nombre arriba, Tasa/Fee/Receive/botón abajo) en lugar del grid horizontal de 5 columnas del HTML
+- Falta el badge esquina superior derecha "★ MEJOR OPCIÓN" / "SEGUNDA OPCIÓN" / "⚡ MÁS RÁPIDO" / "💰 MENOR COMISIÓN"
+- Los 3 tabs de ordenamiento (Mejor tasa / Más rápido / Menor comisión) no aparecen, o aparecen pero no cambian el orden
+- El botón "Enviar ahora" no es azul con hover translateX(3px) sino verde/compacto
+- El Preenvíos Score aparece como badge grande coloreado (verde/amarillo/rojo) en lugar de una línea pequeña azul discreta
+- El número "Reciben" no es 22px verde-oscuro sino otro tamaño/color
+- La caja amarilla inferior no tiene el icono SVG circular ni el texto largo "Importante: ..."
+- En <980px la tarjeta no colapsa a 2 columnas con el botón full-width
 
 ## Causas y soluciones (ordenadas de más probable a menos probable)
 
-### 🎯 Causa 1 — Deploy antiguo todavía cacheado en Vercel Edge
-Contexto: tras el commit del rediseño, el CDN puede servir la versión vieja hasta que se invalide.
+### 🎯 Causa 1 — CSS del Comparador falta en globals.css
+Contexto: las clases `.cmp-card`, `.cmp-brand`, `.cmp-col`, `.cmp-btn`, `.cmp-sort`, `.cmp-badge`, `.cmp-disclaimer` fueron portadas del index.html a `app/globals.css` con prefijo `.cmp-*`. Si alguien las borra, la tarjeta queda sin estilos.
 
 Arreglo:
-1. Vercel dashboard → Deployments → confirmar que el último "Ready" corresponde al commit del rediseño
-2. Si ya está desplegado: DevTools → Network → hard reload con shift+reload. El HTML debe contener "Método: Cuenta bancaria"
-3. Si persiste: redeploy manual desde Vercel para purgar cache edge
-
-### 🎯 Causa 2 — Translations faltantes (claves nuevas no agregadas)
-Contexto: el rediseño agregó claves `disclaimers.topShort`, `topShortLink`, `bottomShort`, `bottomShortLink`, `footerLink` y `delivery.methodLabel`. Si `messages/es.json` o `messages/en.json` no las tienen, next-intl muestra la clave cruda o lanza error en build.
-
-Arreglo:
-1. Verificar claves presentes:
+1. Verificar bloque CSS presente:
    ```bash
-   grep -E "topShort|bottomShort|footerLink|methodLabel" messages/es.json messages/en.json
+   grep -c "cmp-card" app/globals.css
    ```
-2. Deben aparecer 6 resultados por archivo. Si faltan, copiar del commit `feat(ui): rediseño Comparador simplicidad radical`
-3. Build local: `npm run build` → si falla con "key not found", la clave falta
+   Debe dar >=3 apariciones (.cmp-card base + variantes + responsive)
+2. Si falta: restaurar del commit de paridad con HTML original
+3. Los colores base (`--color-blue`, `--color-green`, `--color-orange`, `--color-yellow`, `--color-ink-2`) deben existir en `@theme` de globals.css
 
-### 🎯 Causa 3 — Página /disclaimers no existe en el build
-Contexto: la página nueva vive en `app/[locale]/disclaimers/page.tsx` + `content.tsx`. Si se borraron o la carpeta no se subió a git, el link del footer va a 404.
+### 🎯 Causa 2 — Tarjeta pintada con Tailwind en lugar de clases `.cmp-*`
+Contexto: alguien editó `components/Comparador.tsx` y reemplazó `className="cmp-card"` por classes Tailwind (`bg-white rounded-[22px] grid ...`). Los estilos aplicados quedan desalineados con el HTML original.
 
 Arreglo:
-1. Verificar archivos:
+1. Confirmar en `components/Comparador.tsx` que la `<article>` principal de ResultCard usa la clase `cmp-card` (no Tailwind):
    ```bash
-   ls app/[locale]/disclaimers/
-   # Debe listar: page.tsx content.tsx
+   grep -c "cmp-card" components/Comparador.tsx
    ```
-2. Si faltan: restaurar del commit `feat(ui): rediseño Comparador simplicidad radical` o del repo
-3. Verificar build incluye la ruta: `npm run build | grep disclaimers` → debe mostrar `/es/disclaimers` y `/en/disclaimers`
+2. Si da 0: revertir a la versión de paridad con HTML original
+3. Regla del proyecto: NO reimplementar la card con Tailwind. El diseño vive en globals.css para conservar paridad con index.html
 
-### 🎯 Causa 4 — Cambio accidental revirtió el ResultCard al diseño viejo
-Contexto: alguien abrió `components/Comparador.tsx` y pegó por encima el grid viejo de 5 columnas.
+### 🎯 Causa 3 — Sort tabs no cambian el orden
+Contexto: los 3 tabs actualizan `sortKey` via `setSortKey('best'|'fastest'|'cheapest')`. El `useMemo` que calcula `ranked` debe depender de `sortKey`.
 
 Arreglo:
-1. Verificar que `ResultCard` tiene la estructura nueva (flex en 2 filas, no grid):
+1. Verificar en `components/Comparador.tsx`:
    ```bash
-   grep -c "grid-cols-\[1fr_1fr\]" components/Comparador.tsx
-   # Debe dar 0 (grid 2-col viejo eliminado)
-   grep -c "scoreColor" components/Comparador.tsx
-   # Debe dar >=2 (lógica nueva de color de badge)
+   grep -n "sortKey" components/Comparador.tsx
    ```
-2. Si hay divergencia: revertir al commit del rediseño con `git checkout <hash> -- components/Comparador.tsx`
+2. Deben aparecer al menos 5 referencias: definición del state, dependencia del useMemo, y 3 onClick en los botones
+3. Si el sort `fastest` no funciona: verificar que `VELOCIDAD_RANK` tiene las keys que devuelve la columna `velocidad` de Supabase (Segundos/Minutos/Horas/Días en es + Seconds/Minutes/Hours/Days en en)
 
-### 🎯 Causa 5 — ESLint/TypeScript bloquea el build por METODOS sin uso
-Contexto: la constante `METODOS` y la función `selectMetodo` quedaron intactas a propósito (infra para reactivar post-lanzamiento). Si alguien agrega `noUnusedLocals: true` a `tsconfig.json` o endurece eslint, el build puede fallar.
-
-Arreglo:
-1. Verificar `tsconfig.json` NO tiene `noUnusedLocals: true`
-2. Si se quiere endurecer: renombrar a `_METODOS` y `_selectMetodo` (convención TS para unused intentional)
-3. NO borrar — forman parte de la infra diferida según CONTEXTO_FINAL.md sección 4.2.2
-
-### 🎯 Causa 6 — Colores Tailwind del scoreColor no existen
-Contexto: la nueva ResultCard usa `bg-green`, `bg-yellow`, `bg-red` según el score. Si `app/globals.css` pierde las variables CSS, los badges se verán transparentes.
+### 🎯 Causa 4 — Preenvíos Score aparece como badge grande (regresión del diseño trivago)
+Contexto: el Score debe ser una línea pequeña 11px color azul, NO un badge pill con fondo verde/amarillo/rojo. Esa fue la versión trivago que el usuario rechazó.
 
 Arreglo:
-1. Verificar en `app/globals.css`:
+1. Verificar en `components/Comparador.tsx` que el Score se renderiza como `<div className="score">` dentro de `.cmp-brand-info`:
    ```bash
-   grep -E "color-(green|yellow|red)" app/globals.css
+   grep -A 1 'className="score"' components/Comparador.tsx
    ```
-2. Deben aparecer `--color-green: #00D957`, `--color-yellow: #FACC15`, `--color-red: #EF4444`
-3. Si faltan: restaurar del commit base de Tailwind
+2. Debe ser texto plano "Preenvíos Score <b>N/100</b>", no un span con background color
+3. En globals.css la regla `.cmp-brand-info .score` debe usar `font-size: 11px; color: var(--color-blue)` — sin `background-color`
+
+### 🎯 Causa 5 — Badges aparecen como pseudo-elemento ::before con contenido hardcoded en español
+Contexto: una versión anterior usaba `.cmp-card.best::before { content: "★ MEJOR OPCIÓN" }`. Eso rompe i18n porque los usuarios en /en verían el texto en español. El fix fue usar un `<span className="cmp-badge best">` con texto de traducción.
+
+Arreglo:
+1. Verificar que no hay `::before` con content hardcoded:
+   ```bash
+   grep -n "::before" app/globals.css | grep -i "content"
+   ```
+2. No debería haber matches en `.cmp-card.*::before`. Si aparecen, reemplazar por `.cmp-badge` styles
+3. El componente debe renderizar `{badgeLabel && <span className={\`cmp-badge ${badgeClass}\`}>{badgeLabel}</span>}`
+
+### 🎯 Causa 6 — Layout roto solo en mobile (<640px o <980px)
+Contexto: el CSS tiene media queries específicas que reconfiguran el grid. Si alguien las borra, la card se ve amontonada en mobile.
+
+Arreglo:
+1. Verificar en globals.css presencia de ambas media queries:
+   ```bash
+   grep -nE "max-width:\s*(640|980)px" app/globals.css
+   ```
+2. Deben aparecer 2 bloques: `@media (max-width: 980px)` y `@media (max-width: 640px)`
+3. Dentro del 980px: `.cmp-card { grid-template-columns: 1fr 1fr; }`, `.cmp-brand { grid-column: 1 / 3; }`, `.cmp-btn { grid-column: 1 / 3; width: 100%; }`
+4. Dentro del 640px: `.cmp-logo { width: 42px; height: 42px; }`, `.cmp-brand-info .name` con ellipsis
+
+### 🎯 Causa 7 — Link "Disclaimers" del footer apunta a 404
+Contexto: la página `app/[locale]/disclaimers/` debe existir. Es net-new sobre el HTML original pero se mantiene porque centraliza los 6 disclaimers FTC.
+
+Arreglo:
+1. `ls app/[locale]/disclaimers/` — debe listar `page.tsx` y `content.tsx`
+2. Si falta: restaurar del commit que creó la página
 
 ## Workaround mientras arreglas
-No hay workaround porque es un regresión visual, no funcional. El usuario aún puede comparar y hacer click en "Enviar →". Si el ResultCard se rompe completamente mostrando errores de console, desplegar el commit `cef65db` (docs TROUBLESHOOTING) que es el anterior al rediseño:
-```bash
-git revert <hash-del-rediseno>
-git push
-```
+Si el usuario reporta la tarjeta rota visualmente pero el fetch y ranking funcionan, no hay workaround — es 100% visual. Revertir al último commit estable con paridad al HTML original.
 
 ## Relacionados
-- [LOGICA_DE_NEGOCIO/04_componentes_react.md](../LOGICA_DE_NEGOCIO/04_componentes_react.md) — estructura del Comparador y ResultCard
-- [LOGICA_DE_NEGOCIO/07_paginas_legales_disclaimers.md](../LOGICA_DE_NEGOCIO/07_paginas_legales_disclaimers.md) — dónde aparece cada disclaimer
-- [05_vercel_deploy_falla.md](05_vercel_deploy_falla.md) — si el deploy del rediseño nunca terminó
-- [12_i18n_locale_rutas_rotas.md](12_i18n_locale_rutas_rotas.md) — si las claves nuevas rompen el i18n
+- [LOGICA_DE_NEGOCIO/04_componentes_react.md](../LOGICA_DE_NEGOCIO/04_componentes_react.md) — estructura final del Comparador
+- [LOGICA_DE_NEGOCIO/02_algoritmo_ranking.md](../LOGICA_DE_NEGOCIO/02_algoritmo_ranking.md) — lógica del Preenvíos Score que se muestra discreto
+- [19_ranking_orden_inesperado.md](19_ranking_orden_inesperado.md) — si el sort cambia el orden de forma incorrecta
+- [05_vercel_deploy_falla.md](05_vercel_deploy_falla.md) — si el deploy nuevo nunca termina

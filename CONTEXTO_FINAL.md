@@ -489,22 +489,32 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 - [x] Sección "Configuración de afiliado por operador" en panel admin → Tasas con bulk update PATCH /api/admin/precios (completado 2026-04-18)
 - [x] Retrocompatibilidad: si las columnas son null, se usan defaults (comision=0, cookie=30, trafico=1.0) (completado 2026-04-18)
 
-#### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18)
-Motivo: el usuario es diáspora latina en EE.UU. que decide en 10 segundos desde el celular. Competidores (Monito, RemitFinder, CompareRemit) muestran 0–1 disclaimers visibles por pantalla; Preenvios mostraba 14 (2 × 7 operadores). Se redujo el ruido para ganar confianza.
-- [x] Selector de 4 métodos (bank/cash_pickup/delivery/mobile) removido del UI. Se reemplazó por una etiqueta gris informativa "Método: Cuenta bancaria". Infraestructura (constante METODOS, estado `metodo`, campo `metodo_entrega` en tabla `precios`, scrapers, parámetro `metodo` en `/api/precios`) permanece intacta para reactivar cuando haya datos (completado 2026-04-18)
-- [x] ResultCard rediseñada estilo trivago: logo 48×48 izq, nombre + rating + badge Score en una columna, RECIBEN + monto verde grande a la derecha, línea inferior con Tasa · Fee · Velocidad · botón Enviar → (completado 2026-04-18)
-- [x] Color del badge Preenvíos Score según valor: verde ≥80, amarillo 60–79, rojo <60 (completado 2026-04-18)
-- [x] Botón CTA cambió de "Enviar ahora →" a "Enviar →" (más corto, más limpio), verde sólido #10B981 con hover más oscuro y sombra (completado 2026-04-18)
-- [x] Eliminados de cada tarjeta: disclaimer d1 (tasas aproximadas) y disclaimer d4 (afiliado). Antes se repetían 14 veces; ahora 0 (completado 2026-04-18)
-- [x] Arriba del listado: 1 línea gris pequeña "El orden considera tasa, velocidad y acuerdos comerciales. Saber más →" con link a /como-ganamos-dinero (completado 2026-04-18)
-- [x] Al final del listado: caja amarilla acortada con link a nueva página /disclaimers donde viven los 6 disclaimers FTC completos (completado 2026-04-18)
-- [x] Página nueva /es/disclaimers y /en/disclaimers con los 6 disclaimers completos + meta noindex (completado 2026-04-18)
-- [x] Link "Disclaimers" agregado al footer en sección Legal entre "Cómo ganamos dinero" y "Uso de marcas" (completado 2026-04-18)
-- [x] Subtítulo redundante "Tasas comparadas en tiempo real" eliminado del encabezado de resultados (completado 2026-04-18)
-- [x] Lista de resultados con max-width 900px centrada para legibilidad mobile-first (completado 2026-04-18)
+#### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
+Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
+
+#### 4.2.3 — Restauración del diseño original del Comparador + score discreto (2026-04-18)
+Motivo: el rediseño trivago-style del 4.2.2 fue considerado "feo" comparado con el HTML de preenvios.com. Se volvió al diseño exacto del index.html MVP, añadiendo únicamente el Preenvíos Score como línea pequeña debajo del rating.
+- [x] Card reinstaurada con `grid-template-columns: 1.4fr 1fr 1fr 1fr auto` (brand | Tasa | Comisión | Reciben | botón), padding 22px 26px, border-radius 22px (completado 2026-04-18)
+- [x] Logo 48×48 redondeado 10px con fondo g50 y borde g200, imagen interna 36×36 (completado 2026-04-18)
+- [x] Nombre del operador 16px weight 800, meta con ★★★★★ amarillo + rating + número de opiniones (completado 2026-04-18)
+- [x] Tarjeta `.best` (posición 0): borde verde + gradiente blanco → verde muy claro + badge "★ MEJOR OPCIÓN" esquina superior derecha (completado 2026-04-18)
+- [x] Tarjeta `.second` (posición 1): borde azul + gradiente + badge "SEGUNDA OPCIÓN" + botón azul (completado 2026-04-18)
+- [x] Tarjeta `.fast` (cuando sort=fastest, posición 0): borde naranja + badge "⚡ MÁS RÁPIDO" (completado 2026-04-18)
+- [x] Tarjeta `.cheap` (cuando sort=cheapest, posición 0): borde verde oscuro + badge "💰 MENOR COMISIÓN" (completado 2026-04-18)
+- [x] Tabs de ordenamiento restaurados (pill container blanco con tres botones: Mejor tasa / Más rápido / Menor comisión). El activo va con fondo negro ink y texto blanco — igual que el HTML (completado 2026-04-18)
+- [x] Lógica real de sort implementada: `best` usa el ranking por Preenvíos Score, `fastest` ordena por VELOCIDAD_RANK (Segundos > Minutos > Horas > Días) con tie-breaker por score, `cheapest` ordena por fee ascendente con tie-breaker por score (completado 2026-04-18)
+- [x] Preenvíos Score agregado como única adición al diseño original: línea pequeña 11px weight 700 color azul, 3px por debajo del rating, formato "Preenvíos Score X/100" (completado 2026-04-18)
+- [x] Botón CTA vuelto a "Enviar ahora" (original), estilo `.cmp-btn` azul con hover azul-oscuro y translateX(3px). Para operadores sin afiliado botón gris `.cmp-btn-ref` "Ver en sitio" (completado 2026-04-18)
+- [x] Disclaimer inferior amarillo estilo original (icono SVG + "Importante: ..." + link "Ver disclaimers completos →" a /disclaimers) (completado 2026-04-18)
+- [x] Línea gris "ranking-note" arriba de la lista con `disclaimers.d3` + link "Saber más" a /como-ganamos-dinero (original del HTML) (completado 2026-04-18)
+- [x] Selector de método de entrega sigue oculto (no existía en el HTML original). Infra METODOS/selectMetodo/metodo_entrega intacta para reactivar post-lanzamiento (completado 2026-04-18)
+- [x] Responsive idéntico al HTML: grid colapsa a 2 columnas a <980px, brand ocupa ambas columnas, botón full-width; a <640px logo 42×42 y nombre con ellipsis (completado 2026-04-18)
+- [x] CSS portado del index.html a `app/globals.css` bajo prefijo `.cmp-*` para evitar colisiones con Tailwind (completado 2026-04-18)
+
+**Regla:** Lo que venga sobre el comparador en el futuro debe preservar la línea gráfica del HTML original. Solo adiciones discretas tipo el Score. No reescribir layout.
 
 **Features diferidas a post-lanzamiento:**
-Selector de método de entrega (Retiro efectivo, Domicilio, Billetera móvil): el UI fue simplificado pre-lanzamiento. Reactivar cuando los scrapers capturen tasas reales por método para los 4 corredores del MVP y se tengan datos de al menos 3 operadores por método. No hay fecha fija — depende de capacidad de scrapers y de feedback del usuario post-lanzamiento. Para reactivar: descomentar el bloque de tabs en components/Comparador.tsx donde hoy vive la etiqueta "Método: Cuenta bancaria", y volver a llamar `selectMetodo` desde los botones.
+Selector de método de entrega (Retiro efectivo, Domicilio, Billetera móvil): nunca existió en el HTML original y no se implementa en Next.js hasta que los scrapers capturen tasas reales por método para los 4 corredores del MVP con al menos 3 operadores por método. Infra (constante METODOS, estado `metodo`, campo `metodo_entrega` en tabla `precios`, scrapers, parámetro `metodo` en `/api/precios`) permanece lista para activar.
 
 #### 4.3 — Publicidad directa con bancos
 - [ ] Reunión con Banreservas NY (Washington Heights)

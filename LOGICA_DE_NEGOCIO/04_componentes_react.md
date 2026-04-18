@@ -38,16 +38,23 @@ El Comparador es el componente principal del sitio. Contiene:
 3. Para reactivar post-lanzamiento: descomentar el bloque de tabs en `components/Comparador.tsx` y volver a llamar `selectMetodo` desde los botones. Requisito: los scrapers deben capturar tasas reales por método para los 4 corredores MVP con al menos 3 operadores por método
 4. Evento GA4 `cambio_metodo_entrega`: temporalmente no se dispara porque la UI no lo activa; el código en `selectMetodo()` se conserva
 
-**Cálculo y resultados:**
+**Cálculo y resultados (diseño final 2026-04-18 — paridad con HTML original):**
 1. El usuario escribe monto en USD
 2. Se hace fetch a `/api/precios?corredor=X&metodo=bank` (método siempre bank hasta reactivar selector)
 3. Los precios pasan por `rankProviders()` que devuelve la lista rankeada con Preenvíos Score
-4. Se renderizan las tarjetas de resultado en una columna de max-width 900px centrada (mobile-first)
-5. Tarjeta #1: badge "MEJOR OPCIÓN" (verde). Tarjeta #2: badge "SEGUNDA OPCIÓN" (azul)
-6. ResultCard rediseñada 2026-04-18 estilo trivago: logo 48×48 izquierda, nombre + rating (★ 4.9 (12,043)) + badge Score coloreado por valor (verde ≥80, amarillo 60–79, rojo <60), bloque RECIBEN + monto verde grande 24px a la derecha. Línea inferior con Tasa · Fee · Velocidad · botón "Enviar →"
-7. Operadores con afiliado: botón verde sólido "Enviar →" (link con `data-affiliate-slot`, `rel="noopener sponsored"`)
-8. Operadores sin afiliado: botón gris "Ver en sitio"
-9. Sin disclaimers por tarjeta (se eliminaron los 2 disclaimers d1 y d4 que se repetían por operador). Solo hay 1 línea gris arriba del listado y 1 caja amarilla condensada al final con link a `/disclaimers`
+4. Un post-sort se aplica según el tab activo:
+   - "Mejor tasa" (default): mantiene el orden de rankProviders (Preenvíos Score descendente)
+   - "Más rápido": ordena por `VELOCIDAD_RANK` (Segundos 4 > Minutos 3 > Horas 2 > Días 1), tie-breaker por score
+   - "Menor comisión": ordena por `fee` ascendente, tie-breaker por score
+5. Tarjetas renderizadas con clases CSS portadas del HTML original (`.cmp-card`, `.cmp-brand`, `.cmp-col`, `.cmp-btn` viven en `app/globals.css`)
+6. Badge contextual solo en posición 0 según sort: `best` → "★ MEJOR OPCIÓN" verde, `fast` → "⚡ MÁS RÁPIDO" naranja, `cheap` → "💰 MENOR COMISIÓN" verde-oscuro. Cuando sort=best, posición 1 también lleva "SEGUNDA OPCIÓN" azul
+7. Estructura de la tarjeta replica 1:1 el HTML de preenvios.com: grid `1.4fr 1fr 1fr 1fr auto` con brand (logo + nombre + rating) | Tasa | Comisión | Reciben | botón
+8. Única adición sobre el diseño original: el **Preenvíos Score** como línea pequeña 11px color azul, debajo del rating. Formato "Preenvíos Score N/100"
+9. Operadores con afiliado: botón `.cmp-btn` "Enviar ahora →" con `rel="noopener sponsored"` y `data-affiliate-slot`
+10. Operadores sin afiliado: botón gris `.cmp-btn-ref` "Ver en sitio" sin `sponsored`
+11. Arriba del listado: línea gris `disclaimers.d3` con link "Saber más" a `/como-ganamos-dinero` (original del HTML)
+12. Al final: caja amarilla `.cmp-disclaimer` con icono + "Importante: Las tasas mostradas son estimaciones..." + link "Ver disclaimers completos →" a `/disclaimers`
+13. Responsive idéntico al HTML: a <980px el grid colapsa a 2 columnas (brand span 1/3, botón full-width); a <640px logo baja a 42×42 y nombre con ellipsis
 
 **Analytics (GA4):**
 - `inicio_uso`: cuando el usuario empieza a escribir el monto

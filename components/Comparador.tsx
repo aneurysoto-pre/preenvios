@@ -47,6 +47,9 @@ type ComparadorProps = {
   heroLede?: string
 }
 
+type SortKey = 'best' | 'fastest' | 'cheapest'
+const VELOCIDAD_RANK: Record<string, number> = { 'Segundos': 4, 'Seconds': 4, 'Minutos': 3, 'Minutes': 3, 'Horas': 2, 'Hours': 2, 'Días': 1, 'Days': 1 }
+
 export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede }: ComparadorProps = {}) {
   const t = useTranslations()
   const locale = useLocale()
@@ -57,6 +60,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   const [loading, setLoading] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortKey, setSortKey] = useState<SortKey>('best')
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const t0 = useRef(Date.now())
@@ -106,12 +110,23 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   }, [])
 
   // ═══════════════════════════════════════
-  // RANKING
+  // RANKING + SORT
   // ═══════════════════════════════════════
   const ranked = useMemo(() => {
     if (montoNum <= 0 || precios.length === 0) return []
-    return rankProviders(precios, montoNum)
-  }, [precios, montoNum])
+    const base = rankProviders(precios, montoNum)
+    if (sortKey === 'fastest') {
+      return [...base].sort((a, b) => {
+        const ra = VELOCIDAD_RANK[a.velocidad] ?? 0
+        const rb = VELOCIDAD_RANK[b.velocidad] ?? 0
+        return rb - ra || b.score - a.score
+      })
+    }
+    if (sortKey === 'cheapest') {
+      return [...base].sort((a, b) => a.fee - b.fee || b.score - a.score)
+    }
+    return base
+  }, [precios, montoNum, sortKey])
 
   // ═══════════════════════════════════════
   // SEARCH FILTER
@@ -319,56 +334,79 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       {montoNum > 0 && (
         <section className="py-20 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
           <div className="max-w-[1240px] mx-auto px-6">
-            {/* Header — centered, single line */}
-            <div className="mb-6 text-center">
-              <h2 className="font-heading text-[clamp(22px,3.5vw,40px)] font-black leading-[1.1]">
-                {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-              </h2>
-              <p className="text-xs text-g500 mt-3">
-                {t('disclaimers.topShort')}{' '}
-                <a href={`/${locale}/como-ganamos-dinero`} className="text-blue underline">{t('disclaimers.topShortLink')} →</a>
-              </p>
-            </div>
-
-            {/* Method tag (informative only — other methods deferred post-launch) */}
-            <div className="mb-6">
-              <span className="inline-flex items-center gap-1.5 text-xs text-g500 bg-g100 px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 bg-g400 rounded-full" />
-                {t('delivery.methodLabel')}
-              </span>
-            </div>
-
-            {/* Results cards — centered narrow list for mobile-first readability */}
-            <div className="max-w-[900px] mx-auto">
-              {loading ? (
-                <div className="text-center py-16 text-g500">Loading...</div>
-              ) : ranked.length === 0 ? (
-                <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
-                  <div className="text-[40px] mb-3">🕑</div>
-                  <h3 className="font-heading text-xl font-extrabold mb-2">{locale === 'en' ? 'Rates coming soon' : 'Tasas disponibles pronto'}</h3>
-                  <p className="text-ink-2 text-[15px] max-w-[420px] mx-auto">
-                    {locale === 'en'
-                      ? `We're verifying rates for ${corredorData.nombre_en}.`
-                      : `Estamos verificando las tasas para ${corredorData.nombre}.`}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  {ranked.map((p, i) => (
-                    <ResultCard key={p.operador} p={p} i={i} esUSD={esUSD} moneda={corredorData.moneda} locale={locale} t={t} onClick={() => onOperadorClick(p, i)} />
-                  ))}
-                </div>
-              )}
-
-              {/* Single condensed disclaimer at bottom */}
-              <div className="mt-6 flex gap-2.5 items-start bg-[#FFFBEB] border border-[#FDE68A] border-l-4 border-l-[#F59E0B] rounded-xl p-3.5">
-                <svg className="w-[16px] h-[16px] text-[#B45309] shrink-0 mt-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
-                <p className="text-[12.5px] text-[#78350F] leading-relaxed">
-                  <b>{locale === 'en' ? 'Important:' : 'Importante:'}</b>{' '}
-                  {t('disclaimers.bottomShort')}{' '}
-                  <a href={`/${locale}/disclaimers`} className="underline font-semibold">{t('disclaimers.bottomShortLink')} →</a>
+            {/* Header — split layout: title left, sort tabs right (replicates original HTML) */}
+            <div className="cmp-results-head">
+              <div>
+                <h2 className="font-heading">
+                  {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
+                </h2>
+                <p className="font-sans">{t('results.subtitle')}</p>
+                <p className="cmp-ranking-note">
+                  {t('disclaimers.d3')} <a href={`/${locale}/como-ganamos-dinero`}>{t('disclaimers.d3Link')}</a>
                 </p>
               </div>
+              <div className="cmp-sort" role="tablist" aria-label={t('results.rate')}>
+                <button
+                  type="button"
+                  className={sortKey === 'best' ? 'on' : ''}
+                  onClick={() => setSortKey('best')}
+                  role="tab"
+                  aria-selected={sortKey === 'best'}
+                >
+                  {t('results.bestRate')}
+                </button>
+                <button
+                  type="button"
+                  className={sortKey === 'fastest' ? 'on' : ''}
+                  onClick={() => setSortKey('fastest')}
+                  role="tab"
+                  aria-selected={sortKey === 'fastest'}
+                >
+                  {t('results.fastest')}
+                </button>
+                <button
+                  type="button"
+                  className={sortKey === 'cheapest' ? 'on' : ''}
+                  onClick={() => setSortKey('cheapest')}
+                  role="tab"
+                  aria-selected={sortKey === 'cheapest'}
+                >
+                  {t('results.lowestFee')}
+                </button>
+              </div>
+            </div>
+
+            {/* Results cards */}
+            {loading ? (
+              <div className="text-center py-16 text-g500">Loading...</div>
+            ) : ranked.length === 0 ? (
+              <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
+                <div className="text-[40px] mb-3">🕑</div>
+                <h3 className="font-heading text-xl font-extrabold mb-2">{locale === 'en' ? 'Rates coming soon' : 'Tasas disponibles pronto'}</h3>
+                <p className="text-ink-2 text-[15px] max-w-[420px] mx-auto">
+                  {locale === 'en'
+                    ? `We're verifying rates for ${corredorData.nombre_en}.`
+                    : `Estamos verificando las tasas para ${corredorData.nombre}.`}
+                </p>
+              </div>
+            ) : (
+              <div className="cmp-card-list">
+                {ranked.map((p, i) => (
+                  <ResultCard key={p.operador} p={p} i={i} sortKey={sortKey} esUSD={esUSD} moneda={corredorData.moneda} locale={locale} t={t} onClick={() => onOperadorClick(p, i)} />
+                ))}
+              </div>
+            )}
+
+            {/* Bottom disclaimer (replicates original HTML, + link to /disclaimers) */}
+            <div className="cmp-disclaimer">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
+              <p>
+                <b>{locale === 'en' ? 'Important:' : 'Importante:'}</b>{' '}
+                {locale === 'en'
+                  ? 'Rates shown are approximate estimates for comparison purposes. PreEnvios does not handle, receive or transfer money — we only compare public information from remittance providers. Always confirm the final amount directly with the provider before sending.'
+                  : 'Las tasas mostradas son estimaciones aproximadas con fines comparativos. PreEnvios no maneja, recibe ni transfiere dinero — solo comparamos información pública de las remesadoras. Confirma siempre el monto final directamente con la remesadora antes de enviar.'}{' '}
+                <a href={`/${locale}/disclaimers`}>{t('disclaimers.bottomShortLink')} →</a>
+              </p>
             </div>
           </div>
         </section>
@@ -378,36 +416,33 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 }
 
 // ═══════════════════════════════════════
-// RESULT CARD — simplified trivago-style layout
+// RESULT CARD — replicates original preenvios.com HTML card layout
+// Only addition over original: small Preenvíos Score line below rating
 // ═══════════════════════════════════════
-function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
-  p: PrecioRanked; i: number; esUSD: boolean; moneda: string; locale: string
+function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
+  p: PrecioRanked; i: number; sortKey: SortKey; esUSD: boolean; moneda: string; locale: string
   t: ReturnType<typeof useTranslations>; onClick: () => void
 }) {
-  const receiveFmt = esUSD
-    ? `$${p.recibe.toFixed(2)}`
-    : `${Math.round(p.recibe).toLocaleString()} ${moneda}`
+  const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5 - Math.round(p.rating))
 
-  const tagLabel = i === 0 ? t('results.bestOption') : i === 1 ? t('results.secondOption') : ''
-  const tagBg = i === 0 ? 'bg-green' : 'bg-blue'
-
-  const scoreColor = p.score >= 80 ? 'bg-green' : p.score >= 60 ? 'bg-yellow text-ink' : 'bg-red'
-
-  const rateText = esUSD ? (locale === 'en' ? 'No conversion' : 'Sin conversión') : p.tasa.toFixed(2)
-  const feeText = p.fee === 0 ? t('results.free') : `$${p.fee.toFixed(2)}`
+  // Only position 0 gets a contextual badge. Label depends on active sort.
+  let variantClass = ''
+  let badgeClass = ''
+  let badgeLabel = ''
+  if (i === 0) {
+    if (sortKey === 'fastest')       { variantClass = 'fast';  badgeClass = 'fast';   badgeLabel = t('results.fastestTag') }
+    else if (sortKey === 'cheapest') { variantClass = 'cheap'; badgeClass = 'cheap';  badgeLabel = t('results.lowestFeeTag') }
+    else                              { variantClass = 'best';  badgeClass = 'best';   badgeLabel = t('results.bestOption') }
+  } else if (i === 1 && sortKey === 'best') {
+    variantClass = 'second'; badgeClass = 'second'; badgeLabel = t('results.secondOption')
+  }
 
   return (
-    <article className="bg-white rounded-[12px] p-4 sm:p-5 border border-g200 hover:border-green transition-all relative">
-      {tagLabel && (
-        <span className={`absolute top-0 right-0 ${tagBg} text-white text-[10px] font-extrabold px-2.5 py-1 rounded-bl-xl rounded-tr-[12px] tracking-wider`}>
-          {i === 0 ? '★ ' : ''}{tagLabel}
-        </span>
-      )}
+    <article className={`cmp-card ${variantClass}`} data-operator={p.operador} data-position={i + 1} data-affiliate={p.afiliado}>
+      {badgeLabel && <span className={`cmp-badge ${badgeClass}`}>{badgeLabel}</span>}
 
-      {/* Top row: Brand (left) · Recibe (right) */}
-      <div className="flex items-start gap-3 sm:gap-4">
-        {/* Logo */}
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[10px] bg-g50 border border-g200 flex items-center justify-center shrink-0 overflow-hidden">
+      <div className="cmp-brand">
+        <div className="cmp-logo">
           <img
             src={LOGOS[p.operador]}
             alt={p.nombre_operador}
@@ -415,65 +450,73 @@ function ResultCard({ p, i, esUSD, moneda, locale, t, onClick }: {
             height={36}
             loading="lazy"
             decoding="async"
-            className="w-9 h-9 object-contain"
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
           />
         </div>
-
-        {/* Name + rating + score badge */}
-        <div className="min-w-0 flex-1">
-          <div className="font-extrabold text-[16px] sm:text-[18px] text-ink leading-tight truncate">{p.nombre_operador}</div>
-          <div className="text-[13px] text-g500 mt-0.5 truncate">
-            <span className="text-yellow">★</span> {p.rating} <span className="text-g400">({p.reviews.toLocaleString()})</span>
+        <div className="cmp-brand-info">
+          <div className="name">{p.nombre_operador}</div>
+          <div className="meta">
+            <span className="stars">{stars}</span> {p.rating} · {p.reviews.toLocaleString()} {t('results.reviews')}
           </div>
-          <span className={`inline-block mt-1.5 ${scoreColor} text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider`}>
-            {t('results.score')} {p.score}/100
-          </span>
-        </div>
-
-        {/* Recibe (right-aligned) */}
-        <div className="text-right shrink-0">
-          <div className="text-[10px] font-bold text-g500 uppercase tracking-wider">{t('results.theyReceive')}</div>
-          <div className="font-heading text-[20px] sm:text-[24px] font-black text-green-dark leading-tight">{receiveFmt}</div>
+          <div className="score">{t('results.score')} <b>{p.score}/100</b></div>
         </div>
       </div>
 
-      {/* Bottom row: Tasa · Fee · Velocidad (left) | CTA (right) */}
-      <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-g100 flex-wrap">
-        <div className="text-[13px] text-g600 flex items-center gap-1.5 flex-wrap">
-          <span><span className="text-g500">{t('results.rate')}</span> <b className="text-ink">{rateText}</b></span>
-          <span className="text-g300">·</span>
-          <span><span className="text-g500">{t('results.fee')}</span> <b className="text-ink">{feeText}</b></span>
-          <span className="text-g300">·</span>
-          <span className="text-ink font-semibold">{p.velocidad}</span>
-        </div>
-
-        {p.afiliado ? (
-          <a
-            href={p.link}
-            target="_blank"
-            rel="noopener sponsored"
-            onClick={onClick}
-            className="bg-green hover:bg-green-dark text-white py-3 px-6 rounded-lg font-semibold text-[15px] inline-flex items-center gap-2 whitespace-nowrap transition-all hover:shadow-md duration-150"
-            data-affiliate-slot={p.operador}
-            data-corredor={p.corredor}
-          >
-            {locale === 'en' ? 'Send' : 'Enviar'}
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </a>
+      <div className="cmp-col">
+        <div className="lbl">{t('results.rate')}</div>
+        {esUSD ? (
+          <>
+            <div className="val rate">{locale === 'en' ? 'No conversion' : 'Sin conversión'}</div>
+            <div className="sub">USD → USD</div>
+          </>
         ) : (
-          <a
-            href={p.link || `https://www.google.com/search?q=${encodeURIComponent(p.nombre_operador)}`}
-            target="_blank"
-            rel="noopener"
-            onClick={onClick}
-            className="bg-g100 hover:bg-g200 text-g700 py-3 px-6 rounded-lg font-semibold text-[15px] inline-flex items-center gap-2 whitespace-nowrap transition-colors"
-          >
-            {t('results.viewSite')}
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </a>
+          <>
+            <div className="val rate">{p.tasa.toFixed(2)}</div>
+            <div className="sub">{moneda} {t('results.perUsd')}</div>
+          </>
         )}
       </div>
+
+      <div className="cmp-col">
+        <div className="lbl">{t('results.fee')}</div>
+        <div className="val">{p.fee === 0 ? t('results.free') : `$${p.fee.toFixed(2)}`}</div>
+        <div className="sub">{p.velocidad}</div>
+      </div>
+
+      <div className="cmp-col">
+        <div className="lbl">{t('results.theyReceive')}</div>
+        <div className="val receive">
+          {esUSD
+            ? `$${p.recibe.toFixed(2)}`
+            : <>{Math.round(p.recibe).toLocaleString()}<small>{moneda}</small></>}
+        </div>
+      </div>
+
+      {p.afiliado ? (
+        <a
+          href={p.link}
+          target="_blank"
+          rel="noopener sponsored"
+          onClick={onClick}
+          className="cmp-btn"
+          data-affiliate-slot={p.operador}
+          data-corredor={p.corredor}
+        >
+          {t('results.sendNow')}
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </a>
+      ) : (
+        <a
+          href={p.link || `https://www.google.com/search?q=${encodeURIComponent(p.nombre_operador)}`}
+          target="_blank"
+          rel="noopener"
+          onClick={onClick}
+          className="cmp-btn cmp-btn-ref"
+        >
+          {t('results.viewSite')}
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </a>
+      )}
     </article>
   )
 }

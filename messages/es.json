@@ -33,8 +33,10 @@
     "bestRate": "Mejor tasa",
     "fastest": "Más rápido",
     "lowestFee": "Menor comisión",
-    "bestOption": "MEJOR OPCIÓN",
+    "bestOption": "★ MEJOR OPCIÓN",
     "secondOption": "SEGUNDA OPCIÓN",
+    "fastestTag": "⚡ MÁS RÁPIDO",
+    "lowestFeeTag": "💰 MENOR COMISIÓN",
     "sendNow": "Enviar ahora",
     "viewSite": "Ver en sitio",
     "rate": "Tasa",
@@ -51,8 +53,7 @@
     "home": "Domicilio",
     "wallet": "Billetera móvil",
     "popular": "POPULAR",
-    "bestDeal": "LA MEJOR OFERTA",
-    "methodLabel": "Método: Cuenta bancaria"
+    "bestDeal": "LA MEJOR OFERTA"
   },
   "strip": {
     "title": "Comparamos las remesadoras más confiables"
@@ -140,9 +141,6 @@
     "d4": "Preenvíos puede recibir comisión cuando haces clic y completas una transferencia. Esto no tiene costo adicional para ti y no afecta el orden del ranking.",
     "d5": "Preenvíos no es responsable por pérdidas derivadas de decisiones tomadas con base en la información mostrada. Los usuarios deben ejercer su juicio y verificar los datos antes de transferir dinero. Al usar este sitio, aceptas estos términos.",
     "d6": "Los logos y nombres de remesadoras mostrados son marcas nominativas usadas con fines informativos de comparación. Preenvíos no está afiliado, patrocinado ni respaldado por dichas empresas salvo que se indique lo contrario.",
-    "topShort": "El orden considera tasa, velocidad y acuerdos comerciales.",
-    "topShortLink": "Saber más",
-    "bottomShort": "Las tasas son estimaciones. Confirma el monto final con la remesadora antes de enviar.",
     "bottomShortLink": "Ver disclaimers completos",
     "footerLink": "Disclaimers"
   },

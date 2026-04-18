@@ -33,8 +33,10 @@
     "bestRate": "Best rate",
     "fastest": "Fastest",
     "lowestFee": "Lowest fee",
-    "bestOption": "BEST OPTION",
+    "bestOption": "★ BEST OPTION",
     "secondOption": "SECOND OPTION",
+    "fastestTag": "⚡ FASTEST",
+    "lowestFeeTag": "💰 LOWEST FEE",
     "sendNow": "Send now",
     "viewSite": "View site",
     "rate": "Rate",
@@ -51,8 +53,7 @@
     "home": "Home delivery",
     "wallet": "Mobile wallet",
     "popular": "POPULAR",
-    "bestDeal": "BEST DEAL",
-    "methodLabel": "Method: Bank account"
+    "bestDeal": "BEST DEAL"
   },
   "strip": {
     "title": "We compare the most trusted remittance providers"
@@ -140,9 +141,6 @@
     "d4": "PreEnvios may receive a commission when you click and complete a transfer. This comes at no additional cost to you and does not affect the ranking order.",
     "d5": "PreEnvios is not responsible for losses resulting from decisions made based on the information displayed. Users must exercise their own judgment and verify data before transferring money. By using this site, you accept these terms.",
     "d6": "The logos and names of remittance providers shown are nominative trademarks used for informational comparison purposes. PreEnvios is not affiliated with, sponsored by, or endorsed by these companies unless otherwise indicated.",
-    "topShort": "Ranking considers rate, speed and commercial agreements.",
-    "topShortLink": "Learn more",
-    "bottomShort": "Rates are estimates. Confirm the final amount with the provider before sending.",
     "bottomShortLink": "See full disclaimers",
     "footerLink": "Disclaimers"
   },
