@@ -212,11 +212,11 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     }
     trackEvent('comparar_click', { monto: montoNum, corredor, metodo, segundos_hasta_comparar: secs() })
 
-    // Loading micro-delay: muestra spinner con logo P para que el usuario sienta
-    // que se estan buscando las mejores tasas. Duracion 800ms — tiempo suficiente
-    // para que el scroll smooth termine y sea visible el loading.
+    // Loading full-screen estilo Monito: pantalla blanca cubre todo mientras
+    // el scroll smooth termina y el usuario percibe 'buscando las mejores tasas'.
+    // 1400ms — lo suficiente para que se vea el spinner completo sin molestar.
     setIsComparing(true)
-    setTimeout(() => setIsComparing(false), 800)
+    setTimeout(() => setIsComparing(false), 1400)
 
     // Scroll intermedio — ver LOGICA_DE_NEGOCIO/19 seccion 3bis:
     // Target: encabezado de resultados a ~150px del top del viewport.
@@ -250,17 +250,19 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
   return (
     <>
-      {/* ═════ LOADING OVERLAY — microsegundos durante el scroll a resultados ═════ */}
+      {/* ═════ LOADING FULL-SCREEN — pantalla blanca con spinner durante scroll ═════ */}
       {isComparing && (
         <div
-          className="fixed inset-0 z-[90] flex items-center justify-center pointer-events-none"
-          aria-hidden="true"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-white"
+          role="status"
+          aria-live="polite"
+          aria-label={locale === 'en' ? 'Finding the best rates' : 'Buscando las mejores tasas'}
         >
-          <div className="relative w-[88px] h-[88px] flex items-center justify-center bg-white rounded-full shadow-[0_10px_40px_-4px_rgba(15,23,42,.25)]">
-            {/* Anillo giratorio */}
-            <div className="absolute inset-0 rounded-full border-[3px] border-green-soft border-t-green animate-spin" />
+          <div className="relative w-[112px] h-[112px] flex items-center justify-center">
+            {/* Anillo giratorio exterior */}
+            <div className="absolute inset-0 rounded-full border-[4px] border-green-soft border-t-green animate-spin" />
             {/* Logo P */}
-            <svg className="w-11 h-11 relative" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <svg className="w-14 h-14 relative" viewBox="0 0 40 40" fill="none" aria-hidden="true">
               <rect width="40" height="40" rx="10" fill="#00D957" />
               <path d="M13 10h10.5a7 7 0 0 1 0 14H17v6h-4V10zm4 4v6h6.5a3 3 0 0 0 0-6H17z" fill="#fff" />
             </svg>
