@@ -4,13 +4,15 @@
 🔴 Crítico
 ⏱ Fix típico: 30-60 min
 
-## ✅ Estado: Causa 3 y Causa 4 resueltas el 2026-04-19
+## ✅ Estado: Causas 1, 3 y 4 resueltas el 2026-04-19
 
+- **Causa 1** (token de sesión no criptográficamente seguro): `lib/admin-auth.ts` ahora genera token como `<random32-base64url>.<expires-at>.<hmac-sha256>` firmado con `ADMIN_SESSION_SECRET`. `isAdminAuthenticated()` verifica HMAC con `timingSafeEqual` y valida expiración. Duración reducida de 24h → 4h.
+  - **Vercel env vars (2026-04-19):** agregar `ADMIN_SESSION_SECRET` (generar con `openssl rand -hex 32`) en los 3 entornos. Sin esta variable el login lanza/falla siempre.
 - **Causa 3** (`/api/admin/dashboard` no usa sesión admin): `app/api/admin/dashboard/route.ts` valida con `isAdminAuthenticated()`; `panel.tsx` ya no envía `Authorization` header. Cerrado.
 - **Causa 4** (`ADMIN_PASSWORD` en texto plano): `lib/admin-auth.ts` usa `bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH)` con factor 12. `bcryptjs` + `@types/bcryptjs` instalados. Variable renombrada a `ADMIN_PASSWORD_HASH` en `.env.example`.
   - **Vercel env vars (2026-04-19):** `ADMIN_PASSWORD` eliminada, `ADMIN_PASSWORD_HASH` agregada en los 3 entornos. Login admin probado en producción.
 
-**Causas 1 (token predecible) y 2 (rate limit) siguen abiertas** — bloqueantes pre-lanzamiento restantes según auditoría #01.
+**Causa 2 (rate limit) sigue abierta** — único bloqueante pre-lanzamiento restante según auditoría #01.
 
 ---
 
