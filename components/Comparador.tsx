@@ -369,7 +369,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
       {/* ═════ DELIVERY METHOD SELECTOR + RESULTS ═════ */}
       {montoNum > 0 && (
-        <section className="py-20 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
+        <section className="pt-8 pb-20 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
           <div className="max-w-[1240px] mx-auto px-6">
             {/* Header — split layout: title left, sort tabs right (replicates original HTML) */}
             <div className="cmp-results-head">
