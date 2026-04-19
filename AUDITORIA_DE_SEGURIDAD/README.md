@@ -1,6 +1,15 @@
 # AUDITORIA DE SEGURIDAD — PreEnvios.com
 
-Registro de auditorías OWASP del sitio. Incluye metodología, cadencia obligatoria, checklist por categoría Top 10, y bitácora de auditorías pasadas y programadas.
+Carpeta de auditorías OWASP del sitio. Cada auditoría vive en su propio archivo numerado (`01_auditoria_YYYY_MM_DD.md`, `02_...`, etc.) con la misma estructura — mismo patrón que `LOGICA_DE_NEGOCIO/` y `TROUBLESHOOTING/`. Este README es el índice + metodología + cadencia obligatoria.
+
+---
+
+## Índice de auditorías
+
+| # | Archivo | Fecha | Motivo | Estado |
+|---|---------|-------|--------|--------|
+| 01 | [01_auditoria_2026_04_19.md](01_auditoria_2026_04_19.md) | 2026-04-19 | Pre-lanzamiento inicial | 🔴 NO APROBADA — 4 críticos abiertos |
+| 02 | (pendiente) | antes del DNS a preenvios.com | Re-auditoría post-fixes | bloqueante para lanzamiento |
 
 ---
 
@@ -111,44 +120,9 @@ Cada categoría se revisa con grep del código, test manual de endpoints, y veri
 
 ---
 
-## Bitácora de auditorías
+## Plantilla de auditorías
 
-### Auditoría #1 — 2026-04-19 (pre-lanzamiento inicial)
-**Fecha:** 2026-04-19
-**Auditor:** Claude Code (automatizada) + fundador (revisión)
-**Alcance:** Full OWASP Top 10
-**Rama auditada:** `main` commit más reciente al momento
-**Estado:** 🟡 En progreso — resultados detallados pendientes
-
-**Hallazgos conocidos antes de iniciar (ya registrados en TROUBLESHOOTING):**
-- [TROUBLESHOOTING/14](TROUBLESHOOTING/14_endpoint_cron_expuesto.md) — endpoint `/api/scrape` requiere CRON_SECRET (🔴 validar que no esté en client bundle como `NEXT_PUBLIC_*`)
-- [TROUBLESHOOTING/15](TROUBLESHOOTING/15_admin_login_vulnerable.md) — admin login vulnerable a brute force (🔴 falta rate limiting)
-- [TROUBLESHOOTING/16](TROUBLESHOOTING/16_webhook_twilio_sin_firma.md) — webhook Twilio no valida firma HMAC (🔴)
-- [TROUBLESHOOTING/17](TROUBLESHOOTING/17_suscripcion_free_spam.md) — `/api/suscripcion-free` sin rate limiting (🟡)
-- [TROUBLESHOOTING/18](TROUBLESHOOTING/18_headers_seguridad_globales.md) — faltan headers CSP, HSTS, X-Frame-Options globales (🟡)
-
-**Acción inmediata:** remediar los 3 hallazgos 🔴 antes de considerar esta auditoría cerrada.
-
-**Resultado resumido:** (a completar al cerrar)
-- Hallazgos 🔴 críticos encontrados: _pendiente_
-- Hallazgos 🟡 importantes: _pendiente_
-- Hallazgos 🟢 menores: _pendiente_
-- Fecha de cierre: _pendiente_
-
----
-
-### Auditoría #2 — PROGRAMADA: antes del lanzamiento en preenvios.com
-**Fecha estimada:** antes del primer deploy a dominio `preenvios.com` (no a `*.vercel.app`)
-**Auditor:** Claude Code + fundador
-**Alcance:** Full OWASP Top 10 + verificación de que los 3 hallazgos 🔴 de la auditoría #1 estén cerrados
-**Requisito de aprobación:** cero 🔴 abiertos + plan de mitigación escrito para cada 🟡 abierto
-**Bloqueante para:** activación DNS del dominio preenvios.com en Vercel
-
----
-
-### Auditorías futuras (plantilla para llenar)
-
-Cada auditoría sigue la plantilla:
+La bitácora completa vive en los archivos numerados (ver Índice al inicio). Cada auditoría sigue esta plantilla:
 
 ```markdown
 ### Auditoría #N — YYYY-MM-DD (motivo)
