@@ -35,19 +35,19 @@ valor_afiliado_score = (valor_bruto - min) / (max - min)  [normalizado contra op
 - **cookie_dias**: duración de cookie del programa (9999 = lifetime). Se cap a 3× para que un lifetime no domine completamente
 - **trafico_calificable**: fracción 0-1 del tráfico que califica al programa (ej. Xoom solo US Android → 0.4 porque iPhone y desktop quedan fuera)
 
-#### Valores iniciales por operador (seed SQL 003)
+#### Valores iniciales por operador (seed SQL 003, activados WU+MG en SQL 005)
 
-| Operador | comision_usd | cookie_dias | trafico_calificable | valor_bruto |
-|----------|--------------|-------------|----------------------|-------------|
-| WorldRemit | $30 | 45 | 1.0 | 45 |
-| Wise | $12 | 9999 (lifetime) | 1.0 | 36 |
-| Remitly | $12 | 30 | 1.0 | 12 |
-| Western Union* | $10 | 30 | 1.0 | 10 |
-| Xoom | $10 | 30 | 0.4 | 4 |
-| Ria | $8 | 30 | 1.0 | 8 |
-| MoneyGram* | $5 | 30 | 1.0 | 5 |
+| Operador | comision_usd | cookie_dias | trafico_calificable | valor_bruto | Estado afiliado |
+|----------|--------------|-------------|----------------------|-------------|-----------------|
+| WorldRemit | $30 | 45 | 1.0 | 45 | Aprobado (CJ) |
+| Wise | $12 | 9999 (lifetime) | 1.0 | 36 | Aprobado (Partnerize) |
+| Remitly | $12 | 30 | 1.0 | 12 | Aprobado (Impact.com) |
+| Western Union | $10 | 30 | 1.0 | 10 | 🟡 Pendiente (CJ) |
+| Xoom | $10 | 30 | 0.4 | 4 | Aprobado (CJ) |
+| Ria | $8 | 30 | 1.0 | 8 | Aprobado (CJ) |
+| MoneyGram | $5 | 30 | 1.0 | 5 | 🟡 Pendiente (FlexOffers + CJ) |
 
-*Western Union y MoneyGram no tienen afiliado activo, por lo que su score de valor_afiliado es 0 aunque los valores estén documentados.
+**Nota sobre Western Union y MoneyGram (2026-04-18):** tras la migración 005 ambos tienen `afiliado=true` y puntúan en el factor valor_afiliado como cualquier otro operador. Sus valores de comision/cookie/trafico son placeholders hasta que las cuentas sean aprobadas y se confirmen los términos reales de cada programa. El link en `precios.link` es el dominio público (sin tracking ID) — CTR contará pero no hay atribución de comisión hasta el swap a URL con tracking.
 
 ### 4. Puntaje final
 - Se multiplica cada score parcial por su peso y se suman
@@ -68,12 +68,13 @@ valor_afiliado_score = (valor_bruto - min) / (max - min)  [normalizado contra op
 | Remitly | 59.60 | 0.20 | 67 |
 | Xoom | 59.40 | 0.00 (tráfico 0.4) | 58 |
 | Ria | 59.00 | 0.10 | 49 |
-| Western Union | 58.50 | 0 (sin afiliado) | 34 |
-| MoneyGram | 58.30 | 0 (sin afiliado) | 29 |
+| Western Union | 58.50 | ~0.20 | ~42 |
+| MoneyGram | 58.30 | ~0.10 | ~37 |
 
 Wise sube al top por cookie lifetime aunque no tenga la mejor tasa absoluta.
 WorldRemit sube pese a peor tasa por su comisión $30.
 Xoom cae pese a buena tasa por tráfico calificable 0.4 (solo US Android).
+Western Union y MoneyGram (desde 2026-04-18) vuelven a puntuar — sus valor_afiliado_score queda en el tercio bajo porque comision_usd es pequeña ($10 y $5) pero ya no es 0.
 
 ## Mantenimiento — cómo ajustar los valores
 

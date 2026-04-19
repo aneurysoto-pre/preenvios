@@ -128,16 +128,16 @@ negociar Revenue Share directo con Remitly y Wise.
 
 ## Operadores — expansión por fases
 
-### MVP — 7 operadores (5 con afiliado + 2 referencia)
+### MVP — 7 operadores (5 aprobados + 2 pendientes de aprobación)
 | Operador | Afiliado | Red | Estado |
 |----------|----------|-----|--------|
-| Remitly | ✅ | Impact.com | MVP |
-| Wise | ✅ | Partnerize | MVP |
-| Xoom (PayPal) | ✅ | CJ Affiliate | MVP |
-| Ria Money Transfer | ✅ | CJ Affiliate | MVP |
-| WorldRemit | ✅ | CJ Affiliate | MVP |
-| Western Union | ❌ | Sin programa público | MVP (referencia) |
-| MoneyGram | ❌ | Sin programa público | MVP (referencia) |
+| Remitly | ✅ | Impact.com | MVP — aprobado |
+| Wise | ✅ | Partnerize | MVP — aprobado |
+| Xoom (PayPal) | ✅ | CJ Affiliate | MVP — aprobado |
+| Ria Money Transfer | ✅ | CJ Affiliate | MVP — aprobado |
+| WorldRemit | ✅ | CJ Affiliate | MVP — aprobado |
+| Western Union | 🟡 | CJ Affiliate ([cj.com](https://www.cj.com/advertiser/western-union)) | MVP — pendiente aprobación (boton activo, link temporal westernunion.com) |
+| MoneyGram | 🟡 | FlexOffers + CJ ([flexoffers.com](https://www.flexoffers.com/affiliate-programs/moneygram-international-affiliate-program/)) | MVP — pendiente aprobación (boton activo, link temporal moneygram.com) |
 
 ### Fase 4 — Operadores adicionales
 | Operador | Afiliado | Tipo de acuerdo |
@@ -491,6 +491,23 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 
 #### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
 Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
+
+#### 4.2.6 — Activación afiliado Western Union y MoneyGram (2026-04-18)
+Contexto: ambos operadores SÍ tienen programa de afiliados público — investigación previa era incorrecta al marcarlos "sin programa público". WU es aplicable via CJ Affiliate (también conocido como Commission Junction) y MoneyGram via FlexOffers + CJ. Se activan para que el botón "Ver en sitio" gris pase a "Enviar ahora" verde como los demás. Mientras la aprobación de cuenta está pendiente, el link apunta al dominio público sin tracking ID.
+- [x] Tabla `precios` en Supabase: `afiliado=true` y `link='https://www.westernunion.com'` para WU en los 8 corredores; `link='https://www.moneygram.com'` para MG (completado 2026-04-18 — SQL migración 005 pendiente de ejecutar por usuario)
+- [x] Estado de ambos operadores en CONTEXTO_FINAL pasa de "❌ Sin programa público / MVP (referencia)" a "🟡 pendiente aprobación (boton activo, link temporal dominio público)" (completado 2026-04-18)
+- [x] Ranking: ambos operadores vuelven a puntuar en el factor `valor_afiliado` usando los valores que ya estaban cargados en la migración 003 (WU: comision $10, cookie 30, tráfico 1.0 → valor_bruto 10; MG: $5 × 30 × 1.0 → valor_bruto 5). Antes aportaban 0 al score por tener `afiliado=false` (completado 2026-04-18)
+- [x] Seed scripts `scripts/seed.mjs` y `scripts/seed-new-corridors.mjs` actualizados para consistencia en re-ejecuciones (completado 2026-04-18)
+- [x] Página `/como-ganamos-dinero` actualizada: WU y MG dejan de aparecer como "no tienen programas de afiliados públicos" y se documenta su estado pendiente con las redes correspondientes (completado 2026-04-18)
+- [x] Migración 005 `supabase/migrations/005_activate_wu_mg_affiliate.sql` copy-paste ready para ejecutar en Supabase SQL Editor (completado 2026-04-18)
+
+**Acción pendiente del usuario (NO es código):**
+1. Ejecutar SQL 005 en Supabase SQL Editor (sin esto los botones siguen grises en producción)
+2. Aplicar a CJ Affiliate como publisher y solicitar acceso al programa Western Union
+3. Aplicar a FlexOffers (y/o CJ) para MoneyGram
+4. Cuando las cuentas sean aprobadas: reemplazar el link `https://www.westernunion.com` por el link con tracking ID (via `/es/admin` → Tasas, o UPDATE SQL). Mismo para MoneyGram
+
+**Nota operativa:** mientras los links no tengan tracking ID, los clicks NO generan comisión. Es un tradeoff aceptado: perder atribución a cambio de botones activos y mejor UX (evita el "callejón sin salida" del botón gris que suele generar bounces).
 
 #### 4.2.5 — Pulido UI fase lanzamiento (2026-04-18)
 Fase de ajustes cosméticos y SEO tras el rediseño del Comparador y las páginas institucionales.

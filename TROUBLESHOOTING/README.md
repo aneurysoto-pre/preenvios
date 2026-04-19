@@ -27,6 +27,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [21](21_comparador_pais_y_locale.md) | País o idioma equivocados al cargar | 🟡 | 5-15m |
 | [22](22_nav_footer_contacto_roto.md) | Nav/Footer falta o /contacto no guarda | 🟡 | 10-30m |
 | [23](23_ui_polish_regresiones.md) | Regresiones del pulido UI (iconos, footer 4col, fundador) | 🟡 | 5-15m |
+| [24](24_afiliado_wu_mg_links.md) | Botones WU/MG grises o links sin tracking | 🟡 | 5-15m |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

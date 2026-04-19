@@ -28,8 +28,9 @@ const operadores = {
   xoom:         { nombre: 'Xoom',          rating: 4.7, reviews: 6120,  afiliado: true,  confiabilidad: 90, metodos: 3 },
   ria:          { nombre: 'Ria',           rating: 4.6, reviews: 5200,  afiliado: true,  confiabilidad: 85, metodos: 4 },
   worldremit:   { nombre: 'WorldRemit',    rating: 4.6, reviews: 4800,  afiliado: true,  confiabilidad: 75, metodos: 4 },
-  westernunion: { nombre: 'Western Union', rating: 4.5, reviews: 15820, afiliado: false, confiabilidad: 95, metodos: 3 },
-  moneygram:    { nombre: 'MoneyGram',     rating: 4.4, reviews: 7541,  afiliado: false, confiabilidad: 85, metodos: 3 },
+  // WU (CJ) y MG (FlexOffers + CJ) pendientes de aprobacion: link temporal al dominio publico.
+  westernunion: { nombre: 'Western Union', rating: 4.5, reviews: 15820, afiliado: true, confiabilidad: 95, metodos: 3 },
+  moneygram:    { nombre: 'MoneyGram',     rating: 4.4, reviews: 7541,  afiliado: true, confiabilidad: 85, metodos: 3 },
 }
 
 // Tasas estimadas iniciales (se reemplazan con scrapers)
@@ -44,10 +45,10 @@ const fees = { remitly: 2.99, wise: 2.50, xoom: 4.99, ria: 0, worldremit: 1.99, 
 const velocidades = { remitly: 'Minutos', wise: 'Segundos', xoom: 'Minutos', ria: 'Minutos', worldremit: 'Minutos', westernunion: 'Minutos', moneygram: 'Horas' }
 
 const links = {
-  colombia:  { remitly: 'https://www.remitly.com/us/en/colombia', wise: 'https://wise.com/us/send-money/send-money-to-colombia', xoom: 'https://www.xoom.com/colombia/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/colombia', worldremit: 'https://www.worldremit.com/en/send-money/united-states/colombia' },
-  mexico:    { remitly: 'https://www.remitly.com/us/en/mexico', wise: 'https://wise.com/us/send-money/send-money-to-mexico', xoom: 'https://www.xoom.com/mexico/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/mexico', worldremit: 'https://www.worldremit.com/en/send-money/united-states/mexico' },
-  nicaragua: { remitly: 'https://www.remitly.com/us/en/nicaragua', wise: 'https://wise.com/us/send-money/send-money-to-nicaragua', xoom: 'https://www.xoom.com/nicaragua/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/nicaragua', worldremit: 'https://www.worldremit.com/en/send-money/united-states/nicaragua' },
-  haiti:     { remitly: 'https://www.remitly.com/us/en/haiti', wise: 'https://wise.com/us/send-money/send-money-to-haiti', xoom: 'https://www.xoom.com/haiti/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/haiti', worldremit: 'https://www.worldremit.com/en/send-money/united-states/haiti' },
+  colombia:  { remitly: 'https://www.remitly.com/us/en/colombia', wise: 'https://wise.com/us/send-money/send-money-to-colombia', xoom: 'https://www.xoom.com/colombia/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/colombia', worldremit: 'https://www.worldremit.com/en/send-money/united-states/colombia', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
+  mexico:    { remitly: 'https://www.remitly.com/us/en/mexico', wise: 'https://wise.com/us/send-money/send-money-to-mexico', xoom: 'https://www.xoom.com/mexico/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/mexico', worldremit: 'https://www.worldremit.com/en/send-money/united-states/mexico', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
+  nicaragua: { remitly: 'https://www.remitly.com/us/en/nicaragua', wise: 'https://wise.com/us/send-money/send-money-to-nicaragua', xoom: 'https://www.xoom.com/nicaragua/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/nicaragua', worldremit: 'https://www.worldremit.com/en/send-money/united-states/nicaragua', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
+  haiti:     { remitly: 'https://www.remitly.com/us/en/haiti', wise: 'https://wise.com/us/send-money/send-money-to-haiti', xoom: 'https://www.xoom.com/haiti/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/haiti', worldremit: 'https://www.worldremit.com/en/send-money/united-states/haiti', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
 }
 
 async function seed() {

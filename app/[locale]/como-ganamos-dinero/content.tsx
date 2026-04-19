@@ -14,9 +14,12 @@ export default function ComoGanamosContent() {
       <ul>
         <li><strong>Impact.com</strong> — Remitly</li>
         <li><strong>Partnerize</strong> — Wise</li>
-        <li><strong>CJ Affiliate</strong> — Xoom, Ria, WorldRemit</li>
+        <li><strong>CJ Affiliate</strong> — Xoom, Ria, WorldRemit, Western Union (pendiente aprobación)</li>
+        <li><strong>FlexOffers + CJ</strong> — MoneyGram (pendiente aprobación)</li>
       </ul>
-      <p>{en ? 'Western Union and MoneyGram do not have public affiliate programs. They appear in our comparison for informational purposes only.' : 'Western Union y MoneyGram no tienen programas de afiliados públicos. Aparecen en nuestra comparación solo con fines informativos.'}</p>
+      <p>{en
+        ? 'Western Union (CJ Affiliate) and MoneyGram (FlexOffers + CJ) offer public affiliate programs. Our application is pending approval with both networks. Until approved, their links point directly to the public domain without a tracking ID — we do not earn commission on those clicks, but the user still gets an active button instead of a dead end.'
+        : 'Western Union (CJ Affiliate) y MoneyGram (FlexOffers + CJ) ofrecen programas de afiliado público. Nuestra solicitud está pendiente de aprobación en ambas redes. Hasta que sean aprobadas, sus links apuntan al dominio público sin tracking ID — no ganamos comisión en esos clicks, pero el usuario tiene un botón activo en lugar de un callejón sin salida.'}</p>
       <h2>{en ? 'Does this affect the ranking?' : '¿Esto afecta el ranking?'}</h2>
       <p>{en ? 'Our ranking algorithm (Preenvíos Score) uses 5 weighted criteria:' : 'Nuestro algoritmo de ranking (Preenvíos Score) usa 5 criterios ponderados:'}</p>
       <ul>
