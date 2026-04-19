@@ -218,16 +218,13 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     setIsComparing(true)
     setTimeout(() => setIsComparing(false), 1400)
 
-    // Scroll al top de #banners-patrocinados con offset 72 (Nav fixed).
-    // Ver LOGICA_DE_NEGOCIO/19 seccion 3bis:
-    // - Banners quedan totalmente visibles arriba (100% de impresion publicitaria)
-    // - Encabezado 'Resultados para...' aparece debajo
-    // - Primer resultado asoma al fondo del viewport con su boton 'Enviar ahora'
-    //   visible — friction diseñada para forzar scroll corto y consciente.
+    // Scroll a banners via scrollIntoView + CSS scroll-mt-[72px] en la seccion.
+    // Es mas confiable que el calculo manual de getBoundingClientRect (que a veces
+    // overshootea con smooth scroll). Banners quedan 100% visibles bajo el Nav y
+    // el primer resultado asoma al fondo del viewport — ver LOGICA/19 seccion 3bis.
     const banners = document.getElementById('banners-patrocinados')
     if (banners) {
-      const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
-      window.scrollTo({ top: y, behavior: 'smooth' })
+      banners.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } else {
       // Fallback si el slot de banners no esta en el DOM
       document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
