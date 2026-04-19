@@ -44,9 +44,10 @@ export default function PaisContent({ slug }: { slug: string }) {
         heroTitle={en ? `Sending money to ${nombre}?` : `Envías dinero a ${nombre}?`}
         heroHighlight={en ? 'Compare and save in seconds.' : 'Compara y ahorra en segundos.'}
         heroLede={en ? `See in seconds how much arrives in ${nombre}` : `Revisa en segundos cuánto llega a ${nombre}`}
-      />
+      >
+        <BannersPatrocinados />
+      </Comparador>
       <OfertasDestacadas hidden={true} />
-      <BannersPatrocinados />
       <TasasReferencia />
       <LazyBelow />
 

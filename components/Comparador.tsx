@@ -45,12 +45,16 @@ type ComparadorProps = {
   heroHighlight?: string
   /** Override hero subtitle (default: from translations) */
   heroLede?: string
+  /** Contenido que se renderiza ENTRE el hero y la seccion de resultados.
+   *  Usado para banners patrocinados que deben siempre estar visibles, incluso
+   *  cuando el usuario aun no escribe un monto. */
+  children?: React.ReactNode
 }
 
 type SortKey = 'best' | 'fastest' | 'cheapest'
 const VELOCIDAD_RANK: Record<string, number> = { 'Segundos': 4, 'Seconds': 4, 'Minutos': 3, 'Minutes': 3, 'Horas': 2, 'Hours': 2, 'Días': 1, 'Days': 1 }
 
-export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede }: ComparadorProps = {}) {
+export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede, children }: ComparadorProps = {}) {
   const t = useTranslations()
   const locale = useLocale()
   const [corredor, setCorredor] = useState(defaultCorredor || 'dominican_republic')
@@ -353,6 +357,9 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
           </div>
         </div>
       </section>
+
+      {/* ═════ SLOT: contenido entre hero y resultados (banners patrocinados) ═════ */}
+      {children}
 
       {/* ═════ DELIVERY METHOD SELECTOR + RESULTS ═════ */}
       {montoNum > 0 && (

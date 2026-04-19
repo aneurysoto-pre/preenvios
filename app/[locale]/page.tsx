@@ -54,9 +54,10 @@ export default async function HomePage({
   return (
     <main>
       <Nav />
-      <Comparador />
+      <Comparador>
+        <BannersPatrocinados />
+      </Comparador>
       <OfertasDestacadas hidden={true} />
-      <BannersPatrocinados />
       <TasasReferencia />
       <LazyBelow />
       <Footer />
