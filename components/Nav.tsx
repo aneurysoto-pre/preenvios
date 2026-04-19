@@ -85,7 +85,7 @@ export default function Nav() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-[14px] border-b border-g200 transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_14px_rgba(15,23,42,.08)]' : ''}`}>
-      <div className="max-w-[1240px] mx-auto px-6 h-[72px] flex items-center justify-between">
+      <div className="max-w-[1240px] mx-auto px-6 h-[48px] flex items-center justify-between">
         {/* Logo */}
         <a href={`/${locale}`} className="flex items-center gap-2 font-logo text-[22px] font-bold lowercase tracking-tight">
           <svg className="w-[26px] h-[26px] shrink-0" viewBox="0 0 40 40" fill="none">
@@ -153,7 +153,7 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden fixed top-[72px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1 max-h-[calc(100vh-72px)] overflow-y-auto">
+        <div className="md:hidden fixed top-[48px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1 max-h-[calc(100vh-48px)] overflow-y-auto">
           <p className="pt-1 pb-1 px-1 text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider">{t('corridors')}</p>
           {PAISES_MVP.map(p => (
             <a

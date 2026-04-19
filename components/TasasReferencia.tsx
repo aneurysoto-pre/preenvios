@@ -60,7 +60,7 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
   if (visibles.length === 0) return null
 
   return (
-    <section className="py-14 bg-gradient-to-b from-g50 to-white">
+    <section className="pt-10 pb-14 bg-gradient-to-b from-g50 to-white">
       <div className="max-w-[1240px] mx-auto px-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-5 flex-wrap gap-3">

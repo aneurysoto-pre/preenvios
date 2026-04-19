@@ -81,7 +81,7 @@ export default function BannersPatrocinados() {
   return (
     <section
       id="banners-patrocinados"
-      className="pt-4 pb-0 scroll-mt-[72px]"
+      className="pt-2 pb-0 scroll-mt-[48px]"
       aria-label={en ? 'Sponsored offers' : 'Ofertas patrocinadas'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { rankProviders, type Precio, type PrecioRanked } from '@/lib/ranking'
+import AlertaForm from '@/components/AlertaForm'
 
 // ═══════════════════════════════════════
 // DATOS ESTÁTICOS
@@ -272,7 +273,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       )}
 
       {/* ═════ HERO + SEARCH CARD ═════ */}
-      <section id="calculadora" data-section="calculadora" className="relative pt-24 pb-10 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
+      <section id="calculadora" data-section="calculadora" className="relative pt-20 pb-6 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(10,79,229,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(10,79,229,.05) 1px,transparent 1px)',
           backgroundSize: '42px 42px',
@@ -407,7 +408,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
       {/* ═════ DELIVERY METHOD SELECTOR + RESULTS ═════ */}
       {montoNum > 0 && (
-        <section className="pt-0 pb-20 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
+        <section className="pt-8 pb-8 bg-g50 animate-[fadeIn_.5s_ease]" id="comparar">
           <div className="max-w-[1240px] mx-auto px-6">
             {/* Header — split layout: title left, sort tabs right (replicates original HTML) */}
             <div className="cmp-results-head">
@@ -416,13 +417,14 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
                 </h2>
                 {/* Meta: badge verde pill (timestamp) + linea separada debajo (ranking note).
-                    Ambos con font 9px discreto para NO competir con el h2. */}
-                <div className="mt-2 flex flex-col items-start gap-1">
+                    Ambos con font discreto para NO competir con el h2. Aire vertical
+                    aumentado (mt-4 + gap-2.5) para separar las 3 lineas. */}
+                <div className="mt-4 flex flex-col items-start gap-2.5">
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-dark bg-green-soft rounded-full px-2 py-0.5 leading-tight">
                     <span className="w-1 h-1 bg-green rounded-full animate-pulse" aria-hidden="true" />
                     {updatedLabel || t('results.subtitle')}
                   </span>
-                  <p className="text-[8px] text-g400 leading-tight">
+                  <p className="text-[9px] text-g400 leading-tight">
                     {t('disclaimers.d3')}{' '}
                     <a href={`/${locale}/como-ganamos-dinero`} className="underline decoration-g300 hover:text-blue hover:decoration-blue underline-offset-2">{t('disclaimers.d3Link')}</a>
                   </p>
@@ -490,6 +492,15 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   : 'Las tasas mostradas son estimaciones aproximadas con fines comparativos. PreEnvios no maneja, recibe ni transfiere dinero — solo comparamos información pública de las remesadoras. Confirma siempre el monto final directamente con la remesadora antes de enviar.'}{' '}
                 <a href={`/${locale}/disclaimers`}>{t('disclaimers.bottomShortLink')} →</a>
               </p>
+            </div>
+
+            {/* Alerta gratis — entre disclaimer y TasasReferencia. Prellena con
+                el corredor activo del comparador (Landing: dropdown; Pais: defaultCorredor). */}
+            <div className="mt-8">
+              <AlertaForm
+                corredorId={corredor}
+                corredorNombre={locale === 'en' ? corredorData.nombre_en : corredorData.nombre}
+              />
             </div>
           </div>
         </section>
@@ -571,7 +582,7 @@ function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
         <div className="val receive">
           {esUSD
             ? `$${p.recibe.toFixed(2)}`
-            : <>{Math.round(p.recibe).toLocaleString()}<small>{moneda}</small></>}
+            : <>{`$${Math.round(p.recibe).toLocaleString()}`}<small>{moneda}</small></>}
         </div>
       </div>
 

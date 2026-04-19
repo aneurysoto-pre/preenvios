@@ -106,13 +106,13 @@ export function StepsSection() {
 
 export function CTASection() {
   const t = useTranslations('cta')
-  // Scrolls to the hero calculator accounting for the fixed 72px header.
+  // Scrolls to the hero calculator accounting for the fixed 48px header (+ 8px aire).
   // Works on home and on country pages (/honduras, /guatemala...) because both
   // render <Comparador /> which has id="calculadora" on the hero section.
   function scrollToCalculator() {
     const el = document.getElementById('calculadora') || document.querySelector<HTMLElement>('[data-section="calculadora"]')
     if (!el) return
-    const headerHeight = 80
+    const headerHeight = 56
     const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight
     window.scrollTo({ top: y, behavior: 'smooth' })
   }

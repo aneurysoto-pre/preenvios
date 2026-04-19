@@ -39,9 +39,9 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 /* Nota: NO definir regla generica para `.cmp-results-head p` — sobrescribe estilos Tailwind
    del meta (timestamp + ranking note). Si se agregan mas <p>, estilarlos por clase. */
 
-.cmp-sort { display: flex; gap: 8px; background: #fff; padding: 6px; border-radius: 50px; border: 1px solid var(--color-g200); box-shadow: 0 2px 6px -2px rgba(15,23,42,.08); }
-.cmp-sort button { padding: 9px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--color-g600); background: transparent; transition: .2s; white-space: nowrap; cursor: pointer; }
-.cmp-sort button.on { background: var(--color-ink); color: #fff; }
+.cmp-sort { display: flex; gap: 4px; background: #fff; padding: 4px; border-radius: 50px; border: 1px solid var(--color-g200); box-shadow: 0 2px 6px -2px rgba(15,23,42,.06); }
+.cmp-sort button { padding: 6px 12px; border-radius: 50px; font-size: 11px; font-weight: 600; color: var(--color-g600); background: transparent; transition: .2s; white-space: nowrap; cursor: pointer; }
+.cmp-sort button.on { background: var(--color-ink); color: #fff; font-weight: 700; }
 
 .cmp-card-list { display: flex; flex-direction: column; gap: 16px; }
 .cmp-card { background: #fff; border-radius: 22px; padding: 22px 26px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr auto; gap: 24px; align-items: center; border: 1.5px solid var(--color-g200); transition: .25s; position: relative; overflow: hidden; }
@@ -70,12 +70,14 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 .cmp-brand-info .score b { font-weight: 800; }
 
 .cmp-col { min-width: 0; }
-.cmp-col .lbl { font-size: 11px; font-weight: 700; color: var(--color-g500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-.cmp-col .val { font-size: 15px; font-weight: 700; color: var(--color-ink); }
+.cmp-col .lbl { font-size: 10px; font-weight: 700; color: var(--color-g500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+.cmp-col .val { font-size: 13px; font-weight: 600; color: var(--color-ink-2); }
 .cmp-col .val.rate { color: var(--color-blue); }
-.cmp-col .val.receive { font-size: 22px; font-weight: 900; color: var(--color-green-dark); font-family: var(--font-heading); }
-.cmp-col .val.receive small { font-size: 12px; font-weight: 700; color: var(--color-g500); margin-left: 3px; }
-.cmp-col .sub { font-size: 11px; color: var(--color-g500); margin-top: 2px; }
+/* Monto que recibe: unica cifra destacada de la tarjeta. Negro grande para no
+   competir con el verde del boton CTA (que pasa a ser la unica instancia de verde). */
+.cmp-col .val.receive { font-size: 22px; font-weight: 900; color: var(--color-ink); font-family: var(--font-heading); }
+.cmp-col .val.receive small { font-size: 11px; font-weight: 600; color: var(--color-g500); margin-left: 3px; }
+.cmp-col .sub { font-size: 10px; color: var(--color-g500); margin-top: 2px; }
 
 .cmp-btn { background: var(--color-blue); color: #fff; padding: 13px 24px; border-radius: 10px; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: .2s; white-space: nowrap; }
 .cmp-btn:hover { background: var(--color-blue-dark); transform: translateX(3px); }
