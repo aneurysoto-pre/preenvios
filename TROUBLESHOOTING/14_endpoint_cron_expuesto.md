@@ -6,12 +6,11 @@
 
 ## ✅ Estado: Causa 2 resuelta el 2026-04-19
 
-La **Causa 2** (`NEXT_PUBLIC_CRON_SECRET` en bundle) fue remediada:
-- `app/api/admin/dashboard/route.ts` ahora valida con `isAdminAuthenticated()`
+La **Causa 2** (`NEXT_PUBLIC_CRON_SECRET` en bundle) está cerrada:
+- `app/api/admin/dashboard/route.ts` valida con `isAdminAuthenticated()`
 - `app/[locale]/admin/panel.tsx:61` ya no envía `Authorization` header
 - `NEXT_PUBLIC_CRON_SECRET` eliminada de `.env.example`
-
-**Acción manual pendiente en Vercel:** eliminar `NEXT_PUBLIC_CRON_SECRET` de Project Settings → Environment Variables (los 3 entornos) y rotar `CRON_SECRET`. Ver AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md § H-01.2.
+- **Vercel env vars (2026-04-19):** `NEXT_PUBLIC_CRON_SECRET` eliminada de los 3 entornos; `CRON_SECRET` rotada. Login admin probado en producción.
 
 Las Causas 1 (falta hard-fail si `CRON_SECRET` undefined en `/api/scrape`) y 3 (revisar invocaciones previas) siguen vigentes — revisar abajo.
 
