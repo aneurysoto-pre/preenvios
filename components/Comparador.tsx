@@ -329,8 +329,11 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                     type="number"
                     value={monto}
                     onChange={e => onMontoChange(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); onCompararClick() } }}
                     placeholder="0"
                     min="1"
+                    inputMode="decimal"
+                    enterKeyHint="go"
                     className="flex-1 bg-transparent border-none outline-none font-heading text-[20px] sm:text-2xl font-extrabold text-ink min-w-0"
                   />
                   <div className="flex items-center gap-2 font-bold text-g700 text-[13px] sm:text-[15px] shrink-0">
