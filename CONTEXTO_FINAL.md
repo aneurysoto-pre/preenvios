@@ -538,8 +538,11 @@ Contexto: ambos operadores SÍ tienen programa de afiliados público — investi
 - [x] Página `/como-ganamos-dinero` actualizada: WU y MG dejan de aparecer como "no tienen programas de afiliados públicos" y se documenta su estado pendiente con las redes correspondientes (completado 2026-04-18)
 - [x] Migración 005 `supabase/migrations/005_activate_wu_mg_affiliate.sql` copy-paste ready para ejecutar en Supabase SQL Editor (completado 2026-04-18)
 
+**Bug importante descubierto el 2026-04-18:** los scrapers `lib/scrapers/moneygram.ts` y `westernunion.ts` hardcoded `afiliado: false, link: ''`. Cada corrida de cron revertía SQL 005 via upsert. Fix aplicado: scrapers ahora hardcoded `afiliado: true` con link al dominio público. Detalle en TROUBLESHOOTING/26.
+
 **Acción pendiente del usuario (NO es código):**
-1. Ejecutar SQL 005 en Supabase SQL Editor (sin esto los botones siguen grises en producción)
+1. Ejecutar SQL 005 en Supabase SQL Editor — RE-EJECUTAR si ya se había ejecutado (el scraper lo revirtió entre tanto). Es idempotente, seguro
+1b. Verificar en Supabase: `SELECT operador, afiliado FROM precios WHERE operador IN ('westernunion','moneygram') LIMIT 4` — debe mostrar afiliado=true
 2. Aplicar a CJ Affiliate como publisher y solicitar acceso al programa Western Union
 3. Aplicar a FlexOffers (y/o CJ) para MoneyGram
 4. Cuando las cuentas sean aprobadas: reemplazar el link `https://www.westernunion.com` por el link con tracking ID (via `/es/admin` → Tasas, o UPDATE SQL). Mismo para MoneyGram

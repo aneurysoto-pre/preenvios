@@ -45,8 +45,8 @@ export async function scrapeWesternUnion(): Promise<{ saved: number; errors: str
         nombre_operador: 'Western Union',
         rating: 4.5,
         reviews: 15820,
-        afiliado: false,
-        link: '',
+        afiliado: true,
+        link: 'https://www.westernunion.com',
         confiabilidad: 95,
         metodos_disponibles: 3,
       })

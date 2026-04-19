@@ -45,8 +45,8 @@ export async function scrapeMoneyGram(): Promise<{ saved: number; errors: string
         nombre_operador: 'MoneyGram',
         rating: 4.4,
         reviews: 7541,
-        afiliado: false,
-        link: '',
+        afiliado: true,
+        link: 'https://www.moneygram.com',
         confiabilidad: 85,
         metodos_disponibles: 3,
       })

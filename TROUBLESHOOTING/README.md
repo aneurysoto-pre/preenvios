@@ -29,6 +29,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [23](23_ui_polish_regresiones.md) | Regresiones del pulido UI (iconos, footer 4col, fundador) | 🟡 | 5-15m |
 | [24](24_afiliado_wu_mg_links.md) | Botones WU/MG grises o links sin tracking | 🟡 | 5-15m |
 | [25](25_cta_scroll_y_calc_inversa.md) | CTA "Comparar ahora" no scrollea o calc inversa >4 países | 🟡 | 5-15m |
+| [26](26_scraper_revierte_afiliado.md) | Scraper revierte afiliado/link de un operador | 🔴 | 5m |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

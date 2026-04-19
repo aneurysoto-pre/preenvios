@@ -18,6 +18,12 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+// IMPORTANTE: los campos afiliado y link son metadata de negocio (configurada
+// via admin panel / SQL migrations), NO datos scraped. El scraper debe pasarlos
+// con los valores actuales del operador — hoy todos los operadores MVP tienen
+// afiliado=true. Si se agrega un operador nuevo, asegurar que su scraper tenga
+// los valores correctos aqui para que el upsert no los sobreescriba con false/''.
+// Ver TROUBLESHOOTING/24 y 26 para el patron.
 export type ScrapedPrice = {
   operador: string
   corredor: string
