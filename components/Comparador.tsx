@@ -210,7 +210,18 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       return
     }
     trackEvent('comparar_click', { monto: montoNum, corredor, metodo, segundos_hasta_comparar: secs() })
-    document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
+    // Scroll al top de los banners patrocinados (NO a #comparar / resultados).
+    // Objetivo de negocio: que los banners queden visibles arriba y el encabezado
+    // de resultados tambien aparezca en viewport, forzando un scroll corto y
+    // consciente hacia abajo. Ver LOGICA_DE_NEGOCIO/19_banners_patrocinados.md.
+    const banners = document.getElementById('banners-patrocinados')
+    if (banners) {
+      const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    } else {
+      // Fallback al comportamiento anterior si el slot no esta disponible
+      document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   function onOperadorClick(p: PrecioRanked, pos: number) {

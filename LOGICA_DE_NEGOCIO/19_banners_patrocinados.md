@@ -45,6 +45,32 @@ Los valores son **placeholders** hasta que se firmen los acuerdos reales. La tas
 - Hover: `-translate-y-0.5` + sombra sutil
 - Etiqueta "PATROCINADO" / "SPONSORED" 11px gris uppercase tracking-wider centrada arriba
 
+### 3bis. Target del scroll al comparar (decisión clave 2026-04-18)
+
+Cuando el usuario hace click en "Comparar las mejores remesadoras" o presiona Enter en el input de monto, el comportamiento NO es scrollear directo a la sección de resultados. En su lugar, se scrollea al **top de los banners patrocinados** (`id="banners-patrocinados"`) con un offset de 72px para compensar el Nav fixed.
+
+**Razón de negocio:** si el scroll salta directo a `#comparar` (resultados), los banners patrocinados quedan arriba del viewport y el usuario nunca los ve. Se pierde impresión publicitaria — que es el activo monetizable más importante de la página después del click al afiliado.
+
+Al scrollear al top de banners en lugar de resultados:
+- Los 4 banners quedan totalmente visibles en el viewport (arriba)
+- El encabezado "Resultados para $X USD → País" aparece justo debajo
+- El primer resultado (Remitly o el mejor del momento) se asoma al fondo del viewport
+- El usuario hace un scroll corto y consciente para ver el ranking completo → la publicidad tuvo impresión garantizada
+
+Este comportamiento es idéntico en desktop y mobile. Implementación en `components/Comparador.tsx`:
+```ts
+function onCompararClick() {
+  // ... validación de monto ...
+  const banners = document.getElementById('banners-patrocinados')
+  if (banners) {
+    const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
+}
+```
+
+**Nota:** no confundir con la función `scrollToCalculator` en `CTASection`, que scrollea AL hero calculadora (target diferente — "Comparar ahora →" del CTA final lleva al usuario de vuelta al hero si está abajo).
+
 ### 4. Tracking (preparado, no activo)
 Cada `<a>` tiene:
 - `rel="noopener sponsored"` — cumple con las directrices FTC y Google sobre links pagados
