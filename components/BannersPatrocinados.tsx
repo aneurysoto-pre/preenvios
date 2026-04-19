@@ -85,7 +85,7 @@ export default function BannersPatrocinados() {
       aria-label={en ? 'Sponsored offers' : 'Ofertas patrocinadas'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-        <p className="text-[11px] text-g500 text-center mb-3 tracking-wider uppercase">
+        <p className="text-[11px] text-g500 text-center mb-2 tracking-wider uppercase">
           {en ? 'Sponsored' : 'Patrocinado'}
         </p>
 

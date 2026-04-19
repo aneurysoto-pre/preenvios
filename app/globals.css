@@ -34,7 +34,7 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 /* ═════════════════════════════════════════════════════════════
    Comparador results (design parity with original preenvios.com HTML)
    ═════════════════════════════════════════════════════════════ */
-.cmp-results-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 34px; flex-wrap: wrap; gap: 20px; }
+.cmp-results-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 20px; }
 .cmp-results-head h2 { font-size: clamp(20px,2.4vw,28px); font-weight: 900; line-height: 1.15; }
 /* Nota: NO definir regla generica para `.cmp-results-head p` — sobrescribe estilos Tailwind
    del meta (timestamp + ranking note). Si se agregan mas <p>, estilarlos por clase. */
