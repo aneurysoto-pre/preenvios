@@ -219,22 +219,26 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     setIsComparing(true)
     setTimeout(() => setIsComparing(false), 1400)
 
-    // Scroll target (2026-04-19): aterrizar con el segundo resultado asomando
-    // ~120px al fondo del viewport. Eso genera: banners con top ligeramente
-    // recortado bajo el nav, primera tarjeta 100% visible, y segunda tarjeta
-    // visible en su borde superior — invita a seguir scrolleando.
-    // requestAnimationFrame asegura que el DOM este listo tras cualquier render
-    // pendiente antes de calcular posiciones.
+    // Scroll target: anclado al top de banners + nudge para cortar ~30px
+    // del top de banners (bajo la sombra del nav). Resultado visual:
+    // - Banners 85% visibles (pequeño cut arriba)
+    // - Primer resultado 100% visible
+    // - Segundo resultado asomando (variable segun altura de viewport)
+    //
+    // Historia: intento previo con formula "PEEK=120 del segundo card"
+    // era adaptable por viewport pero overshooteaba en pantallas grandes
+    // (~1000px+) escondiendo los banners completos. Anclar en banners con
+    // NUDGE fijo es mas predecible. Tuned via user feedback 2026-04-19.
     requestAnimationFrame(() => {
-      const cards = document.querySelectorAll<HTMLElement>('.cmp-card')
-      if (cards.length >= 2) {
-        const PEEK = 120
-        const rect = cards[1].getBoundingClientRect()
-        const y = rect.top + window.scrollY - (window.innerHeight - PEEK)
+      const banners = document.getElementById('banners-patrocinados')
+      if (banners) {
+        const NAV_HEIGHT = 48
+        const NUDGE = 30 // px de banners cortados bajo el nav
+        const rect = banners.getBoundingClientRect()
+        const y = rect.top + window.scrollY - NAV_HEIGHT + NUDGE
         window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
       } else {
-        // Fallback: solo 1 resultado (raro) — volver al scroll a banners
-        document.getElementById('banners-patrocinados')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     })
   }
