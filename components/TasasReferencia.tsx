@@ -26,11 +26,8 @@ const SIGLAS_COLORS: Record<string, string> = {
   BRH:  'bg-gradient-to-br from-[#00209F] to-[#001260]',
 }
 
-const COUNTRY_FLAGS: Record<string, string> = {
-  hn: '🇭🇳', do: '🇩🇴', gt: '🇬🇹', sv: '🇸🇻',
-  co: '🇨🇴', mx: '🇲🇽', ni: '🇳🇮', ht: '🇭🇹',
-}
-
+// Flag emojis were replaced with flagcdn PNGs (2026-04-18) because Windows
+// renders flag emojis as the ISO-letter pair ("HN", "DO"...) instead of the flag glyph.
 const COUNTRY_NAMES: Record<string, Record<string, string>> = {
   hn: { es: 'Honduras', en: 'Honduras' },
   do: { es: 'República Dominicana', en: 'Dominican Republic' },
@@ -93,8 +90,17 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] text-ink-2 font-medium mb-0.5">
-                    {COUNTRY_FLAGS[bc.codigo_pais]} {COUNTRY_NAMES[bc.codigo_pais]?.[locale] || bc.codigo_pais.toUpperCase()}
+                  <div className="flex items-center gap-1.5 text-[11px] text-ink-2 font-medium mb-0.5">
+                    <img
+                      src={`https://flagcdn.com/w40/${bc.codigo_pais}.png`}
+                      alt=""
+                      width={18}
+                      height={12}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-[18px] h-[12px] rounded-[1.5px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+                    />
+                    <span>{COUNTRY_NAMES[bc.codigo_pais]?.[locale] || bc.codigo_pais.toUpperCase()}</span>
                   </div>
                   <div className="text-[13px] font-extrabold text-ink whitespace-nowrap overflow-hidden text-ellipsis">
                     {en ? bc.nombre_banco_en : bc.nombre_banco}

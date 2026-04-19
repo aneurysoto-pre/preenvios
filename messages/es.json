@@ -140,7 +140,7 @@
   "banks": {
     "title": "Tasas de referencia",
     "subtitle": "Actualización semanal",
-    "note": "Tasas de referencia publicadas por el Banco Central de cada país. El Salvador está dolarizado desde 2001.",
+    "note": "Tasas de referencia publicadas por el Banco Central de cada país.",
     "perUsd": "/USD"
   },
   "disclaimers": {

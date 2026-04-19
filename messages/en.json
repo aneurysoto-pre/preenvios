@@ -140,7 +140,7 @@
   "banks": {
     "title": "Reference rates",
     "subtitle": "Weekly update",
-    "note": "Reference rates published by each country's Central Bank. El Salvador has been dollarized since 2001.",
+    "note": "Reference rates published by each country's Central Bank.",
     "perUsd": "/USD"
   },
   "disclaimers": {
