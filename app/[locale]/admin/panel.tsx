@@ -58,7 +58,7 @@ export default function AdminPanel() {
   }
 
   async function loadDashboard() {
-    const res = await fetch('/api/admin/dashboard', { headers: { authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || ''}` } })
+    const res = await fetch('/api/admin/dashboard')
     if (res.ok) setDashboard(await res.json())
   }
 

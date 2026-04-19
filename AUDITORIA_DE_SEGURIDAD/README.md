@@ -8,7 +8,7 @@ Carpeta de auditorías OWASP del sitio. Cada auditoría vive en su propio archiv
 
 | # | Archivo | Fecha | Motivo | Estado |
 |---|---------|-------|--------|--------|
-| 01 | [01_auditoria_2026_04_19.md](01_auditoria_2026_04_19.md) | 2026-04-19 | Pre-lanzamiento inicial | 🔴 NO APROBADA — 4 críticos abiertos |
+| 01 | [01_auditoria_2026_04_19.md](01_auditoria_2026_04_19.md) | 2026-04-19 | Pre-lanzamiento inicial | 🔴 NO APROBADA — 2 de 4 críticos cerrados (H-01.2, H-02.1 cerrados 2026-04-19) |
 | 02 | (pendiente) | antes del DNS a preenvios.com | Re-auditoría post-fixes | bloqueante para lanzamiento |
 
 ---
@@ -197,4 +197,4 @@ npm audit --audit-level=moderate
 
 ---
 
-_Última actualización: 2026-04-19. Próxima revisión obligatoria: antes del lanzamiento en preenvios.com._
+_Última actualización: 2026-04-19 (post fix H-01.2 + H-02.1). Próxima revisión obligatoria: antes del lanzamiento en preenvios.com._

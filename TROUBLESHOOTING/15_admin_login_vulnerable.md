@@ -4,6 +4,16 @@
 🔴 Crítico
 ⏱ Fix típico: 30-60 min
 
+## ✅ Estado: Causa 3 y Causa 4 resueltas el 2026-04-19
+
+- **Causa 3** (`/api/admin/dashboard` no usa sesión admin): `app/api/admin/dashboard/route.ts` ahora valida con `isAdminAuthenticated()`; `panel.tsx` ya no envía `Authorization` header. Cerrado.
+- **Causa 4** (`ADMIN_PASSWORD` en texto plano): `lib/admin-auth.ts` ahora usa `bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH)` con factor 12. `bcryptjs` + `@types/bcryptjs` instalados. Variable renombrada a `ADMIN_PASSWORD_HASH` en `.env.example`.
+  - **Acción manual en Vercel:** generar hash `node -e "console.log(require('bcryptjs').hashSync('LA_PASSWORD', 12))"`, guardar en `ADMIN_PASSWORD_HASH`, eliminar `ADMIN_PASSWORD`. Ver AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md § H-02.1.
+
+**Causas 1 (token predecible) y 2 (rate limit) siguen abiertas** — bloqueantes pre-lanzamiento restantes según auditoría #01.
+
+---
+
 ## Síntoma
 Evidencia:
 1. `lib/admin-auth.ts:16` genera tokens con `Buffer.from(\`${Date.now()}-${Math.random().toString(36)}\`).toString('base64')` — reversible y predecible

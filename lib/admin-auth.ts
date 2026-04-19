@@ -4,16 +4,26 @@
  */
 
 import { cookies } from 'next/headers'
+import bcrypt from 'bcryptjs'
 
 const ADMIN_COOKIE = 'preenvios_admin_session'
 const SESSION_DURATION = 24 * 60 * 60 * 1000 // 24 horas
 
 export async function validateAdminLogin(email: string, password: string): Promise<boolean> {
-  return email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD
+  const expectedEmail = process.env.ADMIN_EMAIL
+  const expectedHash = process.env.ADMIN_PASSWORD_HASH
+  if (!expectedEmail || !expectedHash) return false
+  if (email !== expectedEmail) return false
+  try {
+    return bcrypt.compareSync(password, expectedHash)
+  } catch {
+    return false
+  }
 }
 
 export async function createAdminSession(): Promise<string> {
-  const token = Buffer.from(`${Date.now()}-${Math.random().toString(36)}`).toString('base64')
+  const { randomBytes } = await import('node:crypto')
+  const token = randomBytes(32).toString('base64url')
   const cookieStore = await cookies()
   cookieStore.set(ADMIN_COOKIE, token, {
     httpOnly: true,

@@ -4,6 +4,19 @@
 🔴 Crítico
 ⏱ Fix típico: 10 min
 
+## ✅ Estado: Causa 2 resuelta el 2026-04-19
+
+La **Causa 2** (`NEXT_PUBLIC_CRON_SECRET` en bundle) fue remediada:
+- `app/api/admin/dashboard/route.ts` ahora valida con `isAdminAuthenticated()`
+- `app/[locale]/admin/panel.tsx:61` ya no envía `Authorization` header
+- `NEXT_PUBLIC_CRON_SECRET` eliminada de `.env.example`
+
+**Acción manual pendiente en Vercel:** eliminar `NEXT_PUBLIC_CRON_SECRET` de Project Settings → Environment Variables (los 3 entornos) y rotar `CRON_SECRET`. Ver AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md § H-01.2.
+
+Las Causas 1 (falta hard-fail si `CRON_SECRET` undefined en `/api/scrape`) y 3 (revisar invocaciones previas) siguen vigentes — revisar abajo.
+
+---
+
 ## Síntoma
 Dos formas de detectarlo:
 1. `curl https://preenvios.vercel.app/api/scrape` (sin header `Authorization`) devuelve 200 y corre los scrapers
