@@ -364,20 +364,14 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 <h2 className="font-heading">
                   {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
                 </h2>
-                <p className="font-sans flex items-center gap-2 flex-wrap">
-                  {updatedLabel ? (
-                    <>
-                      <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-green-dark bg-green-soft rounded-full px-2.5 py-1">
-                        <span className="w-1.5 h-1.5 bg-green rounded-full animate-pulse" aria-hidden="true" />
-                        {updatedLabel}
-                      </span>
-                    </>
-                  ) : (
-                    t('results.subtitle')
-                  )}
-                </p>
-                <p className="cmp-ranking-note">
-                  {t('disclaimers.d3')} <a href={`/${locale}/como-ganamos-dinero`}>{t('disclaimers.d3Link')}</a>
+                {/* Single subtle meta line: updated-at · ranking-note. Monito-style discreto. */}
+                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-g500 leading-tight">
+                  <span>{updatedLabel || t('results.subtitle')}</span>
+                  <span aria-hidden="true" className="text-g300">·</span>
+                  <span className="text-[11px] text-g400">
+                    {t('disclaimers.d3')}{' '}
+                    <a href={`/${locale}/como-ganamos-dinero`} className="underline decoration-g300 hover:text-blue hover:decoration-blue underline-offset-2">{t('disclaimers.d3Link')}</a>
+                  </span>
                 </p>
               </div>
               <div className="cmp-sort" role="tablist" aria-label={t('results.rate')}>

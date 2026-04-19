@@ -37,8 +37,6 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 .cmp-results-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 34px; flex-wrap: wrap; gap: 20px; }
 .cmp-results-head h2 { font-size: clamp(28px,3.5vw,40px); font-weight: 900; line-height: 1.1; }
 .cmp-results-head p { color: var(--color-ink-2); margin-top: 6px; font-size: 15px; }
-.cmp-ranking-note { font-size: 12px; color: var(--color-g500); margin-top: 6px; }
-.cmp-ranking-note a { color: var(--color-blue); }
 
 .cmp-sort { display: flex; gap: 8px; background: #fff; padding: 6px; border-radius: 50px; border: 1px solid var(--color-g200); box-shadow: 0 2px 6px -2px rgba(15,23,42,.08); }
 .cmp-sort button { padding: 9px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--color-g600); background: transparent; transition: .2s; white-space: nowrap; cursor: pointer; }
