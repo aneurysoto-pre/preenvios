@@ -371,11 +371,12 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 <h2 className="font-heading">
                   {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
                 </h2>
-                {/* Single subtle meta line: updated-at · ranking-note. Monito-style discreto. */}
-                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-g500 leading-tight">
+                {/* Single subtle meta line: updated-at · ranking-note. Monito-style.
+                    Ambos fragmentos con mismo tamano/color (11px g400) para NO competir con el h2. */}
+                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-g400 leading-tight">
                   <span>{updatedLabel || t('results.subtitle')}</span>
                   <span aria-hidden="true" className="text-g300">·</span>
-                  <span className="text-[11px] text-g400">
+                  <span>
                     {t('disclaimers.d3')}{' '}
                     <a href={`/${locale}/como-ganamos-dinero`} className="underline decoration-g300 hover:text-blue hover:decoration-blue underline-offset-2">{t('disclaimers.d3Link')}</a>
                   </span>
