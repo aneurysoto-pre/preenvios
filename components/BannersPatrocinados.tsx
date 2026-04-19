@@ -80,7 +80,7 @@ export default function BannersPatrocinados() {
 
   return (
     <section
-      className="py-4"
+      className="pt-4 pb-0"
       aria-label={en ? 'Sponsored offers' : 'Ofertas patrocinadas'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
