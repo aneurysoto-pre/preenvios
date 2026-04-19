@@ -219,17 +219,24 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     setIsComparing(true)
     setTimeout(() => setIsComparing(false), 1400)
 
-    // Scroll a banners via scrollIntoView + CSS scroll-mt-[72px] en la seccion.
-    // Es mas confiable que el calculo manual de getBoundingClientRect (que a veces
-    // overshootea con smooth scroll). Banners quedan 100% visibles bajo el Nav y
-    // el primer resultado asoma al fondo del viewport — ver LOGICA/19 seccion 3bis.
-    const banners = document.getElementById('banners-patrocinados')
-    if (banners) {
-      banners.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else {
-      // Fallback si el slot de banners no esta en el DOM
-      document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
-    }
+    // Scroll target (2026-04-19): aterrizar con el segundo resultado asomando
+    // ~120px al fondo del viewport. Eso genera: banners con top ligeramente
+    // recortado bajo el nav, primera tarjeta 100% visible, y segunda tarjeta
+    // visible en su borde superior — invita a seguir scrolleando.
+    // requestAnimationFrame asegura que el DOM este listo tras cualquier render
+    // pendiente antes de calcular posiciones.
+    requestAnimationFrame(() => {
+      const cards = document.querySelectorAll<HTMLElement>('.cmp-card')
+      if (cards.length >= 2) {
+        const PEEK = 120
+        const rect = cards[1].getBoundingClientRect()
+        const y = rect.top + window.scrollY - (window.innerHeight - PEEK)
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+      } else {
+        // Fallback: solo 1 resultado (raro) — volver al scroll a banners
+        document.getElementById('banners-patrocinados')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
   }
 
   function onOperadorClick(p: PrecioRanked, pos: number) {
