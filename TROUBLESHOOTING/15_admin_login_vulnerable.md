@@ -4,15 +4,17 @@
 🔴 Crítico
 ⏱ Fix típico: 30-60 min
 
-## ✅ Estado: Causas 1, 3 y 4 resueltas el 2026-04-19
+## ✅ Estado: las 4 causas resueltas el 2026-04-19
 
 - **Causa 1** (token de sesión no criptográficamente seguro): `lib/admin-auth.ts` ahora genera token como `<random32-base64url>.<expires-at>.<hmac-sha256>` firmado con `ADMIN_SESSION_SECRET`. `isAdminAuthenticated()` verifica HMAC con `timingSafeEqual` y valida expiración. Duración reducida de 24h → 4h.
-  - **Vercel env vars (2026-04-19):** agregar `ADMIN_SESSION_SECRET` (generar con `openssl rand -hex 32`) en los 3 entornos. Sin esta variable el login lanza/falla siempre.
+  - **Vercel env vars (2026-04-19):** `ADMIN_SESSION_SECRET` agregada en los 3 entornos. Login admin probado en producción.
+- **Causa 2** (sin rate limit en `/api/admin/auth`): implementado rate limit Supabase-backed — 5 intentos fallidos / IP / 15min → HTTP 429 con `Retry-After`. Tabla `admin_login_attempts` (migración 006) + `lib/rate-limit.ts`. Cerrado en código.
+  - **Acción manual en Supabase (pendiente):** ejecutar `supabase/migrations/006_admin_login_attempts.sql` en Supabase SQL Editor.
 - **Causa 3** (`/api/admin/dashboard` no usa sesión admin): `app/api/admin/dashboard/route.ts` valida con `isAdminAuthenticated()`; `panel.tsx` ya no envía `Authorization` header. Cerrado.
-- **Causa 4** (`ADMIN_PASSWORD` en texto plano): `lib/admin-auth.ts` usa `bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH)` con factor 12. `bcryptjs` + `@types/bcryptjs` instalados. Variable renombrada a `ADMIN_PASSWORD_HASH` en `.env.example`.
+- **Causa 4** (`ADMIN_PASSWORD` en texto plano): `lib/admin-auth.ts` usa `bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH)` con factor 12. `bcryptjs` + `@types/bcryptjs` instalados.
   - **Vercel env vars (2026-04-19):** `ADMIN_PASSWORD` eliminada, `ADMIN_PASSWORD_HASH` agregada en los 3 entornos. Login admin probado en producción.
 
-**Causa 2 (rate limit) sigue abierta** — único bloqueante pre-lanzamiento restante según auditoría #01.
+Los 4 🔴 críticos de auditoría #01 quedan cerrados. Queda pendiente ejecutar la migración 006 en Supabase + smoke test en producción antes de activar DNS.
 
 ---
 
