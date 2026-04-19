@@ -50,11 +50,11 @@ Los valores son **placeholders** hasta que se firmen los acuerdos reales. La tas
 Cuando el usuario hace click en "Comparar las mejores remesadoras" o presiona Enter en el input de monto:
 
 1. **Se muestra un loading spinner centrado** (logo P verde con anillo giratorio animado alrededor) durante 800ms como micro-delay psicológico que refuerza la percepción de "se están buscando las mejores tasas".
-2. **Paralelamente, se inicia scroll smooth** al encabezado de resultados con offset -150px para dejar visible:
-   - Parte inferior (~80px) de los banners patrocinados arriba del viewport
-   - El Nav fixed (72px)
-   - El encabezado "Resultados para $X USD → País" en posición prominente
-   - El primer resultado asomando, con su botón "Enviar ahora" cerca del centro del viewport
+2. **Paralelamente, se inicia scroll smooth** al top de `#banners-patrocinados` con offset -72px (Nav fixed), dejando visible:
+   - Nav fixed (72px)
+   - Los 4 banners patrocinados completamente visibles — 100% de impresión publicitaria en cada conversión
+   - Encabezado "Resultados para $X USD → País" debajo de los banners
+   - El primer resultado asoma al fondo del viewport con su botón "Enviar ahora" apenas visible → friction diseñada para forzar scroll corto y consciente hacia el ranking completo
 
 **Razón de negocio doble:**
 1. **Impresión publicitaria garantizada:** si el scroll saltara directo al top de resultados, los banners quedarían fuera del viewport y se perdería el impacto publicitario. Con el offset -150 los banners quedan parcialmente visibles arriba, garantizando exposición en cada conversión.
@@ -68,25 +68,28 @@ function onCompararClick() {
   if (montoNum <= 0) { inputRef.current?.focus(); return }
   trackEvent('comparar_click', {...})
 
-  // Loading micro-delay (800ms)
+  // Loading full-screen (1400ms, estilo Monito)
   setIsComparing(true)
-  setTimeout(() => setIsComparing(false), 800)
+  setTimeout(() => setIsComparing(false), 1400)
 
-  // Scroll intermedio
-  const results = document.getElementById('comparar')
-  if (results) {
-    const y = results.getBoundingClientRect().top + window.pageYOffset - 150
+  // Scroll al top de banners con offset de 72px (Nav)
+  const banners = document.getElementById('banners-patrocinados')
+  if (banners) {
+    const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
     window.scrollTo({ top: y, behavior: 'smooth' })
+  } else {
+    document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
   }
 }
 ```
 
-Comportamiento idéntico en desktop y mobile. El offset 150px funciona bien en ambos viewports porque los banners tienen altura similar (160px desktop horizontal / 180px mobile grid 2×2 según pantalla).
+Comportamiento idéntico en desktop y mobile.
 
 **Historial de iteraciones:**
 - v1 (mañana 2026-04-18): scrolleaba a `#comparar` → usuario perdía los banners
-- v2 (mediodía): scrolleaba a `#banners-patrocinados` con offset -72 → banners 100% visibles pero resultado lejos, usuario no veía la carne del comparador
-- v3 (final, actual): scroll al encabezado de resultados -150px → equilibrio: banners parcial + header + primer resultado medio. Adicionalmente loading spinner para UX premium.
+- v2 (mediodía): scrolleaba a `#banners-patrocinados` con offset -72 → banners 100% visibles
+- v3 (tarde): scroll al encabezado de resultados -150px → banners parcial + primer resultado medio, pero usuario sintió que saltaba muy abajo y los banners no tenían suficiente exposición
+- **v4 (final, actual — 2026-04-19):** vuelve a v2 + loading full-screen blanco de 1400ms. El loading estilo Monito refuerza la percepción de "buscando las mejores tasas" y el target de scroll privilegia la impresión 100% de los banners. El primer resultado asomando al fondo del viewport ejerce suficiente friction para forzar scroll consciente
 
 **Nota:** no confundir con `scrollToCalculator` en `CTASection` (bloque final "Listo para enviar más por menos?") — ese botón lleva al usuario DE VUELTA al hero calculadora si está abajo. Targets y propósitos distintos.
 

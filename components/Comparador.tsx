@@ -218,15 +218,19 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     setIsComparing(true)
     setTimeout(() => setIsComparing(false), 1400)
 
-    // Scroll intermedio — ver LOGICA_DE_NEGOCIO/19 seccion 3bis:
-    // Target: encabezado de resultados a ~150px del top del viewport.
-    // Esto deja los banners parcialmente visibles arriba (bottom ~80px) y el
-    // primer resultado asomando al centro del viewport con el boton a la vista,
-    // forzando scroll corto y consciente hacia abajo.
-    const results = document.getElementById('comparar')
-    if (results) {
-      const y = results.getBoundingClientRect().top + window.pageYOffset - 150
+    // Scroll al top de #banners-patrocinados con offset 72 (Nav fixed).
+    // Ver LOGICA_DE_NEGOCIO/19 seccion 3bis:
+    // - Banners quedan totalmente visibles arriba (100% de impresion publicitaria)
+    // - Encabezado 'Resultados para...' aparece debajo
+    // - Primer resultado asoma al fondo del viewport con su boton 'Enviar ahora'
+    //   visible — friction diseñada para forzar scroll corto y consciente.
+    const banners = document.getElementById('banners-patrocinados')
+    if (banners) {
+      const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
       window.scrollTo({ top: y, behavior: 'smooth' })
+    } else {
+      // Fallback si el slot de banners no esta en el DOM
+      document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
