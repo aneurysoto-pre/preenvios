@@ -41,7 +41,7 @@ export default function PaisContent({ slug }: { slug: string }) {
       <Comparador
         defaultCorredor={pais.corredorId}
         heroTitle={en ? `Sending money to ${nombre}?` : `Envías dinero a ${nombre}?`}
-        heroHighlight={en ? 'Compare first, save later.' : 'Compara primero, ahorra después.'}
+        heroHighlight={en ? 'Compare and save in seconds.' : 'Compara y ahorra en segundos.'}
         heroLede={en ? `See in seconds how much arrives in ${nombre}` : `Revisa en segundos cuánto llega a ${nombre}`}
       />
       <OfertasDestacadas hidden={true} />
