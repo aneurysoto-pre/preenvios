@@ -76,26 +76,8 @@ export default function NosotrosContent() {
           </div>
         </section>
 
-        {/* Founder */}
-        <section className="py-14 bg-white">
-          <div className="max-w-[760px] mx-auto px-6">
-            <h2 className="font-heading text-2xl md:text-3xl font-black mb-8 text-center">{t('founderTitle')}</h2>
-            <div className="flex flex-col md:flex-row items-center gap-7 bg-g50 border border-g200 rounded-[22px] p-7 md:p-9">
-              {/* Founder avatar placeholder */}
-              <div className="w-28 h-28 md:w-32 md:h-32 shrink-0 rounded-full bg-gradient-to-br from-blue to-green flex items-center justify-center text-white font-heading font-black text-4xl shadow-md">
-                AS
-              </div>
-              <div className="text-center md:text-left">
-                <h3 className="font-heading text-xl font-extrabold mb-1.5 text-ink">{t('founderName')}</h3>
-                <p className="text-xs font-bold text-blue uppercase tracking-wider mb-3">{locale === 'en' ? 'Founder' : 'Fundador'}</p>
-                <p className="text-ink-2 text-[15px] leading-relaxed">{t('founderBio')}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA to /contacto */}
-        <section className="pt-4 pb-16 bg-white">
+        <section className="pt-10 pb-16 bg-white">
           <div className="max-w-[760px] mx-auto px-6">
             <div className="bg-gradient-to-br from-blue to-blue-dark rounded-[24px] py-10 px-6 md:px-10 text-center text-white relative overflow-hidden">
               <div className="absolute w-[300px] h-[300px] -top-[100px] -right-[80px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.15),transparent_70%)]" />

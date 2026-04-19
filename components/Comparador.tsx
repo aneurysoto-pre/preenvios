@@ -61,6 +61,8 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('best')
+  const [lastFetch, setLastFetch] = useState<number | null>(null)
+  const [nowTick, setNowTick] = useState(0)
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const t0 = useRef(Date.now())
@@ -78,12 +80,32 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       try {
         const res = await fetch(`/api/precios?corredor=${corredor}&metodo=${metodo}`)
         const data = await res.json()
-        if (Array.isArray(data)) setPrecios(data)
+        if (Array.isArray(data)) {
+          setPrecios(data)
+          setLastFetch(Date.now())
+        }
       } catch { /* silent */ }
       setLoading(false)
     }
     fetchPrecios()
   }, [corredor, metodo])
+
+  // Tick every 30s so the "hace X min" label re-renders without another fetch
+  useEffect(() => {
+    const id = setInterval(() => setNowTick(t => t + 1), 30_000)
+    return () => clearInterval(id)
+  }, [])
+
+  const updatedLabel = useMemo(() => {
+    if (!lastFetch) return ''
+    void nowTick
+    const diffMin = Math.floor((Date.now() - lastFetch) / 60_000)
+    if (diffMin < 1) return t('search.updatedJustNow')
+    if (diffMin < 60) return t('search.updatedMinutes', { n: diffMin })
+    const diffHour = Math.floor(diffMin / 60)
+    if (diffHour === 1) return t('search.updatedHour')
+    return t('search.updatedHours', { n: diffHour })
+  }, [lastFetch, nowTick, t])
 
   // ═══════════════════════════════════════
   // COOKIE corredor — solo se respeta cuando NO hay defaultCorredor explícito.
@@ -342,7 +364,18 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 <h2 className="font-heading">
                   {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
                 </h2>
-                <p className="font-sans">{t('results.subtitle')}</p>
+                <p className="font-sans flex items-center gap-2 flex-wrap">
+                  {updatedLabel ? (
+                    <>
+                      <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-green-dark bg-green-soft rounded-full px-2.5 py-1">
+                        <span className="w-1.5 h-1.5 bg-green rounded-full animate-pulse" aria-hidden="true" />
+                        {updatedLabel}
+                      </span>
+                    </>
+                  ) : (
+                    t('results.subtitle')
+                  )}
+                </p>
                 <p className="cmp-ranking-note">
                   {t('disclaimers.d3')} <a href={`/${locale}/como-ganamos-dinero`}>{t('disclaimers.d3Link')}</a>
                 </p>

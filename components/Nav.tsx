@@ -96,8 +96,13 @@ export default function Nav() {
           <a href={homeAnchor('#como')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('howItWorks')}</a>
           <a href={homeAnchor('#faq')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('faq')}</a>
           <a href={`/${locale}/contacto`} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('contact')}</a>
-          <button onClick={switchLocale} className="text-sm font-bold text-g600 hover:text-blue border border-g200 rounded-full px-3 py-1.5 transition-colors">
-            {locale === 'es' ? 'EN' : 'ES'}
+          <button
+            onClick={switchLocale}
+            className="text-sm font-bold text-g700 hover:text-blue border border-g200 hover:border-blue rounded-full px-3 py-1.5 transition-colors inline-flex items-center gap-1.5"
+            aria-label={locale === 'es' ? 'Switch to English' : 'Cambiar a español'}
+          >
+            <span aria-hidden="true">{locale === 'es' ? '🇺🇸' : '🇪🇸'}</span>
+            <span>{locale === 'es' ? 'English' : 'Español'}</span>
           </button>
         </div>
 
@@ -126,8 +131,9 @@ export default function Nav() {
           <a href={homeAnchor('#como')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
           <a href={homeAnchor('#faq')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
           <a href={`/${locale}/contacto`} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('contact')}</a>
-          <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left">
-            {locale === 'es' ? '🌐 English' : '🌐 Español'}
+          <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left inline-flex items-center gap-2">
+            <span aria-hidden="true">{locale === 'es' ? '🇺🇸' : '🇪🇸'}</span>
+            {locale === 'es' ? 'English' : 'Español'}
           </button>
         </div>
       )}

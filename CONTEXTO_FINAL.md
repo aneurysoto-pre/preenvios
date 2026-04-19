@@ -492,6 +492,18 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
 Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
 
+#### 4.2.5 — Pulido UI fase lanzamiento (2026-04-18)
+Fase de ajustes cosméticos y SEO tras el rediseño del Comparador y las páginas institucionales.
+- [x] Eliminado todo rastro del fundador (Aneury Soto) de `/nosotros`. La página ahora es **anónima — solo marca "Preenvíos"**. Se removió la sección "El fundador" completa (avatar con iniciales AS, nombre y bio). Las claves `nosotros.founderTitle`, `founderName`, `founderBio` fueron eliminadas de `messages/es.json` y `messages/en.json`. Regla del proyecto: NUNCA añadir nombre personal ni foto del fundador a /nosotros (completado 2026-04-18)
+- [x] Instalado `lucide-react@^0.542.0`. Emojis 💰 ⚡ 🔒 de la sección "Por qué PreEnvios" reemplazados por iconos SVG: `DollarSign`, `Zap`, `ShieldCheck`. Color heredado de la clase contenedora vía `currentColor` (completado 2026-04-18)
+- [x] Círculos 1-2-3 de la sección "3 pasos" rediseñados: ahora son círculos gradientes de 96px con icono lucide (`Search`, `BarChart3`, `Send`) en blanco + número pequeño en badge blanco con borde g200 en esquina superior derecha. Mantiene la línea punteada entre círculos (completado 2026-04-18)
+- [x] Selector de idioma con bandera: 🇺🇸 English (cuando el sitio está en ES y ofrece cambiar a EN) y 🇪🇸 Español (cuando está en EN). Aplicado en desktop y mobile menu (completado 2026-04-18)
+- [x] Timestamp dinámico "Tasas actualizadas hace X min/horas" como badge verde animado (punto pulsante) arriba del listado de resultados. Tick cada 30s para re-renderizar el label sin volver a fetch-ear la API (completado 2026-04-18)
+- [x] Footer reorganizado de 3 a 4 columnas de contenido (+ brand): Producto · **Recursos** · Empresa · Legal. Nueva columna Recursos contiene Guías (/wiki), Blog, Calculadora inversa y Remesadoras (operadores/remitly) (completado 2026-04-18)
+- [x] Meta descriptions específicas por página: `/` (home con generateMetadata bilingüe), `/[pais]` (ya tenía), `/nosotros` (bilingüe con canonical y alternates), `/contacto` (bilingüe), `/wiki` (bilingüe), `/blog` (bilingüe), `/operadores/[slug]` (bilingüe dinámico por operador). "Cómo funciona" y "FAQ" no son páginas separadas — son anchors en home, heredan metadata del home (completado 2026-04-18)
+- [x] Página `/wiki` con alineación central: el tag, título y fecha están centrados horizontalmente. El cuerpo del contenido mantiene alineación left-aligned para legibilidad. Cambio aplicado en `components/LegalPage.tsx` → afecta a las 11 páginas que usan el wrapper (completado 2026-04-18)
+- [x] CTA "Comparar ahora →" arreglado para mobile: padding reducido en viewports chicos (px-5 sm:px-8), flecha SVG separada de texto con gap-1.5, `whitespace-nowrap` para evitar wrap feo, contenedor con padding sm responsive (completado 2026-04-18)
+
 #### 4.2.4 — Páginas institucionales + header/footer globales (2026-04-18)
 Motivo: varias páginas legales no tenían el nav global ni el footer — se veían desconectadas del resto del sitio. A la vez faltaban /nosotros y /contacto que aparecían en footer pero no existían. Se unifica la experiencia: header completo (logo + Destinos + Cómo funciona + FAQ + Contacto + ES/EN) y footer en 3 columnas en toda la navegación pública.
 - [x] `components/LegalPage.tsx` ahora renderiza `<Nav />` arriba y `<Footer />` abajo en lugar del mini-header custom. Un solo cambio propaga header/footer globales a las 11 páginas que usaban el wrapper (terminos, privacidad, como-ganamos-dinero, metodologia, uso-de-marcas, disclaimers, blog, wiki, operadores, wiki/[slug], blog/[slug]) (completado 2026-04-18)
@@ -671,6 +683,9 @@ Cuando el volumen referido llegue a $50,000/mes:
 7. Idioma por defecto siempre ES (2026-04-18). No detectar Accept-Language — solo cambiar a EN si el usuario lo elige manualmente desde el botón EN/ES del nav. La cookie `NEXT_LOCALE` persiste esa elección
 8. El nav usa el label "Destinos" (ES) / "Destinations" (EN) para la sección de países soportados — no "Corredores" ni "Countries"
 9. En páginas de país (`/[locale]/[pais]`), el `defaultCorredor` que recibe el Comparador siempre gana sobre la cookie `preenvios_corredor`. La cookie solo aplica en la home
+10. La página `/nosotros` es **anónima** — representa solo la marca "Preenvíos". No incluir nombre personal de fundador, foto, biografía individual ni iniciales en avatar. Si futuros mandatos piden volver a agregar al fundador, levantar la inconsistencia con esta regla antes de ejecutar
+11. Los iconos decorativos dentro del sitio (secciones Por qué / Cómo funciona) usan `lucide-react`. Los emojis quedan solo para banderas de país y para el selector de idioma (banderas US/ES). No agregar nuevos emojis como iconos de UI principal
+12. Footer tiene 4 columnas de contenido + brand: Producto / Recursos / Empresa / Legal. Si se agrega una página nueva, elegir la columna semánticamente más cercana en lugar de inventar una quinta
 7. Revisar métricas una vez por semana — no todos los días
 8. El número que importa cada semana: clics en "Enviar ahora"
 9. Ninguna decisión de dirección estratégica antes del mes 18

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
+import { DollarSign, Zap, ShieldCheck, Search, BarChart3, Send } from 'lucide-react'
 import { PAISES_MVP } from '@/lib/paises'
 
 const BRANDS = ['Remitly', 'Wise', 'Xoom', 'Ria', 'WorldRemit', 'Western Union', 'MoneyGram']
@@ -34,9 +35,9 @@ export function WhySection({ region }: { region?: string } = {}) {
   const t = useTranslations('why')
   const locale = useLocale()
   const items = [
-    { key: 'bestRate', icon: '💰', cls: 'bg-blue-soft text-blue' },
-    { key: 'instant', icon: '⚡', cls: 'bg-green-soft text-green-dark' },
-    { key: 'trusted', icon: '🔒', cls: 'bg-[#FEF3C7] text-[#B45309]' },
+    { key: 'bestRate', Icon: DollarSign,  cls: 'bg-blue-soft text-blue' },
+    { key: 'instant',  Icon: Zap,         cls: 'bg-green-soft text-green-dark' },
+    { key: 'trusted',  Icon: ShieldCheck, cls: 'bg-[#FEF3C7] text-[#B45309]' },
   ]
   const title = region
     ? t('title').replace(locale === 'en' ? 'Latin America' : 'Latinoamérica', region)
@@ -53,11 +54,13 @@ export function WhySection({ region }: { region?: string } = {}) {
           <p className="text-ink-2 text-[17px]">{subtitle}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {items.map(it => (
-            <div key={it.key} className="bg-g50 border border-g200 rounded-[22px] p-8 transition-all hover:-translate-y-1.5 hover:bg-white hover:shadow-lg hover:border-blue-soft">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-[26px] ${it.cls}`}>{it.icon}</div>
-              <h3 className="font-heading text-xl font-extrabold mb-2.5">{t(it.key)}</h3>
-              <p className="text-ink-2 text-[15px]">{t(`${it.key}Desc`)}</p>
+          {items.map(({ key, Icon, cls }) => (
+            <div key={key} className="bg-g50 border border-g200 rounded-[22px] p-8 transition-all hover:-translate-y-1.5 hover:bg-white hover:shadow-lg hover:border-blue-soft">
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${cls}`}>
+                <Icon size={28} strokeWidth={2.2} aria-hidden="true" />
+              </div>
+              <h3 className="font-heading text-xl font-extrabold mb-2.5">{t(key)}</h3>
+              <p className="text-ink-2 text-[15px]">{t(`${key}Desc`)}</p>
             </div>
           ))}
         </div>
@@ -68,6 +71,11 @@ export function WhySection({ region }: { region?: string } = {}) {
 
 export function StepsSection() {
   const t = useTranslations('steps')
+  const steps = [
+    { n: 1, Icon: Search,     cls: 'from-blue to-blue-dark' },
+    { n: 2, Icon: BarChart3,  cls: 'from-green to-green-dark' },
+    { n: 3, Icon: Send,       cls: 'from-[#F97316] to-[#EA580C]' },
+  ]
   return (
     <section className="pt-[50px] pb-[90px] bg-gradient-to-b from-g50 to-white" id="como">
       <div className="max-w-[1240px] mx-auto px-6">
@@ -76,11 +84,16 @@ export function StepsSection() {
           <h2 className="font-heading text-[clamp(30px,4vw,46px)] font-black leading-[1.1] mb-3.5">{t('title')}</h2>
           <p className="text-ink-2 text-[17px]">{t('subtitle')}</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-          <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-0.5 bg-[repeating-linear-gradient(90deg,var(--color-g300)_0_8px,transparent_8px_16px)]" />
-          {[1, 2, 3].map(n => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+          <div className="hidden md:block absolute top-11 left-[16%] right-[16%] h-0.5 bg-[repeating-linear-gradient(90deg,var(--color-g300)_0_8px,transparent_8px_16px)]" />
+          {steps.map(({ n, Icon, cls }) => (
             <div key={n} className="relative text-center px-5">
-              <div className="w-20 h-20 mx-auto mb-5 bg-white border-2 border-g200 rounded-full flex items-center justify-center text-3xl font-black text-blue font-heading shadow-[0_4px_14px_rgba(15,23,42,.08)] relative">{n}</div>
+              <div className="relative w-24 h-24 mx-auto mb-6">
+                <div className={`w-24 h-24 bg-gradient-to-br ${cls} rounded-full flex items-center justify-center text-white shadow-[0_12px_30px_-8px_rgba(10,79,229,.35)]`}>
+                  <Icon size={34} strokeWidth={2.2} aria-hidden="true" />
+                </div>
+                <span className="absolute -top-1 -right-1 w-8 h-8 bg-white border-2 border-g200 rounded-full flex items-center justify-center text-sm font-heading font-black text-ink shadow-sm">{n}</span>
+              </div>
               <h3 className="font-heading text-xl font-extrabold mb-2.5">{t(`step${n}`)}</h3>
               <p className="text-ink-2 text-[15px]">{t(`step${n}Desc`)}</p>
             </div>
@@ -95,13 +108,19 @@ export function CTASection() {
   const t = useTranslations('cta')
   return (
     <section className="py-[70px]">
-      <div className="max-w-[1240px] mx-auto px-6">
-        <div className="bg-gradient-to-br from-blue to-blue-dark rounded-[32px] py-16 px-6 md:px-12 text-center text-white relative overflow-hidden">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
+        <div className="bg-gradient-to-br from-blue to-blue-dark rounded-[32px] py-14 px-5 sm:px-8 md:py-16 md:px-12 text-center text-white relative overflow-hidden">
           <div className="absolute w-[400px] h-[400px] -top-[150px] -right-[100px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.15),transparent_70%)]" />
           <div className="absolute w-[300px] h-[300px] -bottom-[120px] -left-[60px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.15),transparent_70%)]" />
-          <h2 className="font-heading text-[clamp(28px,3.5vw,42px)] font-black mb-3.5 relative">{t('title')}</h2>
-          <p className="text-[17px] opacity-90 max-w-[540px] mx-auto mb-7 relative">{t('subtitle')}</p>
-          <a href="#comparar" className="inline-block bg-white text-blue py-[15px] px-8 rounded-full font-extrabold text-[15px] relative transition-transform hover:-translate-y-0.5 hover:shadow-lg">{t('button')} →</a>
+          <h2 className="font-heading text-[clamp(24px,3.5vw,42px)] font-black mb-3.5 relative leading-[1.15] px-1">{t('title')}</h2>
+          <p className="text-[15px] sm:text-[17px] opacity-90 max-w-[540px] mx-auto mb-7 relative px-2">{t('subtitle')}</p>
+          <a
+            href="#comparar"
+            className="inline-flex items-center justify-center gap-1.5 bg-white text-blue py-4 px-7 sm:px-8 rounded-full font-extrabold text-[15px] whitespace-nowrap relative transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            <span>{t('button')}</span>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
         </div>
       </div>
     </section>
@@ -143,9 +162,9 @@ export function Footer() {
   return (
     <footer className="bg-ink text-g400 pt-[70px] pb-8">
       <div className="max-w-[1240px] mx-auto px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-10 lg:gap-12 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 lg:gap-10 mb-12">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 font-logo text-[22px] font-bold lowercase tracking-tight mb-3.5">
               <svg className="w-[26px] h-[26px] shrink-0" viewBox="0 0 40 40" fill="none">
                 <rect width="40" height="40" rx="10" fill="#00D957" />
@@ -162,6 +181,15 @@ export function Footer() {
             <a href={`/${locale}/#comparar`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('corridors')}</a>
             <a href={`/${locale}/#como`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('howItWorks')}</a>
             <a href={`/${locale}/#faq`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('faq')}</a>
+          </div>
+
+          {/* Recursos */}
+          <div>
+            <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('resources')}</h4>
+            <a href={`/${locale}/wiki`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('wiki')}</a>
+            <a href={`/${locale}/blog`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('blog')}</a>
+            <a href={`/${locale}/calculadora-inversa`} className="block py-1.5 text-sm hover:text-white transition-colors">{en ? 'Reverse calculator' : 'Calculadora inversa'}</a>
+            <a href={`/${locale}/operadores/remitly`} className="block py-1.5 text-sm hover:text-white transition-colors">{t('operators')}</a>
           </div>
 
           {/* Empresa */}

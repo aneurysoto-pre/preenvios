@@ -24,7 +24,11 @@
     "sendFrom": "Sending from the United States",
     "refRate": "Reference rate",
     "button": "Compare the best remittance providers",
-    "noConversion": "no conversion"
+    "noConversion": "no conversion",
+    "updatedJustNow": "Rates updated just now",
+    "updatedMinutes": "Rates updated {n} min ago",
+    "updatedHour": "Rates updated 1 hour ago",
+    "updatedHours": "Rates updated {n} hours ago"
   },
   "results": {
     "title": "Results for",
@@ -105,6 +109,11 @@
   "footer": {
     "desc": "Compare remittance providers before sending money to Latin America. Save on every transfer.",
     "product": "Product",
+    "resources": "Resources",
+    "wiki": "Guides",
+    "blog": "Blog",
+    "operators": "Providers",
+    "rateHistory": "Historical rates",
     "compare": "Compare",
     "ratesToday": "Rates today",
     "remittanceCompanies": "Providers",
@@ -167,9 +176,6 @@
     "revenueTitle": "How we make money",
     "revenueText": "We receive an affiliate commission when you click \"Send now\" and complete a transfer with a partner provider. This costs you nothing extra and does not affect the ranking order.",
     "revenueLink": "See the details in How we earn money →",
-    "founderTitle": "The founder",
-    "founderName": "Aneury Soto",
-    "founderBio": "Dominican living in the United States. After years of watching family and friends lose money on every transfer by not comparing, he decided to build the tool that would have saved him thousands of dollars over time.",
     "ctaTitle": "Got a question or idea?",
     "ctaText": "Write to us. We reply to everything — users, press, providers, investors.",
     "ctaButton": "Contact us"

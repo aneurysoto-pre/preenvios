@@ -19,7 +19,7 @@ Completado el 2026-04-16 como Bloque 3 de la Fase 1.
 | StepsSection | Client | `components/Sections.tsx` | "Cómo funciona" — 3 pasos |
 | CTASection | Client | `components/Sections.tsx` | Call to action con botón "Comparar ahora" |
 | FAQSection | Client | `components/Sections.tsx` | 6 preguntas frecuentes con acordeón |
-| Footer | Client | `components/Sections.tsx` | Footer 3 columnas (Producto/Empresa/Legal) + brand + disclaimer legal + copyright. Desde 2026-04-18 |
+| Footer | Client | `components/Sections.tsx` | Footer 4 columnas de contenido (Producto/Recursos/Empresa/Legal) + brand + disclaimer legal + copyright. Desde 2026-04-18 |
 | LegalPage | Client | `components/LegalPage.tsx` | Wrapper reutilizable para páginas legales e institucionales. Renderiza `<Nav />` arriba, contenido centrado con max-width 820px, y `<Footer />` abajo. Usado por 11 páginas (terminos, privacidad, como-ganamos-dinero, metodologia, uso-de-marcas, disclaimers, blog, wiki, operadores...) para garantizar header/footer globales |
 | NosotrosContent | Client | `app/[locale]/nosotros/content.tsx` | Página institucional con hero + historia + misión + 4 valores + cómo ganamos dinero + sección del fundador + CTA a /contacto |
 | ContactoContent | Client | `app/[locale]/contacto/content.tsx` | Formulario de contacto (nombre/email/asunto dropdown/mensaje) que POSTea a `/api/contactos`. Sidebar con emails directos (contact@ y partnerships@) + tiempo de respuesta + link a FAQ |
@@ -79,6 +79,29 @@ El Comparador es el componente principal del sitio. Contiene:
 - Sombra en el nav aparece al hacer scroll (> 10px)
 - **Regla:** los anchors `#como` y `#faq` se prefijan con `/${locale}` cuando pathname != home, para que desde páginas legales/institucionales naveguen correctamente a la home + scroll
 - Se removió el link "Comparar" (redundante con el hero ya visible en la home) y se agregó "Contacto" como página dedicada `/contacto`
+- Selector de idioma con bandera (desde 2026-04-18): muestra 🇺🇸 English cuando el sitio está en ES y 🇪🇸 Español cuando está en EN. El botón dispara `router.push` al mismo path con el otro locale
+
+### 3bis. WhySection y StepsSection con lucide-react (2026-04-18)
+
+**WhySection:**
+- Iconos de las 3 tarjetas migrados de emojis 💰 ⚡ 🔒 a `DollarSign`, `Zap`, `ShieldCheck` de `lucide-react`
+- Tamaño 28px, strokeWidth 2.2, color heredado de la clase del contenedor (vía `currentColor`)
+- Preserva los colores de fondo: blue-soft/blue, green-soft/green-dark, FEF3C7/B45309
+
+**StepsSection (rediseño 2026-04-18):**
+- Círculos de 96px con gradiente (blue→blue-dark, green→green-dark, orange→orange-dark)
+- Iconos lucide centrados: `Search`, `BarChart3`, `Send` en blanco 34px strokeWidth 2.2
+- Número pequeño (1, 2, 3) en badge blanco 32px con borde g200 en esquina superior derecha del círculo
+- Línea punteada horizontal entre círculos (solo desktop md+), posicionada a top-11 para coincidir con el centro de los círculos
+
+**Regla del proyecto:** iconos de UI usan lucide-react. Emojis quedan solo para banderas de país (corredores) y banderas de idioma.
+
+### 3ter. Timestamp "hace X min" en Comparador (2026-04-18)
+
+- Cada vez que se hace fetch a `/api/precios`, el estado `lastFetch` guarda `Date.now()`
+- Un `setInterval` de 30s incrementa `nowTick` para forzar re-render del label sin disparar otro fetch
+- El label se calcula en useMemo: < 1 min → "ahora mismo"; < 60 min → "hace N min"; 1 hora → "hace 1 hora"; > 1 hora → "hace N horas"
+- Se renderiza como badge verde (`bg-green-soft`/`text-green-dark`) con punto pulsante, arriba a la izquierda del listado de resultados
 
 ### 4. Secciones estáticas
 

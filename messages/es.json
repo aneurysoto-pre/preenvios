@@ -24,7 +24,11 @@
     "sendFrom": "Envías desde Estados Unidos",
     "refRate": "Tasa de referencia",
     "button": "Comparar las mejores remesadoras",
-    "noConversion": "sin conversión"
+    "noConversion": "sin conversión",
+    "updatedJustNow": "Tasas actualizadas ahora mismo",
+    "updatedMinutes": "Tasas actualizadas hace {n} min",
+    "updatedHour": "Tasas actualizadas hace 1 hora",
+    "updatedHours": "Tasas actualizadas hace {n} horas"
   },
   "results": {
     "title": "Resultados para",
@@ -105,6 +109,11 @@
   "footer": {
     "desc": "Compara remesadoras antes de enviar dinero a Latinoamérica. Ahorra en cada envío.",
     "product": "Producto",
+    "resources": "Recursos",
+    "wiki": "Guías",
+    "blog": "Blog",
+    "operators": "Remesadoras",
+    "rateHistory": "Tasas históricas",
     "compare": "Comparar",
     "ratesToday": "Tasas hoy",
     "remittanceCompanies": "Remesadoras",
@@ -167,9 +176,6 @@
     "revenueTitle": "Cómo ganamos dinero",
     "revenueText": "Recibimos comisión de afiliado cuando haces clic en \"Enviar ahora\" y completas una transferencia en una remesadora asociada. Esto no te cuesta nada extra y no afecta el orden del ranking.",
     "revenueLink": "Conoce el detalle en Cómo ganamos dinero →",
-    "founderTitle": "El fundador",
-    "founderName": "Aneury Soto",
-    "founderBio": "Dominicano viviendo en Estados Unidos. Después de años viendo a familia y amigos perder dinero en cada envío por no comparar, decidió construir la herramienta que a él le habría ahorrado miles de dólares a lo largo del tiempo.",
     "ctaTitle": "¿Tienes una pregunta o idea?",
     "ctaText": "Escríbenos. Respondemos todo — usuarios, prensa, remesadoras, inversionistas.",
     "ctaButton": "Contáctanos"
