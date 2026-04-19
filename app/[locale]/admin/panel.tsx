@@ -24,6 +24,8 @@ export default function AdminPanel() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  const [rateLimitedUntil, setRateLimitedUntil] = useState<number | null>(null)
+  const [now, setNow] = useState(() => Date.now())
   const [tab, setTab] = useState<'dashboard' | 'precios' | 'ingresos'>('dashboard')
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [precios, setPrecios] = useState<Precio[]>([])
@@ -42,14 +44,30 @@ export default function AdminPanel() {
   const [opSaveMsg, setOpSaveMsg] = useState('')
 
   async function login() {
+    if (rateLimitedUntil && Date.now() < rateLimitedUntil) return
     setLoginError('')
     const res = await fetch('/api/admin/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     })
-    if (res.ok) { setLoggedIn(true); loadDashboard() }
-    else setLoginError('Credenciales incorrectas')
+    if (res.ok) {
+      setRateLimitedUntil(null)
+      setLoggedIn(true)
+      loadDashboard()
+      return
+    }
+    if (res.status === 429) {
+      const retryAfterSec = Number(res.headers.get('Retry-After')) || 15 * 60
+      setRateLimitedUntil(Date.now() + retryAfterSec * 1000)
+      setLoginError('')
+      return
+    }
+    if (res.status === 401) {
+      setLoginError('Credenciales incorrectas')
+      return
+    }
+    setLoginError('Error inesperado. Intentá de nuevo.')
   }
 
   async function logout() {
@@ -135,10 +153,27 @@ export default function AdminPanel() {
   useEffect(() => { if (tab === 'precios') loadPrecios() }, [tab])
   useEffect(() => { if (tab === 'ingresos') loadIngresos() }, [tab])
 
+  useEffect(() => {
+    if (!rateLimitedUntil) return
+    const id = setInterval(() => {
+      const t = Date.now()
+      setNow(t)
+      if (t >= rateLimitedUntil) {
+        setRateLimitedUntil(null)
+        clearInterval(id)
+      }
+    }, 1000)
+    return () => clearInterval(id)
+  }, [rateLimitedUntil])
+
   // ═══════════════════════════════════════
   // LOGIN SCREEN
   // ═══════════════════════════════════════
   if (!loggedIn) {
+    const blocked = !!(rateLimitedUntil && now < rateLimitedUntil)
+    const secondsLeft = blocked ? Math.ceil(((rateLimitedUntil ?? 0) - now) / 1000) : 0
+    const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0')
+    const ss = String(secondsLeft % 60).padStart(2, '0')
     return (
       <div className="min-h-screen bg-ink flex items-center justify-center px-6">
         <div className="bg-white rounded-[22px] p-8 w-full max-w-[400px] shadow-xl">
@@ -150,10 +185,18 @@ export default function AdminPanel() {
             <span><span className="text-green">pre</span><span className="text-ink">envios</span></span>
             <span className="text-g400 text-sm font-normal ml-2">Admin</span>
           </div>
-          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="w-full border border-g200 rounded-[10px] px-4 py-3 mb-3 text-sm outline-none focus:border-blue" />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && login()} className="w-full border border-g200 rounded-[10px] px-4 py-3 mb-3 text-sm outline-none focus:border-blue" />
-          {loginError && <p className="text-red text-xs mb-3">{loginError}</p>}
-          <button onClick={login} className="w-full bg-blue text-white py-3 rounded-[10px] font-bold text-sm hover:bg-blue-dark transition-colors">Ingresar</button>
+          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} disabled={blocked} className="w-full border border-g200 rounded-[10px] px-4 py-3 mb-3 text-sm outline-none focus:border-blue disabled:bg-g50 disabled:text-g400" />
+          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && !blocked && login()} disabled={blocked} className="w-full border border-g200 rounded-[10px] px-4 py-3 mb-3 text-sm outline-none focus:border-blue disabled:bg-g50 disabled:text-g400" />
+          {blocked && (
+            <div className="bg-red/10 border border-red/30 rounded-[10px] px-3 py-2 mb-3">
+              <p className="text-red text-xs font-bold mb-0.5">Demasiados intentos</p>
+              <p className="text-red text-xs">Probá de nuevo en {mm}:{ss}</p>
+            </div>
+          )}
+          {!blocked && loginError && <p className="text-red text-xs mb-3">{loginError}</p>}
+          <button onClick={login} disabled={blocked} className="w-full bg-blue text-white py-3 rounded-[10px] font-bold text-sm hover:bg-blue-dark transition-colors disabled:bg-g300 disabled:cursor-not-allowed disabled:hover:bg-g300">
+            {blocked ? `Bloqueado (${mm}:${ss})` : 'Ingresar'}
+          </button>
         </div>
       </div>
     )
