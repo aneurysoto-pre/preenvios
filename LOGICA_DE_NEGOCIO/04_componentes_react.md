@@ -99,6 +99,25 @@ El Comparador es el componente principal del sitio. Contiene:
 
 **Regla del proyecto:** iconos de UI usan lucide-react. Emojis quedan solo para banderas de país (corredores) y banderas de idioma.
 
+### 3quinquies. Slot de children en Comparador + Enter dispara Comparar + meta header discreto (2026-04-18)
+
+**Slot de children:** el componente `Comparador` acepta `children?: React.ReactNode` que se renderizan ENTRE el hero (search card) y la sección condicional de resultados. Uso primario: insertar `<BannersPatrocinados />` de modo que siempre esté visible arriba de los resultados (no abajo). Ver patrón en `app/[locale]/page.tsx` y `pais-content.tsx`:
+```tsx
+<Comparador>
+  <BannersPatrocinados />
+</Comparador>
+<TasasReferencia />
+```
+
+**Enter key en el input del monto (2026-04-18):** el input tiene `onKeyDown={e => e.key === 'Enter' && onCompararClick()}` para que presionar Enter dispare la misma acción que el botón "Comparar las mejores remesadoras". El input también incluye `enterKeyHint="go"` (teclado mobile muestra tecla verde "Go") e `inputMode="decimal"`.
+
+**Meta del header de resultados estilo Monito (2026-04-18):** la línea debajo del h2 "Resultados para $X USD → País" es **discreta**:
+- Badge verde pill "Tasas actualizadas hace X" — 10px, padding reducido (`px-2 py-0.5`), punto pulsante 4px, `bg-green-soft text-green-dark`
+- Disclaimer "El orden de los resultados..." — 8px, `text-g400` (#94A3B8), en línea separada debajo del badge
+- Cuenta en **segundos** el primer minuto (`hace 5 seg`, `hace 10 seg`...) — tick cada 5s, no 30s como antes
+
+**Cuidado con CSS legacy:** no agregar regla `.cmp-results-head p { ... }` en globals.css — sobrescribe los estilos Tailwind del meta. La regla se eliminó en 2026-04-18 por causar disclaimer en color negro.
+
 ### 3quater. CTA "Comparar ahora" con scrollTo + offset de header (2026-04-18)
 
 Regla: cualquier botón o link del sitio que quiera llevar al usuario al comparador (no a los resultados conditional) debe:

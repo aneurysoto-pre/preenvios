@@ -47,6 +47,21 @@ Todos los scrapers envían: `PreenviosBot/1.0 contact@preenvios.com`
 - El dashboard `/api/admin/dashboard` reporta operadores con datos desactualizados
 - El sitio nunca muestra datos rotos — solo datos viejos marcados
 
+### 6bis. Regla: el scraper NO debe sobreescribir metadata de afiliado (2026-04-18)
+
+`savePrices()` hace `upsert` pasando TODAS las columnas del objeto `ScrapedPrice`, incluyendo `afiliado`, `link`, `rating`, `reviews`, `confiabilidad`, `metodos_disponibles`. Si un scraper hardcodea valores obsoletos (ej. `afiliado: false, link: ''`), cada corrida del cron REVIERTE cualquier cambio manual hecho via admin o SQL migration.
+
+**Bug real de 2026-04-18:** `lib/scrapers/moneygram.ts` y `westernunion.ts` tenían `afiliado: false, link: ''` hardcoded. Tras ejecutar SQL 005 que flipeó `afiliado=true`, el próximo cron lo revirtió. El botón de MG volvió a mostrar "Ver en sitio" gris.
+
+**Regla del proyecto:** los valores de `afiliado`, `link` y demás metadata en cada scraper deben coincidir con lo que admin espera. Cuando cambie el estado de afiliado de un operador:
+1. Actualizar la SQL (o admin panel)
+2. Actualizar el valor hardcoded en `lib/scrapers/<operador>.ts`
+3. Si no se actualizan ambos, el scraper revierte en la siguiente corrida
+
+**Safety net — normalizeAffiliate en /api/precios** (2026-04-18): el endpoint normaliza la respuesta antes de devolverla. Para operadores en `PENDING_AFFILIATES` (actualmente WU y MG) se fuerza `afiliado=true` y `link=<dominio público>` si la DB los tiene vacíos. Esto asegura que la UI nunca muestre un botón gris por bug de scraper o cache stale.
+
+Ver detalles completos en [TROUBLESHOOTING/26_scraper_revierte_afiliado.md](../TROUBLESHOOTING/26_scraper_revierte_afiliado.md).
+
 ### 7. Dashboard admin
 `GET /api/admin/dashboard` (protegido por CRON_SECRET):
 - Total de precios activos
