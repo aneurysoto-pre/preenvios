@@ -1,31 +1,38 @@
 /**
- * Rate limit para endpoints sensibles — Supabase-backed, sin Redis externo.
+ * Rate limit para endpoints sensibles — Upstash Redis (atomic INCR + TTL).
  *
- * Diseño:
- * - Tabla `admin_login_attempts` registra cada intento (IP hasheada + email + success)
- * - `checkAdminLoginRateLimit` cuenta intentos fallidos en la ventana
- * - Privacidad: IP se guarda como SHA-256 (no plaintext)
- * - Fail OPEN ante errores de Supabase: el admin no debe quedar bloqueado
- *   por fallos de infra. Los logs avisan y H-09.1 (Sentry) cubrirá monitoreo.
+ * Requiere env vars:
+ *   UPSTASH_REDIS_REST_URL
+ *   UPSTASH_REDIS_REST_TOKEN
  *
- * Reemplazar por Upstash/Redis o capa edge si el volumen crece.
+ * Plan free de Upstash: 10.000 commands/día, suficiente para todo el
+ * tráfico esperado de PreEnvios pre-lanzamiento.
+ *
+ * Fail-OPEN ante errores de Redis: el admin no debe quedar bloqueado
+ * por fallos de infra. Los errores se loggean. Monitoreo futuro H-09.1.
+ *
+ * Política actual:
+ * - Admin login: 5 intentos / 15 min / IP (sliding window)
+ *
+ * Para agregar rate limit a otros endpoints (H-04.1 en `/api/contactos`,
+ * `/api/suscripcion-free`): crear un limiter adicional con su propio
+ * prefix y tuning.
  */
 
-import { createHash } from 'node:crypto'
-import { createClient } from '@supabase/supabase-js'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 
-const MAX_FAILED_ATTEMPTS = 5
-const WINDOW_MINUTES = 15
+let _adminLoginLimiter: Ratelimit | null = null
 
-function getAdminSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
-
-function hashIp(ip: string): string {
-  return createHash('sha256').update(ip).digest('hex')
+function getAdminLoginLimiter(): Ratelimit {
+  if (_adminLoginLimiter) return _adminLoginLimiter
+  _adminLoginLimiter = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(5, '15 m'),
+    analytics: false,
+    prefix: 'rl:admin-login',
+  })
+  return _adminLoginLimiter
 }
 
 export function getClientIp(request: Request): string {
@@ -40,54 +47,20 @@ export function getClientIp(request: Request): string {
 export type RateLimitResult = {
   allowed: boolean
   retryAfterSeconds: number
-  failedAttempts: number
+  remaining: number
 }
 
 export async function checkAdminLoginRateLimit(ip: string): Promise<RateLimitResult> {
   try {
-    const supabase = getAdminSupabase()
-    const since = new Date(Date.now() - WINDOW_MINUTES * 60 * 1000).toISOString()
-    const { count, error } = await supabase
-      .from('admin_login_attempts')
-      .select('id', { count: 'exact', head: true })
-      .eq('ip_hash', hashIp(ip))
-      .eq('success', false)
-      .gte('attempted_at', since)
-
-    if (error) {
-      console.error('[rate-limit] supabase count error:', error)
-      return { allowed: true, retryAfterSeconds: 0, failedAttempts: 0 }
+    const limiter = getAdminLoginLimiter()
+    const { success, reset, remaining } = await limiter.limit(ip)
+    if (success) {
+      return { allowed: true, retryAfterSeconds: 0, remaining }
     }
-
-    const failed = count ?? 0
-    if (failed >= MAX_FAILED_ATTEMPTS) {
-      return {
-        allowed: false,
-        retryAfterSeconds: WINDOW_MINUTES * 60,
-        failedAttempts: failed,
-      }
-    }
-    return { allowed: true, retryAfterSeconds: 0, failedAttempts: failed }
+    const retryAfterSeconds = Math.max(1, Math.ceil((reset - Date.now()) / 1000))
+    return { allowed: false, retryAfterSeconds, remaining: 0 }
   } catch (err) {
-    console.error('[rate-limit] check failed:', err)
-    return { allowed: true, retryAfterSeconds: 0, failedAttempts: 0 }
-  }
-}
-
-export async function recordAdminLoginAttempt(
-  ip: string,
-  email: string,
-  success: boolean,
-): Promise<void> {
-  try {
-    const supabase = getAdminSupabase()
-    const { error } = await supabase.from('admin_login_attempts').insert({
-      ip_hash: hashIp(ip),
-      email: email.slice(0, 254),
-      success,
-    })
-    if (error) console.error('[rate-limit] supabase insert error:', error)
-  } catch (err) {
-    console.error('[rate-limit] record failed:', err)
+    console.error('[rate-limit] upstash error:', err)
+    return { allowed: true, retryAfterSeconds: 0, remaining: 5 }
   }
 }

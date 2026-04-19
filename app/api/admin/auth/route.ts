@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { validateAdminLogin, createAdminSession, clearAdminSession } from '@/lib/admin-auth'
-import {
-  getClientIp,
-  checkAdminLoginRateLimit,
-  recordAdminLoginAttempt,
-} from '@/lib/rate-limit'
+import { getClientIp, checkAdminLoginRateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   const ip = getClientIp(request)
@@ -23,14 +19,10 @@ export async function POST(request: NextRequest) {
   const { email, password } = await request.json()
 
   if (typeof email !== 'string' || typeof password !== 'string') {
-    await recordAdminLoginAttempt(ip, String(email ?? ''), false)
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
   }
 
-  const valid = await validateAdminLogin(email, password)
-  await recordAdminLoginAttempt(ip, email, valid)
-
-  if (valid) {
+  if (await validateAdminLogin(email, password)) {
     await createAdminSession()
     return NextResponse.json({ ok: true })
   }

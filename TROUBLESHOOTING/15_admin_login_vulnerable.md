@@ -8,8 +8,9 @@
 
 - **Causa 1** (token de sesión no criptográficamente seguro): `lib/admin-auth.ts` ahora genera token como `<random32-base64url>.<expires-at>.<hmac-sha256>` firmado con `ADMIN_SESSION_SECRET`. `isAdminAuthenticated()` verifica HMAC con `timingSafeEqual` y valida expiración. Duración reducida de 24h → 4h.
   - **Vercel env vars (2026-04-19):** `ADMIN_SESSION_SECRET` agregada en los 3 entornos. Login admin probado en producción.
-- **Causa 2** (sin rate limit en `/api/admin/auth`): implementado rate limit Supabase-backed — 5 intentos fallidos / IP / 15min → HTTP 429 con `Retry-After`. Tabla `admin_login_attempts` (migración 006) + `lib/rate-limit.ts`. Cerrado en código.
-  - **Acción manual en Supabase (pendiente):** ejecutar `supabase/migrations/006_admin_login_attempts.sql` en Supabase SQL Editor.
+- **Causa 2** (sin rate limit en `/api/admin/auth`): implementado con Upstash Redis (`@upstash/ratelimit` + `@upstash/redis`), sliding window 5 intentos / IP / 15 min → HTTP 429 con `Retry-After`. `lib/rate-limit.ts` reescrito. Cerrado en código.
+  - **Historial:** primer intento fue Supabase-backed (tabla `admin_login_attempts`, migración 006). El user hizo 9 intentos fallidos sin recibir 429 porque la migración no se había ejecutado y el fail-open enmascaró el problema. Switch a Upstash (recomendación original del audit) — atómico y sin dependencia de migración manual.
+  - **Acciones manuales pendientes:** crear Redis db free en upstash.com; pegar `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` en Vercel (3 entornos) y `.env.local`; redeploy; smoke test.
 - **Causa 3** (`/api/admin/dashboard` no usa sesión admin): `app/api/admin/dashboard/route.ts` valida con `isAdminAuthenticated()`; `panel.tsx` ya no envía `Authorization` header. Cerrado.
 - **Causa 4** (`ADMIN_PASSWORD` en texto plano): `lib/admin-auth.ts` usa `bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH)` con factor 12. `bcryptjs` + `@types/bcryptjs` instalados.
   - **Vercel env vars (2026-04-19):** `ADMIN_PASSWORD` eliminada, `ADMIN_PASSWORD_HASH` agregada en los 3 entornos. Login admin probado en producción.
