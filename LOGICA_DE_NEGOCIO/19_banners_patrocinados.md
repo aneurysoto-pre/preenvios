@@ -45,31 +45,50 @@ Los valores son **placeholders** hasta que se firmen los acuerdos reales. La tas
 - Hover: `-translate-y-0.5` + sombra sutil
 - Etiqueta "PATROCINADO" / "SPONSORED" 11px gris uppercase tracking-wider centrada arriba
 
-### 3bis. Target del scroll al comparar (decisión clave 2026-04-18)
+### 3bis. Target del scroll al comparar — iteración final (2026-04-18)
 
-Cuando el usuario hace click en "Comparar las mejores remesadoras" o presiona Enter en el input de monto, el comportamiento NO es scrollear directo a la sección de resultados. En su lugar, se scrollea al **top de los banners patrocinados** (`id="banners-patrocinados"`) con un offset de 72px para compensar el Nav fixed.
+Cuando el usuario hace click en "Comparar las mejores remesadoras" o presiona Enter en el input de monto:
 
-**Razón de negocio:** si el scroll salta directo a `#comparar` (resultados), los banners patrocinados quedan arriba del viewport y el usuario nunca los ve. Se pierde impresión publicitaria — que es el activo monetizable más importante de la página después del click al afiliado.
+1. **Se muestra un loading spinner centrado** (logo P verde con anillo giratorio animado alrededor) durante 800ms como micro-delay psicológico que refuerza la percepción de "se están buscando las mejores tasas".
+2. **Paralelamente, se inicia scroll smooth** al encabezado de resultados con offset -150px para dejar visible:
+   - Parte inferior (~80px) de los banners patrocinados arriba del viewport
+   - El Nav fixed (72px)
+   - El encabezado "Resultados para $X USD → País" en posición prominente
+   - El primer resultado asomando, con su botón "Enviar ahora" cerca del centro del viewport
 
-Al scrollear al top de banners en lugar de resultados:
-- Los 4 banners quedan totalmente visibles en el viewport (arriba)
-- El encabezado "Resultados para $X USD → País" aparece justo debajo
-- El primer resultado (Remitly o el mejor del momento) se asoma al fondo del viewport
-- El usuario hace un scroll corto y consciente para ver el ranking completo → la publicidad tuvo impresión garantizada
+**Razón de negocio doble:**
+1. **Impresión publicitaria garantizada:** si el scroll saltara directo al top de resultados, los banners quedarían fuera del viewport y se perdería el impacto publicitario. Con el offset -150 los banners quedan parcialmente visibles arriba, garantizando exposición en cada conversión.
+2. **Friction diseñada:** el primer resultado asoma pero no se ve completo → el usuario hace un scroll corto y consciente para ver el ranking completo. Ese scroll expone el catálogo entero Y refuerza engagement.
 
-Este comportamiento es idéntico en desktop y mobile. Implementación en `components/Comparador.tsx`:
+**Loading spinner:** overlay fixed que cubre el viewport entero (z-[90], pointer-events-none). Al centro, una bola blanca de 88px con el logo P (verde Preenvíos) + anillo giratorio `border-t-green border-green-soft animate-spin`. Desaparece a los 800ms. Es puramente estético — los resultados YA están en el DOM desde que el usuario escribió el monto (ranking es síncrono, no hay fetch real).
+
+Implementación completa en `components/Comparador.tsx`:
 ```ts
 function onCompararClick() {
-  // ... validación de monto ...
-  const banners = document.getElementById('banners-patrocinados')
-  if (banners) {
-    const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
+  if (montoNum <= 0) { inputRef.current?.focus(); return }
+  trackEvent('comparar_click', {...})
+
+  // Loading micro-delay (800ms)
+  setIsComparing(true)
+  setTimeout(() => setIsComparing(false), 800)
+
+  // Scroll intermedio
+  const results = document.getElementById('comparar')
+  if (results) {
+    const y = results.getBoundingClientRect().top + window.pageYOffset - 150
     window.scrollTo({ top: y, behavior: 'smooth' })
   }
 }
 ```
 
-**Nota:** no confundir con la función `scrollToCalculator` en `CTASection`, que scrollea AL hero calculadora (target diferente — "Comparar ahora →" del CTA final lleva al usuario de vuelta al hero si está abajo).
+Comportamiento idéntico en desktop y mobile. El offset 150px funciona bien en ambos viewports porque los banners tienen altura similar (160px desktop horizontal / 180px mobile grid 2×2 según pantalla).
+
+**Historial de iteraciones:**
+- v1 (mañana 2026-04-18): scrolleaba a `#comparar` → usuario perdía los banners
+- v2 (mediodía): scrolleaba a `#banners-patrocinados` con offset -72 → banners 100% visibles pero resultado lejos, usuario no veía la carne del comparador
+- v3 (final, actual): scroll al encabezado de resultados -150px → equilibrio: banners parcial + header + primer resultado medio. Adicionalmente loading spinner para UX premium.
+
+**Nota:** no confundir con `scrollToCalculator` en `CTASection` (bloque final "Listo para enviar más por menos?") — ese botón lleva al usuario DE VUELTA al hero calculadora si está abajo. Targets y propósitos distintos.
 
 ### 4. Tracking (preparado, no activo)
 Cada `<a>` tiene:

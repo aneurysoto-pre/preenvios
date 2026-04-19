@@ -68,6 +68,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   const [sortKey, setSortKey] = useState<SortKey>('best')
   const [lastFetch, setLastFetch] = useState<number | null>(null)
   const [nowTick, setNowTick] = useState(0)
+  const [isComparing, setIsComparing] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const t0 = useRef(Date.now())
@@ -210,17 +211,22 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       return
     }
     trackEvent('comparar_click', { monto: montoNum, corredor, metodo, segundos_hasta_comparar: secs() })
-    // Scroll al top de los banners patrocinados (NO a #comparar / resultados).
-    // Objetivo de negocio: que los banners queden visibles arriba y el encabezado
-    // de resultados tambien aparezca en viewport, forzando un scroll corto y
-    // consciente hacia abajo. Ver LOGICA_DE_NEGOCIO/19_banners_patrocinados.md.
-    const banners = document.getElementById('banners-patrocinados')
-    if (banners) {
-      const y = banners.getBoundingClientRect().top + window.pageYOffset - 72
+
+    // Loading micro-delay: muestra spinner con logo P para que el usuario sienta
+    // que se estan buscando las mejores tasas. Duracion 800ms — tiempo suficiente
+    // para que el scroll smooth termine y sea visible el loading.
+    setIsComparing(true)
+    setTimeout(() => setIsComparing(false), 800)
+
+    // Scroll intermedio — ver LOGICA_DE_NEGOCIO/19 seccion 3bis:
+    // Target: encabezado de resultados a ~150px del top del viewport.
+    // Esto deja los banners parcialmente visibles arriba (bottom ~80px) y el
+    // primer resultado asomando al centro del viewport con el boton a la vista,
+    // forzando scroll corto y consciente hacia abajo.
+    const results = document.getElementById('comparar')
+    if (results) {
+      const y = results.getBoundingClientRect().top + window.pageYOffset - 150
       window.scrollTo({ top: y, behavior: 'smooth' })
-    } else {
-      // Fallback al comportamiento anterior si el slot no esta disponible
-      document.getElementById('comparar')?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -244,6 +250,24 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
   return (
     <>
+      {/* ═════ LOADING OVERLAY — microsegundos durante el scroll a resultados ═════ */}
+      {isComparing && (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center pointer-events-none"
+          aria-hidden="true"
+        >
+          <div className="relative w-[88px] h-[88px] flex items-center justify-center bg-white rounded-full shadow-[0_10px_40px_-4px_rgba(15,23,42,.25)]">
+            {/* Anillo giratorio */}
+            <div className="absolute inset-0 rounded-full border-[3px] border-green-soft border-t-green animate-spin" />
+            {/* Logo P */}
+            <svg className="w-11 h-11 relative" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <rect width="40" height="40" rx="10" fill="#00D957" />
+              <path d="M13 10h10.5a7 7 0 0 1 0 14H17v6h-4V10zm4 4v6h6.5a3 3 0 0 0 0-6H17z" fill="#fff" />
+            </svg>
+          </div>
+        </div>
+      )}
+
       {/* ═════ HERO + SEARCH CARD ═════ */}
       <section id="calculadora" data-section="calculadora" className="relative pt-24 pb-10 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
         <div className="absolute inset-0 pointer-events-none" style={{
