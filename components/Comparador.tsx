@@ -95,17 +95,19 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     fetchPrecios()
   }, [corredor, metodo])
 
-  // Tick every 30s so the "hace X min" label re-renders without another fetch
+  // Tick every 5s para que el contador se vea mover en los primeros segundos.
   useEffect(() => {
-    const id = setInterval(() => setNowTick(t => t + 1), 30_000)
+    const id = setInterval(() => setNowTick(t => t + 1), 5_000)
     return () => clearInterval(id)
   }, [])
 
   const updatedLabel = useMemo(() => {
     if (!lastFetch) return ''
     void nowTick
-    const diffMin = Math.floor((Date.now() - lastFetch) / 60_000)
-    if (diffMin < 1) return t('search.updatedJustNow')
+    const diffSec = Math.floor((Date.now() - lastFetch) / 1000)
+    if (diffSec < 5) return t('search.updatedJustNow')
+    if (diffSec < 60) return t('search.updatedSeconds', { n: diffSec })
+    const diffMin = Math.floor(diffSec / 60)
     if (diffMin < 60) return t('search.updatedMinutes', { n: diffMin })
     const diffHour = Math.floor(diffMin / 60)
     if (diffHour === 1) return t('search.updatedHour')

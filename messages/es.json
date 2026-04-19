@@ -26,6 +26,7 @@
     "button": "Comparar las mejores remesadoras",
     "noConversion": "sin conversión",
     "updatedJustNow": "Tasas actualizadas ahora mismo",
+    "updatedSeconds": "Tasas actualizadas hace {n} seg",
     "updatedMinutes": "Tasas actualizadas hace {n} min",
     "updatedHour": "Tasas actualizadas hace 1 hora",
     "updatedHours": "Tasas actualizadas hace {n} horas"

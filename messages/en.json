@@ -26,6 +26,7 @@
     "button": "Compare the best remittance providers",
     "noConversion": "no conversion",
     "updatedJustNow": "Rates updated just now",
+    "updatedSeconds": "Rates updated {n} sec ago",
     "updatedMinutes": "Rates updated {n} min ago",
     "updatedHour": "Rates updated 1 hour ago",
     "updatedHours": "Rates updated {n} hours ago"
