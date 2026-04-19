@@ -8,7 +8,7 @@ Carpeta de auditorías OWASP del sitio. Cada auditoría vive en su propio archiv
 
 | # | Archivo | Fecha | Motivo | Estado |
 |---|---------|-------|--------|--------|
-| 01 | [01_auditoria_2026_04_19.md](01_auditoria_2026_04_19.md) | 2026-04-19 | Pre-lanzamiento inicial | 🟡 APROBACIÓN CONDICIONAL — 4/4 críticos cerrados en código 2026-04-19. Pendiente ejecutar migración 006 en Supabase |
+| 01 | [01_auditoria_2026_04_19.md](01_auditoria_2026_04_19.md) | 2026-04-19 | Pre-lanzamiento inicial | 🟢 APROBADA — 4/4 críticos cerrados en código + env + smoke test producción. Los 🟡 a cerrar en primeros 30 días post-lanzamiento |
 | 02 | (pendiente) | antes del DNS a preenvios.com | Re-auditoría post-fixes | bloqueante para lanzamiento |
 
 ---
@@ -197,4 +197,4 @@ npm audit --audit-level=moderate
 
 ---
 
-_Última actualización: 2026-04-19 (4/4 críticos cerrados: H-01.1 + H-01.2 + H-02.1 + H-07.1). Próxima revisión obligatoria: Auditoría #02 tras confirmar smoke test en producción._
+_Última actualización: 2026-04-19 (4/4 críticos cerrados: H-01.1 + H-01.2 + H-02.1 + H-07.1). Smoke test producción confirmado. Próxima revisión obligatoria: Auditoría #02 en 30 días post-lanzamiento, alcance = 🟡 restantes._
