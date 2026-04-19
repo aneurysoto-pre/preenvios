@@ -492,6 +492,25 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
 Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
 
+#### 4.2.8 — CTA scrollTo con offset + calculadora inversa a 4 MVP (2026-04-18)
+**CTA "Comparar ahora →"**: el botón del bloque "Listo para enviar más por menos?" era un `<a href="#comparar">`. Problemas:
+1. `#comparar` apunta a la sección de RESULTADOS (conditional: solo existe cuando `montoNum > 0`). Un usuario fresco al hacer click scrolleaba a nada
+2. Aunque hubiera resultados, el header fixed (72px) ocultaba el top del destino
+
+Fix aplicado:
+- [x] Sección del hero + search card en `components/Comparador.tsx` ahora tiene `id="calculadora"` + `data-section="calculadora"` como fallback (completado 2026-04-18)
+- [x] CTASection convertido de `<a>` a `<button>` con `onClick={scrollToCalculator}`. El handler hace `document.getElementById('calculadora') || document.querySelector('[data-section="calculadora"]')` → calcula posición con `getBoundingClientRect().top + pageYOffset - 80` y llama `window.scrollTo({ top, behavior: 'smooth' })`. 80px de offset para compensar el header fixed de 72px + 8px de aire (completado 2026-04-18)
+- [x] Footer link "Destinos" actualizado de `/${locale}/#comparar` a `/${locale}/#calculadora` — antes el link del footer tenía el mismo bug (scrolleaba a sección oculta) (completado 2026-04-18)
+- [x] En páginas de país (/honduras, /guatemala, /el-salvador, /republica-dominicana) el botón funciona igual porque ambas rutas renderizan el mismo `<Comparador />` que expone `id="calculadora"` (completado 2026-04-18)
+
+**Calculadora inversa (`/[locale]/calculadora-inversa`)**: mostraba 7 países (RD, HN, GT + Colombia, México, Nicaragua, Haití) — sin El Salvador. Debía mostrar solo los 4 del MVP.
+- [x] `CORREDORES` array reducido a los 4 del MVP: Rep. Dominicana, Honduras, Guatemala, El Salvador. Se agregó El Salvador (faltaba) con moneda USD. Eliminados Colombia, México, Nicaragua, Haití (completado 2026-04-18)
+- [x] Las filas de Supabase (seed-new-corridors) NO se tocan — los 4 corredores no-MVP siguen en DB para que `/api/precios` los siga sirviendo. Solo se oculta en UI de la calculadora inversa (completado 2026-04-18)
+- [x] Tabs con `flex-wrap` para que los 4 botones se apilen bien en mobile <375px si hiciera falta (completado 2026-04-18)
+- [x] El Salvador con tasa=1 (dolarizado) en la fórmula `(montoNum / p.tasa) + p.fee` produce `monto + fee`, que es semánticamente correcto (lo que enviaron = lo que recibieron + comisión) (completado 2026-04-18)
+
+**Regla del proyecto (actualizada):** la calculadora inversa, el buscador del hero, las páginas editoriales por país y las páginas `/tasa/[pair]` públicas del MVP deben mostrar SOLO los 4 corredores MVP (HN, RD, GT, SV) hasta que el corredor adicional tenga scraper activo + datos validados + pagina editorial. Supabase puede tener filas de corredores futuros pero no se exponen en UI.
+
 #### 4.2.7 — Banderas SVG en selector idioma + círculos Steps reducidos (2026-04-18)
 - [x] Selector de idioma reemplaza emojis 🇺🇸/🇪🇸 por SVGs inline. Motivo: Windows NO renderiza flag emojis — los muestra como los dos Regional Indicator letters ("us", "es") lo cual se veía "us English" con "us" minúsculas como texto suelto. Se definen 2 componentes locales en `components/Nav.tsx`: `<FlagUS />` (13 barras rojas + cantón azul sobre blanco, viewBox 60×30) y `<FlagES />` (rojo-amarillo-rojo horizontal, viewBox 60×40). Ambos con `rounded-[2px]` + sombra sutil para integrarse al diseño. Se usa en desktop y mobile menu (completado 2026-04-18)
 - [x] Regla del proyecto actualizada: el proyecto usa **iconos lucide-react para iconos de UI, pero banderas SVG inline para flags de país/idioma**. Evitar flag emojis porque Windows los renderiza como letras (completado 2026-04-18)

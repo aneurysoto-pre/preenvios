@@ -106,6 +106,16 @@ export function StepsSection() {
 
 export function CTASection() {
   const t = useTranslations('cta')
+  // Scrolls to the hero calculator accounting for the fixed 72px header.
+  // Works on home and on country pages (/honduras, /guatemala...) because both
+  // render <Comparador /> which has id="calculadora" on the hero section.
+  function scrollToCalculator() {
+    const el = document.getElementById('calculadora') || document.querySelector<HTMLElement>('[data-section="calculadora"]')
+    if (!el) return
+    const headerHeight = 80
+    const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
   return (
     <section className="py-[70px]">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
@@ -114,13 +124,14 @@ export function CTASection() {
           <div className="absolute w-[300px] h-[300px] -bottom-[120px] -left-[60px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.15),transparent_70%)]" />
           <h2 className="font-heading text-[clamp(24px,3.5vw,42px)] font-black mb-3.5 relative leading-[1.15] px-1">{t('title')}</h2>
           <p className="text-[15px] sm:text-[17px] opacity-90 max-w-[540px] mx-auto mb-7 relative px-2">{t('subtitle')}</p>
-          <a
-            href="#comparar"
-            className="inline-flex items-center justify-center gap-1.5 bg-white text-blue py-4 px-7 sm:px-8 rounded-full font-extrabold text-[15px] whitespace-nowrap relative transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+          <button
+            type="button"
+            onClick={scrollToCalculator}
+            className="inline-flex items-center justify-center gap-1.5 bg-white text-blue py-4 px-7 sm:px-8 rounded-full font-extrabold text-[15px] whitespace-nowrap relative transition-transform hover:-translate-y-0.5 hover:shadow-lg cursor-pointer"
           >
             <span>{t('button')}</span>
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </a>
+          </button>
         </div>
       </div>
     </section>
@@ -178,7 +189,7 @@ export function Footer() {
           {/* Producto */}
           <div>
             <h4 className="text-white text-sm uppercase tracking-wider mb-4 font-extrabold">{t('product')}</h4>
-            <a href={`/${locale}/#comparar`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('corridors')}</a>
+            <a href={`/${locale}/#calculadora`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('corridors')}</a>
             <a href={`/${locale}/#como`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('howItWorks')}</a>
             <a href={`/${locale}/#faq`} className="block py-1.5 text-sm hover:text-white transition-colors">{tn('faq')}</a>
           </div>

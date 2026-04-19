@@ -227,7 +227,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   return (
     <>
       {/* ═════ HERO + SEARCH CARD ═════ */}
-      <section className="relative pt-24 pb-10 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
+      <section id="calculadora" data-section="calculadora" className="relative pt-24 pb-10 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(10,79,229,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(10,79,229,.05) 1px,transparent 1px)',
           backgroundSize: '42px 42px',

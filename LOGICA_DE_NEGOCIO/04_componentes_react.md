@@ -98,6 +98,26 @@ El Comparador es el componente principal del sitio. Contiene:
 
 **Regla del proyecto:** iconos de UI usan lucide-react. Emojis quedan solo para banderas de país (corredores) y banderas de idioma.
 
+### 3quater. CTA "Comparar ahora" con scrollTo + offset de header (2026-04-18)
+
+Regla: cualquier botón o link del sitio que quiera llevar al usuario al comparador (no a los resultados conditional) debe:
+
+1. Apuntar a `id="calculadora"` — la sección del hero con la search card, definida en `components/Comparador.tsx` al inicio del render con `<section id="calculadora" data-section="calculadora" ...>`
+2. Si es un botón intra-page (mismo documento): usar `<button type="button">` con `onClick={scrollToCalculator}` handler que compensa los 72px del header fixed. NO usar `<a href="#calculadora">` para anchors intra-page porque el browser scrollea al borde superior del elemento, escondiéndolo bajo el Nav
+3. Si es un link cross-page (footer desde otra ruta): usar `<a href="/${locale}/#calculadora">` — el browser primero navega y luego scrollea. Aquí sí pasa el Nav por encima pero solo en primer paint; el usuario normalmente ajusta. Si se quiere offset perfecto habría que hacer un `useEffect` que detecte el hash y scrollee con offset, pero no vale la pena por ahora
+
+El handler canónico vive en `CTASection` de `components/Sections.tsx`:
+```ts
+function scrollToCalculator() {
+  const el = document.getElementById('calculadora') || document.querySelector<HTMLElement>('[data-section="calculadora"]')
+  if (!el) return
+  const y = el.getBoundingClientRect().top + window.pageYOffset - 80
+  window.scrollTo({ top: y, behavior: 'smooth' })
+}
+```
+
+**Por qué `id="comparar"` sigue existiendo en la sección de resultados:** por compatibilidad con el MVP y por si alguna vez se necesita deep-linkear a resultados. No confundir — para UX intenso el target correcto es `calculadora` (hero).
+
 ### 3ter. Timestamp "hace X min" en Comparador (2026-04-18)
 
 - Cada vez que se hace fetch a `/api/precios`, el estado `lastFetch` guarda `Date.now()`

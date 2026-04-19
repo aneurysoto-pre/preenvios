@@ -5,14 +5,14 @@ import { useLocale } from 'next-intl'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
 
+// Solo los 4 corredores del MVP. Colombia, Mexico, Nicaragua y Haiti existen en
+// Supabase (precios seed) pero NO se exponen en la UI hasta que tengan scraper activo
+// y validacion de datos — la calculadora inversa es solo para los 4 del MVP.
 const CORREDORES = [
   { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴' },
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳' },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹' },
-  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    bandera: '🇨🇴' },
-  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    bandera: '🇲🇽' },
-  { id: 'nicaragua',          nombre: 'Nicaragua',        nombre_en: 'Nicaragua',          moneda: 'NIO', simbolo: 'C$',   bandera: '🇳🇮' },
-  { id: 'haiti',              nombre: 'Haití',            nombre_en: 'Haiti',              moneda: 'HTG', simbolo: 'G',    bandera: '🇭🇹' },
+  { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻' },
 ]
 
 type Precio = { operador: string; nombre_operador: string; tasa: number; fee: number }
@@ -66,16 +66,17 @@ export default function CalculadoraInversaContent() {
 
           {/* Corridor selector */}
           <div className="bg-white rounded-[22px] p-5 shadow-lg border border-g200 mb-6">
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               {CORREDORES.map(c => (
                 <button
                   key={c.id}
                   onClick={() => setCorredor(c.id)}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all border ${
-                    corredor === c.id ? 'bg-ink text-white border-ink' : 'bg-white text-g600 border-g200'
+                    corredor === c.id ? 'bg-ink text-white border-ink' : 'bg-white text-g600 border-g200 hover:border-blue'
                   }`}
                 >
-                  {c.bandera} {en ? c.nombre_en : c.nombre}
+                  <span aria-hidden="true">{c.bandera}</span>
+                  {en ? c.nombre_en : c.nombre}
                 </button>
               ))}
             </div>
