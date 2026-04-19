@@ -492,6 +492,19 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.2.2 — Rediseño Comparador simplicidad radical (2026-04-18, revertido el mismo día)
 Primer intento: se rediseñó la tarjeta estilo trivago (logo izq, RECIBEN grande a la derecha, score coloreado verde/amarillo/rojo, botón "Enviar →"). Resultado: el usuario pidió revertir porque rompía la línea gráfica original. Ver 4.2.3 para el diseño final.
 
+#### 4.2.9 — Banderas PNG (flagcdn) en calculadora inversa + Nav dropdowns (2026-04-18)
+Extensión del mismo bug de Windows que afectaba al selector de idioma (4.2.7). Los emoji flags 🇩🇴 🇭🇳 🇬🇹 🇸🇻 🇨🇴 🇲🇽 🇳🇮 🇭🇹 renderizan como "DO HN GT SV CO MX NI HT" en Windows porque el OS no tiene glifos para Regional Indicator Symbols. El bug se repetía en 3 lugares además del selector de idioma.
+- [x] `/es/calculadora-inversa` tabs: reemplazado campo `bandera` emoji por `codigo_pais` (ISO 3166-1 alpha-2), renderizado como `<img src="https://flagcdn.com/w40/{codigo_pais}.png">`. 22×15px con `rounded-[2px]` + sombra sutil (completado 2026-04-18)
+- [x] Nav desktop corridor dropdown: emoji `{p.bandera}` reemplazado por `<img>` con flagcdn, 22×15px (completado 2026-04-18)
+- [x] Nav mobile menu corridor list: mismo cambio, 26×18px (un poco más grande porque el menú mobile tiene más aire) (completado 2026-04-18)
+- [x] Comparador hero search (ya usaba flagcdn.com desde el MVP — no cambia) (completado 2026-04-18)
+
+**Regla consolidada del proyecto:** NO usar flag emojis en ningún lugar del sitio. Las opciones aprobadas son:
+1. **PNG de flagcdn.com** (`https://flagcdn.com/w40/{iso}.png`) — para banderas dentro de listas largas y dropdowns de corredores donde se usa de forma repetitiva
+2. **SVG inline** (como `<FlagUS />` y `<FlagES />` en Nav) — para casos puntuales (p.ej. selector de idioma) donde no hay ISO code o queremos cero network requests
+
+Los `bandera: '🇸🇻'` que quedan en constantes JS (`CORREDORES` de Comparador, `PAISES_MVP` en `lib/paises.ts`) se conservan por compatibilidad pero NO deben renderizarse en UI. Son datos, no elementos visuales.
+
 #### 4.2.8 — CTA scrollTo con offset + calculadora inversa a 4 MVP (2026-04-18)
 **CTA "Comparar ahora →"**: el botón del bloque "Listo para enviar más por menos?" era un `<a href="#comparar">`. Problemas:
 1. `#comparar` apunta a la sección de RESULTADOS (conditional: solo existe cuando `montoNum > 0`). Un usuario fresco al hacer click scrolleaba a nada

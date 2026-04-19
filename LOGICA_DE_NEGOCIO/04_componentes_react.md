@@ -81,6 +81,7 @@ El Comparador es el componente principal del sitio. Contiene:
 - Se removió el link "Comparar" (redundante con el hero ya visible en la home) y se agregó "Contacto" como página dedicada `/contacto`
 - Selector de idioma con bandera SVG (desde 2026-04-18): los componentes locales `<FlagUS />` y `<FlagES />` (definidos al inicio de `Nav.tsx`) renderizan banderas inline como SVG. Muestra "🇺🇸 English" cuando el sitio está en ES y "🇪🇸 Español" cuando está en EN. El botón dispara `router.push` al mismo path con el otro locale
 - **Por qué SVG y no emoji:** Windows no renderiza flag emojis (Unicode Regional Indicator Symbols), los muestra como las dos letras del código de país ("us", "es") en texto pequeño que parece un bug del sitio. SVG inline funciona en todos los navegadores/OS
+- **Banderas de países (corredores) en listas/dropdowns**: usar `<img src="https://flagcdn.com/w40/{codigo_pais}.png">` en lugar de emoji. Mismo bug de Windows. Aplicado 2026-04-18 en: Nav desktop dropdown de corredores, Nav mobile menu, calculadora inversa tabs. Comparador search ya lo usaba desde el MVP
 
 ### 3bis. WhySection y StepsSection con lucide-react (2026-04-18)
 

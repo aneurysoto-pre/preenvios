@@ -102,17 +102,21 @@ Arreglo:
    }
    ```
 
-### 🎯 Causa 7 — Selector de idioma sin banderas o muestra "us"/"es" como texto pequeño
-Contexto: el botón ES/EN debe mostrar la bandera SVG + "English"/"Español". **NO usar emoji flags** — Windows los renderiza como las dos letras Regional Indicator ("us"/"es" en minúsculas pequeñas) lo cual parece un bug del sitio.
+### 🎯 Causa 7 — Banderas emoji aparecen como "us", "do", "hn", "gt", "sv" en texto pequeño
+Contexto: Windows NO renderiza flag emojis (🇺🇸 🇪🇸 🇩🇴 🇭🇳 🇬🇹 🇸🇻 🇨🇴 🇲🇽 🇳🇮 🇭🇹). Los muestra como las dos letras Regional Indicator ("US", "DO", "HN"...) en texto pequeño que parece un bug del sitio. Afecta el selector de idioma Y los dropdowns/tabs de corredores.
 
-Arreglo:
-1. Verificar en `components/Nav.tsx`:
-   ```bash
-   grep -E "FlagUS|FlagES" components/Nav.tsx
-   ```
-2. Deben aparecer >=4 matches (definición de 2 componentes + uso en desktop + uso en mobile)
-3. Si aparece el caracter 🇺🇸 o 🇪🇸 en Nav.tsx: es regresión — volver a SVG. Las definiciones de `<FlagUS />` y `<FlagES />` viven al inicio del archivo
-4. Si alguien quiere reemplazar los SVG por una librería de banderas (p.ej. `country-flag-icons`): OK pero asegurar que renderiza en Windows Chrome, Edge y Firefox — testear antes de mergear
+**Opciones aprobadas del proyecto** (NO usar emoji flags en UI):
+1. **SVG inline** — para selector de idioma. Componentes `<FlagUS />` y `<FlagES />` definidos al inicio de `components/Nav.tsx`
+2. **PNG de flagcdn.com** — para listas de corredores. Patrón: `<img src={\`https://flagcdn.com/w40/${codigoPais}.png\`} className="w-[22px] h-[15px] rounded-[2px]" />`
+
+Arreglo (selector de idioma):
+1. `grep -E "FlagUS|FlagES" components/Nav.tsx` — deben aparecer >=4 matches
+2. Si aparece 🇺🇸 o 🇪🇸 literal: regresión → volver a `<FlagUS />` / `<FlagES />`
+
+Arreglo (dropdowns de corredores, Nav + calculadora inversa + cualquier sitio futuro):
+1. `grep -rn "bandera\b" app/ components/` — buscar usos restantes
+2. Si algún lugar renderiza `{p.bandera}` o `{c.bandera}` como JSX: reemplazar por `<img src={\`https://flagcdn.com/w40/${p.codigoPais}.png\`} />`. El campo `bandera` sigue en las constantes JS pero como dato histórico — no renderizar directamente
+3. Si el CSP bloquea `flagcdn.com`: agregar `img-src https://flagcdn.com` al `Content-Security-Policy` en `next.config.ts`. Alternativa: copiar los 8 PNGs a `public/flags/` y servirlos localmente
 
 ### 🎯 Causa 8 — CTA mobile roto (flecha separada o wrap feo)
 Contexto: la flecha → debe estar pegada al texto "Comparar ahora" vía `gap-1.5` en un `inline-flex`. Si alguien vuelve a usar `{t('button')} →` con la flecha como texto, en mobile puede salir en otra línea.

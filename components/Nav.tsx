@@ -115,7 +115,15 @@ export default function Nav() {
                     onClick={() => setCorridorOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] hover:bg-[var(--color-g50)] transition-colors"
                   >
-                    <span className="text-lg">{p.bandera}</span>
+                    <img
+                      src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
+                      alt=""
+                      width={24}
+                      height={16}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+                    />
                     <span>{en ? p.nombreEn : p.nombre}</span>
                   </a>
                 ))}
@@ -154,7 +162,16 @@ export default function Nav() {
               onClick={closeMenu}
               className="py-3 px-1 text-base font-bold text-ink border-b border-g100 flex items-center gap-3"
             >
-              <span>{p.bandera}</span> {en ? p.nombreEn : p.nombre}
+              <img
+                src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
+                alt=""
+                width={28}
+                height={19}
+                loading="lazy"
+                decoding="async"
+                className="w-[26px] h-[18px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+              />
+              {en ? p.nombreEn : p.nombre}
             </a>
           ))}
           <a href={homeAnchor('#como')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>

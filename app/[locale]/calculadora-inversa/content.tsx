@@ -8,11 +8,13 @@ import { Footer } from '@/components/Sections'
 // Solo los 4 corredores del MVP. Colombia, Mexico, Nicaragua y Haiti existen en
 // Supabase (precios seed) pero NO se exponen en la UI hasta que tengan scraper activo
 // y validacion de datos — la calculadora inversa es solo para los 4 del MVP.
+// codigo_pais: ISO 3166-1 alpha-2 para flagcdn.com (PNG flags, funcionan en Windows
+// donde los emoji flags 🇩🇴🇭🇳🇬🇹🇸🇻 renderizan como las letras "do","hn","gt","sv").
 const CORREDORES = [
-  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴' },
-  { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳' },
-  { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹' },
-  { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻' },
+  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', codigo_pais: 'do' },
+  { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    codigo_pais: 'hn' },
+  { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    codigo_pais: 'gt' },
+  { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    codigo_pais: 'sv' },
 ]
 
 type Precio = { operador: string; nombre_operador: string; tasa: number; fee: number }
@@ -75,7 +77,15 @@ export default function CalculadoraInversaContent() {
                     corredor === c.id ? 'bg-ink text-white border-ink' : 'bg-white text-g600 border-g200 hover:border-blue'
                   }`}
                 >
-                  <span aria-hidden="true">{c.bandera}</span>
+                  <img
+                    src={`https://flagcdn.com/w40/${c.codigo_pais}.png`}
+                    alt=""
+                    width={24}
+                    height={16}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.1)]"
+                  />
                   {en ? c.nombre_en : c.nombre}
                 </button>
               ))}
