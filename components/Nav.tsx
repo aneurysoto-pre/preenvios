@@ -5,6 +5,35 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import { PAISES_MVP } from '@/lib/paises'
 
+// Inline SVG flags — emoji flags (🇺🇸 🇪🇸) don't render as flags on Windows
+// and fall back to the two-letter region code ("us"/"es") which looks like a bug.
+function FlagUS({ className = 'w-5 h-[14px]' }: { className?: string }) {
+  return (
+    <svg className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`} viewBox="0 0 60 30" aria-hidden="true">
+      <rect width="60" height="30" fill="#fff" />
+      <g fill="#B22234">
+        <rect y="0" width="60" height="2.3" />
+        <rect y="4.6" width="60" height="2.3" />
+        <rect y="9.2" width="60" height="2.3" />
+        <rect y="13.8" width="60" height="2.3" />
+        <rect y="18.4" width="60" height="2.3" />
+        <rect y="23" width="60" height="2.3" />
+        <rect y="27.6" width="60" height="2.4" />
+      </g>
+      <rect width="24" height="16.2" fill="#3C3B6E" />
+    </svg>
+  )
+}
+
+function FlagES({ className = 'w-5 h-[14px]' }: { className?: string }) {
+  return (
+    <svg className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`} viewBox="0 0 60 40" aria-hidden="true">
+      <rect width="60" height="40" fill="#C60B1E" />
+      <rect y="10" width="60" height="20" fill="#FFC400" />
+    </svg>
+  )
+}
+
 export default function Nav() {
   const t = useTranslations('nav')
   const locale = useLocale()
@@ -98,10 +127,10 @@ export default function Nav() {
           <a href={`/${locale}/contacto`} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('contact')}</a>
           <button
             onClick={switchLocale}
-            className="text-sm font-bold text-g700 hover:text-blue border border-g200 hover:border-blue rounded-full px-3 py-1.5 transition-colors inline-flex items-center gap-1.5"
+            className="text-sm font-bold text-g700 hover:text-blue border border-g200 hover:border-blue rounded-full px-3 py-1.5 transition-colors inline-flex items-center gap-2"
             aria-label={locale === 'es' ? 'Switch to English' : 'Cambiar a español'}
           >
-            <span aria-hidden="true">{locale === 'es' ? '🇺🇸' : '🇪🇸'}</span>
+            {locale === 'es' ? <FlagUS /> : <FlagES />}
             <span>{locale === 'es' ? 'English' : 'Español'}</span>
           </button>
         </div>
@@ -131,9 +160,9 @@ export default function Nav() {
           <a href={homeAnchor('#como')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
           <a href={homeAnchor('#faq')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
           <a href={`/${locale}/contacto`} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('contact')}</a>
-          <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left inline-flex items-center gap-2">
-            <span aria-hidden="true">{locale === 'es' ? '🇺🇸' : '🇪🇸'}</span>
-            {locale === 'es' ? 'English' : 'Español'}
+          <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left inline-flex items-center gap-2.5">
+            {locale === 'es' ? <FlagUS className="w-6 h-[17px]" /> : <FlagES className="w-6 h-[17px]" />}
+            <span>{locale === 'es' ? 'English' : 'Español'}</span>
           </button>
         </div>
       )}

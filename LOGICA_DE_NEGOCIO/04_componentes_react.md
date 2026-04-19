@@ -79,7 +79,8 @@ El Comparador es el componente principal del sitio. Contiene:
 - Sombra en el nav aparece al hacer scroll (> 10px)
 - **Regla:** los anchors `#como` y `#faq` se prefijan con `/${locale}` cuando pathname != home, para que desde páginas legales/institucionales naveguen correctamente a la home + scroll
 - Se removió el link "Comparar" (redundante con el hero ya visible en la home) y se agregó "Contacto" como página dedicada `/contacto`
-- Selector de idioma con bandera (desde 2026-04-18): muestra 🇺🇸 English cuando el sitio está en ES y 🇪🇸 Español cuando está en EN. El botón dispara `router.push` al mismo path con el otro locale
+- Selector de idioma con bandera SVG (desde 2026-04-18): los componentes locales `<FlagUS />` y `<FlagES />` (definidos al inicio de `Nav.tsx`) renderizan banderas inline como SVG. Muestra "🇺🇸 English" cuando el sitio está en ES y "🇪🇸 Español" cuando está en EN. El botón dispara `router.push` al mismo path con el otro locale
+- **Por qué SVG y no emoji:** Windows no renderiza flag emojis (Unicode Regional Indicator Symbols), los muestra como las dos letras del código de país ("us", "es") en texto pequeño que parece un bug del sitio. SVG inline funciona en todos los navegadores/OS
 
 ### 3bis. WhySection y StepsSection con lucide-react (2026-04-18)
 
@@ -88,11 +89,12 @@ El Comparador es el componente principal del sitio. Contiene:
 - Tamaño 28px, strokeWidth 2.2, color heredado de la clase del contenedor (vía `currentColor`)
 - Preserva los colores de fondo: blue-soft/blue, green-soft/green-dark, FEF3C7/B45309
 
-**StepsSection (rediseño 2026-04-18):**
-- Círculos de 96px con gradiente (blue→blue-dark, green→green-dark, orange→orange-dark)
-- Iconos lucide centrados: `Search`, `BarChart3`, `Send` en blanco 34px strokeWidth 2.2
-- Número pequeño (1, 2, 3) en badge blanco 32px con borde g200 en esquina superior derecha del círculo
-- Línea punteada horizontal entre círculos (solo desktop md+), posicionada a top-11 para coincidir con el centro de los círculos
+**StepsSection (rediseño 2026-04-18, reducido en tamaño misma fecha):**
+- Círculos de **48px** (reducidos de 96px porque dominaban visualmente) con gradiente (blue→blue-dark, green→green-dark, orange→orange-dark)
+- Iconos lucide centrados: `Search`, `BarChart3`, `Send` en blanco 20px strokeWidth 2.2
+- Número pequeño (1, 2, 3) en badge blanco 20px con borde g200 en esquina superior derecha del círculo
+- Línea punteada horizontal entre círculos (solo desktop md+), posicionada a **top-6** (24px, centro del círculo nuevo)
+- Sombra del círculo reducida a `shadow-[0_6px_14px_-4px_rgba(10,79,229,.3)]` (antes `0_12px_30px_-8px`)
 
 **Regla del proyecto:** iconos de UI usan lucide-react. Emojis quedan solo para banderas de país (corredores) y banderas de idioma.
 

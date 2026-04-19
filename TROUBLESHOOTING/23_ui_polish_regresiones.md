@@ -42,6 +42,17 @@ Arreglo:
    Debe dar >=3 (los 3 iconos importados)
 2. En `WhySection` la lista `items` debe tener `Icon: DollarSign`, `Icon: Zap`, `Icon: ShieldCheck` — NO `icon: '💰'` como string
 
+### 🎯 Causa 2bis — Círculos de Steps demasiado grandes
+Contexto: el diseño final del 2026-04-18 es `w-12 h-12` (48px) para los círculos, `size={20}` para el icono lucide interno, y badge numérico `w-5 h-5 text-[11px]`. El diseño anterior usaba `w-24 h-24` (96px) que dominaba visualmente.
+
+Arreglo:
+1. Verificar en `components/Sections.tsx` StepsSection:
+   ```bash
+   grep -E "w-12 h-12|w-24 h-24" components/Sections.tsx
+   ```
+2. Debe aparecer solo `w-12 h-12` (NO `w-24 h-24`)
+3. Línea punteada horizontal en `top-6` (24px = centro del círculo de 48px). Si está en `top-11` es el valor viejo — actualizar
+
 ### 🎯 Causa 3 — Timestamp "hace X min" no se muestra
 Contexto: el label depende de `lastFetch` (set cuando `/api/precios` responde). Si el fetch falla silenciosamente, `lastFetch` queda null y el label no aparece.
 
@@ -91,16 +102,17 @@ Arreglo:
    }
    ```
 
-### 🎯 Causa 7 — Selector de idioma sin banderas
-Contexto: el botón ES/EN debe mostrar 🇺🇸 English / 🇪🇸 Español con flag. Si alguien lo simplifica de vuelta a texto:
+### 🎯 Causa 7 — Selector de idioma sin banderas o muestra "us"/"es" como texto pequeño
+Contexto: el botón ES/EN debe mostrar la bandera SVG + "English"/"Español". **NO usar emoji flags** — Windows los renderiza como las dos letras Regional Indicator ("us"/"es" en minúsculas pequeñas) lo cual parece un bug del sitio.
 
 Arreglo:
 1. Verificar en `components/Nav.tsx`:
    ```bash
-   grep -E "🇺🇸|🇪🇸|switchLocale" components/Nav.tsx
+   grep -E "FlagUS|FlagES" components/Nav.tsx
    ```
-2. El botón desktop y el mobile menu deben ambos incluir el emoji flag + texto "English"/"Español"
-3. Las banderas son emojis Unicode — NO lucide-react. Es la única excepción a la regla del proyecto #11
+2. Deben aparecer >=4 matches (definición de 2 componentes + uso en desktop + uso en mobile)
+3. Si aparece el caracter 🇺🇸 o 🇪🇸 en Nav.tsx: es regresión — volver a SVG. Las definiciones de `<FlagUS />` y `<FlagES />` viven al inicio del archivo
+4. Si alguien quiere reemplazar los SVG por una librería de banderas (p.ej. `country-flag-icons`): OK pero asegurar que renderiza en Windows Chrome, Edge y Firefox — testear antes de mergear
 
 ### 🎯 Causa 8 — CTA mobile roto (flecha separada o wrap feo)
 Contexto: la flecha → debe estar pegada al texto "Comparar ahora" vía `gap-1.5` en un `inline-flex`. Si alguien vuelve a usar `{t('button')} →` con la flecha como texto, en mobile puede salir en otra línea.

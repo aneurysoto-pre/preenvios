@@ -85,14 +85,14 @@ export function StepsSection() {
           <p className="text-ink-2 text-[17px]">{t('subtitle')}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
-          <div className="hidden md:block absolute top-11 left-[16%] right-[16%] h-0.5 bg-[repeating-linear-gradient(90deg,var(--color-g300)_0_8px,transparent_8px_16px)]" />
+          <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-0.5 bg-[repeating-linear-gradient(90deg,var(--color-g300)_0_8px,transparent_8px_16px)]" />
           {steps.map(({ n, Icon, cls }) => (
             <div key={n} className="relative text-center px-5">
-              <div className="relative w-24 h-24 mx-auto mb-6">
-                <div className={`w-24 h-24 bg-gradient-to-br ${cls} rounded-full flex items-center justify-center text-white shadow-[0_12px_30px_-8px_rgba(10,79,229,.35)]`}>
-                  <Icon size={34} strokeWidth={2.2} aria-hidden="true" />
+              <div className="relative w-12 h-12 mx-auto mb-4">
+                <div className={`w-12 h-12 bg-gradient-to-br ${cls} rounded-full flex items-center justify-center text-white shadow-[0_6px_14px_-4px_rgba(10,79,229,.3)]`}>
+                  <Icon size={20} strokeWidth={2.2} aria-hidden="true" />
                 </div>
-                <span className="absolute -top-1 -right-1 w-8 h-8 bg-white border-2 border-g200 rounded-full flex items-center justify-center text-sm font-heading font-black text-ink shadow-sm">{n}</span>
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-white border border-g200 rounded-full flex items-center justify-center text-[11px] font-heading font-black text-ink shadow-sm">{n}</span>
               </div>
               <h3 className="font-heading text-xl font-extrabold mb-2.5">{t(`step${n}`)}</h3>
               <p className="text-ink-2 text-[15px]">{t(`step${n}Desc`)}</p>
