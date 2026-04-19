@@ -14,6 +14,7 @@ import Comparador from '@/components/Comparador'
 import { Footer } from '@/components/Sections'
 
 const OfertasDestacadas = dynamic(() => import('@/components/OfertasDestacadas'))
+const BannersPatrocinados = dynamic(() => import('@/components/BannersPatrocinados'))
 const TasasReferencia = dynamic(() => import('@/components/TasasReferencia'))
 const LazyBelow = dynamic(() => import('@/components/Sections').then(m => {
   const Combo = () => (
@@ -45,6 +46,7 @@ export default function PaisContent({ slug }: { slug: string }) {
         heroLede={en ? `See in seconds how much arrives in ${nombre}` : `Revisa en segundos cuánto llega a ${nombre}`}
       />
       <OfertasDestacadas hidden={true} />
+      <BannersPatrocinados />
       <TasasReferencia />
       <LazyBelow />
 

@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 // Below-fold components loaded lazily to reduce initial JS bundle
 const OfertasDestacadas = dynamic(() => import('@/components/OfertasDestacadas'))
+const BannersPatrocinados = dynamic(() => import('@/components/BannersPatrocinados'))
 const TasasReferencia = dynamic(() => import('@/components/TasasReferencia'))
 const LazyBelow = dynamic(() => import('@/components/Sections').then(m => {
   const Combo = () => (
@@ -55,6 +56,7 @@ export default async function HomePage({
       <Nav />
       <Comparador />
       <OfertasDestacadas hidden={true} />
+      <BannersPatrocinados />
       <TasasReferencia />
       <LazyBelow />
       <Footer />
