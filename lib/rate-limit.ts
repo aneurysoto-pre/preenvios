@@ -12,7 +12,14 @@
  * por fallos de infra. Los errores se loggean. Monitoreo futuro H-09.1.
  *
  * Política actual:
- * - Admin login: 5 intentos / 15 min / IP (sliding window)
+ * - Admin login: 5 intentos / 15 min / IP (fixed window)
+ *
+ * Sobre el bucketing de @upstash/ratelimit: el library almacena keys
+ * como `{prefix}:{identifier}:{bucket_id}` donde bucket_id =
+ * floor(now_ms / window_ms). Para window=15min, bucket_id cambia cada
+ * 15 minutos. Un solo key por (identifier, ventana) — NO una clave por
+ * request. Si ves multiples keys con bucket_ids distintos, es porque
+ * los tests cruzaron >=1 frontera de 15 min.
  *
  * Para agregar rate limit a otros endpoints (H-04.1 en `/api/contactos`,
  * `/api/suscripcion-free`): crear un limiter adicional con su propio
@@ -28,8 +35,8 @@ function getAdminLoginLimiter(): Ratelimit {
   if (_adminLoginLimiter) return _adminLoginLimiter
   _adminLoginLimiter = new Ratelimit({
     redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(5, '15 m'),
-    analytics: false,
+    limiter: Ratelimit.fixedWindow(5, '15 m'),
+    analytics: true,
     prefix: 'rl:admin-login',
   })
   return _adminLoginLimiter
@@ -53,11 +60,18 @@ export type RateLimitResult = {
 export async function checkAdminLoginRateLimit(ip: string): Promise<RateLimitResult> {
   try {
     const limiter = getAdminLoginLimiter()
-    const { success, reset, remaining } = await limiter.limit(ip)
-    if (success) {
-      return { allowed: true, retryAfterSeconds: 0, remaining }
+    const res = await limiter.limit(ip)
+    console.log('[rate-limit] admin-login', {
+      ip,
+      success: res.success,
+      limit: res.limit,
+      remaining: res.remaining,
+      resetInSeconds: Math.max(0, Math.ceil((res.reset - Date.now()) / 1000)),
+    })
+    if (res.success) {
+      return { allowed: true, retryAfterSeconds: 0, remaining: res.remaining }
     }
-    const retryAfterSeconds = Math.max(1, Math.ceil((reset - Date.now()) / 1000))
+    const retryAfterSeconds = Math.max(1, Math.ceil((res.reset - Date.now()) / 1000))
     return { allowed: false, retryAfterSeconds, remaining: 0 }
   } catch (err) {
     console.error('[rate-limit] upstash error:', err)
