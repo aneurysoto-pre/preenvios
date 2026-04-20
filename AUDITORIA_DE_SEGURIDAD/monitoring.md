@@ -6,7 +6,7 @@ La implementación está dividida en 2 fases complementarias — cada una cubre 
 
 | Fase | Herramienta | Cubre | Estado al 2026-04-20 |
 |------|-------------|-------|----------------------|
-| 1 | BetterStack | Uptime — "¿el sitio está arriba?" | 🟡 Pendiente setup manual user |
+| 1 | BetterStack | Uptime — "¿el sitio está arriba?" | 🟡 Parcial — signup + 4 monitores activos en `preenvios.vercel.app`. Pendiente migrar URLs a `preenvios.com` y crear status page post-DNS cutover |
 | 2 | Sentry (`@sentry/nextjs`) | App errors — "arriba pero lanza excepciones" | 🟡 Código instalado, pendiente DSN en Vercel |
 
 **Con Fase 1 + Fase 2 H-09.1 queda cerrado.** H-09.2 (audit trail de cambios admin) sigue siendo hallazgo separado.
@@ -29,21 +29,26 @@ La implementación está dividida en 2 fases complementarias — cada una cubre 
   - Incident timeline + historial
 - **Costo mensual:** $0
 
-### Monitores configurados
+### Monitores configurados (estado al 2026-04-20)
 
-| # | Nombre | URL | Tipo de chequeo | Frecuencia |
-|---|--------|-----|-----------------|------------|
-| 1 | Home | `https://preenvios.com/` | HTTP status 2xx/3xx | 30s |
-| 2 | API precios | `https://preenvios.com/api/precios?corredor=honduras&metodo=bank` | Keyword match: `"operador"` | 30s |
-| 3 | API tasas banco central | `https://preenvios.com/api/tasas-banco-central` | Keyword match: `"tasa"` | 30s |
-| 4 | Admin panel | `https://preenvios.com/es/admin` | HTTP status 200 (debe mostrar login form) | 30s |
-| 5 | SSL cert | `preenvios.com` | Expiry warning a 30, 14, 7 días | — |
+Los 4 monitores HTTP están **activos en BetterStack** apuntando al staging de Vercel. Se actualizan a `preenvios.com` cuando se active el DNS. SSL/TLS verification no es un monitor separado en BetterStack — es un flag por-monitor que alerta a los 30/14/7 días del vencimiento del cert.
 
-### Destinatario de alertas
+| # | Nombre | URL actual (staging) | URL final (post-DNS) | Tipo de chequeo |
+|---|--------|----------------------|----------------------|-----------------|
+| 1 | Home | `https://preenvios.vercel.app/` | `https://preenvios.com/` | HTTP status 2xx/3xx + SSL verify |
+| 2 | Admin | `https://preenvios.vercel.app/es/admin` | `https://preenvios.com/es/admin` | HTTP status 200 (muestra login form) + SSL verify |
+| 3 | API precios | `https://preenvios.vercel.app/api/precios?corredor=honduras&metodo=bank` | `https://preenvios.com/api/precios?corredor=honduras&metodo=bank` | Keyword match: `"operador"` + SSL verify |
+| 4 | API tasas banco central | `https://preenvios.vercel.app/api/tasas-banco-central` | `https://preenvios.com/api/tasas-banco-central` | Keyword match: `"tasa"` + SSL verify |
 
-- **Email único:** `contact@preenvios.com` (Zoho Mail)
-- **Escalación:** ninguna — solo email directo
-- **Umbral:** 2 fallos consecutivos antes de alertar (BetterStack default, evita falsos positivos)
+**Frecuencia de chequeo:** 30 segundos (default del plan Free).
+
+### Destinatarios de alertas
+
+- **Email — aneury soto** (email personal): alertas llegan al inbox personal del founder
+- **Email — `contact@preenvios.com`** (Zoho Mail): inbox compartido de negocio
+- **Por qué dos:** redundancia basica sin complicación. Si uno se va a spam o se pierde, el otro llega. No se usa Slack ni SMS.
+- **Escalación:** ninguna — ambos destinatarios reciben simultáneamente
+- **Umbral:** 2 fallos consecutivos antes de alertar (BetterStack default, evita falsos positivos por glitches de red)
 
 ### Status page pública
 
@@ -63,18 +68,30 @@ Decisión tomada el **2026-04-20**. Justificación:
    - Tráfico justifica on-call rotativo
    - Se quiere dashboard interno con estado agregado (BetterStack + Sentry + analytics en un solo lugar)
 
-### Acción manual pendiente del user
+### Progreso y acciones pendientes
 
-1. Signup free en [betterstack.com](https://betterstack.com)
-2. Team Members → agregar `contact@preenvios.com` como destinatario de alertas (único o primary)
-3. Monitors → crear los 5 de la tabla de arriba
-4. Status Page → crear página pública, agregar los monitores, configurar subdominio `status.preenvios.com`
-5. Ir a Namecheap → Advanced DNS → agregar el CNAME que BetterStack provee
-6. Smoke test: pausar un monitor manualmente y verificar que llega el email al inbox de Zoho
+**✅ Completado 2026-04-20:**
+- Signup en [betterstack.com](https://betterstack.com) con plan free
+- Team Members configurados: aneury soto (personal) + `contact@preenvios.com`
+- 4 monitores creados apuntando a `preenvios.vercel.app`
+- SSL/TLS verification activado en los 4 monitores
+- Canal email único (sin Slack, sin SMS, sin webhook — decisión consciente)
+
+**🟡 Pendiente post-DNS cutover:**
+1. **Actualizar URLs de los 4 monitores:** editar en BetterStack dashboard → reemplazar `preenvios.vercel.app` por `preenvios.com` en cada monitor. 2-3 min.
+2. **Crear Status Page pública:**
+   - BetterStack dashboard → Status Pages → New
+   - Agregar los 4 monitores
+   - Subdominio: `status.preenvios.com`
+   - BetterStack provee un valor CNAME (típicamente `<algo>.betteruptimestatus.com` o similar)
+3. **Configurar CNAME en Namecheap:**
+   - Namecheap → dominio preenvios.com → Advanced DNS
+   - Add new record: tipo `CNAME`, host `status`, value = el que BetterStack provee
+4. **Smoke test:** pausar un monitor desde BetterStack dashboard → verificar que llega email a ambos destinatarios en < 90s
 
 ### Timing
 
-Setup recomendado: **antes de activar DNS a preenvios.com**. Los monitores ya pueden apuntar al dominio aunque el DNS apunte a `preenvios-*.vercel.app` en desarrollo (BetterStack chequea por URL, no por DNS del origin).
+BetterStack ya está configurado ANTES del DNS cutover — los monitores apuntan a `preenvios.vercel.app` que es donde vive el staging. Eso detecta caídas del staging hoy. Al migrar al dominio propio, solo se editan URLs (2 min de trabajo, sin recrear monitores).
 
 ---
 

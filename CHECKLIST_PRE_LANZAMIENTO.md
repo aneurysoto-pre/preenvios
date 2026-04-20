@@ -193,7 +193,58 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 ---
 
-## 11. Pre-DNS checklist final
+## 11. Monitoring y observabilidad (cierre H-09.1 auditoría #01)
+
+Plan completo en [AUDITORIA_DE_SEGURIDAD/monitoring.md](AUDITORIA_DE_SEGURIDAD/monitoring.md).
+
+### 11.1 BetterStack — Fase 1 uptime (en progreso 2026-04-20)
+- [x] Signup completado en betterstack.com (plan free)
+- [x] 4 monitores activos apuntando a `preenvios.vercel.app` (temporal — se actualizan a `preenvios.com` post-DNS):
+  - [x] Home: `https://preenvios.vercel.app/`
+  - [x] Admin: `https://preenvios.vercel.app/es/admin` (espera HTTP 200 con login form)
+  - [x] API precios: `https://preenvios.vercel.app/api/precios?corredor=honduras&metodo=bank` (keyword match `"operador"`)
+  - [x] API tasas: `https://preenvios.vercel.app/api/tasas-banco-central` (keyword match `"tasa"`)
+- [x] SSL/TLS verification habilitado en los 4 monitores HTTPS (aviso a 30/14/7 días del vencimiento del cert)
+- [x] Team Members configurados: aneury soto (email personal) + `contact@preenvios.com`
+- [x] Canal de alertas: email a ambos destinatarios del team (sin Slack, sin SMS, sin webhook)
+
+**Pendiente de completar post-DNS cutover:**
+- [ ] Editar los 4 monitores: reemplazar `preenvios.vercel.app` → `preenvios.com` en la URL
+- [ ] Crear Status Page pública en BetterStack con subdominio `status.preenvios.com`
+- [ ] Namecheap → Advanced DNS → agregar el CNAME que BetterStack provee para el status page
+- [ ] Smoke test: pausar temporalmente un monitor desde el dashboard, verificar llegada de email a ambos destinatarios (aneury personal + contact@)
+
+### 11.2 Sentry — Fase 2 error tracking (código listo 2026-04-20)
+- [x] `@sentry/nextjs` instalado (commit `ba107e5`)
+- [x] Config files creados en raíz del proyecto:
+  - [x] `instrumentation.ts` (server Node/edge runtime hook)
+  - [x] `instrumentation-client.ts` (client-side init)
+  - [x] `sentry.server.config.ts` + `sentry.edge.config.ts`
+- [x] `next.config.ts` wrapped con `withSentryConfig`
+- [x] `.env.example` documenta las 5 vars Sentry
+- [x] Build verificado: pasa sin DSN (SDK en no-op) y pasa con DSN configurado
+
+**Pendiente de completar:**
+- [ ] Signup en sentry.io (plan Developer Free)
+- [ ] Crear proyecto Next.js en Sentry, copiar DSN
+- [ ] Auth Token opcional para source map upload (Settings → Auth Tokens, scope `project:releases`)
+- [ ] Configurar en Vercel → Environment Variables (los 3 entornos):
+  - [ ] `NEXT_PUBLIC_SENTRY_DSN`
+  - [ ] `SENTRY_DSN`
+  - [ ] `SENTRY_ORG`
+  - [ ] `SENTRY_PROJECT`
+  - [ ] `SENTRY_AUTH_TOKEN` (opcional)
+- [ ] Redeploy y verificar que el build sigue OK con las env vars seteadas
+- [ ] Smoke test: trigger intencional de un error (ej. 500 en una ruta de testing) y verificar que aparece en Sentry dashboard con stack trace
+
+### 11.3 Cierre de H-09.1
+H-09.1 pasa de 🟡 EN PROCESO a 🟢 CERRADO cuando:
+- [ ] BetterStack: los 4 monitores activos apuntan a `preenvios.com`, status page pública activa, smoke test confirmado
+- [ ] Sentry: DSN configurado en Vercel, build en producción, error de prueba visible en dashboard
+
+---
+
+## 12. Pre-DNS checklist final
 
 - [ ] Todas las secciones anteriores marcadas con [x]
 - [ ] No hay errores en la consola del navegador
