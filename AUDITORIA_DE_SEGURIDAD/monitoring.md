@@ -6,7 +6,7 @@ La implementación está dividida en 2 fases complementarias — cada una cubre 
 
 | Fase | Herramienta | Cubre | Estado al 2026-04-20 |
 |------|-------------|-------|----------------------|
-| 1 | BetterStack | Uptime — "¿el sitio está arriba?" | 🟡 Parcial — signup + 4 monitores activos en `preenvios.vercel.app`. Pendiente migrar URLs a `preenvios.com` y crear status page post-DNS cutover |
+| 1 | BetterStack | Uptime — "¿el sitio está arriba?" | 🔴 **PAUSADA** — signup hecho + team configurado. Monitores eliminados porque `preenvios.com` apunta a GitHub Pages del MVP viejo. Se recrean el día del DNS cutover a Vercel |
 | 2 | Sentry (`@sentry/nextjs`) | App errors — "arriba pero lanza excepciones" | 🟡 Código instalado, pendiente DSN en Vercel |
 
 **Con Fase 1 + Fase 2 H-09.1 queda cerrado.** H-09.2 (audit trail de cambios admin) sigue siendo hallazgo separado.
@@ -29,24 +29,33 @@ La implementación está dividida en 2 fases complementarias — cada una cubre 
   - Incident timeline + historial
 - **Costo mensual:** $0
 
-### Monitores configurados (estado al 2026-04-20)
+### Histórico — qué pasó con los monitores iniciales
 
-Los 4 monitores HTTP están **activos en BetterStack** apuntando al staging de Vercel. Se actualizan a `preenvios.com` cuando se active el DNS. SSL/TLS verification no es un monitor separado en BetterStack — es un flag por-monitor que alerta a los 30/14/7 días del vencimiento del cert.
+- **2026-04-19:** se creó el signup + team + 4 monitores apuntando a `preenvios.com`.
+- **2026-04-19/20:** se detectó que los monitores de `/api/precios` y `/api/tasas-banco-central` devolvían 404 porque `preenvios.com` todavía apunta a GitHub Pages (IPs `185.199.x.x`) del MVP viejo — endpoints de Next.js no existen ahí. Los monitores de `/` y `/es/admin` también eran problemáticos porque respondían con contenido del MVP viejo, no con el Next.js esperado.
+- **2026-04-20:** se intentó cambiar las URLs a `preenvios.vercel.app` pero BetterStack mantuvo internamente las URLs antiguas causando falsos positivos. Decisión: **los 4 monitores se eliminaron** del dashboard para no ensuciar el canal de alertas.
+- **Estado actual:** signup activo + team de 2 emails configurado. Cero monitores activos. La Fase 1 está formalmente **pausada hasta el DNS cutover**.
 
-| # | Nombre | URL actual (staging) | URL final (post-DNS) | Tipo de chequeo |
-|---|--------|----------------------|----------------------|-----------------|
-| 1 | Home | `https://preenvios.vercel.app/` | `https://preenvios.com/` | HTTP status 2xx/3xx + SSL verify |
-| 2 | Admin | `https://preenvios.vercel.app/es/admin` | `https://preenvios.com/es/admin` | HTTP status 200 (muestra login form) + SSL verify |
-| 3 | API precios | `https://preenvios.vercel.app/api/precios?corredor=honduras&metodo=bank` | `https://preenvios.com/api/precios?corredor=honduras&metodo=bank` | Keyword match: `"operador"` + SSL verify |
-| 4 | API tasas banco central | `https://preenvios.vercel.app/api/tasas-banco-central` | `https://preenvios.com/api/tasas-banco-central` | Keyword match: `"tasa"` + SSL verify |
+### Monitores a recrear el día del DNS cutover
+
+**Acción requerida post-DNS** (cuando `preenvios.com` apunte a Vercel y HTTPS esté activo — típicamente 10-60 min tras el cambio en Namecheap): **crear los 4 monitores desde cero** (no editar, crear nuevos) con estas URLs finales:
+
+| # | Nombre | URL final de producción | Tipo de chequeo |
+|---|--------|------------------------|-----------------|
+| 1 | Home | `https://preenvios.com/` | HTTP status 2xx/3xx + SSL verify |
+| 2 | Admin | `https://preenvios.com/es/admin` | HTTP status 200 (login form) + SSL verify |
+| 3 | API precios | `https://preenvios.com/api/precios?corredor=honduras&metodo=bank` | Keyword match: `"operador"` + SSL verify |
+| 4 | API tasas banco central | `https://preenvios.com/api/tasas-banco-central` | Keyword match: `"tasa"` + SSL verify |
 
 **Frecuencia de chequeo:** 30 segundos (default del plan Free).
 
+El checklist paso-a-paso completo está en [CHECKLIST_PRE_LANZAMIENTO.md § 11.1](../CHECKLIST_PRE_LANZAMIENTO.md) — "TAREA POST-DNS".
+
 ### Destinatarios de alertas
 
-- **Email — aneury soto** (email personal): alertas llegan al inbox personal del founder
+- **Email — `aneurysoto@gmail.com`** (personal del founder): alertas directo a inbox personal
 - **Email — `contact@preenvios.com`** (Zoho Mail): inbox compartido de negocio
-- **Por qué dos:** redundancia basica sin complicación. Si uno se va a spam o se pierde, el otro llega. No se usa Slack ni SMS.
+- **Por qué dos:** redundancia básica sin complicación. Si uno se va a spam o se pierde, el otro llega. No se usa Slack ni SMS.
 - **Escalación:** ninguna — ambos destinatarios reciben simultáneamente
 - **Umbral:** 2 fallos consecutivos antes de alertar (BetterStack default, evita falsos positivos por glitches de red)
 
@@ -70,28 +79,38 @@ Decisión tomada el **2026-04-20**. Justificación:
 
 ### Progreso y acciones pendientes
 
-**✅ Completado 2026-04-20:**
+**✅ Completado 2026-04-19/20:**
 - Signup en [betterstack.com](https://betterstack.com) con plan free
-- Team Members configurados: aneury soto (personal) + `contact@preenvios.com`
-- 4 monitores creados apuntando a `preenvios.vercel.app`
-- SSL/TLS verification activado en los 4 monitores
-- Canal email único (sin Slack, sin SMS, sin webhook — decisión consciente)
+- Team Members configurados: `aneurysoto@gmail.com` (personal) + `contact@preenvios.com`
+- Canal email (sin Slack, sin SMS, sin webhook — decisión consciente)
 
-**🟡 Pendiente post-DNS cutover:**
-1. **Actualizar URLs de los 4 monitores:** editar en BetterStack dashboard → reemplazar `preenvios.vercel.app` por `preenvios.com` en cada monitor. 2-3 min.
-2. **Crear Status Page pública:**
+**🔴 Pausado por problema DNS:**
+- 4 monitores fueron creados y luego eliminados porque `preenvios.com` apunta a GitHub Pages del MVP viejo (ver histórico arriba). Decisión: no mantener monitores con URLs temporales de Vercel staging porque BetterStack arrastró URLs antiguas internamente y porque habría que recrearlos igual al hacer el cutover.
+
+**🟡 Pendiente el día del DNS cutover:**
+1. **Recrear los 4 monitores desde cero** con URLs finales de `preenvios.com` (ver tabla de la sección anterior)
+2. **Asignar los 2 team members como destinatarios** de cada monitor
+3. **SSL/TLS verification activado** en los 4 (toggle por-monitor en BetterStack)
+4. **Smoke test:** pausar un monitor → esperar 2-3 min → verificar que llega email a `aneurysoto@gmail.com` Y `contact@preenvios.com`
+5. **Crear Status Page pública:**
    - BetterStack dashboard → Status Pages → New
-   - Agregar los 4 monitores
+   - Agregar los 4 monitores recién creados
    - Subdominio: `status.preenvios.com`
-   - BetterStack provee un valor CNAME (típicamente `<algo>.betteruptimestatus.com` o similar)
-3. **Configurar CNAME en Namecheap:**
+   - BetterStack provee un valor CNAME (típicamente `statuspage.betteruptime.com` o similar)
+6. **Configurar CNAME en Namecheap:**
    - Namecheap → dominio preenvios.com → Advanced DNS
-   - Add new record: tipo `CNAME`, host `status`, value = el que BetterStack provee
-4. **Smoke test:** pausar un monitor desde BetterStack dashboard → verificar que llega email a ambos destinatarios en < 90s
+   - Add new record: tipo `CNAME`, host `status`, value = el que BetterStack proveyó
+7. **Verificar** que `https://status.preenvios.com` carga la página pública (5-30 min de propagación)
 
-### Timing
+Tiempo total estimado del día-del-cutover: **15-20 min** activos + espera pasiva de propagación DNS.
 
-BetterStack ya está configurado ANTES del DNS cutover — los monitores apuntan a `preenvios.vercel.app` que es donde vive el staging. Eso detecta caídas del staging hoy. Al migrar al dominio propio, solo se editan URLs (2 min de trabajo, sin recrear monitores).
+### Timing — por qué no monitoreamos ahora
+
+Intentamos tener BetterStack activo ANTES del DNS cutover apuntando a staging. No funcionó en la práctica:
+- `preenvios.com` va a GitHub Pages (MVP viejo) → los endpoints Next.js no existen ahí
+- `preenvios.vercel.app` SÍ tiene los endpoints, pero BetterStack arrastró las URLs viejas internamente
+
+Conclusión: esperar al cutover. El costo de oportunidad (0 monitoring durante ~10 días antes del lanzamiento) es bajo porque el staging tiene tráfico mínimo y bugs de producción aún no aplican.
 
 ---
 

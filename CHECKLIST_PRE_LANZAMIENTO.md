@@ -197,22 +197,38 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 Plan completo en [AUDITORIA_DE_SEGURIDAD/monitoring.md](AUDITORIA_DE_SEGURIDAD/monitoring.md).
 
-### 11.1 BetterStack — Fase 1 uptime (en progreso 2026-04-20)
-- [x] Signup completado en betterstack.com (plan free)
-- [x] 4 monitores activos apuntando a `preenvios.vercel.app` (temporal — se actualizan a `preenvios.com` post-DNS):
-  - [x] Home: `https://preenvios.vercel.app/`
-  - [x] Admin: `https://preenvios.vercel.app/es/admin` (espera HTTP 200 con login form)
-  - [x] API precios: `https://preenvios.vercel.app/api/precios?corredor=honduras&metodo=bank` (keyword match `"operador"`)
-  - [x] API tasas: `https://preenvios.vercel.app/api/tasas-banco-central` (keyword match `"tasa"`)
-- [x] SSL/TLS verification habilitado en los 4 monitores HTTPS (aviso a 30/14/7 días del vencimiento del cert)
-- [x] Team Members configurados: aneury soto (email personal) + `contact@preenvios.com`
-- [x] Canal de alertas: email a ambos destinatarios del team (sin Slack, sin SMS, sin webhook)
+### 11.1 BetterStack — Fase 1 uptime (PAUSADA 2026-04-20, pendiente DNS cutover)
 
-**Pendiente de completar post-DNS cutover:**
-- [ ] Editar los 4 monitores: reemplazar `preenvios.vercel.app` → `preenvios.com` en la URL
-- [ ] Crear Status Page pública en BetterStack con subdominio `status.preenvios.com`
-- [ ] Namecheap → Advanced DNS → agregar el CNAME que BetterStack provee para el status page
-- [ ] Smoke test: pausar temporalmente un monitor desde el dashboard, verificar llegada de email a ambos destinatarios (aneury personal + contact@)
+#### Estado completado
+- [x] Signup en betterstack.com (plan free)
+- [x] Team Members configurados en BetterStack: `aneurysoto@gmail.com` (personal) + `contact@preenvios.com`
+
+#### Por qué está pausada — contexto del problema detectado
+Durante la configuración inicial (2026-04-19) se crearon 4 monitores apuntando a `preenvios.com` pero se detectó que **no podían funcionar** porque el dominio todavía apunta a GitHub Pages (IPs `185.199.x.x` del MVP viejo), donde las rutas `/api/precios` y `/api/tasas-banco-central` no existen. Se intentó cambiar las URLs a `preenvios.vercel.app` pero BetterStack mantuvo internamente las URLs antiguas causando falsas alertas. **Los 4 monitores fueron eliminados** para evitar ruido en el canal de alertas.
+
+La Fase 1 queda formalmente pausada hasta que el DNS de `preenvios.com` apunte a Vercel. No tiene sentido recrear los monitores con URLs temporales de `preenvios.vercel.app` porque BetterStack arrastra el problema histórico y además habría que recrearlos de nuevo al hacer el cutover.
+
+#### 🚨 TAREA POST-DNS — recrear monitores desde cero
+**Cuándo:** inmediatamente después de que `preenvios.com` apunte a Vercel y el HTTPS esté activo (típicamente 10-60 min tras cambiar los DNS records en Namecheap).
+
+**Pasos (15-20 min total):**
+
+1. [ ] Sign in en BetterStack → Monitors → **crear desde cero los 4 monitores** (no editar los eliminados — crear nuevos):
+   - [ ] **Home:** `https://preenvios.com/` · HTTP status 2xx/3xx · intervalo 30s · SSL/TLS verification ✅
+   - [ ] **Admin:** `https://preenvios.com/es/admin` · espera HTTP 200 (login form) · intervalo 30s · SSL/TLS verification ✅
+   - [ ] **API precios:** `https://preenvios.com/api/precios?corredor=honduras&metodo=bank` · keyword match `"operador"` · intervalo 30s · SSL/TLS verification ✅
+   - [ ] **API tasas banco central:** `https://preenvios.com/api/tasas-banco-central` · keyword match `"tasa"` · intervalo 30s · SSL/TLS verification ✅
+2. [ ] Asignar los 4 monitores a los 2 team members (`aneurysoto@gmail.com` + `contact@preenvios.com`) como destinatarios de alertas
+3. [ ] Umbral: 2 fallos consecutivos antes de alertar (default BetterStack)
+4. [ ] **Smoke test:** pausar un monitor desde el dashboard → esperar 2-3 min → verificar que llega email a ambos inboxes (`contact@preenvios.com` y `aneurysoto@gmail.com`) → reactivar el monitor
+5. [ ] Status Page → crear página pública:
+   - [ ] Agregar los 4 monitores
+   - [ ] Subdominio deseado: `status.preenvios.com`
+   - [ ] BetterStack genera un valor CNAME (típicamente `statuspage.betteruptime.com` o similar)
+6. [ ] Namecheap → Advanced DNS → agregar record tipo `CNAME`, host `status`, value = el que BetterStack proveyó
+7. [ ] Esperar propagación DNS (~5-30 min) → verificar que `https://status.preenvios.com` carga la página pública
+
+Con esto la Fase 1 queda completada y H-09.1 avanza a "pendiente solo Fase 2 Sentry" para cierre definitivo.
 
 ### 11.2 Sentry — Fase 2 error tracking (código listo 2026-04-20)
 - [x] `@sentry/nextjs` instalado (commit `ba107e5`)
