@@ -251,6 +251,8 @@ NODE_ENV=production
 
 Las siguientes configuraciones no son opcionales — son base de seguridad y mantenimiento. Se documentan aquí para que queden explícitas en el roadmap.
 
+> **📋 Inventario completo de servicios externos:** ver [SERVICIOS_EXTERNOS.md](SERVICIOS_EXTERNOS.md) en la raíz del repo. Ahí están todas las cuentas (GitHub, Vercel, Supabase, Upstash, Twilio, Resend, Zoho, Namecheap, GA4, Search Console, redes de afiliados, Payoneer) con plan actual, límites, uso estimado, costo, umbrales de upgrade, dashboards y variables de entorno que dependen de cada una. Este archivo resume el stack; SERVICIOS_EXTERNOS.md es la bitácora operativa.
+
 ### GitHub Secrets (seguridad de credenciales)
 - Todas las variables de entorno listadas arriba NUNCA se guardan en el repositorio
 - Se guardan en dos lugares:
