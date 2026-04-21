@@ -158,6 +158,28 @@
     "note": "Reference rates published by each country's Central Bank.",
     "perUsd": "/USD"
   },
+  "banners": {
+    "calcInversa": {
+      "title": "Reverse calculator",
+      "offer": "How many USD were sent?",
+      "cta": "Calculate"
+    },
+    "tasaHonduras": {
+      "title": "Lempira rate",
+      "offer": "30-day history, free",
+      "cta": "View rate"
+    },
+    "alertasGratis": {
+      "title": "Free daily alerts",
+      "offer": "Today's best rate in your inbox",
+      "cta": "Subscribe"
+    },
+    "nosotros": {
+      "title": "Made by the diaspora",
+      "offer": "Free, no signup, transparent",
+      "cta": "Learn more"
+    }
+  },
   "disclaimers": {
     "d1": "Rates shown are approximate and may vary at the time of transaction. Always confirm the final amount directly with the remittance provider before sending.",
     "d2": "PreEnvios.com is not a financial institution. We do not process payments, receive or send money. We only compare public information from remittance providers.",

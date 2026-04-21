@@ -1,19 +1,18 @@
 'use client'
 
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import Link from 'next/link'
 import { Calculator, TrendingUp, Bell, Heart, type LucideIcon } from 'lucide-react'
 
 type Banner = {
   id: string
+  /** Key dentro de messages/{es,en}.json banners.* */
+  i18nKey: 'calcInversa' | 'tasaHonduras' | 'alertasGratis' | 'nosotros'
   Icon: LucideIcon
-  bgCls: string      // tarjeta background + border (tailwind arbitrary values)
-  iconCls: string    // circulo del icono background
-  title_es: string
-  title_en: string
-  offer_es: string
-  offer_en: string
-  cta_es: string
-  cta_en: string
+  /** Background + border de la tarjeta (Tailwind arbitrary values) */
+  bgCls: string
+  /** Background del circulo del icono */
+  iconCls: string
   /** Path relativo al locale (ej. '/calculadora-inversa'). El href se calcula como /{locale}{path}. */
   path: string
 }
@@ -24,57 +23,42 @@ type Banner = {
 // contenido propio funcional hasta tener acuerdos firmados con partners reales.
 // Cuando haya acuerdos de sponsorship, volver a agregar banners patrocinados
 // como un 2do bloque separado, dejando estos 4 como "Mas de PreEnvios" aparte.
+//
+// Data mantenida aca: id, icono, clases visuales, path. Textos (title, offer,
+// cta) migrados a messages/{es,en}.json bajo banners.{i18nKey} — permite
+// cambiar copy sin tocar codigo y mantiene consistencia i18n con el resto del
+// sitio.
 const BANNERS: Banner[] = [
   {
     id: 'calc-inversa',
+    i18nKey: 'calcInversa',
     Icon: Calculator,
     bgCls: 'bg-[#FEF2F2] border-[#FECACA]',
     iconCls: 'bg-[#C8102E]',
-    title_es: 'Calculadora inversa',
-    title_en: 'Reverse calculator',
-    offer_es: '¿Cuánto USD te mandaron?',
-    offer_en: 'How many USD were sent?',
-    cta_es: 'Calcular',
-    cta_en: 'Calculate',
     path: '/calculadora-inversa',
   },
   {
     id: 'tasa-honduras',
+    i18nKey: 'tasaHonduras',
     Icon: TrendingUp,
     bgCls: 'bg-[#EFF6FF] border-[#BFDBFE]',
     iconCls: 'bg-[#003087]',
-    title_es: 'Tasa del lempira',
-    title_en: 'Lempira rate',
-    offer_es: '30 días de historia, gratis',
-    offer_en: '30-day history, free',
-    cta_es: 'Ver tasa',
-    cta_en: 'View rate',
     path: '/tasa/usd-hnl',
   },
   {
     id: 'alertas-gratis',
+    i18nKey: 'alertasGratis',
     Icon: Bell,
     bgCls: 'bg-[#F0FDF4] border-[#BBF7D0]',
     iconCls: 'bg-[#00A859]',
-    title_es: 'Alertas diarias gratis',
-    title_en: 'Free daily alerts',
-    offer_es: 'La mejor tasa del día en tu email',
-    offer_en: "Today's best rate in your inbox",
-    cta_es: 'Suscribirme',
-    cta_en: 'Subscribe',
     path: '/tasa/usd-hnl',
   },
   {
     id: 'nosotros',
+    i18nKey: 'nosotros',
     Icon: Heart,
     bgCls: 'bg-[#FFF7ED] border-[#FED7AA]',
     iconCls: 'bg-[#FF6B00]',
-    title_es: 'Hecho por la diáspora',
-    title_en: 'Made by the diaspora',
-    offer_es: 'Gratis, sin registro, transparente',
-    offer_en: 'Free, no signup, transparent',
-    cta_es: 'Conocenos',
-    cta_en: 'Learn more',
     path: '/nosotros',
   },
 ]
@@ -82,6 +66,7 @@ const BANNERS: Banner[] = [
 export default function BannersPatrocinados() {
   const locale = useLocale()
   const en = locale === 'en'
+  const t = useTranslations('banners')
 
   return (
     <section
@@ -90,16 +75,31 @@ export default function BannersPatrocinados() {
       aria-label={en ? 'More from PreEnvios' : 'Más de PreEnvios'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 justify-center max-w-[1160px] mx-auto">
+        {/* Grid mobile-first:
+            - mobile (<640px): 1 col stack vertical (cards full-width
+              refuerzan patron "toda la card clickeable" con tap area
+              amplia)
+            - tablet (640-1023px): 2 col (compacto para pantallas medias)
+            - desktop (>=1024px): 4 col con max-w por card (banners
+              estetica balanceada en fila) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center max-w-[1160px] mx-auto">
           {BANNERS.map(b => {
-            const title = en ? b.title_en : b.title_es
-            const offer = en ? b.offer_en : b.offer_es
-            const cta = en ? b.cta_en : b.cta_es
+            const title = t(`${b.i18nKey}.title`)
+            const offer = t(`${b.i18nKey}.offer`)
+            const cta = t(`${b.i18nKey}.cta`)
             const href = `/${locale}${b.path}`
             return (
-              <article
+              // TODA la card clickeable — Link como elemento root.
+              // Patron Airbnb/Booking/Monito: el "cta" visual abajo a la
+              // derecha es solo indicador visual, pero el tap funciona
+              // en cualquier parte del area del card. Mejora conversion
+              // en mobile (tap area mas grande) y a11y (usuarios con
+              // dedos grandes o tremor no tienen que apuntar al boton).
+              <Link
                 key={b.id}
-                className={`relative rounded-[12px] border ${b.bgCls} p-4 h-[160px] lg:h-[140px] lg:max-w-[280px] flex flex-col transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(15,23,42,.15)]`}
+                href={href}
+                data-cta-id={b.id}
+                className={`relative rounded-[12px] border ${b.bgCls} p-4 min-h-[120px] lg:h-[140px] lg:max-w-[280px] flex flex-col transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(15,23,42,.15)]`}
               >
                 {/* Icon top-left */}
                 <div className={`w-8 h-8 ${b.iconCls} rounded-lg flex items-center justify-center text-white shrink-0`}>
@@ -108,20 +108,28 @@ export default function BannersPatrocinados() {
 
                 {/* Title + offer — todo en font-heading (Work Sans) para viveza visual */}
                 <div className="mt-2.5 flex-1 min-h-0">
-                  <h3 className="font-heading text-[14px] font-bold text-ink mb-1 leading-tight">{title}</h3>
-                  <p className="font-heading text-[16px] font-black text-green-dark leading-tight">{offer}</p>
+                  <h3 className="font-heading text-[14px] font-bold text-ink mb-1 leading-tight">
+                    {title}
+                  </h3>
+                  <p className="font-heading text-[16px] font-black text-green-dark leading-tight">
+                    {offer}
+                  </p>
                 </div>
 
-                {/* CTA bottom-right */}
-                <a
-                  href={href}
-                  data-cta-id={b.id}
-                  className="font-heading absolute bottom-3 right-3 text-[12px] font-extrabold text-blue hover:text-blue-dark inline-flex items-center gap-1 transition-colors"
+                {/* CTA visual bottom-right — <span>, NO <a>. Es solo
+                    affordance visual ("mira, aqui tocas"). El tap real
+                    lo captura el Link padre. Evita anidar <a> dentro
+                    de <a> (HTML invalido). */}
+                <span
+                  aria-hidden="true"
+                  className="font-heading absolute bottom-3 right-3 text-[12px] font-extrabold text-blue inline-flex items-center gap-1"
                 >
                   {cta}
-                  <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </a>
-              </article>
+                  <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </Link>
             )
           })}
         </div>
