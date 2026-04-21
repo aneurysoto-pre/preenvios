@@ -135,15 +135,35 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   }, [corredor])
 
   // ═══════════════════════════════════════
-  // CLOSE SEARCH ON OUTSIDE CLICK
+  // CLOSE SEARCH ON OUTSIDE CLICK / ESCAPE + BODY SCROLL LOCK EN MOBILE
   // ═══════════════════════════════════════
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false)
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery('') }
+    }
     document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
   }, [])
+
+  // Body scroll lock: solo cuando el modal mobile esta abierto. Evita que
+  // el fondo se mueva detras del modal en iOS al hacer scroll. El chequeo
+  // md:hidden se hace via matchMedia — en desktop el inline picker NO
+  // necesita lock porque vive dentro del flujo normal.
+  useEffect(() => {
+    if (!searchOpen) return
+    const mq = window.matchMedia('(max-width: 767px)')
+    if (!mq.matches) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [searchOpen])
 
   // ═══════════════════════════════════════
   // RANKING + SORT
@@ -333,75 +353,171 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
               </div>
 
               {/* ═════ COUNTRY PICKER ═════
-                  Diseño: reemplaza el slot del selector cuando esta abierto
-                  (inline expansion), NO dropdown absolute. Motivo: el hero
-                  section tiene overflow-hidden (necesario para el mask del
-                  grid decorativo); un dropdown absolute de 306px queda
-                  clipeado por la section cuando la lista crece a 6 paises.
-                  Al ser inline, el card crece naturalmente y la section
-                  crece con el. Cero clipping, scroll real en la lista. */}
+                  Dos UIs paralelas purpose-built por viewport, NO una
+                  responsive. Razon: el form factor cambia el patron UX.
+                  - Desktop (md+): inline expansion dentro del card. Hay
+                    espacio vertical suficiente sin teclado virtual.
+                  - Mobile (<md): modal fullscreen (fixed inset-0). El
+                    teclado flota sobre el modal; la lista conserva
+                    overflow-y-auto con height dinamico 100dvh asi el
+                    scroll funciona tanto con teclado abierto como cerrado.
+                  Ambas variantes viven dentro del mismo searchRef para
+                  que el outside-click handler (mousedown) siga
+                  funcionando en desktop y para que la busqueda comparta
+                  estado con el input. */}
               <div className="mb-2.5" ref={searchRef}>
-                {searchOpen ? (
-                  <div className="bg-white border-[1.5px] border-blue rounded-[14px] overflow-hidden shadow-[0_4px_14px_-6px_rgba(10,79,229,.25)]">
-                    {/* Header: search input + close button */}
-                    <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-g100 bg-g50">
-                      <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                        <circle cx="9" cy="9" r="6" />
-                        <path d="m14 14 3 3" strokeLinecap="round" />
-                      </svg>
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
-                        className="flex-1 bg-transparent border-none outline-none text-sm font-medium min-w-0 text-ink placeholder:text-g500"
-                        autoFocus
-                      />
+                {/* ─── DESKTOP: inline swap ─── */}
+                <div className="hidden md:block">
+                  {searchOpen ? (
+                    <div className="bg-white border-[1.5px] border-blue rounded-[14px] overflow-hidden shadow-[0_4px_14px_-6px_rgba(10,79,229,.25)]">
+                      <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-g100 bg-g50">
+                        <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <circle cx="9" cy="9" r="6" />
+                          <path d="m14 14 3 3" strokeLinecap="round" />
+                        </svg>
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={e => setSearchQuery(e.target.value)}
+                          placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
+                          className="flex-1 bg-transparent border-none outline-none text-sm font-medium min-w-0 text-ink placeholder:text-g500"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={() => { setSearchOpen(false); setSearchQuery('') }}
+                          className="p-1 text-g500 hover:text-ink hover:bg-g100 rounded transition-colors shrink-0"
+                          aria-label={locale === 'en' ? 'Close' : 'Cerrar'}
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                            <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="max-h-[260px] overflow-y-auto overscroll-contain">
+                        {filteredCorredores.map(c => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => selectCorredor(c.id)}
+                            className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
+                          >
+                            <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover shrink-0" />
+                            <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
+                            <span className="text-xs text-g500 ml-auto shrink-0">{c.moneda}</span>
+                          </button>
+                        ))}
+                        {filteredCorredores.length === 0 && (
+                          <div className="px-4 py-3 text-sm text-g500">{locale === 'en' ? 'No results' : 'Sin resultados'}</div>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue text-left"
+                      onClick={() => setSearchOpen(true)}
+                      aria-expanded={false}
+                      aria-haspopup="listbox"
+                    >
+                      <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
+                      <span className="flex items-center gap-2.5">
+                        <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
+                        <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
+                        <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                      </span>
+                    </button>
+                  )}
+                </div>
+
+                {/* ─── MOBILE: closed state siempre visible ─── */}
+                <button
+                  type="button"
+                  className="md:hidden w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue active:border-blue text-left"
+                  onClick={() => setSearchOpen(true)}
+                  aria-expanded={searchOpen}
+                  aria-haspopup="dialog"
+                >
+                  <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
+                  <span className="flex items-center gap-2.5">
+                    <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
+                    <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
+                    <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                  </span>
+                </button>
+
+                {/* ─── MOBILE: modal fullscreen cuando abierto ─── */}
+                {searchOpen && (
+                  <div
+                    className="md:hidden fixed inset-0 z-[200] bg-white flex flex-col animate-[fadeIn_.15s_ease]"
+                    style={{ height: '100dvh' }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={locale === 'en' ? 'Select destination country' : 'Selecciona país destino'}
+                  >
+                    {/* Header con safe-area para notch iPhone */}
+                    <div className="shrink-0 flex items-center gap-2 px-3 py-3 border-b border-g200 bg-white" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
                       <button
                         type="button"
                         onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                        className="p-1 text-g500 hover:text-ink hover:bg-g100 rounded transition-colors shrink-0"
+                        className="p-2 -ml-2 text-g600 hover:text-ink hover:bg-g100 rounded-full transition-colors shrink-0"
                         aria-label={locale === 'en' ? 'Close' : 'Cerrar'}
                       >
-                        <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                          <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+                        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <path d="M12 5l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
+                      <div className="flex-1 flex items-center gap-2 bg-g50 border border-g200 rounded-full px-3 py-2 focus-within:border-blue focus-within:bg-white">
+                        <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <circle cx="9" cy="9" r="6" />
+                          <path d="m14 14 3 3" strokeLinecap="round" />
+                        </svg>
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={e => setSearchQuery(e.target.value)}
+                          placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
+                          className="flex-1 bg-transparent border-none outline-none text-[15px] font-medium min-w-0 text-ink placeholder:text-g500"
+                          autoFocus
+                        />
+                        {searchQuery && (
+                          <button
+                            type="button"
+                            onClick={() => setSearchQuery('')}
+                            className="text-g500 hover:text-ink shrink-0"
+                            aria-label={locale === 'en' ? 'Clear' : 'Limpiar'}
+                          >
+                            <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                              <circle cx="10" cy="10" r="7" fill="currentColor" opacity=".15" />
+                              <path d="M7 7l6 6M13 7l-6 6" strokeLinecap="round" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    {/* Scrollable list — max-h directo, sin flex parent */}
-                    <div className="max-h-[260px] overflow-y-auto overscroll-contain">
+
+                    {/* Lista scrollable: flex-1 + min-h-0 para que shrinkee
+                        correctamente dentro del flex column */}
+                    <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
                       {filteredCorredores.map(c => (
                         <button
                           key={c.id}
                           type="button"
                           onClick={() => selectCorredor(c.id)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
+                          className={`w-full flex items-center gap-3 px-5 py-4 text-left border-b border-g100 active:bg-g100 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
                         >
-                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover shrink-0" />
-                          <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
-                          <span className="text-xs text-g500 ml-auto shrink-0">{c.moneda}</span>
+                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[32px] h-[22px] rounded-[2px] object-cover shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]" />
+                          <span className="font-bold text-[16px] flex-1 min-w-0 truncate">{locale === 'en' ? c.nombre_en : c.nombre}</span>
+                          <span className="text-xs text-g500 ml-auto shrink-0 font-semibold">{c.moneda}</span>
                         </button>
                       ))}
                       {filteredCorredores.length === 0 && (
-                        <div className="px-4 py-3 text-sm text-g500">{locale === 'en' ? 'No results' : 'Sin resultados'}</div>
+                        <div className="px-5 py-8 text-sm text-g500 text-center">
+                          {locale === 'en' ? 'No results' : 'Sin resultados'}
+                        </div>
                       )}
                     </div>
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue text-left"
-                    onClick={() => setSearchOpen(true)}
-                    aria-expanded={false}
-                    aria-haspopup="listbox"
-                  >
-                    <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
-                    <span className="flex items-center gap-2.5">
-                      <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
-                      <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-                      <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
-                    </span>
-                  </button>
                 )}
               </div>
 
