@@ -307,23 +307,136 @@ H-09.1 pasa de 🟡 EN PROCESO a 🟢 CERRADO cuando:
 
 ---
 
-## 12. Pre-DNS checklist final
+## 12. Expansión de catálogo (Fase 8 del CONTEXTO_FINAL)
+
+Detalle completo en [CONTEXTO_FINAL.md § Fase 8](CONTEXTO_FINAL.md). Trabajo pre-lanzamiento aprovechando que la fecha es flexible:
+
+### 12.1 México y Colombia al catálogo MVP
+- [ ] Validar scrapers devuelven data para `corredor=mexico` (los 7 operadores)
+- [ ] Validar scrapers devuelven data para `corredor=colombia` (los 7 operadores)
+- [ ] Agregar al array `CORREDORES` de `components/Comparador.tsx`
+- [ ] Agregar a `PAISES_MVP` en `lib/paises.ts`
+- [ ] Agregar a calculadora inversa
+- [ ] Página editorial `/es/mexico` + `/en/mexico`
+- [ ] Página editorial `/es/colombia` + `/en/colombia`
+- [ ] Tasa Banxico (MXN) en tabla `tasas_bancos_centrales`
+- [ ] Tasa Banrep (COP) en tabla `tasas_bancos_centrales`
+- [ ] Bounds de MX/CO en validador ingress (Agente 1)
+- [ ] Traducciones ES/EN
+- [ ] Smoke test del flujo completo en ambos corredores
+
+### 12.2 Wise API pública (Tier 4 data source)
+- [ ] Integrar `api.wise.com/v1/rates` como fuente primaria para operador Wise (gratis, sin aprobación)
+- [ ] Mantener scraper Wise como fallback si API falla
+
+### 12.3 Email deliverability
+- [ ] Verificar dominio `preenvios.com` en Resend (TXT, DKIM, SPF en Namecheap)
+- [ ] Configurar DMARC `p=none` inicial (elevar a `p=quarantine` tras 2 semanas)
+- [ ] Smoke test: suscribirse con email propio → confirmar llega desde `alertas@preenvios.com` y NO cae en spam
+
+---
+
+## 13. Smoke test formal pre-cutover (30-45 min)
+
+Protocolo obligatorio antes de activar el DNS. Correr desde desktop + mobile real, en navegador incógnito.
+
+### 13.1 Landing principal (10 min)
+- [ ] `preenvios.vercel.app/es` carga en <3 seg
+- [ ] Default Honduras preseleccionado en calculadora del hero
+- [ ] Escribir $400 → click "Comparar" → aparecen 7 remesadoras con tasas reales
+- [ ] Click "Enviar ahora" del primer resultado → abre link afiliado en nueva pestaña
+- [ ] Cambiar país Honduras → RD → Guatemala → El Salvador (→ MX → CO si Fase 8 hecha) → resultados cambian sin errores
+- [ ] Click "English" → toda la página se traduce → click "Español" → vuelve
+
+### 13.2 Páginas de país (5 min)
+- [ ] `/es/honduras` carga completo
+- [ ] `/es/republica-dominicana` carga completo
+- [ ] `/es/guatemala` carga completo
+- [ ] `/es/el-salvador` carga completo
+- [ ] `/es/mexico` carga (si Fase 8 hecha)
+- [ ] `/es/colombia` carga (si Fase 8 hecha)
+
+### 13.3 Calculadora inversa y operadores (5 min)
+- [ ] `/es/calculadora-inversa` — escribir 12000 DOP → ver resultados → botón WhatsApp abre wa.me con mensaje correcto
+- [ ] `/es/operadores/remitly` — carga, botón azul CTA final muestra texto visible
+- [ ] `/es/tasa/usd-hnl` — gráfica de 30 días carga con datos
+
+### 13.4 Formularios (10 min)
+- [ ] `/es/contacto` — llenar y enviar mensaje de prueba → "¡Recibimos tu mensaje!"
+- [ ] Suscribite a alertas con email propio → recibís email en <2 min → click link → "Suscripción confirmada"
+- [ ] Chequear inbox Zoho (`contact@preenvios.com`) → ves el mensaje del formulario
+- [ ] Si Fase 8 hecha: email de confirmación viene de `alertas@preenvios.com` (no de `resend.dev`)
+
+### 13.5 Admin panel (5 min)
+- [ ] `/es/admin` login correcto → entra al dashboard
+- [ ] 6 intentos con password mala desde misma IP → el 6to muestra "Demasiados intentos" con countdown (rate limit)
+- [ ] Logout → vuelve a pedir login
+
+### 13.6 Legal y navegación (3 min)
+- [ ] `/es/terminos`, `/es/privacidad`, `/es/disclaimers` cargan
+- [ ] Footer → click "Preguntas" → scrollea al FAQ
+- [ ] Footer → click "Cómo funciona" → scrollea a la sección
+- [ ] Nav superior en mobile (hamburguesa) funciona
+
+### 13.7 Mobile real (5 min en tu celular)
+- [ ] Landing en iPhone/Android: hero, calc, banners, footer todos visibles y legibles
+- [ ] Comparador funciona: escribir monto, click Comparar, ver resultados
+- [ ] Primer resultado visible después del scroll automático
+
+### 13.8 404 y edge cases (1 min)
+- [ ] `/es/pagina-que-no-existe` muestra 404 decente, no error técnico
+- [ ] `/es/admin/sin-login-directo` redirige o muestra login
+
+### 13.9 Validador ingress (Agente 1) funcionando (pre-launch blocker)
+- [ ] Agente 1 implementado y testeado (ver § 7.5)
+- [ ] Corriendo en producción sin falsos positivos por 48 hrs antes del cutover
+
+---
+
+## 14. Pre-DNS checklist final
 
 - [ ] Todas las secciones anteriores marcadas con [x]
 - [ ] No hay errores en la consola del navegador
 - [ ] Vercel deploy muestra "Ready" en verde
 - [ ] Supabase proyecto activo (no pausado)
-- [ ] El MVP en preenvios.com sigue funcionando en GitHub Pages
+- [ ] El MVP en preenvios.com sigue funcionando en GitHub Pages (rollback de emergencia)
 - [ ] Se tiene acceso al panel DNS de Namecheap
 - [ ] Se conocen los registros DNS que se van a cambiar (A record + CNAME www)
+- [ ] Todos los agentes de Fase 7 (defense-in-depth) construidos: validador ingress + data quality + DB health + E2E smoke + business metrics
 
 ---
 
-## Después del cambio de DNS
+## 15. Después del cambio de DNS
 
-- [ ] preenvios.com carga el sitio Next.js (no el MVP viejo)
-- [ ] HTTPS funciona correctamente
-- [ ] Redirect de www a sin-www funciona (o viceversa)
-- [ ] GA4 sigue midiendo en el nuevo dominio
+### 15.1 Verificación inmediata (primera hora)
+- [ ] `preenvios.com` carga el sitio Next.js (no el MVP viejo)
+- [ ] HTTPS funciona correctamente (certificado válido)
+- [ ] Redirect de www a sin-www funciona (o viceversa según config)
+- [ ] GA4 sigue midiendo en el nuevo dominio (verificar Real-Time con 1 visita)
 - [ ] Todos los links de afiliado siguen funcionando
-- [ ] El MVP viejo (index.html) se archiva o elimina del repo
+- [ ] Recrear los 4 monitores BetterStack con URLs de `preenvios.com` (ver § 11.1)
+- [ ] Configurar `SENTRY_DSN` en Vercel + redeploy (ver § 11.2)
+- [ ] Cambiar URL target del Agente 4 (E2E) de `preenvios.vercel.app` a `preenvios.com`
+
+### 15.2 Limpieza y cleanup (primera semana)
+- [ ] MVP viejo (`index.html` en GH Pages) se archiva o elimina del repo
+- [ ] Crear Status Page pública en `status.preenvios.com` con BetterStack
+
+---
+
+## 16. Cadencias institucionales post-lanzamiento
+
+Tareas recurrentes que se institucionalizan después del cutover. Todas son blockers de calidad del producto, no opcionales.
+
+| Cadencia | Tarea | Doc referencia |
+|----------|-------|----------------|
+| **Semanal** | Revisión de 30 min: Sentry errors, BetterStack incidents, anomalías scraper, agentes alertas, GA4 top pages | — |
+| **Semanal** | Usar el sitio como usuario real en 3 dispositivos distintos (iPhone + Android + desktop) para detectar UX bugs que los agentes no ven | — |
+| **Bimensual (cada 60-90 días)** | Auditoría interna OWASP Top 10 (template: `AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md`). Ejecuta auditoría #02, #03, etc. | `AUDITORIA_DE_SEGURIDAD/README.md` |
+| **Bimensual** | `npm audit` + review Dependabot alerts + actualizar dependencias seguras | — |
+| **Mensual (meses 1-3 post-launch)** | Tuning de thresholds de agentes 2, 3, 5 con data real acumulada | Fase 7 del CONTEXTO_FINAL |
+| **Mensual** | Revisión del estado de hiring triggers (ver `EQUIPO_Y_ESCALA.md`). ¿Se cumplió >5K users/mes + >2hrs/día en bugs? ¿Se contrata ya? | `EQUIPO_Y_ESCALA.md` |
+| **Trimestral** | Actualizar `SERVICIOS_EXTERNOS.md` con costos reales del trimestre + revisar necesidad de upgrades (Vercel Pro, Supabase Pro, etc.) | `SERVICIOS_EXTERNOS.md` |
+| **Anual** | Auditoría de seguridad externa profesional (~$1K-1.5K). Requisito para Fase 4.3 (publicidad directa bancos) | `AUDITORIA_DE_SEGURIDAD/README.md` |
+
+**Regla institucional:** cada cadencia tiene un dueño (founder o empleado post-hire) y un calendario visible (Google Calendar recurrente o similar). Cadencia sin dueño = cadencia que nunca se ejecuta.

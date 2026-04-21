@@ -746,6 +746,44 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 
 ---
 
+### Fase 8 — Expansión de catálogo pre-lanzamiento
+
+**Contexto (2026-04-21):** la fecha de lanzamiento se movió a flexible. Mejor lanzar con catálogo más amplio y pulido que con 4 corredores. Se agregan México y Colombia al catálogo público ANTES del DNS cutover — ya que no hay fecha fija, conviene aprovechar el runway (espera de LLC + Payoneer) para maximizar el valor del lanzamiento.
+
+**México y Colombia al catálogo público MVP:**
+
+- [ ] Validar que scrapers de los 7 operadores ya devuelven data para `corredor=mexico`. Si algún scraper está hardcodeado a 4 corredores, expandirlo o documentar el gap
+- [ ] Validar lo mismo para `corredor=colombia`
+- [ ] Si hay gaps de scraping, decidir por operador: expandir scraper / ocultar operador en esos corredores / usar feed de afiliado si ya aprobado
+- [ ] Agregar México y Colombia al array `CORREDORES` en `components/Comparador.tsx` (dropdown del hero)
+- [ ] Agregar México y Colombia a `lib/paises.ts` (`PAISES_MVP`) — automáticamente los sube al Nav dropdown, TasasReferencia, sitemap, etc.
+- [ ] Agregar México y Colombia a la calculadora inversa (`app/[locale]/calculadora-inversa/content.tsx`)
+- [ ] Crear página editorial `/es/mexico` y `/en/mexico` (template de `/es/honduras`, adaptar copy)
+- [ ] Crear página editorial `/es/colombia` y `/en/colombia` (mismo patrón)
+- [ ] Verificar/agregar tasa de Banxico (MXN) en tabla `tasas_bancos_centrales`
+- [ ] Verificar/agregar tasa del Banrep (COP) en tabla `tasas_bancos_centrales`
+- [ ] Agregar México y Colombia al validador de ingress (Agente 1, Fase 7) — bounds ±10% de tasa Banxico y Banrep respectivamente
+- [ ] Traducciones ES/EN de todo texto nuevo (`messages/es.json`, `messages/en.json`)
+- [ ] Smoke test: usuario mexicano y colombiano completa el flujo comparar → click → afiliado
+
+**Calidad de data sources (sube del Tier 3 a Tier 4 para Wise):**
+
+- [ ] Integrar [Wise API pública](https://api.wise.com/v1/rates) para reemplazar/complementar scraper Wise. Es gratuita, no requiere aprobación, más confiable que scraping. Simplifica el pipeline y reduce dependencia de Tier 3 para 1 de los 7 operadores. Estimación: 2-3 hrs
+
+**Email deliverability (crítico para alertas gratis y confirmaciones):**
+
+- [ ] Verificar dominio `preenvios.com` en Resend (DKIM + SPF + DMARC records en Namecheap). Hoy los emails salen desde `onboarding@resend.dev` que mata trust de la marca y aumenta tasa de spam. Estimación: 20-30 min + propagación DNS ~2-24 hrs
+- [ ] Smoke test: suscribirse con email propio, verificar que llega el email de confirmación desde `alertas@preenvios.com` (no resend.dev) y NO cae en spam
+- [ ] DMARC policy inicial en `p=none` para monitoreo; subir a `p=quarantine` tras 2 semanas sin falsos positivos
+
+**No se incluye en esta fase:**
+- Nicaragua y Haití: siguen en Fase 4 (post-launch) hasta tener data validada
+- Perú y Ecuador: fase 4 también
+- Wiki escrita: el founder la escribe manual post-launch (no IA por policy Google/Meta)
+- Blog SEO: post-launch progresivo
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)
