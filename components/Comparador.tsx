@@ -13,9 +13,12 @@ import AlertaForm from '@/components/AlertaForm'
 // /api/precios los sigue sirviendo, pero no se muestran en la UI publica hasta
 // que tengan scraper activo + pagina editorial + datos validados (regla del
 // proyecto registrada en CONTEXTO_FINAL 4.2.8).
+// Orden refleja la prioridad de producto (Honduras = MVP #1, plan de ataque
+// de marketing mes 1). PAISES_MVP en lib/paises.ts mantiene el mismo orden
+// por consistencia. Si se reordena aca, reordenar tambien alla.
 const CORREDORES = [
-  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳', codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
+  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹', codigo_pais: 'gt', aliases: ['gt','gtq','guat','guate','chapín'] },
   { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻', codigo_pais: 'sv', aliases: ['sv','slv','salv','salvador','guanaco'] },
 ]
@@ -59,7 +62,7 @@ const VELOCIDAD_RANK: Record<string, number> = { 'Segundos': 4, 'Seconds': 4, 'M
 export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede, children }: ComparadorProps = {}) {
   const t = useTranslations()
   const locale = useLocale()
-  const [corredor, setCorredor] = useState(defaultCorredor || 'dominican_republic')
+  const [corredor, setCorredor] = useState(defaultCorredor || 'honduras')
   const [monto, setMonto] = useState('')
   const [metodo, setMetodo] = useState('bank')
   const [precios, setPrecios] = useState<Precio[]>([])
