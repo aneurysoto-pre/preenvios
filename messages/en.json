@@ -9,7 +9,8 @@
     "contact": "Contact",
     "menuTitle": "Menu",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "close": "Close"
   },
   "hero": {
     "badge": "Exchange rates updated in real time",

@@ -9,7 +9,8 @@
     "contact": "Contacto",
     "menuTitle": "Menú",
     "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú"
+    "closeMenu": "Cerrar menú",
+    "close": "Cerrar"
   },
   "hero": {
     "badge": "Tasas actualizadas en tiempo real",

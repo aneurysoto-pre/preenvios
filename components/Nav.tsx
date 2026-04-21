@@ -220,34 +220,21 @@ export default function Nav() {
             </button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            {/* DrawerHeader — solo contiene el boton Cerrar visible.
-                Title y Description van sr-only (requeridos por Radix para
-                a11y, no se muestran visualmente para no duplicar con el
-                texto "Cerrar menú").
-                paddingTop con env(safe-area-inset-top) empuja el contenido
-                debajo del notch en iPhone 14/15/16 Pro — sin esto el
-                close button quedaba tapado por el notch y no visible
-                (bug reportado por founder post-Fase 1.2 commit bcf07e5). */}
-            <DrawerHeader
-              className="flex-row items-center justify-end gap-0 px-2 pb-2 border-b border-g200 space-y-0"
-              style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}
+            {/* DrawerTitle + Description sr-only — requeridos por Radix
+                para screen readers. Sin header visual porque el boton
+                "Cerrar" ahora vive AL FINAL de la lista de navegacion
+                (bajo ES/EN), con mismo estilo que los demas links. */}
+            <DrawerTitle className="sr-only">{t('menuTitle')}</DrawerTitle>
+            <DrawerDescription className="sr-only">{t('menuTitle')}</DrawerDescription>
+            {/* Content wrapper con paddingTop safe-area — empuja la
+                primera label "DESTINOS" debajo del notch en iPhone
+                14/15/16 Pro. max(16px, inset) garantiza minimo 16px de
+                aire en devices sin notch (iPhone SE, desktop). */}
+            <div
+              className="flex-1 overflow-y-auto pb-[env(safe-area-inset-bottom)]"
+              style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}
             >
-              <DrawerTitle className="sr-only">{t('menuTitle')}</DrawerTitle>
-              <DrawerDescription className="sr-only">
-                {t('menuTitle')}
-              </DrawerDescription>
-              <DrawerClose asChild>
-                <button
-                  type="button"
-                  className="text-sm font-medium text-ink px-3 min-h-[44px] inline-flex items-center hover:opacity-70 transition-opacity"
-                  aria-label={t('closeMenu')}
-                >
-                  ✕ {t('closeMenu')}
-                </button>
-              </DrawerClose>
-            </DrawerHeader>
-            <div className="flex-1 overflow-y-auto pb-[env(safe-area-inset-bottom)]">
-              <p className="pt-4 pb-2 px-5 text-xs font-extrabold text-g500 uppercase tracking-wider">
+              <p className="pt-2 pb-2 px-5 text-xs font-extrabold text-g500 uppercase tracking-wider">
                 {t('corridors')}
               </p>
               {PAISES_MVP.map(p => (
@@ -299,6 +286,18 @@ export default function Nav() {
                 {locale === 'es' ? <FlagUS className="w-6 h-[17px]" /> : <FlagES className="w-6 h-[17px]" />}
                 <span>{locale === 'es' ? 'English' : 'Español'}</span>
               </button>
+              {/* Cerrar — al final de la lista, mismo estilo que los
+                  otros links. Sin border/bg/gradient. Solo texto negro
+                  con simbolo ✕. aria-label da contexto adicional a SR. */}
+              <DrawerClose asChild>
+                <button
+                  type="button"
+                  className="w-full py-3.5 px-5 text-base font-bold text-ink border-b border-g100 text-left"
+                  aria-label={t('closeMenu')}
+                >
+                  ✕ {t('close')}
+                </button>
+              </DrawerClose>
             </div>
           </DrawerContent>
         </Drawer>
