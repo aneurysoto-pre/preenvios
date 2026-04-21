@@ -286,16 +286,23 @@ export default function Nav() {
                 {locale === 'es' ? <FlagUS className="w-6 h-[17px]" /> : <FlagES className="w-6 h-[17px]" />}
                 <span>{locale === 'es' ? 'English' : 'Español'}</span>
               </button>
-              {/* Cerrar — al final de la lista, mismo estilo que los
-                  otros links. Sin border/bg/gradient. Solo texto negro
-                  con simbolo ✕. aria-label da contexto adicional a SR. */}
+              {/* Cerrar — SEPARADO visualmente del menu (no es parte
+                  de la lista de navegacion, es accion de cerrar).
+                  - Margen top grande (mt-8) para despegarlo de ES/EN
+                  - Layout stacked: ✕ grande arriba (text-3xl) + "Cerrar"
+                    pequeño debajo (text-sm). Convencion UX mobile apps:
+                    usuarios buscan X en esquinas o arriba/abajo → les
+                    damos la X prominente al fondo
+                  - Centered (items-center) — NO text-left como los links
+                  - Sin border-b (es el ultimo elemento, no fluye a nada) */}
               <DrawerClose asChild>
                 <button
                   type="button"
-                  className="w-full py-3.5 px-5 text-base font-bold text-ink border-b border-g100 text-left"
+                  className="w-full mt-8 py-6 flex flex-col items-center justify-center gap-1 text-ink hover:opacity-70 transition-opacity"
                   aria-label={t('closeMenu')}
                 >
-                  ✕ {t('close')}
+                  <span className="text-3xl font-normal leading-none" aria-hidden="true">✕</span>
+                  <span className="text-sm font-medium">{t('close')}</span>
                 </button>
               </DrawerClose>
             </div>
