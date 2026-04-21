@@ -4,7 +4,7 @@ import { PAISES_MVP } from '@/lib/paises'
 
 const BASE_URL = 'https://preenvios.com'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
-const INSTITUTIONAL_PAGES = ['nosotros']
+const INSTITUTIONAL_PAGES = ['nosotros', 'contacto']
 const BLOG_SLUGS = ['cuanto-cobra-western-union-honduras', 'remitly-vs-western-union-dominicana', 'forma-mas-barata-enviar-guatemala']
 
 function altLangs(path: string) {

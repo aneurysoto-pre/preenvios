@@ -189,16 +189,12 @@ export default function Nav() {
           >
             {t('faq')}
           </Link>
-          {/* Contacto: mientras se rehace el form con shadcn/ui Form
-              (commit siguiente pendiente autorizacion del founder), el
-              link pasa a mailto directo. Preserva funcionalidad basica
-              del CTA "Contacto" sin depender del form eliminado. */}
-          <a
-            href="mailto:contact@preenvios.com"
+          <Link
+            href={`/${locale}/contacto`}
             className="text-sm font-semibold text-g600 hover:text-blue transition-colors"
           >
             {t('contact')}
-          </a>
+          </Link>
           <button
             onClick={switchLocale}
             className="text-sm font-bold text-g700 hover:text-blue border border-g200 hover:border-blue rounded-full px-3 py-1.5 transition-colors inline-flex items-center gap-2"
@@ -276,12 +272,12 @@ export default function Nav() {
                 </Link>
               </DrawerClose>
               <DrawerClose asChild>
-                <a
-                  href="mailto:contact@preenvios.com"
+                <Link
+                  href={`/${locale}/contacto`}
                   className="py-3.5 px-5 text-base font-bold text-ink border-b border-g100 block"
                 >
                   {t('contact')}
-                </a>
+                </Link>
               </DrawerClose>
               <button
                 onClick={switchLocale}

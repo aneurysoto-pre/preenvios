@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
+import Link from 'next/link'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
 
@@ -76,20 +77,19 @@ export default function NosotrosContent() {
           </div>
         </section>
 
-        {/* CTA — mailto directo mientras se rehace el form de contacto
-            con shadcn/ui Form (commit siguiente pendiente). */}
+        {/* CTA */}
         <section className="pt-10 pb-16 bg-white">
           <div className="max-w-[760px] mx-auto px-6">
             <div className="bg-gradient-to-br from-blue to-blue-dark rounded-[24px] py-10 px-6 md:px-10 text-center text-white relative overflow-hidden">
               <div className="absolute w-[300px] h-[300px] -top-[100px] -right-[80px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,.15),transparent_70%)]" />
               <h2 className="font-heading text-2xl md:text-3xl font-black mb-3 relative">{t('ctaTitle')}</h2>
               <p className="text-[16px] opacity-90 max-w-[480px] mx-auto mb-6 relative">{t('ctaText')}</p>
-              <a
-                href="mailto:contact@preenvios.com"
+              <Link
+                href={`/${locale}/contacto`}
                 className="inline-block bg-white text-blue py-3.5 px-7 rounded-full font-extrabold text-[15px] relative transition-transform hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {t('ctaButton')} →
-              </a>
+              </Link>
             </div>
           </div>
         </section>
