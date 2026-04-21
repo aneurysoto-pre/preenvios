@@ -13,6 +13,7 @@
  *
  * Política actual:
  * - Admin login: 5 intentos / 15 min / IP (fixed window)
+ * - Contacto form: 3 envíos / 1 hora / IP (fixed window)
  *
  * Sobre el bucketing de @upstash/ratelimit: el library almacena keys
  * como `{prefix}:{identifier}:{bucket_id}` donde bucket_id =
@@ -29,6 +30,7 @@ import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
 let _adminLoginLimiter: Ratelimit | null = null
+let _contactoLimiter: Ratelimit | null = null
 
 function getAdminLoginLimiter(): Ratelimit {
   if (_adminLoginLimiter) return _adminLoginLimiter
@@ -39,6 +41,17 @@ function getAdminLoginLimiter(): Ratelimit {
     prefix: 'rl:admin-login',
   })
   return _adminLoginLimiter
+}
+
+function getContactoLimiter(): Ratelimit {
+  if (_contactoLimiter) return _contactoLimiter
+  _contactoLimiter = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.fixedWindow(3, '1 h'),
+    analytics: true,
+    prefix: 'rl:contacto',
+  })
+  return _contactoLimiter
 }
 
 export function getClientIp(request: Request): string {
@@ -75,5 +88,27 @@ export async function checkAdminLoginRateLimit(ip: string): Promise<RateLimitRes
   } catch (err) {
     console.error('[rate-limit] upstash error:', err)
     return { allowed: true, retryAfterSeconds: 0, remaining: 5 }
+  }
+}
+
+export async function checkContactoRateLimit(ip: string): Promise<RateLimitResult> {
+  try {
+    const limiter = getContactoLimiter()
+    const res = await limiter.limit(ip)
+    console.log('[rate-limit] contacto', {
+      ip,
+      success: res.success,
+      limit: res.limit,
+      remaining: res.remaining,
+      resetInSeconds: Math.max(0, Math.ceil((res.reset - Date.now()) / 1000)),
+    })
+    if (res.success) {
+      return { allowed: true, retryAfterSeconds: 0, remaining: res.remaining }
+    }
+    const retryAfterSeconds = Math.max(1, Math.ceil((res.reset - Date.now()) / 1000))
+    return { allowed: false, retryAfterSeconds, remaining: 0 }
+  } catch (err) {
+    console.error('[rate-limit] upstash error:', err)
+    return { allowed: true, retryAfterSeconds: 0, remaining: 3 }
   }
 }
