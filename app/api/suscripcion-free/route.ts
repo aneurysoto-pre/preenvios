@@ -104,7 +104,22 @@ export async function POST(request: NextRequest) {
         : 'Revisa tu email para confirmar tu suscripción',
       status: 'confirmation_sent'
     })
-  } catch {
+  } catch (err) {
+    // Logging explicito del error para diagnosticar en Vercel logs
+    // (function logs / runtime). Sin esto el catch tragaba cualquier
+    // throw (Resend fail, Supabase RLS, env vars missing, crypto issue)
+    // y el cliente solo recibia { error: "Error interno" } 500 sin
+    // pista de que rompio. console.error + JSON.stringify asegura
+    // que Error objects, supabase PostgrestError, y throws custom
+    // queden visibles en el log.
+    console.error('[/api/suscripcion-free POST] Error:', err)
+    if (err instanceof Error) {
+      console.error('[/api/suscripcion-free POST] name:', err.name)
+      console.error('[/api/suscripcion-free POST] message:', err.message)
+      console.error('[/api/suscripcion-free POST] stack:', err.stack)
+    } else {
+      console.error('[/api/suscripcion-free POST] non-Error:', JSON.stringify(err))
+    }
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }
 }
