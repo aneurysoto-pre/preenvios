@@ -22,7 +22,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, ChevronDown } from 'lucide-react'
 import { PAISES_MVP } from '@/lib/paises'
 import { trackEvent } from '@/lib/tracking'
 import {
@@ -220,19 +220,29 @@ export default function Nav() {
             </button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            <DrawerHeader className="flex-row items-center justify-between gap-0 p-4 border-b border-g200 space-y-0">
-              <DrawerTitle className="font-heading text-base font-extrabold text-ink">
-                {t('menuTitle')}
-              </DrawerTitle>
+            {/* DrawerHeader — solo contiene el boton Cerrar visible.
+                Title y Description van sr-only (requeridos por Radix para
+                a11y, no se muestran visualmente para no duplicar con el
+                texto "Cerrar menú").
+                paddingTop con env(safe-area-inset-top) empuja el contenido
+                debajo del notch en iPhone 14/15/16 Pro — sin esto el
+                close button quedaba tapado por el notch y no visible
+                (bug reportado por founder post-Fase 1.2 commit bcf07e5). */}
+            <DrawerHeader
+              className="flex-row items-center justify-end gap-0 px-2 pb-2 border-b border-g200 space-y-0"
+              style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}
+            >
+              <DrawerTitle className="sr-only">{t('menuTitle')}</DrawerTitle>
               <DrawerDescription className="sr-only">
                 {t('menuTitle')}
               </DrawerDescription>
               <DrawerClose asChild>
                 <button
-                  className="p-1.5 -mr-1.5 text-g600 hover:text-ink hover:bg-g100 rounded transition-colors"
+                  type="button"
+                  className="text-sm font-medium text-ink px-3 min-h-[44px] inline-flex items-center hover:opacity-70 transition-opacity"
                   aria-label={t('closeMenu')}
                 >
-                  <X className="size-5" aria-hidden="true" />
+                  ✕ {t('closeMenu')}
                 </button>
               </DrawerClose>
             </DrawerHeader>
