@@ -88,9 +88,9 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
                   {bc.siglas}
                 </div>
 
-                {/* Info */}
+                {/* Info — todo en font-heading (Work Sans) para viveza y legibilidad */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 text-[11px] text-ink-2 font-medium mb-0.5">
+                  <div className="font-heading flex items-center gap-1.5 text-[11px] text-ink-2 font-medium mb-0.5">
                     <img
                       src={`https://flagcdn.com/w40/${bc.codigo_pais}.png`}
                       alt=""
@@ -102,7 +102,7 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
                     />
                     <span>{COUNTRY_NAMES[bc.codigo_pais]?.[locale] || bc.codigo_pais.toUpperCase()}</span>
                   </div>
-                  <div className="text-[13px] font-extrabold text-ink whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="font-heading text-[13px] font-extrabold text-ink whitespace-nowrap overflow-hidden text-ellipsis">
                     {en ? bc.nombre_banco_en : bc.nombre_banco}
                   </div>
                   <div className="font-heading text-base font-black text-green-dark">

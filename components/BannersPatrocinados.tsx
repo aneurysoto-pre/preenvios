@@ -104,10 +104,10 @@ export default function BannersPatrocinados() {
                   <b.Icon size={18} strokeWidth={2.2} aria-hidden="true" />
                 </div>
 
-                {/* Title + offer */}
+                {/* Title + offer — todo en font-heading (Work Sans) para viveza visual */}
                 <div className="mt-2.5 flex-1 min-h-0">
                   <h3 className="font-heading text-[14px] font-bold text-ink mb-1 leading-tight">{title}</h3>
-                  <p className="text-[16px] font-black text-green-dark leading-tight">{offer}</p>
+                  <p className="font-heading text-[16px] font-black text-green-dark leading-tight">{offer}</p>
                 </div>
 
                 {/* CTA bottom-right */}
@@ -116,7 +116,7 @@ export default function BannersPatrocinados() {
                   rel="noopener sponsored"
                   target="_blank"
                   data-sponsor-slot={b.id}
-                  className="absolute bottom-3 right-3 text-[12px] font-extrabold text-blue hover:text-blue-dark inline-flex items-center gap-1 transition-colors"
+                  className="font-heading absolute bottom-3 right-3 text-[12px] font-extrabold text-blue hover:text-blue-dark inline-flex items-center gap-1 transition-colors"
                 >
                   {cta}
                   <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
