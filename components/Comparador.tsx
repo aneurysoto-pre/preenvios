@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { rankProviders, type Precio, type PrecioRanked } from '@/lib/ranking'
 import { trackEvent } from '@/lib/tracking'
 import { CountryPicker, type Corredor } from '@/components/comparador/country-picker'
-import AlertaForm from '@/components/AlertaForm'
 
 // ═══════════════════════════════════════
 // DATOS ESTÁTICOS
@@ -433,14 +432,6 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 {t('results.bottomDisclaimer')}{' '}
                 <Link href={`/${locale}/disclaimers`}>{t('disclaimers.bottomShortLink')} →</Link>
               </p>
-            </div>
-
-            {/* Alerta gratis — entre disclaimer y TasasReferencia */}
-            <div className="mt-8">
-              <AlertaForm
-                corredorId={corredor}
-                corredorNombre={locale === 'en' ? corredorData.nombre_en : corredorData.nombre}
-              />
             </div>
           </div>
         </section>

@@ -180,41 +180,6 @@
       "cta": "Conócenos"
     }
   },
-  "alertaForm": {
-    "headerTitle": "Recibe la tasa de hoy en tu email",
-    "headerSubtitle": "Alerta diaria gratis para {pais}",
-    "emailLabel": "Tu correo electrónico",
-    "emailPlaceholder": "tu@email.com",
-    "submit": "Suscribirme",
-    "submitLoading": "Enviando…",
-    "error": "Algo salió mal. Intentá de nuevo.",
-    "disclaimer": "Sin spam. Cancela cuando quieras. Cumple CAN-SPAM.",
-    "sentConfirm": "Revisá tu email para confirmar.",
-    "alreadySubscribed": "Ya estás suscrito a {pais}."
-  },
-  "alertas": {
-    "tag": "Alertas gratis",
-    "heroTitle": "La mejor tasa del día, en tu email",
-    "heroLede": "Suscríbete gratis y recibe cada mañana la tasa más alta de 7 remesadoras para el país que elijas. Sin spam, cancela cuando quieras.",
-    "howTitle": "Así funciona",
-    "step1Title": "Elige un país",
-    "step1Desc": "Honduras, República Dominicana, Guatemala, El Salvador, Colombia o México.",
-    "step2Title": "Confirma tu email",
-    "step2Desc": "Te enviamos un link de confirmación. Un click y listo.",
-    "step3Title": "Recibe la alerta cada mañana",
-    "step3Desc": "Email único con la mejor tasa de 7 remesadoras. Sin publicidad de terceros.",
-    "formTitle": "Suscríbete a alertas diarias",
-    "formSubtitle": "Recibirás alertas para Honduras por defecto. Para otros países, visita la página del corredor específico.",
-    "otherCountriesTitle": "Alertas para otros países",
-    "otherCountriesText": "Cada página de país tiene su propio formulario de alertas. Te suscribes al corredor específico que te interesa.",
-    "faqTitle": "Preguntas frecuentes",
-    "faqQ1": "¿Cuánto cuesta?",
-    "faqA1": "Nada. Las alertas son 100% gratis. No vendemos tu email ni te mostramos publicidad de terceros.",
-    "faqQ2": "¿Puedo cancelar cuando quiera?",
-    "faqA2": "Sí. Cada email tiene un link de baja directo. Un click y dejas de recibirlas inmediatamente.",
-    "faqQ3": "¿A qué hora llega la alerta?",
-    "faqA3": "Cada mañana entre 7 y 9 AM hora del este (ET), después de que nuestros scrapers actualizan las tasas."
-  },
   "disclaimers": {
     "d1": "Las tasas mostradas son aproximadas y pueden variar al momento de la transacción. Confirma el monto final directamente con la remesadora antes de enviar.",
     "d2": "Preenvíos.com no es una institución financiera. No procesamos pagos, no recibimos ni enviamos dinero. Solo comparamos información pública de las remesadoras.",

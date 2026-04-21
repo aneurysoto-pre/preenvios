@@ -22,7 +22,7 @@
  * los tests cruzaron >=1 frontera de 15 min.
  *
  * Para agregar rate limit a otros endpoints (H-04.1 en `/api/contactos`,
- * `/api/suscripcion-free`): crear un limiter adicional con su propio
+ * forms publicos futuros): crear un limiter adicional con su propio
  * prefix y tuning.
  */
 

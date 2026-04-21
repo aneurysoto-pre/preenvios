@@ -6,7 +6,7 @@
  * - Window.gtag: Google Analytics 4 via gtag.js (se carga en layout.tsx
  *   desde <Script src="...googletagmanager.com/gtag/js?id=...">). Sin esta
  *   declaracion TypeScript marca error al llamar window.gtag() en los
- *   componentes que trackean eventos (Comparador, AlertaForm, Nav,
+ *   componentes que trackean eventos (Comparador, Nav,
  *   contacto/content.tsx).
  * - Window.dataLayer: array que gtag usa internamente para eventos. No se
  *   usa directamente en el codigo del proyecto pero se declara por

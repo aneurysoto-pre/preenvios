@@ -5,7 +5,6 @@ import { useLocale } from 'next-intl'
 import { CORREDORES_DATA } from '@/lib/corredores'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
-import AlertaForm from '@/components/AlertaForm'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 type Precio = { operador: string; nombre_operador: string; tasa: number; fee: number; velocidad: string; afiliado: boolean }
@@ -102,11 +101,6 @@ export default function TasaHistorica({ pair }: { pair: string }) {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          {/* Subscription form */}
-          <div className="mb-8">
-            <AlertaForm corredorId={corredor.id} corredorNombre={en ? corredor.nombre_en : corredor.nombre} />
           </div>
 
           {/* CTA */}

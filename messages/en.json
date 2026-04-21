@@ -180,41 +180,6 @@
       "cta": "Learn more"
     }
   },
-  "alertaForm": {
-    "headerTitle": "Get today's rate in your inbox",
-    "headerSubtitle": "Free daily alert for {pais}",
-    "emailLabel": "Your email",
-    "emailPlaceholder": "your@email.com",
-    "submit": "Subscribe",
-    "submitLoading": "Sending…",
-    "error": "Something went wrong. Try again.",
-    "disclaimer": "No spam. Unsubscribe anytime. CAN-SPAM compliant.",
-    "sentConfirm": "Check your email to confirm.",
-    "alreadySubscribed": "You're already subscribed for {pais}."
-  },
-  "alertas": {
-    "tag": "Free alerts",
-    "heroTitle": "Today's best rate, in your inbox",
-    "heroLede": "Subscribe free and get the highest rate from 7 remittance providers every morning, for the country you choose. No spam, cancel anytime.",
-    "howTitle": "How it works",
-    "step1Title": "Choose a country",
-    "step1Desc": "Honduras, Dominican Republic, Guatemala, El Salvador, Colombia or Mexico.",
-    "step2Title": "Confirm your email",
-    "step2Desc": "We'll send you a confirmation link. One click and you're in.",
-    "step3Title": "Get the alert every morning",
-    "step3Desc": "One email with the best rate from 7 providers. No third-party ads.",
-    "formTitle": "Subscribe to daily alerts",
-    "formSubtitle": "You'll receive alerts for Honduras by default. For other countries, visit the specific corridor page.",
-    "otherCountriesTitle": "Alerts for other countries",
-    "otherCountriesText": "Each country page has its own alerts form. You subscribe to the specific corridor you care about.",
-    "faqTitle": "Frequently asked questions",
-    "faqQ1": "How much does it cost?",
-    "faqA1": "Nothing. Alerts are 100% free. We don't sell your email or show third-party ads.",
-    "faqQ2": "Can I cancel anytime?",
-    "faqA2": "Yes. Every email has a direct unsubscribe link. One click and you stop receiving them immediately.",
-    "faqQ3": "What time does the alert arrive?",
-    "faqA3": "Every morning between 7-9 AM Eastern Time (ET), after our scrapers refresh the rates."
-  },
   "disclaimers": {
     "d1": "Rates shown are approximate and may vary at the time of transaction. Always confirm the final amount directly with the remittance provider before sending.",
     "d2": "PreEnvios.com is not a financial institution. We do not process payments, receive or send money. We only compare public information from remittance providers.",

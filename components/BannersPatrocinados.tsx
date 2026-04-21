@@ -51,12 +51,11 @@ const BANNERS: Banner[] = [
     Icon: Bell,
     bgCls: 'bg-[#F0FDF4] border-[#BBF7D0]',
     iconCls: 'bg-[#00A859]',
-    // Apunta a la pagina dedicada /alertas (creada en mismo commit).
-    // Single source of truth para suscripcion a alertas genericas.
-    // Si en el futuro se agrega otro icono "Alertas" en nav/footer/blog,
-    // debe apuntar aqui tambien — NO a formularios inline en paginas de
-    // pais (esos forms son para suscripcion a ese corredor especifico).
-    path: '/alertas',
+    // Apunta a /nosotros (pagina institucional) — el texto del banner
+    // sigue siendo "Alertas diarias gratis" como hook CTA, pero lleva
+    // al usuario a conocer el proyecto. Si se decide tener pagina
+    // dedicada de alertas en el futuro, actualizar este path.
+    path: '/nosotros',
   },
   {
     id: 'nosotros',

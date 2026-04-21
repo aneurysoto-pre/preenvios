@@ -34,8 +34,6 @@ export default function AdminPanel() {
   const [editTasa, setEditTasa] = useState('')
   const [editFee, setEditFee] = useState('')
   const [saving, setSaving] = useState(false)
-  const [alertaCorredor, setAlertaCorredor] = useState('')
-  const [alertaMsg, setAlertaMsg] = useState('')
   const [opEdit, setOpEdit] = useState('')
   const [opComision, setOpComision] = useState('')
   const [opCookie, setOpCookie] = useState('')
@@ -100,17 +98,6 @@ export default function AdminPanel() {
     setEditingId(null)
     setSaving(false)
     loadPrecios()
-  }
-
-  async function sendAlerta() {
-    if (!alertaCorredor) return
-    await fetch('/api/admin/alertas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ corredor: alertaCorredor, mensaje: alertaMsg }),
-    })
-    setAlertaCorredor('')
-    setAlertaMsg('')
   }
 
   async function runScrapers() {
@@ -259,24 +246,6 @@ export default function AdminPanel() {
             ) : (
               <p className="text-g500 mb-8">Cargando...</p>
             )}
-
-            {/* Manual alert */}
-            <h3 className="font-heading font-extrabold text-lg mb-4">Disparar alerta manual</h3>
-            <div className="bg-white rounded-[14px] p-4 border border-g200 flex flex-col sm:flex-row gap-3 mb-8">
-              <select value={alertaCorredor} onChange={e => setAlertaCorredor(e.target.value)} className="border border-g200 rounded-[10px] px-3 py-2 text-sm flex-1">
-                <option value="">Seleccionar corredor</option>
-                <option value="honduras">Honduras</option>
-                <option value="dominican_republic">Rep. Dominicana</option>
-                <option value="guatemala">Guatemala</option>
-                <option value="el_salvador">El Salvador</option>
-                <option value="colombia">Colombia</option>
-                <option value="mexico">México</option>
-                <option value="nicaragua">Nicaragua</option>
-                <option value="haiti">Haití</option>
-              </select>
-              <input value={alertaMsg} onChange={e => setAlertaMsg(e.target.value)} placeholder="Mensaje (opcional)" className="border border-g200 rounded-[10px] px-3 py-2 text-sm flex-1" />
-              <button onClick={sendAlerta} className="bg-orange text-white px-4 py-2 rounded-[10px] text-sm font-bold hover:bg-[#E86C06]">Enviar alerta</button>
-            </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
