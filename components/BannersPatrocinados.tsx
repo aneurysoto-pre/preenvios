@@ -75,14 +75,14 @@ export default function BannersPatrocinados() {
       aria-label={en ? 'More from PreEnvios' : 'Más de PreEnvios'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-        {/* Grid mobile-first:
-            - mobile (<640px): 1 col stack vertical (cards full-width
-              refuerzan patron "toda la card clickeable" con tap area
-              amplia)
-            - tablet (640-1023px): 2 col (compacto para pantallas medias)
-            - desktop (>=1024px): 4 col con max-w por card (banners
-              estetica balanceada en fila) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center max-w-[1160px] mx-auto">
+        {/* Grid:
+            - mobile + tablet (<1024px): 2 col (layout 2x2 con 4 banners)
+            - desktop (≥1024px): 4 col con max-w por card (1 fila)
+            Decision: mantener 2x2 mobile aunque las cards sean mas
+            apretadas — usuarios esperan densidad en banners CTA mobile
+            segun patron establecido. Toda la card clickeable compensa
+            la menor tap area de cada card (todo el area del tile responde). */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 justify-center max-w-[1160px] mx-auto">
           {BANNERS.map(b => {
             const title = t(`${b.i18nKey}.title`)
             const offer = t(`${b.i18nKey}.offer`)
@@ -99,7 +99,7 @@ export default function BannersPatrocinados() {
                 key={b.id}
                 href={href}
                 data-cta-id={b.id}
-                className={`relative rounded-[12px] border ${b.bgCls} p-4 min-h-[120px] lg:h-[140px] lg:max-w-[280px] flex flex-col transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(15,23,42,.15)]`}
+                className={`relative rounded-[12px] border ${b.bgCls} p-4 h-[160px] lg:h-[140px] lg:max-w-[280px] flex flex-col transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(15,23,42,.15)]`}
               >
                 {/* Icon top-left */}
                 <div className={`w-8 h-8 ${b.iconCls} rounded-lg flex items-center justify-center text-white shrink-0`}>
