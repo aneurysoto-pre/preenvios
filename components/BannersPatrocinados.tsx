@@ -51,7 +51,12 @@ const BANNERS: Banner[] = [
     Icon: Bell,
     bgCls: 'bg-[#F0FDF4] border-[#BBF7D0]',
     iconCls: 'bg-[#00A859]',
-    path: '/tasa/usd-hnl',
+    // Apunta a la pagina dedicada /alertas (creada en mismo commit).
+    // Single source of truth para suscripcion a alertas genericas.
+    // Si en el futuro se agrega otro icono "Alertas" en nav/footer/blog,
+    // debe apuntar aqui tambien — NO a formularios inline en paginas de
+    // pais (esos forms son para suscripcion a ese corredor especifico).
+    path: '/alertas',
   },
   {
     id: 'nosotros',

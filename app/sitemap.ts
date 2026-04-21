@@ -64,6 +64,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   pages.push({ url: `${BASE_URL}/es/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
   pages.push({ url: `${BASE_URL}/en/calculadora-inversa`, lastModified: now, changeFrequency: 'daily', priority: 0.6, alternates: altLangs('/calculadora-inversa') })
 
+  // Alertas (landing dedicada de suscripcion a alertas diarias gratis)
+  pages.push({ url: `${BASE_URL}/es/alertas`, lastModified: now, changeFrequency: 'monthly', priority: 0.6, alternates: altLangs('/alertas') })
+  pages.push({ url: `${BASE_URL}/en/alertas`, lastModified: now, changeFrequency: 'monthly', priority: 0.6, alternates: altLangs('/alertas') })
+
   // Páginas editoriales por país
   for (const p of PAISES_MVP) {
     pages.push({ url: `${BASE_URL}/es/${p.slugEs}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}`, en: `${BASE_URL}/en/${p.slugEn}` } } })
