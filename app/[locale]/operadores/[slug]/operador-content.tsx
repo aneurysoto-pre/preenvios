@@ -29,13 +29,19 @@ export default function OperadorContent({ slug }: { slug: string }) {
       <ul>
         {PAISES_MVP.map(p => (
           <li key={p.corredorId}>
-            <a href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-[var(--color-blue)] font-semibold hover:underline">
-              {p.bandera} {en ? p.nombreEn : p.nombre}
+            <a href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-[var(--color-blue)] font-semibold hover:underline inline-flex items-center gap-1.5">
+              <img
+                src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
+                alt=""
+                width={22}
+                height={15}
+                loading="lazy"
+                decoding="async"
+                className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+              />
+              <span>{en ? p.nombreEn : p.nombre}</span>
             </a> ({CORREDORES_DATA.find(c => c.id === p.corredorId)?.moneda})
           </li>
-        ))}
-        {CORREDORES_DATA.filter(c => !PAISES_MVP.some(p => p.corredorId === c.id)).map(c => (
-          <li key={c.id}>{c.bandera} {en ? c.nombre_en : c.nombre} ({c.moneda})</li>
         ))}
       </ul>
 
