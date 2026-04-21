@@ -346,29 +346,35 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   </div>
                 </div>
                 {searchOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-g200 rounded-[14px] shadow-lg z-10 overflow-hidden">
+                  // max-h-[340px] acota la altura para que 6+ paises no desborden la
+                  // card y escondan el input de monto abajo. Header (search input)
+                  // fijo arriba con flex-shrink-0; la lista de paises scrollea dentro
+                  // del overflow-y-auto si hay mas de ~5 items visibles.
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-g200 rounded-[14px] shadow-lg z-10 overflow-hidden max-h-[340px] flex flex-col">
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder={locale === 'en' ? 'Search by country, DOP, HNL...' : 'Busca por país, DOP, HNL...'}
-                      className="w-full px-4 py-3 text-sm border-b border-g100 outline-none font-medium"
+                      className="w-full px-4 py-3 text-sm border-b border-g100 outline-none font-medium shrink-0"
                       autoFocus
                     />
-                    {filteredCorredores.map(c => (
-                      <button
-                        key={c.id}
-                        onClick={() => selectCorredor(c.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
-                      >
-                        <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover" />
-                        <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
-                        <span className="text-xs text-g500 ml-auto">{c.moneda}</span>
-                      </button>
-                    ))}
-                    {filteredCorredores.length === 0 && (
-                      <div className="px-4 py-3 text-sm text-g500">{locale === 'en' ? 'No results' : 'Sin resultados'}</div>
-                    )}
+                    <div className="overflow-y-auto overscroll-contain">
+                      {filteredCorredores.map(c => (
+                        <button
+                          key={c.id}
+                          onClick={() => selectCorredor(c.id)}
+                          className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
+                        >
+                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover" />
+                          <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
+                          <span className="text-xs text-g500 ml-auto">{c.moneda}</span>
+                        </button>
+                      ))}
+                      {filteredCorredores.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-g500">{locale === 'en' ? 'No results' : 'Sin resultados'}</div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
