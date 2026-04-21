@@ -63,3 +63,30 @@ La inclusión de MX y CO en el catálogo no cambia el plan de marketing del mes 
 - `lib/scrapers/*.ts` — 7 scrapers, cada uno con los 8 corredores
 - `app/api/whatsapp/webhook/route.ts` — 8 corredores en el mapa de aliases
 - `messages/es.json` + `en.json` — FAQ q3, q5 y misión actualizadas
+
+---
+
+## 7. UX de navegación al escalar (+10 países)
+
+**Regla a aplicar cuando PAISES_MVP supere 10 países activos:**
+
+El dropdown "Destinos" (desktop) y la lista en el drawer mobile del Nav deben refactorizarse a un **submenu colapsable agrupado por región**. Hoy con 6 países listados directos = OK, la UX es clara y no requiere jerarquía. Con 10+ países la UX degrada por scroll largo en el drawer mobile y falta de jerarquía visual en el dropdown desktop — el usuario pierde tiempo escaneando una lista plana larga.
+
+**Agrupamiento propuesto por región (cuando toque):**
+
+| Grupo | Países MVP actuales | Capacidad en DB |
+|-------|---------------------|-----------------|
+| **Centroamérica** | Honduras, Guatemala, El Salvador | + Nicaragua, Costa Rica, Panamá |
+| **Caribe** | República Dominicana | + Haití, Cuba, Puerto Rico |
+| **Sudamérica (norte)** | Colombia | + Venezuela, Ecuador, Perú |
+| **Sudamérica (sur)** | — | + Bolivia, Argentina, Chile |
+| **Norteamérica** | México | — |
+
+**Archivos que deberán refactorizarse cuando llegue la fase:**
+- `components/Nav.tsx` — tanto DropdownMenu (desktop) como el Drawer mobile. Usar `DropdownMenuSub` de shadcn para submenus desktop y accordion o tabs agrupados en mobile.
+- `components/comparador/country-picker.tsx` — Command list con CommandGroup separators por región (cmdk soporta `<CommandGroup heading="Centroamérica">` nativo)
+- `lib/paises.ts` — agregar campo `region` a cada país para filtrado/agrupación
+
+**Criterio de activación:** al agregar el país #10 a `PAISES_MVP` (post-Fase 8 expansión futura — Nicaragua, Haití, Perú, Colombia+, etc. son candidatos).
+
+**Estimación del refactor futuro:** ~3-4h (no es urgente ahora).
