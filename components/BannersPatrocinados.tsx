@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale } from 'next-intl'
-import { Landmark, Building2, Zap, Gift, type LucideIcon } from 'lucide-react'
+import { Calculator, TrendingUp, Bell, Heart, type LucideIcon } from 'lucide-react'
 
 type Banner = {
   id: string
@@ -14,63 +14,68 @@ type Banner = {
   offer_en: string
   cta_es: string
   cta_en: string
-  href: string
+  /** Path relativo al locale (ej. '/calculadora-inversa'). El href se calcula como /{locale}{path}. */
+  path: string
 }
 
-// Mock data — links apuntan a '#' hasta tener acuerdos firmados.
-// Swap href + remove la etiqueta 'Patrocinado' si cambian a partner acuerdos reales.
+// Publicidad propia de PreEnvios — 4 herramientas/paginas del sitio.
+// Reemplaza los banners de sponsors mock (Banreservas/Popular/Viamericas/Boss
+// Money con links '#') que existian hasta 2026-04-20. Decision: mostrar solo
+// contenido propio funcional hasta tener acuerdos firmados con partners reales.
+// Cuando haya acuerdos de sponsorship, volver a agregar banners patrocinados
+// como un 2do bloque separado, dejando estos 4 como "Mas de PreEnvios" aparte.
 const BANNERS: Banner[] = [
   {
-    id: 'banreservas',
-    Icon: Landmark,
+    id: 'calc-inversa',
+    Icon: Calculator,
     bgCls: 'bg-[#FEF2F2] border-[#FECACA]',
     iconCls: 'bg-[#C8102E]',
-    title_es: 'Banreservas',
-    title_en: 'Banreservas',
-    offer_es: 'Tasa hoy 60.50 DOP/USD',
-    offer_en: "Today's rate 60.50 DOP/USD",
-    cta_es: 'Abrir cuenta',
-    cta_en: 'Open account',
-    href: '#',
+    title_es: 'Calculadora inversa',
+    title_en: 'Reverse calculator',
+    offer_es: '¿Cuánto USD te mandaron?',
+    offer_en: 'How many USD were sent?',
+    cta_es: 'Calcular',
+    cta_en: 'Calculate',
+    path: '/calculadora-inversa',
   },
   {
-    id: 'banco-popular',
-    Icon: Building2,
+    id: 'tasa-honduras',
+    Icon: TrendingUp,
     bgCls: 'bg-[#EFF6FF] border-[#BFDBFE]',
     iconCls: 'bg-[#003087]',
-    title_es: 'Banco Popular',
-    title_en: 'Banco Popular',
-    offer_es: 'Cuenta para diáspora',
-    offer_en: 'Diaspora account',
-    cta_es: 'Más info',
-    cta_en: 'Learn more',
-    href: '#',
+    title_es: 'Tasa del lempira',
+    title_en: 'Lempira rate',
+    offer_es: '30 días de historia, gratis',
+    offer_en: '30-day history, free',
+    cta_es: 'Ver tasa',
+    cta_en: 'View rate',
+    path: '/tasa/usd-hnl',
   },
   {
-    id: 'viamericas',
-    Icon: Zap,
+    id: 'alertas-gratis',
+    Icon: Bell,
     bgCls: 'bg-[#F0FDF4] border-[#BBF7D0]',
     iconCls: 'bg-[#00A859]',
-    title_es: 'Viamericas',
-    title_en: 'Viamericas',
-    offer_es: '$0 comisión primer envío',
-    offer_en: '$0 fee first transfer',
-    cta_es: 'Enviar ahora',
-    cta_en: 'Send now',
-    href: '#',
+    title_es: 'Alertas diarias gratis',
+    title_en: 'Free daily alerts',
+    offer_es: 'La mejor tasa del día en tu email',
+    offer_en: "Today's best rate in your inbox",
+    cta_es: 'Suscribirme',
+    cta_en: 'Subscribe',
+    path: '/tasa/usd-hnl',
   },
   {
-    id: 'boss-money',
-    Icon: Gift,
+    id: 'nosotros',
+    Icon: Heart,
     bgCls: 'bg-[#FFF7ED] border-[#FED7AA]',
     iconCls: 'bg-[#FF6B00]',
-    title_es: 'Boss Money',
-    title_en: 'Boss Money',
-    offer_es: 'Primer envío gratis hasta $300',
-    offer_en: 'First transfer free up to $300',
-    cta_es: 'Probar',
-    cta_en: 'Try it',
-    href: '#',
+    title_es: 'Hecho por la diáspora',
+    title_en: 'Made by the diaspora',
+    offer_es: 'Gratis, sin registro, transparente',
+    offer_en: 'Free, no signup, transparent',
+    cta_es: 'Conocenos',
+    cta_en: 'Learn more',
+    path: '/nosotros',
   },
 ]
 
@@ -82,18 +87,15 @@ export default function BannersPatrocinados() {
     <section
       id="banners-patrocinados"
       className="pt-2 pb-0 scroll-mt-[48px]"
-      aria-label={en ? 'Sponsored offers' : 'Ofertas patrocinadas'}
+      aria-label={en ? 'More from PreEnvios' : 'Más de PreEnvios'}
     >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-        <p className="text-[11px] text-g500 text-center mb-2 tracking-wider uppercase">
-          {en ? 'Sponsored' : 'Patrocinado'}
-        </p>
-
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 justify-center max-w-[1160px] mx-auto">
           {BANNERS.map(b => {
             const title = en ? b.title_en : b.title_es
             const offer = en ? b.offer_en : b.offer_es
             const cta = en ? b.cta_en : b.cta_es
+            const href = `/${locale}${b.path}`
             return (
               <article
                 key={b.id}
@@ -112,10 +114,8 @@ export default function BannersPatrocinados() {
 
                 {/* CTA bottom-right */}
                 <a
-                  href={b.href}
-                  rel="noopener sponsored"
-                  target="_blank"
-                  data-sponsor-slot={b.id}
+                  href={href}
+                  data-cta-id={b.id}
                   className="font-heading absolute bottom-3 right-3 text-[12px] font-extrabold text-blue hover:text-blue-dark inline-flex items-center gap-1 transition-colors"
                 >
                   {cta}
