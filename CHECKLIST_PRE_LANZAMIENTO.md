@@ -153,6 +153,26 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 - [ ] GET /api/scrape → ejecuta scrapers (protegido por CRON_SECRET)
 - [ ] vercel.json tiene schedule "0 7 * * *"
 
+### 7.4 🚨 Data sourcing y scrapers — BLOQUEANTE PARA LANZAMIENTO
+
+**Sin resolver esto el producto es inviable:** si los scrapers de Remitly y/o Western Union fallan en producción y no tenemos fallback, la landing muestra resultados incompletos o tasas viejas → pérdida inmediata de credibilidad con la diáspora.
+
+**Contexto:** hoy los 7 scrapers corren via Vercel Cron con fetch directo sin proxies. Los operadores con mayor riesgo de bloqueo (Remitly, Western Union) ya están marcados en el código. Ver [LOGICA_DE_NEGOCIO/08_scrapers.md](LOGICA_DE_NEGOCIO/08_scrapers.md) para la estrategia de 4 tiers.
+
+**Checklist obligatorio antes del DNS cutover:**
+
+- [ ] Correr los 7 scrapers manualmente vía `/api/scrape` y verificar que los 7 guardan precios válidos en Supabase (no 500s, no tasas cero)
+- [ ] Revisar tabla `precios` en Supabase: cada operador × cada corredor MVP (HN, DO, GT, SV) debe tener filas con `actualizado_en` reciente y `tasa > 0`
+- [ ] Dejar correr el cron 3-5 días antes del cutover para identificar scrapers inestables (el detector `reportScraperFailure` marca stale tras 3 fallos seguidos — revisar el panel admin para este estado)
+- [ ] **Decidir para cada operador una de estas 3 rutas:**
+  - ✅ **Funciona sin proxy** → dejarlo como está
+  - 🟡 **Falla intermitente** → contratar Webshare ($3/mes) + agregar env `PROXY_URL` al scraper afectado. Ver sección 18 en [SERVICIOS_EXTERNOS_DETALLE.md](SERVICIOS_EXTERNOS_DETALLE.md)
+  - ❌ **Falla consistente y sin feed de afiliado aprobado** → removerlo del sitio hasta resolver. No puede aparecer en el comparador con tasa vieja o tasa hardcoded
+- [ ] Pipeline de afiliados con feeds de datos: cada red aprobada = 1 operador que deja de depender de scraping (Tier 3 → Tier 2). Prioridad: CJ (Xoom, Ria, WorldRemit, WU, MG) vía Payoneer → Impact (Remitly) → Partnerize (Wise). Verificar cuántos están aprobados el día del cutover y qué porcentaje del catálogo pasa por scraping puro
+- [ ] Wise API pública (gratis, sin aprobación) está integrada como primary source para Wise, o documentar por qué todavía no
+
+**Criterio de NO-GO:** si hay 2+ operadores MVP en estado "falla consistente sin feed ni workaround" el día del cutover, **no se activa el DNS**. Se corrige o se reduce el catálogo visible.
+
 ---
 
 ## 8. SEO y meta tags

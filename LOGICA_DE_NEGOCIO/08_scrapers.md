@@ -62,6 +62,50 @@ Todos los scrapers envían: `PreenviosBot/1.0 contact@preenvios.com`
 
 Ver detalles completos en [TROUBLESHOOTING/26_scraper_revierte_afiliado.md](../TROUBLESHOOTING/26_scraper_revierte_afiliado.md).
 
+### 6ter. Estrategia de 4 tiers de data sourcing (industria) — BLOQUEANTE PRE-LANZAMIENTO
+
+El scraping NO es el estándar de la industria para comparadores de remesas. Los grandes (Monito) usan mezcla. La ruta de madurez correcta, en orden de preferencia:
+
+| Tier | Fuente | Estado PreEnvios hoy | Cost | Quién lo usa en la industria |
+|------|--------|---------------------|------|-----------------------------|
+| 1 | **APIs oficiales** de cada remesadora (B2B partnership) | ❌ No disponible — requiere volumen | Free con contrato | Monito core |
+| 2 | **Feeds de redes de afiliados** (Impact, CJ, Partnerize, FlexOffers) | 🟡 En pipeline — Payoneer pendiente, luego CJ/Impact/Partnerize | Free (aprobado como publisher) | Todos los comparadores serios |
+| 3 | **Scraping + proxies rotativos** | ✅ Implementado (Tier 3a — sin proxy todavía, usando rotación natural de IPs de Vercel) | $3-30/mes (Webshare/ScraperAPI) | Comparadores chicos/medianos |
+| 4 | **Wise API pública gratuita** | ❌ No integrado (pero es gratis, no requiere aprobación) | $0 | Cualquiera |
+
+**Estado actual por operador (2026-04-21):**
+- Wise → Tier 3 (scraper). Debería migrar a Tier 4 (API pública `api.wise.com/v1/rates`) antes del cutover
+- Xoom, Ria, WorldRemit → Tier 3 (scraper). Migran a Tier 2 cuando CJ Affiliate esté aprobado (requiere Payoneer primero)
+- Remitly → Tier 3 (scraper, protección alta). Migra a Tier 2 cuando Impact.com esté aprobado
+- Western Union, MoneyGram → Tier 3 (scraper, protección alta). Migra a Tier 2 cuando CJ + FlexOffers estén aprobados
+
+**Ruta de madurez esperada:**
+
+```
+Hoy (pre-lanzamiento):
+  7/7 operadores dependen de scraping Tier 3
+  Riesgo: bloqueo de WU/Remitly → landing rota
+
+Mes 1-3 post-lanzamiento (con CJ + Impact + Partnerize aprobados):
+  4-5/7 via Tier 2 (affiliate feeds)
+  2-3/7 via Tier 3 (con Webshare $3/mes como fallback)
+  1/7 (Wise) via Tier 4 (API pública)
+  Riesgo: bajo
+
+Mes 6-12 (con volumen demostrable):
+  Negociación B2B con Remitly/WU → Tier 1 parcial
+  Tier 3 reducido a operadores edge-case
+```
+
+**Criterio bloqueante pre-lanzamiento (ver CHECKLIST § 7.4):** los 7 operadores deben estar en estado verificable:
+- (a) Scraper funciona consistentemente tras 3-5 días de cron corriendo, o
+- (b) Scraper falla pero hay affiliate feed listo, o
+- (c) Scraper falla sin workaround → operador se oculta del sitio hasta resolver
+
+**Proxies rotativos — cuándo contratar:**
+- El detector `reportScraperFailure` en [lib/scrapers/base.ts:101](../lib/scrapers/base.ts#L101) marca stale tras 3 fallos seguidos. Si algún operador MVP pasa a stale en producción, activar Webshare ($3/mes) y configurar `PROXY_URL` env var.
+- Ver sección 18 en [SERVICIOS_EXTERNOS_DETALLE.md](../SERVICIOS_EXTERNOS_DETALLE.md) para comparación de proveedores.
+
 ### 7. Dashboard admin
 `GET /api/admin/dashboard` (protegido por CRON_SECRET):
 - Total de precios activos

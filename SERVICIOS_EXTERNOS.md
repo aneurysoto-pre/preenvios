@@ -25,6 +25,7 @@ cj affiliate         $0        $0
 payoneer             $0        $0       (fees por transacción, no mensual)
 betterstack          $0        $0
 sentry               $0        $0
+proxy scrapers       $0        $0       (fallback táctico $3-30 si un scraper bloquea post-lanzamiento)
 ─────────────────────────────────────────
 TOTAL / mes          $1        $46
 ```

@@ -557,6 +557,50 @@ El SDK está configurado con `enabled: !!process.env.SENTRY_DSN` — si no hay D
 
 ---
 
+## 18. Proxy rotativo para scrapers (fallback táctico, no contratado aún)
+
+| Campo | Valor |
+|-------|-------|
+| **Propósito** | Fallback cuando scrapers de Remitly/WU/MG bloqueen fetch directo desde Vercel. NO es dependencia permanente — se activa solo cuando el detector `reportScraperFailure` marca un operador como stale por 3+ fallos consecutivos |
+| **Plan** | Sin contratar. Candidato principal: **Webshare free-tier hasta $3/mes** (Starter con 10 datacenter IPs) |
+| **Dashboard** | N/A hasta contratar |
+| **Costo mensual** | $0 ahora, $3-30 cuando se active |
+| **Estado** | 🟡 No contratado — trigger documentado en CHECKLIST § 7.4 y LOGICA_DE_NEGOCIO/08_scrapers.md § 6ter |
+
+### Opciones de proveedor (ranking para el volumen de PreEnvios: ~60 requests/día)
+
+| Proveedor | Plan mínimo | Tipo | Recomendación |
+|-----------|-------------|------|---------------|
+| **Webshare** | $2.99/mes (10 IPs datacenter) | Datacenter rotativo | ✅ Primera opción. Barato, alcanza de sobra |
+| **ScraperAPI** | $49/mes (100K req/mes) | API wrapper + anti-bot | Usar si Webshare no bypassa Cloudflare de WU |
+| **SmartProxy / DataImpulse** | $3-15/mes | Residencial | Solo si WU/Remitly detectan datacenter IPs |
+| **Bright Data** | $500/mes mínimo | Enterprise | ❌ Overkill, no usar |
+
+### Trigger para contratar
+
+1. El cron diario de `/api/scrape` falla para un mismo operador MVP 3 veces consecutivas
+2. `reportScraperFailure` marca los precios como stale (`actualizado_en = 2000-01-01`)
+3. El dashboard admin `/es/admin` reporta el operador en rojo
+4. Pasaron >48hrs y los fetchs directos siguen fallando → no es glitch de red, es bloqueo real
+
+Cuando se active: crear cuenta Webshare, copiar URL de proxy (formato `http://user:pass@proxy.webshare.io:80`), agregar env var `PROXY_URL` en Vercel, modificar scrapers afectados para usar ese proxy con `fetch()` (agregar config de agent).
+
+### Env vars que se agregarán
+
+- `PROXY_URL` — URL completa del proxy con credenciales (solo server-side, NO `NEXT_PUBLIC_`)
+- Opcional: `PROXY_OPERATORS` — lista separada por coma de qué operadores usan proxy (ej. `remitly,westernunion`). Si vacío, todos lo usan.
+
+### Relación con afiliados (Tier 2)
+
+Cada red de afiliados que apruebe PreEnvios = 1 operador que deja de depender de scraping + proxy. Roadmap:
+- Payoneer (en curso) → desbloquea CJ → feeds de Xoom, Ria, WorldRemit, WU, MG vía Impact CJ
+- Impact.com → feed de Remitly
+- Partnerize → feed de Wise (o migrar a API pública `api.wise.com/v1/rates` que es gratis y no requiere aprobación)
+
+Cuantos más feeds Tier 2 aprobados, menos necesidad de proxy. Meta: en mes 6 post-lanzamiento, solo 1-2 scrapers dependen de proxy.
+
+---
+
 ## Proyección de costo mensual
 
 | Fase | Servicios pagos | Costo/mes estimado |
