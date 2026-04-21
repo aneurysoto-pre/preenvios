@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
+import Image from 'next/image'
+import Link from 'next/link'
 import { rankProviders, type Precio, type PrecioRanked } from '@/lib/ranking'
+import { trackEvent } from '@/lib/tracking'
+import { CountryPicker, type Corredor } from '@/components/comparador/country-picker'
 import AlertaForm from '@/components/AlertaForm'
 
 // ═══════════════════════════════════════
@@ -14,20 +18,13 @@ import AlertaForm from '@/components/AlertaForm'
 // scraper validado + pagina editorial. Orden refleja la prioridad de producto
 // (Honduras = MVP #1). PAISES_MVP en lib/paises.ts mantiene el mismo orden
 // por consistencia. Si se reordena aca, reordenar tambien alla.
-const CORREDORES = [
-  { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳', codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
-  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },
-  { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹', codigo_pais: 'gt', aliases: ['gt','gtq','guat','guate','chapín'] },
-  { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻', codigo_pais: 'sv', aliases: ['sv','slv','salv','salvador','guanaco'] },
-  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    bandera: '🇨🇴', codigo_pais: 'co', aliases: ['co','cop','col','colombia','paisa'] },
-  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    bandera: '🇲🇽', codigo_pais: 'mx', aliases: ['mx','mxn','mex','mexico','chilango','azteca'] },
-]
-
-const METODOS = [
-  { id: 'bank',        icon: '🏦', es: 'Cuenta bancaria',   en: 'Bank account' },
-  { id: 'cash_pickup', icon: '💵', es: 'Retiro en efectivo', en: 'Cash pickup' },
-  { id: 'delivery',    icon: '🏠', es: 'Domicilio',          en: 'Home delivery' },
-  { id: 'mobile',      icon: '📱', es: 'Billetera móvil',    en: 'Mobile wallet' },
+const CORREDORES: Corredor[] = [
+  { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
+  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },
+  { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    codigo_pais: 'gt', aliases: ['gt','gtq','guat','guate','chapín'] },
+  { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    codigo_pais: 'sv', aliases: ['sv','slv','salv','salvador','guanaco'] },
+  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    codigo_pais: 'co', aliases: ['co','cop','col','colombia','paisa'] },
+  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    codigo_pais: 'mx', aliases: ['mx','mxn','mex','mexico','chilango','azteca'] },
 ]
 
 const LOGOS: Record<string, string> = {
@@ -39,8 +36,6 @@ const LOGOS: Record<string, string> = {
   westernunion: 'https://cdn.brandfetch.io/westernunion.com/w/120/h/120',
   moneygram:    'https://cdn.brandfetch.io/moneygram.com/w/120/h/120',
 }
-
-declare function gtag(...args: unknown[]): void
 
 type ComparadorProps = {
   defaultCorredor?: string
@@ -64,21 +59,18 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   const locale = useLocale()
   const [corredor, setCorredor] = useState(defaultCorredor || 'honduras')
   const [monto, setMonto] = useState('')
-  const [metodo, setMetodo] = useState('bank')
+  const [metodo] = useState('bank')
   const [precios, setPrecios] = useState<Precio[]>([])
   const [loading, setLoading] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('best')
   const [lastFetch, setLastFetch] = useState<number | null>(null)
   const [nowTick, setNowTick] = useState(0)
   const [isComparing, setIsComparing] = useState(false)
-  const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const t0 = useRef(Date.now())
   const inicioEnviado = useRef(false)
 
-  const corredorData = CORREDORES.find(c => c.id === corredor)!
+  const corredorData = CORREDORES.find(c => c.id === corredor) ?? CORREDORES[0]
   const montoNum = parseFloat(monto) || 0
 
   // ═══════════════════════════════════════
@@ -135,37 +127,6 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   }, [corredor])
 
   // ═══════════════════════════════════════
-  // CLOSE SEARCH ON OUTSIDE CLICK / ESCAPE + BODY SCROLL LOCK EN MOBILE
-  // ═══════════════════════════════════════
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false)
-    }
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery('') }
-    }
-    document.addEventListener('mousedown', handleClick)
-    document.addEventListener('keydown', handleKey)
-    return () => {
-      document.removeEventListener('mousedown', handleClick)
-      document.removeEventListener('keydown', handleKey)
-    }
-  }, [])
-
-  // Body scroll lock: solo cuando el modal mobile esta abierto. Evita que
-  // el fondo se mueva detras del modal en iOS al hacer scroll. El chequeo
-  // md:hidden se hace via matchMedia — en desktop el inline picker NO
-  // necesita lock porque vive dentro del flujo normal.
-  useEffect(() => {
-    if (!searchOpen) return
-    const mq = window.matchMedia('(max-width: 767px)')
-    if (!mq.matches) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = prev }
-  }, [searchOpen])
-
-  // ═══════════════════════════════════════
   // RANKING + SORT
   // ═══════════════════════════════════════
   const ranked = useMemo(() => {
@@ -185,40 +146,13 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
   }, [precios, montoNum, sortKey])
 
   // ═══════════════════════════════════════
-  // SEARCH FILTER
-  // ═══════════════════════════════════════
-  const filteredCorredores = CORREDORES.filter(c => {
-    if (!searchQuery) return true
-    const q = searchQuery.toLowerCase()
-    return c.nombre.toLowerCase().includes(q)
-      || c.nombre_en.toLowerCase().includes(q)
-      || c.moneda.toLowerCase().includes(q)
-      || c.codigo_pais.includes(q)
-      || c.aliases.some(a => a.includes(q))
-  })
-
-  // ═══════════════════════════════════════
-  // GA4 HELPERS
+  // HANDLERS
   // ═══════════════════════════════════════
   function secs() { return Math.round((Date.now() - t0.current) / 1000) }
 
-  function trackEvent(name: string, params: Record<string, unknown>) {
-    if (typeof gtag === 'function') gtag('event', name, params)
-  }
-
-  // ═══════════════════════════════════════
-  // HANDLERS
-  // ═══════════════════════════════════════
   function selectCorredor(id: string) {
     setCorredor(id)
-    setSearchOpen(false)
-    setSearchQuery('')
     trackEvent('cambio_corredor', { corredor: id, segundos: secs() })
-  }
-
-  function selectMetodo(id: string) {
-    setMetodo(id)
-    trackEvent('cambio_metodo_entrega', { metodo: id, corredor, segundos: secs() })
   }
 
   function onMontoChange(val: string) {
@@ -247,11 +181,6 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
     // - Banners 85% visibles (pequeño cut arriba)
     // - Primer resultado 100% visible
     // - Segundo resultado asomando (variable segun altura de viewport)
-    //
-    // Historia: intento previo con formula "PEEK=120 del segundo card"
-    // era adaptable por viewport pero overshooteaba en pantallas grandes
-    // (~1000px+) escondiendo los banners completos. Anclar en banners con
-    // NUDGE fijo es mas predecible. Tuned via user feedback 2026-04-19.
     requestAnimationFrame(() => {
       const banners = document.getElementById('banners-patrocinados')
       if (banners) {
@@ -292,7 +221,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
           className="fixed inset-0 z-[100] flex items-center justify-center bg-white"
           role="status"
           aria-live="polite"
-          aria-label={locale === 'en' ? 'Finding the best rates' : 'Buscando las mejores tasas'}
+          aria-label={t('search.loadingRates')}
         >
           <div className="relative w-[112px] h-[112px] flex items-center justify-center">
             {/* Anillo giratorio exterior */}
@@ -306,7 +235,14 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
         </div>
       )}
 
-      {/* ═════ HERO + SEARCH CARD ═════ */}
+      {/* ═════ HERO + SEARCH CARD ═════
+          NOTA sobre scroll horizontal: los gradient decorative cards que
+          vivian detras del search card (inset-[28px_-28px_-28px_28px] +
+          rotate-[4deg]) fueron removidos en este refactor. Causaban bug
+          conocido de iOS Safari donde elementos con transform escapan
+          del overflow-hidden del parent positioned. El search card
+          conserva su shadow-[0_30px_70px_-20px_rgba(10,79,229,.35)] que
+          ya proporciona depth visual suficiente sin overflow riesgoso. */}
       <section id="calculadora" data-section="calculadora" className="relative pt-20 pb-6 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(10,79,229,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(10,79,229,.05) 1px,transparent 1px)',
@@ -341,8 +277,6 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
           {/* Search card */}
           <div className="relative">
-            <div className="absolute inset-[28px_-28px_-28px_28px] bg-blue-soft rounded-[32px] rotate-[4deg] opacity-60" />
-            <div className="absolute inset-[14px_-14px_-14px_14px] bg-green-soft rounded-[32px] rotate-[2deg]" />
             <div className="relative bg-white rounded-[32px] p-5 shadow-[0_30px_70px_-20px_rgba(10,79,229,.35)] border border-g200 z-[2]">
               <div className="flex items-center justify-between mb-3.5">
                 <h3 className="font-heading text-[17px] font-extrabold">{t('search.title')}</h3>
@@ -352,181 +286,32 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 </span>
               </div>
 
-              {/* ═════ COUNTRY PICKER ═════
-                  Dos UIs paralelas purpose-built por viewport, NO una
-                  responsive. Razon: el form factor cambia el patron UX.
-                  - Desktop (md+): inline expansion dentro del card. Hay
-                    espacio vertical suficiente sin teclado virtual.
-                  - Mobile (<md): modal fullscreen (fixed inset-0). El
-                    teclado flota sobre el modal; la lista conserva
-                    overflow-y-auto con height dinamico 100dvh asi el
-                    scroll funciona tanto con teclado abierto como cerrado.
-                  Ambas variantes viven dentro del mismo searchRef para
-                  que el outside-click handler (mousedown) siga
-                  funcionando en desktop y para que la busqueda comparta
-                  estado con el input. */}
-              <div className="mb-2.5" ref={searchRef}>
-                {/* ─── DESKTOP: inline swap ─── */}
-                <div className="hidden md:block">
-                  {searchOpen ? (
-                    <div className="bg-white border-[1.5px] border-blue rounded-[14px] overflow-hidden shadow-[0_4px_14px_-6px_rgba(10,79,229,.25)]">
-                      <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-g100 bg-g50">
-                        <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                          <circle cx="9" cy="9" r="6" />
-                          <path d="m14 14 3 3" strokeLinecap="round" />
-                        </svg>
-                        <input
-                          type="text"
-                          value={searchQuery}
-                          onChange={e => setSearchQuery(e.target.value)}
-                          placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
-                          className="flex-1 bg-transparent border-none outline-none text-sm font-medium min-w-0 text-ink placeholder:text-g500"
-                          autoFocus
-                        />
-                        <button
-                          type="button"
-                          onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                          className="p-1 text-g500 hover:text-ink hover:bg-g100 rounded transition-colors shrink-0"
-                          aria-label={locale === 'en' ? 'Close' : 'Cerrar'}
-                        >
-                          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                            <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="max-h-[260px] overflow-y-auto overscroll-contain">
-                        {filteredCorredores.map(c => (
-                          <button
-                            key={c.id}
-                            type="button"
-                            onClick={() => selectCorredor(c.id)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
-                          >
-                            <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover shrink-0" />
-                            <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
-                            <span className="text-xs text-g500 ml-auto shrink-0">{c.moneda}</span>
-                          </button>
-                        ))}
-                        {filteredCorredores.length === 0 && (
-                          <div className="px-4 py-3 text-sm text-g500">{locale === 'en' ? 'No results' : 'Sin resultados'}</div>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue text-left"
-                      onClick={() => setSearchOpen(true)}
-                      aria-expanded={false}
-                      aria-haspopup="listbox"
-                    >
-                      <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
-                      <span className="flex items-center gap-2.5">
-                        <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
-                        <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-                        <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
-                      </span>
-                    </button>
-                  )}
-                </div>
-
-                {/* ─── MOBILE: closed state siempre visible ─── */}
-                <button
-                  type="button"
-                  className="md:hidden w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue active:border-blue text-left"
-                  onClick={() => setSearchOpen(true)}
-                  aria-expanded={searchOpen}
-                  aria-haspopup="dialog"
-                >
-                  <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
-                  <span className="flex items-center gap-2.5">
-                    <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
-                    <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-                    <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
-                  </span>
-                </button>
-
-                {/* ─── MOBILE: modal fullscreen cuando abierto ─── */}
-                {searchOpen && (
-                  <div
-                    className="md:hidden fixed inset-0 z-[200] bg-white flex flex-col animate-[fadeIn_.15s_ease]"
-                    style={{ height: '100dvh' }}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label={locale === 'en' ? 'Select destination country' : 'Selecciona país destino'}
-                  >
-                    {/* Header con safe-area para notch iPhone */}
-                    <div className="shrink-0 flex items-center gap-2 px-3 py-3 border-b border-g200 bg-white" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
-                      <button
-                        type="button"
-                        onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                        className="p-2 -ml-2 text-g600 hover:text-ink hover:bg-g100 rounded-full transition-colors shrink-0"
-                        aria-label={locale === 'en' ? 'Close' : 'Cerrar'}
-                      >
-                        <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                          <path d="M12 5l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
-                      <div className="flex-1 flex items-center gap-2 bg-g50 border border-g200 rounded-full px-3 py-2 focus-within:border-blue focus-within:bg-white">
-                        <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                          <circle cx="9" cy="9" r="6" />
-                          <path d="m14 14 3 3" strokeLinecap="round" />
-                        </svg>
-                        <input
-                          type="text"
-                          value={searchQuery}
-                          onChange={e => setSearchQuery(e.target.value)}
-                          placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
-                          className="flex-1 bg-transparent border-none outline-none text-[15px] font-medium min-w-0 text-ink placeholder:text-g500"
-                          autoFocus
-                        />
-                        {searchQuery && (
-                          <button
-                            type="button"
-                            onClick={() => setSearchQuery('')}
-                            className="text-g500 hover:text-ink shrink-0"
-                            aria-label={locale === 'en' ? 'Clear' : 'Limpiar'}
-                          >
-                            <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                              <circle cx="10" cy="10" r="7" fill="currentColor" opacity=".15" />
-                              <path d="M7 7l6 6M13 7l-6 6" strokeLinecap="round" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Lista scrollable: flex-1 + min-h-0 para que shrinkee
-                        correctamente dentro del flex column */}
-                    <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-                      {filteredCorredores.map(c => (
-                        <button
-                          key={c.id}
-                          type="button"
-                          onClick={() => selectCorredor(c.id)}
-                          className={`w-full flex items-center gap-3 px-5 py-4 text-left border-b border-g100 active:bg-g100 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
-                        >
-                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[32px] h-[22px] rounded-[2px] object-cover shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]" />
-                          <span className="font-bold text-[16px] flex-1 min-w-0 truncate">{locale === 'en' ? c.nombre_en : c.nombre}</span>
-                          <span className="text-xs text-g500 ml-auto shrink-0 font-semibold">{c.moneda}</span>
-                        </button>
-                      ))}
-                      {filteredCorredores.length === 0 && (
-                        <div className="px-5 py-8 text-sm text-g500 text-center">
-                          {locale === 'en' ? 'No results' : 'Sin resultados'}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+              {/* Country picker — UI responsive via Drawer (mobile) + Dialog
+                  (desktop) de shadcn/ui. El componente maneja focus trap,
+                  escape, outside click, scroll lock, safe-area-inset y
+                  keyboard navigation internamente via Radix + vaul + cmdk.
+                  Reemplaza ~180 lineas de picker custom con parches
+                  md:hidden que fallaban en Safari iOS. */}
+              <div className="mb-2.5">
+                <CountryPicker
+                  corredor={corredor}
+                  corredores={CORREDORES}
+                  onSelect={selectCorredor}
+                />
               </div>
 
-              {/* Amount input */}
+              {/* Amount input — label ahora asociado con htmlFor+id para a11y */}
               <div className="bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 mb-2.5 transition-colors focus-within:border-blue focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(10,79,229,.08)]">
-                <label className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.sendFrom')}</label>
+                <label
+                  htmlFor="comparador-monto"
+                  className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1"
+                >
+                  {t('search.sendFrom')}
+                </label>
                 <div className="flex items-center gap-2.5">
                   <input
                     ref={inputRef}
+                    id="comparador-monto"
                     type="number"
                     value={monto}
                     onChange={e => onMontoChange(e.target.value)}
@@ -539,7 +324,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   />
                   <div className="flex items-center gap-2 font-bold text-g700 text-[13px] sm:text-[15px] shrink-0">
                     <div className="w-[26px] h-[26px] rounded-full overflow-hidden shadow-[0_0_0_2px_white,0_0_0_3px_var(--color-g200)]">
-                      <svg viewBox="0 0 60 30"><rect width="60" height="30" fill="#fff" /><g fill="#B22234"><rect y="0" width="60" height="2.3" /><rect y="4.6" width="60" height="2.3" /><rect y="9.2" width="60" height="2.3" /><rect y="13.8" width="60" height="2.3" /><rect y="18.4" width="60" height="2.3" /><rect y="23" width="60" height="2.3" /><rect y="27.6" width="60" height="2.4" /></g><rect width="24" height="16" fill="#3C3B6E" /></svg>
+                      <svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#fff" /><g fill="#B22234"><rect y="0" width="60" height="2.3" /><rect y="4.6" width="60" height="2.3" /><rect y="9.2" width="60" height="2.3" /><rect y="13.8" width="60" height="2.3" /><rect y="18.4" width="60" height="2.3" /><rect y="23" width="60" height="2.3" /><rect y="27.6" width="60" height="2.4" /></g><rect width="24" height="16" fill="#3C3B6E" /></svg>
                     </div>
                     USD
                   </div>
@@ -578,9 +363,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 <h2 className="font-heading">
                   {t('results.title')} <span className="text-blue">${montoNum.toLocaleString()} USD → {locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
                 </h2>
-                {/* Meta: badge verde pill (timestamp) + linea separada debajo (ranking note).
-                    Ambos con font discreto para NO competir con el h2. Aire vertical
-                    aumentado (mt-4 + gap-2.5) para separar las 3 lineas. */}
+                {/* Meta: badge verde pill (timestamp) + linea separada debajo (ranking note). */}
                 <div className="mt-4 flex flex-col items-start gap-2.5">
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-dark bg-green-soft rounded-full px-2 py-0.5 leading-tight">
                     <span className="w-1 h-1 bg-green rounded-full animate-pulse" aria-hidden="true" />
@@ -588,7 +371,7 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   </span>
                   <p className="text-[9px] text-g400 leading-tight">
                     {t('disclaimers.d3')}{' '}
-                    <a href={`/${locale}/como-ganamos-dinero`} className="underline decoration-g300 hover:text-blue hover:decoration-blue underline-offset-2">{t('disclaimers.d3Link')}</a>
+                    <Link href={`/${locale}/como-ganamos-dinero`} className="underline decoration-g300 hover:text-blue hover:decoration-blue underline-offset-2">{t('disclaimers.d3Link')}</Link>
                   </p>
                 </div>
               </div>
@@ -625,15 +408,13 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
             {/* Results cards */}
             {loading ? (
-              <div className="text-center py-16 text-g500">Loading...</div>
+              <div className="text-center py-16 text-g500">{t('results.loading')}</div>
             ) : ranked.length === 0 ? (
               <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
-                <div className="text-[40px] mb-3">🕑</div>
-                <h3 className="font-heading text-xl font-extrabold mb-2">{locale === 'en' ? 'Rates coming soon' : 'Tasas disponibles pronto'}</h3>
+                <div className="text-[40px] mb-3" aria-hidden="true">🕑</div>
+                <h3 className="font-heading text-xl font-extrabold mb-2">{t('results.emptyTitle')}</h3>
                 <p className="text-ink-2 text-[15px] max-w-[420px] mx-auto">
-                  {locale === 'en'
-                    ? `We're verifying rates for ${corredorData.nombre_en}.`
-                    : `Estamos verificando las tasas para ${corredorData.nombre}.`}
+                  {t('results.emptyDesc', { pais: locale === 'en' ? corredorData.nombre_en : corredorData.nombre })}
                 </p>
               </div>
             ) : (
@@ -644,20 +425,17 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
               </div>
             )}
 
-            {/* Bottom disclaimer (replicates original HTML, + link to /disclaimers) */}
+            {/* Bottom disclaimer */}
             <div className="cmp-disclaimer">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="10" cy="10" r="8" /><path d="M10 6v5" strokeLinecap="round" /><circle cx="10" cy="14" r=".8" fill="currentColor" /></svg>
               <p>
-                <b>{locale === 'en' ? 'Important:' : 'Importante:'}</b>{' '}
-                {locale === 'en'
-                  ? 'Rates shown are approximate estimates for comparison purposes. PreEnvios does not handle, receive or transfer money — we only compare public information from remittance providers. Always confirm the final amount directly with the provider before sending.'
-                  : 'Las tasas mostradas son estimaciones aproximadas con fines comparativos. PreEnvios no maneja, recibe ni transfiere dinero — solo comparamos información pública de las remesadoras. Confirma siempre el monto final directamente con la remesadora antes de enviar.'}{' '}
-                <a href={`/${locale}/disclaimers`}>{t('disclaimers.bottomShortLink')} →</a>
+                <b>{t('results.important')}</b>{' '}
+                {t('results.bottomDisclaimer')}{' '}
+                <Link href={`/${locale}/disclaimers`}>{t('disclaimers.bottomShortLink')} →</Link>
               </p>
             </div>
 
-            {/* Alerta gratis — entre disclaimer y TasasReferencia. Prellena con
-                el corredor activo del comparador (Landing: dropdown; Pais: defaultCorredor). */}
+            {/* Alerta gratis — entre disclaimer y TasasReferencia */}
             <div className="mt-8">
               <AlertaForm
                 corredorId={corredor}
@@ -673,7 +451,6 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
 
 // ═══════════════════════════════════════
 // RESULT CARD — replicates original preenvios.com HTML card layout
-// Only addition over original: small Preenvíos Score line below rating
 // ═══════════════════════════════════════
 function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
   p: PrecioRanked; i: number; sortKey: SortKey; esUSD: boolean; moneda: string; locale: string
@@ -699,14 +476,13 @@ function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
 
       <div className="cmp-brand">
         <div className="cmp-logo">
-          <img
+          <Image
             src={LOGOS[p.operador]}
             alt={p.nombre_operador}
             width={36}
             height={36}
             loading="lazy"
-            decoding="async"
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+            unoptimized
           />
         </div>
         <div className="cmp-brand-info">
@@ -722,7 +498,7 @@ function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
         <div className="lbl">{t('results.rate')}</div>
         {esUSD ? (
           <>
-            <div className="val rate">{locale === 'en' ? 'No conversion' : 'Sin conversión'}</div>
+            <div className="val rate">{t('search.noConversion')}</div>
             <div className="sub">USD → USD</div>
           </>
         ) : (

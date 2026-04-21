@@ -29,7 +29,12 @@
     "updatedSeconds": "Rates updated {n} sec ago",
     "updatedMinutes": "Rates updated {n} min ago",
     "updatedHour": "Rates updated 1 hour ago",
-    "updatedHours": "Rates updated {n} hours ago"
+    "updatedHours": "Rates updated {n} hours ago",
+    "pickerTitle": "Choose destination country",
+    "pickerDescription": "Search the list or type to filter by name, currency or code",
+    "pickerSearchPlaceholder": "Search country, DOP, HNL...",
+    "pickerNoResults": "No results",
+    "loadingRates": "Finding the best rates"
   },
   "results": {
     "title": "Results for",
@@ -51,7 +56,12 @@
     "free": "Free",
     "perUsd": "per USD",
     "reviews": "reviews",
-    "score": "Preenvíos Score"
+    "score": "Preenvíos Score",
+    "loading": "Loading...",
+    "emptyTitle": "Rates coming soon",
+    "emptyDesc": "We're verifying rates for {pais}.",
+    "important": "Important:",
+    "bottomDisclaimer": "Rates shown are approximate estimates for comparison purposes. PreEnvios does not handle, receive or transfer money — we only compare public information from remittance providers. Always confirm the final amount directly with the provider before sending."
   },
   "delivery": {
     "bank": "Bank account",
