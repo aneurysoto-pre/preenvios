@@ -110,8 +110,12 @@ export default function ContactoContent() {
 
   const inputWrapper =
     'bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 transition-colors focus-within:border-blue focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(10,79,229,.08)]'
+  // font-size 16px MANDATORIO en iOS Safari: cualquier `<input>` o
+  // `<textarea>` con font-size < 16px dispara auto-zoom al focusear,
+  // cambia el viewport y puede causar scroll horizontal. Ver
+  // feedback_ios_input_autozoom_16px.md. NO bajar de 16px.
   const innerField =
-    'w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 text-ink text-[15px] placeholder:text-ink-3'
+    'w-full bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 text-ink text-[16px] placeholder:text-ink-3'
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -233,7 +237,7 @@ export default function ContactoContent() {
                           >
                             <FormControl>
                               <SelectTrigger
-                                className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 h-auto text-[15px] text-ink data-placeholder:text-ink-3 focus-visible:border-blue focus-visible:bg-white focus-visible:shadow-[0_0_0_4px_rgba(10,79,229,.08)] focus-visible:ring-0"
+                                className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 h-auto text-[16px] text-ink data-placeholder:text-ink-3 focus-visible:border-blue focus-visible:bg-white focus-visible:shadow-[0_0_0_4px_rgba(10,79,229,.08)] focus-visible:ring-0"
                               >
                                 <SelectValue placeholder={t('asuntoPlaceholder')} />
                               </SelectTrigger>
