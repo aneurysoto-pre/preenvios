@@ -253,6 +253,8 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 
 > **📋 Inventario completo de servicios externos:** ver [SERVICIOS_EXTERNOS.md](SERVICIOS_EXTERNOS.md) en la raíz del repo. Ahí están todas las cuentas (GitHub, Vercel, Supabase, Upstash, Twilio, Resend, Zoho, Namecheap, GA4, Search Console, redes de afiliados, Payoneer) con plan actual, límites, uso estimado, costo, umbrales de upgrade, dashboards y variables de entorno que dependen de cada una. Este archivo resume el stack; SERVICIOS_EXTERNOS.md es la bitácora operativa.
 
+> **👥 Equipo y escala:** ver [EQUIPO_Y_ESCALA.md](EQUIPO_Y_ESCALA.md) para triggers concretos de cuándo contratar el primer developer (>5K users/mes + >2 hrs/día del founder en bugs, rango **$2-4K/mes part-time LATAM**), cuándo escalar cada servicio del stack (umbrales por usuarios/mes), y análisis de ventana de oportunidad vs competencia (9-12 meses antes de que aparezcan comparadores LATAM-first competitivos). Decisiones de hiring y scaling deben pasar por ese documento — no se toman por corazonada.
+
 ### GitHub Secrets (seguridad de credenciales)
 - Todas las variables de entorno listadas arriba NUNCA se guardan en el repositorio
 - Se guardan en dos lugares:
