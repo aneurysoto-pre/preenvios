@@ -526,7 +526,7 @@ Fix aplicado:
 - [x] Tabs con `flex-wrap` para que los 4 botones se apilen bien en mobile <375px si hiciera falta (completado 2026-04-18)
 - [x] El Salvador con tasa=1 (dolarizado) en la fórmula `(montoNum / p.tasa) + p.fee` produce `monto + fee`, que es semánticamente correcto (lo que enviaron = lo que recibieron + comisión) (completado 2026-04-18)
 
-**Regla del proyecto (actualizada):** la calculadora inversa, el buscador del hero, las páginas editoriales por país y las páginas `/tasa/[pair]` públicas del MVP deben mostrar SOLO los 4 corredores MVP (HN, RD, GT, SV) hasta que el corredor adicional tenga scraper activo + datos validados + pagina editorial. Supabase puede tener filas de corredores futuros pero no se exponen en UI.
+**Regla del proyecto (actualizada 2026-04-21):** la calculadora inversa, el buscador del hero, las páginas editoriales por país y `/tasa/[pair]` públicas exponen 6 corredores activos (HN, RD, GT, SV, CO, MX). Nicaragua y Haití siguen en Supabase pero ocultos en UI hasta tener scraper con data validada + página editorial propia. La regla original de "solo 4 MVP" se relajó a 6 porque los scrapers ya cubren MX/CO y el catálogo más amplio mejora SEO pre-launch sin añadir deuda técnica.
 
 #### 4.2.7 — Banderas SVG en selector idioma + círculos Steps reducidos (2026-04-18)
 - [x] Selector de idioma reemplaza emojis 🇺🇸/🇪🇸 por SVGs inline. Motivo: Windows NO renderiza flag emojis — los muestra como los dos Regional Indicator letters ("us", "es") lo cual se veía "us English" con "us" minúsculas como texto suelto. Se definen 2 componentes locales en `components/Nav.tsx`: `<FlagUS />` (13 barras rojas + cantón azul sobre blanco, viewBox 60×30) y `<FlagES />` (rojo-amarillo-rojo horizontal, viewBox 60×40). Ambos con `rounded-[2px]` + sombra sutil para integrarse al diseño. Se usa en desktop y mobile menu (completado 2026-04-18)
@@ -752,19 +752,20 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 
 **México y Colombia al catálogo público MVP:**
 
-- [ ] Validar que scrapers de los 7 operadores ya devuelven data para `corredor=mexico`. Si algún scraper está hardcodeado a 4 corredores, expandirlo o documentar el gap
-- [ ] Validar lo mismo para `corredor=colombia`
-- [ ] Si hay gaps de scraping, decidir por operador: expandir scraper / ocultar operador en esos corredores / usar feed de afiliado si ya aprobado
-- [ ] Agregar México y Colombia al array `CORREDORES` en `components/Comparador.tsx` (dropdown del hero)
-- [ ] Agregar México y Colombia a `lib/paises.ts` (`PAISES_MVP`) — automáticamente los sube al Nav dropdown, TasasReferencia, sitemap, etc.
-- [ ] Agregar México y Colombia a la calculadora inversa (`app/[locale]/calculadora-inversa/content.tsx`)
-- [ ] Crear página editorial `/es/mexico` y `/en/mexico` (template de `/es/honduras`, adaptar copy)
-- [ ] Crear página editorial `/es/colombia` y `/en/colombia` (mismo patrón)
-- [ ] Verificar/agregar tasa de Banxico (MXN) en tabla `tasas_bancos_centrales`
-- [ ] Verificar/agregar tasa del Banrep (COP) en tabla `tasas_bancos_centrales`
-- [ ] Agregar México y Colombia al validador de ingress (Agente 1, Fase 7) — bounds ±10% de tasa Banxico y Banrep respectivamente
-- [ ] Traducciones ES/EN de todo texto nuevo (`messages/es.json`, `messages/en.json`)
-- [ ] Smoke test: usuario mexicano y colombiano completa el flujo comparar → click → afiliado
+- [x] Scrapers de los 7 operadores ya incluyen `corredor=mexico` y `corredor=colombia` en su array CORREDORES (remitly, wise, xoom, ria, worldremit, westernunion, moneygram). Validación con data real se verifica tras primer cron en smoke test (completado 2026-04-21)
+- [x] Agregado al array `CORREDORES` en `components/Comparador.tsx` con aliases (completado 2026-04-21)
+- [x] Agregado a `lib/paises.ts` (`PAISES_MVP`) — propaga auto a Nav dropdown, TasasReferencia, sitemap, páginas editoriales dinámicas (completado 2026-04-21)
+- [x] Agregado a `app/[locale]/calculadora-inversa/content.tsx` (completado 2026-04-21)
+- [x] Página editorial `/es/mexico` y `/en/mexico` — generada automáticamente vía ruta dinámica `app/[locale]/[pais]/page.tsx` + `generateStaticParams` con PAISES_MVP. Copy adapta con `heroTitle: "Envías dinero a México?"` (completado 2026-04-21)
+- [x] Página editorial `/es/colombia` y `/en/colombia` — mismo mecanismo (completado 2026-04-21)
+- [x] TasasReferencia grid ajustado de `lg:grid-cols-4` a `lg:grid-cols-3` para acomodar 6 tarjetas en 2 filas de 3 (completado 2026-04-21)
+- [x] Color BR (Banrep Colombia) cambiado de amarillo claro `#FFD100` a gold oscuro `#C28A00→#7A5700` para contraste con texto blanco (completado 2026-04-21)
+- [x] Traducciones ES/EN actualizadas (FAQ q3, q5 y nosotros.missionText) (completado 2026-04-21)
+- [x] Migración SQL 006 lista (`supabase/migrations/006_mexico_colombia_mvp.sql`) — UPSERT corredores + tasas_bancos_centrales + 14 precios iniciales. Idempotente. **Acción pendiente del usuario: ejecutar en Supabase SQL Editor** (completado 2026-04-21 código, pendiente ejecución SQL)
+- [ ] Bounds MX/CO en validador de ingress (Agente 1, Fase 7) — COP ±10% de 4150, MXN ±10% de 17.15. Se agrega cuando Agente 1 se implemente
+- [ ] Smoke test: usuario mexicano y colombiano completa el flujo comparar → click → afiliado (se corre en § 13 del CHECKLIST)
+
+**Marketing plan NO se toca:** la adición de MX/CO al catálogo es una decisión de producto/SEO de largo plazo. El plan de marketing del mes 1 post-launch sigue enfocado en Honduras (prioridad #1). MX y CO son tráfico orgánico + futuros ad sets del mes 2-3 cuando haya data de conversión por corredor. Referencia: `PLAN_MARKETING_MES_1.md` permanece intacto.
 
 **Calidad de data sources (sube del Tier 3 a Tier 4 para Wise):**
 

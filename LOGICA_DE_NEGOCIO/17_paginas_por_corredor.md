@@ -1,10 +1,11 @@
-# Proceso 17 — Páginas editoriales por corredor (Fase 4.1.2)
+# Proceso 17 — Páginas editoriales por corredor (Fase 4.1.2 + Fase 8)
 
 ## Descripción
 
-Páginas SEO editoriales para los 4 corredores del MVP: Honduras, República Dominicana, Guatemala y El Salvador. Cada página funciona como landing page editorial completa con comparador integrado, tasa actual, FAQ, bancos populares y Schema.org. Coexiste con las páginas técnicas de `/tasa/[pair]` que muestran gráficas históricas.
+Páginas SEO editoriales para los 6 corredores activos: Honduras, República Dominicana, Guatemala, El Salvador, Colombia y México. Cada página funciona como landing page editorial completa con comparador integrado, tasa actual, FAQ, bancos populares y Schema.org. Coexiste con las páginas técnicas de `/tasa/[pair]` que muestran gráficas históricas.
 
-Completado el 2026-04-17 como Fase 4.1.2 del roadmap.
+- **2026-04-17 (Fase 4.1.2)** — 4 páginas iniciales: HN, RD, GT, SV.
+- **2026-04-21 (Fase 8)** — Colombia y México agregadas al catálogo público. Las páginas se generan automáticamente porque la ruta `app/[locale]/[pais]/page.tsx` llama a `generateStaticParams()` iterando `PAISES_MVP`; basta con agregar las entries correspondientes a `lib/paises.ts` (slugs, corredorId, códigoPais, bancos populares).
 
 ## Estructura de URLs
 
@@ -14,6 +15,8 @@ Completado el 2026-04-17 como Fase 4.1.2 del roadmap.
 | Rep. Dominicana | `/es/republica-dominicana` | `/en/dominican-republic` |
 | Guatemala | `/es/guatemala` | `/en/guatemala` |
 | El Salvador | `/es/el-salvador` | `/en/el-salvador` |
+| Colombia | `/es/colombia` | `/en/colombia` |
+| México | `/es/mexico` | `/en/mexico` |
 
 ## Diferencia vs /tasa/[pair]
 
@@ -58,14 +61,14 @@ Nav actualizado con menú "Corredores":
 - **Description**: "Compara Remitly, Wise, Xoom, Ria y más para enviar dinero a [País]..."
 - **H1**: "Enviar dinero a [País]"
 - **Schema.org**: WebPage + BreadcrumbList (Home → País) + FAQPage con 3 preguntas
-- **Sitemap**: 8 URLs nuevas con hreflang alternates es↔en
+- **Sitemap**: 12 URLs de páginas editoriales (6 países × 2 locales) con hreflang alternates es↔en
 - **Priority**: 0.9 (alta — son landing pages de alto valor SEO)
 
 ## Archivos creados/modificados
 
 | Archivo | Qué hace |
 |---------|----------|
-| `lib/paises.ts` | Datos estáticos de los 4 países MVP |
+| `lib/paises.ts` | Datos estáticos de los 6 países activos en UI |
 | `app/[locale]/[pais]/page.tsx` | Ruta dinámica con generateStaticParams + generateMetadata |
 | `app/[locale]/[pais]/pais-content.tsx` | Componente client con todo el contenido |
 | `components/Comparador.tsx` | Modificado: acepta `defaultCorredor` prop |

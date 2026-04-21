@@ -5,16 +5,17 @@ import { useLocale } from 'next-intl'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
 
-// Solo los 4 corredores del MVP. Colombia, Mexico, Nicaragua y Haiti existen en
-// Supabase (precios seed) pero NO se exponen en la UI hasta que tengan scraper activo
-// y validacion de datos — la calculadora inversa es solo para los 4 del MVP.
+// 6 corredores activos (HN, DR, GT, SV, CO, MX). Nicaragua y Haiti existen en
+// Supabase (precios seed) pero NO se exponen hasta tener scraper validado.
 // codigo_pais: ISO 3166-1 alpha-2 para flagcdn.com (PNG flags, funcionan en Windows
-// donde los emoji flags 🇩🇴🇭🇳🇬🇹🇸🇻 renderizan como las letras "do","hn","gt","sv").
+// donde los emoji flags 🇩🇴🇭🇳🇬🇹🇸🇻🇨🇴🇲🇽 renderizan como las letras "do","hn","gt"...).
 const CORREDORES = [
-  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', codigo_pais: 'do' },
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    codigo_pais: 'hn' },
+  { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', codigo_pais: 'do' },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    codigo_pais: 'gt' },
   { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    codigo_pais: 'sv' },
+  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    codigo_pais: 'co' },
+  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    codigo_pais: 'mx' },
 ]
 
 type Precio = { operador: string; nombre_operador: string; tasa: number; fee: number }
@@ -22,7 +23,7 @@ type Precio = { operador: string; nombre_operador: string; tasa: number; fee: nu
 export default function CalculadoraInversaContent() {
   const locale = useLocale()
   const en = locale === 'en'
-  const [corredor, setCorredor] = useState('dominican_republic')
+  const [corredor, setCorredor] = useState('honduras')
   const [monto, setMonto] = useState('')
   const [precios, setPrecios] = useState<Precio[]>([])
 

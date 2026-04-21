@@ -8,19 +8,19 @@ import AlertaForm from '@/components/AlertaForm'
 // ═══════════════════════════════════════
 // DATOS ESTÁTICOS
 // ═══════════════════════════════════════
-// Solo los 4 corredores del MVP expuestos en el buscador del hero. Colombia,
-// Mexico, Nicaragua y Haiti existen en Supabase (seed-new-corridors.mjs) y
-// /api/precios los sigue sirviendo, pero no se muestran en la UI publica hasta
-// que tengan scraper activo + pagina editorial + datos validados (regla del
-// proyecto registrada en CONTEXTO_FINAL 4.2.8).
-// Orden refleja la prioridad de producto (Honduras = MVP #1, plan de ataque
-// de marketing mes 1). PAISES_MVP en lib/paises.ts mantiene el mismo orden
+// 6 corredores activos expuestos en el buscador del hero: Honduras, RD,
+// Guatemala, El Salvador, Colombia y México. Nicaragua y Haití existen en
+// Supabase (seed-new-corridors.mjs) pero no se muestran en UI hasta tener
+// scraper validado + pagina editorial. Orden refleja la prioridad de producto
+// (Honduras = MVP #1). PAISES_MVP en lib/paises.ts mantiene el mismo orden
 // por consistencia. Si se reordena aca, reordenar tambien alla.
 const CORREDORES = [
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    bandera: '🇭🇳', codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
   { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', bandera: '🇩🇴', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },
   { id: 'guatemala',          nombre: 'Guatemala',        nombre_en: 'Guatemala',          moneda: 'GTQ', simbolo: 'Q',    bandera: '🇬🇹', codigo_pais: 'gt', aliases: ['gt','gtq','guat','guate','chapín'] },
   { id: 'el_salvador',        nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', simbolo: '$',    bandera: '🇸🇻', codigo_pais: 'sv', aliases: ['sv','slv','salv','salvador','guanaco'] },
+  { id: 'colombia',           nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', simbolo: '$',    bandera: '🇨🇴', codigo_pais: 'co', aliases: ['co','cop','col','colombia','paisa'] },
+  { id: 'mexico',             nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', simbolo: '$',    bandera: '🇲🇽', codigo_pais: 'mx', aliases: ['mx','mxn','mex','mexico','chilango','azteca'] },
 ]
 
 const METODOS = [

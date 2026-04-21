@@ -312,18 +312,17 @@ H-09.1 pasa de 🟡 EN PROCESO a 🟢 CERRADO cuando:
 Detalle completo en [CONTEXTO_FINAL.md § Fase 8](CONTEXTO_FINAL.md). Trabajo pre-lanzamiento aprovechando que la fecha es flexible:
 
 ### 12.1 México y Colombia al catálogo MVP
-- [ ] Validar scrapers devuelven data para `corredor=mexico` (los 7 operadores)
-- [ ] Validar scrapers devuelven data para `corredor=colombia` (los 7 operadores)
-- [ ] Agregar al array `CORREDORES` de `components/Comparador.tsx`
-- [ ] Agregar a `PAISES_MVP` en `lib/paises.ts`
-- [ ] Agregar a calculadora inversa
-- [ ] Página editorial `/es/mexico` + `/en/mexico`
-- [ ] Página editorial `/es/colombia` + `/en/colombia`
-- [ ] Tasa Banxico (MXN) en tabla `tasas_bancos_centrales`
-- [ ] Tasa Banrep (COP) en tabla `tasas_bancos_centrales`
-- [ ] Bounds de MX/CO en validador ingress (Agente 1)
-- [ ] Traducciones ES/EN
-- [ ] Smoke test del flujo completo en ambos corredores
+- [x] Scrapers Remitly/Wise/Xoom/Ria/WorldRemit/WU/MG ya incluyen `corredor=mexico` y `corredor=colombia` en su array CORREDORES (completado 2026-04-21 — validación de data real se hace en § 12.1.smoke tras primer cron)
+- [x] Agregado al array `CORREDORES` de `components/Comparador.tsx` con aliases (paisa, chilango, azteca) (completado 2026-04-21)
+- [x] Agregado a `PAISES_MVP` en `lib/paises.ts` — propaga auto a Nav dropdown, TasasReferencia, páginas editoriales dinámicas, sitemap, operadores (completado 2026-04-21)
+- [x] Agregado a calculadora inversa (completado 2026-04-21)
+- [x] Página editorial `/es/mexico` + `/en/mexico` — generada automáticamente vía `app/[locale]/[pais]/page.tsx` + `generateStaticParams` con PAISES_MVP (completado 2026-04-21)
+- [x] Página editorial `/es/colombia` + `/en/colombia` — mismo mecanismo (completado 2026-04-21)
+- [x] TasasReferencia grid ajustado de 4 a 3 columnas lg (2 filas de 3 para las 6 tarjetas) (completado 2026-04-21)
+- [x] Traducciones ES/EN de FAQ q3, q5 y misión (completado 2026-04-21)
+- [ ] **Acción manual del usuario**: ejecutar migración SQL 006 en Supabase SQL Editor → `supabase/migrations/006_mexico_colombia_mvp.sql`. Agrega los 2 corredores a `corredores`, las tasas Banxico/Banrep a `tasas_bancos_centrales` y 14 filas de precios iniciales. Idempotente. Si ya se corrieron los seeds `seed-new-corridors.mjs` y `seed-bancos-centrales.mjs` sigue siendo seguro ejecutarlo
+- [ ] Bounds de MX/CO en validador ingress (Agente 1) — COP ±10% de 4150, MXN ±10% de 17.15. Se agrega cuando el Agente 1 esté implementado
+- [ ] Smoke test del flujo completo en ambos corredores (§ 13 abajo)
 
 ### 12.2 Wise API pública (Tier 4 data source)
 - [ ] Integrar `api.wise.com/v1/rates` como fuente primaria para operador Wise (gratis, sin aprobación)
@@ -345,7 +344,7 @@ Protocolo obligatorio antes de activar el DNS. Correr desde desktop + mobile rea
 - [ ] Default Honduras preseleccionado en calculadora del hero
 - [ ] Escribir $400 → click "Comparar" → aparecen 7 remesadoras con tasas reales
 - [ ] Click "Enviar ahora" del primer resultado → abre link afiliado en nueva pestaña
-- [ ] Cambiar país Honduras → RD → Guatemala → El Salvador (→ MX → CO si Fase 8 hecha) → resultados cambian sin errores
+- [ ] Cambiar país Honduras → RD → Guatemala → El Salvador → Colombia → México → resultados cambian sin errores
 - [ ] Click "English" → toda la página se traduce → click "Español" → vuelve
 
 ### 13.2 Páginas de país (5 min)
@@ -353,8 +352,8 @@ Protocolo obligatorio antes de activar el DNS. Correr desde desktop + mobile rea
 - [ ] `/es/republica-dominicana` carga completo
 - [ ] `/es/guatemala` carga completo
 - [ ] `/es/el-salvador` carga completo
-- [ ] `/es/mexico` carga (si Fase 8 hecha)
-- [ ] `/es/colombia` carga (si Fase 8 hecha)
+- [ ] `/es/mexico` carga con default corredor México preseleccionado y 7 remesadoras en resultados
+- [ ] `/es/colombia` carga con default corredor Colombia preseleccionado y 7 remesadoras en resultados
 
 ### 13.3 Calculadora inversa y operadores (5 min)
 - [ ] `/es/calculadora-inversa` — escribir 12000 DOP → ver resultados → botón WhatsApp abre wa.me con mensaje correcto

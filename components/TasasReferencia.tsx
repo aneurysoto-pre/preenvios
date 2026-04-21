@@ -21,7 +21,8 @@ const SIGLAS_COLORS: Record<string, string> = {
   BCRD: 'bg-gradient-to-br from-[#C8102E] to-[#7A0A1C]',
   BG:   'bg-gradient-to-br from-[#1E4D9E] to-[#0D2C5E]',
   BCR:  'bg-gradient-to-br from-[#0033A0] to-[#001A52]',
-  BR:   'bg-gradient-to-br from-[#FFD100] to-[#C8A200]',
+  // Banco de la Republica (Colombia) — gold oscuro para que 'BR' en blanco se lea nitido
+  BR:   'bg-gradient-to-br from-[#C28A00] to-[#7A5700]',
   BM:   'bg-gradient-to-br from-[#006341] to-[#003A24]',
   BCN:  'bg-gradient-to-br from-[#0066B3] to-[#003D6B]',
   BRH:  'bg-gradient-to-br from-[#00209F] to-[#001260]',
@@ -53,11 +54,10 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
       .then(data => { if (Array.isArray(data)) setTasas(data) })
   }, [])
 
-  // If filtering by country, show only that one; otherwise mostrar solo los 4 MVP
-  // en el orden definido en PAISES_MVP (Honduras primero por prioridad producto).
-  // La API /api/tasas-banco-central puede devolver paises adicionales (Colombia,
-  // Mexico, etc.) que todavia no tienen scraper activo ni pagina editorial — se
-  // filtran aqui para no exponer paises no-MVP en el landing.
+  // If filtering by country, show only that one; otherwise mostrar los 6
+  // corredores activos (HN, DR, GT, SV, CO, MX) en el orden definido en
+  // PAISES_MVP. La API puede devolver paises adicionales (Nicaragua, Haiti)
+  // que todavia no estan en UI — se filtran aqui.
   const visibles = filterCodigoPais
     ? tasas.filter(t => t.codigo_pais === filterCodigoPais)
     : PAISES_MVP.map(p => tasas.find(t => t.codigo_pais === p.codigoPais)).filter(Boolean) as TasaBC[]
@@ -76,8 +76,8 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
           <span className="text-xs text-ink-2 font-semibold">{t('subtitle')}</span>
         </div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {/* Cards grid — 6 paises = 2 filas de 3 en desktop (lg), 2 col en tablet, 1 col mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {visibles.map(bc => {
             const displayRate = bc.nota
               ? `${bc.tasa.toFixed(2)} ${en && bc.nota_en ? bc.nota_en : bc.nota}`

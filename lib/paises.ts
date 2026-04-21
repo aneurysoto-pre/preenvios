@@ -75,6 +75,32 @@ export const PAISES_MVP: PaisData[] = [
     bancosEs: ['Banco Agrícola', 'Banco Davivienda', 'Banco Cuscatlán', 'BAC Credomatic', 'Chivo Wallet'],
     bancosEn: ['Banco Agrícola', 'Banco Davivienda', 'Banco Cuscatlán', 'BAC Credomatic', 'Chivo Wallet'],
   },
+  {
+    slugEs: 'colombia',
+    slugEn: 'colombia',
+    corredorId: 'colombia',
+    codigoPais: 'co',
+    nombre: 'Colombia',
+    nombreEn: 'Colombia',
+    moneda: 'COP',
+    bandera: '\u{1F1E8}\u{1F1F4}',
+    heroGradient: 'from-yellow-50 via-white to-blue-50',
+    bancosEs: ['Bancolombia', 'Davivienda', 'Banco de Bogotá', 'BBVA Colombia', 'Nequi', 'Daviplata'],
+    bancosEn: ['Bancolombia', 'Davivienda', 'Banco de Bogotá', 'BBVA Colombia', 'Nequi', 'Daviplata'],
+  },
+  {
+    slugEs: 'mexico',
+    slugEn: 'mexico',
+    corredorId: 'mexico',
+    codigoPais: 'mx',
+    nombre: 'México',
+    nombreEn: 'Mexico',
+    moneda: 'MXN',
+    bandera: '\u{1F1F2}\u{1F1FD}',
+    heroGradient: 'from-green-50 via-white to-red-50',
+    bancosEs: ['BBVA México', 'Banorte', 'Santander México', 'Citibanamex', 'HSBC México', 'Banco Azteca'],
+    bancosEn: ['BBVA México', 'Banorte', 'Santander México', 'Citibanamex', 'HSBC México', 'Banco Azteca'],
+  },
 ]
 
 /** Find a country by any slug (es or en) */
