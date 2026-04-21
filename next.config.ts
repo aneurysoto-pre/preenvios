@@ -6,6 +6,18 @@ const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  images: {
+    // Hosts externos autorizados para next/image. Necesario para que los
+    // componentes puedan pasar de <img src="https://flagcdn.com/..."> a
+    // <Image src="https://flagcdn.com/..."> sin error de dominio rechazado.
+    // Se agregan conforme los refactors (Fase 1) migran <img> a <Image>.
+    // - flagcdn.com: banderas PNG (Nav, Comparador, TasasReferencia)
+    // - cdn.brandfetch.io: logos operadores (Comparador, Sections LogoStrip)
+    remotePatterns: [
+      { protocol: 'https', hostname: 'flagcdn.com' },
+      { protocol: 'https', hostname: 'cdn.brandfetch.io' },
+    ],
+  },
 }
 
 // Sentry wrap: si SENTRY_DSN + SENTRY_AUTH_TOKEN no estan configurados, el

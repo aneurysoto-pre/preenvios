@@ -24,9 +24,15 @@
   --color-g500: #64748B;
   --color-g600: #475569;
   --color-g700: #334155;
-  --font-sans: 'Inter', -apple-system, sans-serif;
-  --font-heading: 'Work Sans', -apple-system, sans-serif;
-  --font-logo: 'Quicksand', sans-serif;
+  /* Fonts self-hosted via next/font/google en app/[locale]/layout.tsx.
+   * next/font expone --font-inter, --font-work-sans, --font-quicksand
+   * como CSS variables en el className del <html>. Aqui se mapean a los
+   * tokens semanticos de Tailwind (font-sans, font-heading, font-logo)
+   * para que las clases del codebase (p.ej. `font-heading`) sigan
+   * funcionando sin tocar los componentes que las usan. */
+  --font-sans: var(--font-inter), -apple-system, sans-serif;
+  --font-heading: var(--font-work-sans), -apple-system, sans-serif;
+  --font-logo: var(--font-quicksand), sans-serif;
   --radius-base: 14px;
   --radius-lg: 22px;
   --radius-xl: 32px;
