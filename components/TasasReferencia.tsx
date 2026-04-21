@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
+import Image from 'next/image'
 import { PAISES_MVP } from '@/lib/paises'
 
 type TasaBC = {
@@ -96,18 +97,24 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
                 {/* Info — todo en font-heading (Work Sans) para viveza y legibilidad */}
                 <div className="flex-1 min-w-0">
                   <div className="font-heading flex items-center gap-1.5 text-[11px] text-ink-2 font-medium mb-0.5">
-                    <img
+                    <Image
                       src={`https://flagcdn.com/w40/${bc.codigo_pais}.png`}
                       alt=""
                       width={18}
                       height={12}
                       loading="lazy"
-                      decoding="async"
-                      className="w-[18px] h-[12px] rounded-[1.5px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+                      unoptimized
+                      className="rounded-[1.5px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
                     />
                     <span>{COUNTRY_NAMES[bc.codigo_pais]?.[locale] || bc.codigo_pais.toUpperCase()}</span>
                   </div>
-                  <div className="font-heading text-[13px] font-extrabold text-ink whitespace-nowrap overflow-hidden text-ellipsis">
+                  {/* line-clamp-2 permite hasta 2 lineas para nombres de bancos
+                      largos (ej. "Banco Central de la Rep. Dominicana",
+                      "Banque de la République d'Haïti"). Reemplaza el
+                      whitespace-nowrap + overflow-hidden + text-ellipsis
+                      previo que truncaba agresivamente en mobile con cards
+                      de ancho reducido. */}
+                  <div className="font-heading text-[13px] font-extrabold text-ink line-clamp-2 leading-tight">
                     {en ? bc.nombre_banco_en : bc.nombre_banco}
                   </div>
                   <div className="font-heading text-base font-black text-green-dark">
