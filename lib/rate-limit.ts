@@ -21,9 +21,8 @@
  * request. Si ves multiples keys con bucket_ids distintos, es porque
  * los tests cruzaron >=1 frontera de 15 min.
  *
- * Para agregar rate limit a otros endpoints (H-04.1 en `/api/contactos`,
- * forms publicos futuros): crear un limiter adicional con su propio
- * prefix y tuning.
+ * Para agregar rate limit a otros endpoints (forms publicos futuros):
+ * crear un limiter adicional con su propio prefix y tuning.
  */
 
 import { Ratelimit } from '@upstash/ratelimit'

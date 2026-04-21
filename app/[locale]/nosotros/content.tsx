@@ -76,7 +76,8 @@ export default function NosotrosContent() {
           </div>
         </section>
 
-        {/* CTA to /contacto */}
+        {/* CTA — mailto directo mientras se rehace el form de contacto
+            con shadcn/ui Form (commit siguiente pendiente). */}
         <section className="pt-10 pb-16 bg-white">
           <div className="max-w-[760px] mx-auto px-6">
             <div className="bg-gradient-to-br from-blue to-blue-dark rounded-[24px] py-10 px-6 md:px-10 text-center text-white relative overflow-hidden">
@@ -84,7 +85,7 @@ export default function NosotrosContent() {
               <h2 className="font-heading text-2xl md:text-3xl font-black mb-3 relative">{t('ctaTitle')}</h2>
               <p className="text-[16px] opacity-90 max-w-[480px] mx-auto mb-6 relative">{t('ctaText')}</p>
               <a
-                href={`/${locale}/contacto`}
+                href="mailto:contact@preenvios.com"
                 className="inline-block bg-white text-blue py-3.5 px-7 rounded-full font-extrabold text-[15px] relative transition-transform hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {t('ctaButton')} →

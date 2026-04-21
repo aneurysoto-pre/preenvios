@@ -375,12 +375,16 @@ export function Footer() {
             >
               {en ? 'About us' : 'Nosotros'}
             </Link>
-            <Link
-              href={`/${locale}/contacto`}
+            {/* Contacto: mailto directo mientras se rehace el form.
+                No usar <Link> porque el Next.js Link normaliza mailto a
+                href absoluto sin issue pero el prefetch intenta parsear
+                la URL; usar <a> plano es mas limpio para mailto. */}
+            <a
+              href="mailto:contact@preenvios.com"
               className="block py-1.5 text-sm hover:text-white transition-colors"
             >
               {tn('contact')}
-            </Link>
+            </a>
             <Link
               href={`/${locale}/como-ganamos-dinero`}
               className="block py-1.5 text-sm hover:text-white transition-colors"
