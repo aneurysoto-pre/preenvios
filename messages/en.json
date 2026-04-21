@@ -6,7 +6,10 @@
     "login": "Sign in",
     "corridors": "Destinations",
     "sendTo": "Send to",
-    "contact": "Contact"
+    "contact": "Contact",
+    "menuTitle": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "badge": "Exchange rates updated in real time",

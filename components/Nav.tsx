@@ -1,15 +1,56 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+/**
+ * Nav — barra de navegacion fixed top con dos UIs purpose-built:
+ *  - Desktop (md+): nav horizontal con DropdownMenu (Radix) para Destinos
+ *    + links <Link> directos + toggle ES/EN
+ *  - Mobile (<md): burger button abre Drawer (vaul) lateral desde la
+ *    derecha — overlay oscurecido bg-black/40, swipe-to-dismiss nativo,
+ *    DrawerClose wraps cada link para que al tap se cierre el drawer
+ *
+ * Reemplaza el approach anterior basado en:
+ *  - Estado `menuOpen` local + div `fixed top-[48px] max-h-[calc(100vh-48px)]`
+ *    que replicaba un drawer custom sin a11y completo
+ *  - `corridorRef` con outside-click handler manual para cerrar dropdown
+ *    (Radix DropdownMenu ya maneja esto nativo + ESC + focus trap)
+ *  - 3-span animated burger (sustituido por Menu icon Lucide con padding
+ *    44x44px segun Apple HIG)
+ */
+
+import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { Menu, X, ChevronDown } from 'lucide-react'
 import { PAISES_MVP } from '@/lib/paises'
+import { trackEvent } from '@/lib/tracking'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerTrigger,
+  DrawerClose,
+} from '@/components/ui/drawer'
 
-// Inline SVG flags — emoji flags (🇺🇸 🇪🇸) don't render as flags on Windows
-// and fall back to the two-letter region code ("us"/"es") which looks like a bug.
+// Inline SVG flags — emoji flags (🇺🇸 🇪🇸) NO renderean en Windows (se ven
+// como "us"/"es" texto). Estos son decorativos pequenos, SVG inline evita
+// request externo + es resistente al bug de Windows.
 function FlagUS({ className = 'w-5 h-[14px]' }: { className?: string }) {
   return (
-    <svg className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`} viewBox="0 0 60 30" aria-hidden="true">
+    <svg
+      className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`}
+      viewBox="0 0 60 30"
+      aria-hidden="true"
+    >
       <rect width="60" height="30" fill="#fff" />
       <g fill="#B22234">
         <rect y="0" width="60" height="2.3" />
@@ -27,7 +68,11 @@ function FlagUS({ className = 'w-5 h-[14px]' }: { className?: string }) {
 
 function FlagES({ className = 'w-5 h-[14px]' }: { className?: string }) {
   return (
-    <svg className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`} viewBox="0 0 60 40" aria-hidden="true">
+    <svg
+      className={`${className} rounded-[2px] shrink-0 shadow-[0_0_0_1px_rgba(15,23,42,.08)]`}
+      viewBox="0 0 60 40"
+      aria-hidden="true"
+    >
       <rect width="60" height="40" fill="#C60B1E" />
       <rect y="10" width="60" height="20" fill="#FFC400" />
     </svg>
@@ -40,9 +85,7 @@ export default function Nav() {
   const router = useRouter()
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [corridorOpen, setCorridorOpen] = useState(false)
-  const corridorRef = useRef<HTMLDivElement>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const en = locale === 'en'
 
@@ -52,87 +95,106 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close corridor dropdown on outside click
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (corridorRef.current && !corridorRef.current.contains(e.target as Node)) {
-        setCorridorOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
-
   function switchLocale() {
     const next = locale === 'es' ? 'en' : 'es'
     const path = pathname.replace(`/${locale}`, `/${next}`)
-    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-      ;(window as any).gtag('event', 'cambio_idioma', {
-        event_category: 'i18n',
-        idioma_anterior: locale,
-        idioma_nuevo: next,
-      })
-    }
+    trackEvent('cambio_idioma', {
+      event_category: 'i18n',
+      idioma_anterior: locale,
+      idioma_nuevo: next,
+    })
     router.push(path)
+    setMobileOpen(false)
   }
 
-  function closeMenu() { setMenuOpen(false) }
-
-  // Anchors that only exist on the home. From any other page, prefix with /${locale}
-  // so the browser navigates home and then scrolls.
+  // Anchors que solo existen en home. Desde otras paginas, prefijar con
+  // /${locale} para que el browser navegue a home y luego scrollee al hash.
   const isHome = pathname === `/${locale}` || pathname === `/${locale}/`
   const homeAnchor = (hash: string) => (isHome ? hash : `/${locale}${hash}`)
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-[14px] border-b border-g200 transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_14px_rgba(15,23,42,.08)]' : ''}`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-[14px] border-b border-g200 transition-shadow duration-300 ${
+        scrolled ? 'shadow-[0_4px_14px_rgba(15,23,42,.08)]' : ''
+      }`}
+    >
       <div className="max-w-[1240px] mx-auto px-6 h-[48px] flex items-center justify-between">
-        {/* Logo */}
-        <a href={`/${locale}`} className="flex items-center gap-2 font-logo text-[22px] font-bold lowercase tracking-tight">
-          <svg className="w-[26px] h-[26px] shrink-0" viewBox="0 0 40 40" fill="none">
+        {/* Logo — Link interno preserva prefetch + client-side navigation */}
+        <Link
+          href={`/${locale}`}
+          className="flex items-center gap-2 font-logo text-[22px] font-bold lowercase tracking-tight"
+        >
+          <svg
+            className="w-[26px] h-[26px] shrink-0"
+            viewBox="0 0 40 40"
+            fill="none"
+            aria-hidden="true"
+          >
             <rect width="40" height="40" rx="10" fill="#00D957" />
-            <path d="M13 10h10.5a7 7 0 0 1 0 14H17v6h-4V10zm4 4v6h6.5a3 3 0 0 0 0-6H17z" fill="#fff" />
+            <path
+              d="M13 10h10.5a7 7 0 0 1 0 14H17v6h-4V10zm4 4v6h6.5a3 3 0 0 0 0-6H17z"
+              fill="#fff"
+            />
           </svg>
-          <span><span className="text-green">pre</span><span className="text-ink">envios</span><span className="text-ink font-bold">.com</span></span>
-        </a>
+          <span>
+            <span className="text-green">pre</span>
+            <span className="text-ink">envios</span>
+            <span className="text-ink font-bold">.com</span>
+          </span>
+        </Link>
 
-        {/* Desktop links — order: Destinos, Como funciona, FAQ, Contacto, ES/EN */}
+        {/* Desktop links — orden: Destinos, Como funciona, Preguntas, Contacto, ES/EN */}
         <div className="hidden md:flex gap-8 items-center">
-          {/* Destinos dropdown */}
-          <div ref={corridorRef} className="relative">
-            <button
-              onClick={() => setCorridorOpen(!corridorOpen)}
-              className="text-sm font-semibold text-g600 hover:text-blue transition-colors flex items-center gap-1"
-            >
+          {/* Destinos — DropdownMenu (Radix) maneja click, ESC, outside
+              click, focus trap, keyboard nav (arrows + enter) nativo.
+              El comportamiento replica el dropdown custom anterior con
+              mejor a11y. */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="group text-sm font-semibold text-g600 hover:text-blue transition-colors flex items-center gap-1 outline-none focus-visible:text-blue data-[state=open]:text-blue">
               {t('corridors')}
-              <svg className={`w-3.5 h-3.5 transition-transform ${corridorOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-            </button>
-            {corridorOpen && (
-              <div className="absolute top-full mt-2 left-0 bg-white rounded-xl border border-[var(--color-g200)] shadow-lg py-2 min-w-[220px] z-50">
-                {PAISES_MVP.map(p => (
-                  <a
-                    key={p.corredorId}
-                    href={`/${locale}/${en ? p.slugEn : p.slugEs}`}
-                    onClick={() => setCorridorOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] hover:bg-[var(--color-g50)] transition-colors"
-                  >
-                    <img
+              <ChevronDown
+                className="size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                aria-hidden="true"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="min-w-[220px] w-auto p-2">
+              {PAISES_MVP.map(p => (
+                <DropdownMenuItem key={p.corredorId} asChild className="px-3 py-2.5 gap-3 cursor-pointer">
+                  <Link href={`/${locale}/${en ? p.slugEn : p.slugEs}`}>
+                    <Image
                       src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
                       alt=""
-                      width={24}
-                      height={16}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+                      width={22}
+                      height={15}
+                      unoptimized
+                      className="rounded-[2px] shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
                     />
-                    <span>{en ? p.nombreEn : p.nombre}</span>
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-          <a href={homeAnchor('#como')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('howItWorks')}</a>
-          <a href={homeAnchor('#faq')} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('faq')}</a>
-          <a href={`/${locale}/contacto`} className="text-sm font-semibold text-g600 hover:text-blue transition-colors">{t('contact')}</a>
+                    <span className="text-sm font-medium text-ink">
+                      {en ? p.nombreEn : p.nombre}
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Link
+            href={homeAnchor('#como')}
+            className="text-sm font-semibold text-g600 hover:text-blue transition-colors"
+          >
+            {t('howItWorks')}
+          </Link>
+          <Link
+            href={homeAnchor('#faq')}
+            className="text-sm font-semibold text-g600 hover:text-blue transition-colors"
+          >
+            {t('faq')}
+          </Link>
+          <Link
+            href={`/${locale}/contacto`}
+            className="text-sm font-semibold text-g600 hover:text-blue transition-colors"
+          >
+            {t('contact')}
+          </Link>
           <button
             onClick={switchLocale}
             className="text-sm font-bold text-g700 hover:text-blue border border-g200 hover:border-blue rounded-full px-3 py-1.5 transition-colors inline-flex items-center gap-2"
@@ -143,46 +205,94 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* Burger */}
-        <button className="md:hidden p-1.5" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
-          <span className={`block w-[22px] h-[2px] bg-ink rounded-sm transition-transform duration-250 ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
-          <span className={`block w-[22px] h-[2px] bg-ink rounded-sm my-[5px] transition-opacity duration-250 ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-[22px] h-[2px] bg-ink rounded-sm transition-transform duration-250 ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden fixed top-[48px] left-0 right-0 bg-white border-b border-g200 shadow-lg z-[99] px-6 py-4 flex flex-col gap-1 max-h-[calc(100vh-48px)] overflow-y-auto">
-          <p className="pt-1 pb-1 px-1 text-xs font-extrabold text-[var(--color-g500)] uppercase tracking-wider">{t('corridors')}</p>
-          {PAISES_MVP.map(p => (
-            <a
-              key={p.corredorId}
-              href={`/${locale}/${en ? p.slugEn : p.slugEs}`}
-              onClick={closeMenu}
-              className="py-3 px-1 text-base font-bold text-ink border-b border-g100 flex items-center gap-3"
+        {/* Mobile burger — Drawer (vaul) direction=right. Reusa overlay
+            oscurecido bg-black/40 + swipe gesture + ESC que ya fueron
+            configurados para el Comparador (Fase 1.1). Tap en burger
+            abre, tap en overlay o swipe cierra, ESC cierra, click en
+            cualquier link interno cierra (via DrawerClose). */}
+        <Drawer open={mobileOpen} onOpenChange={setMobileOpen} direction="right">
+          <DrawerTrigger asChild>
+            <button
+              className="md:hidden p-2.5 -mr-2.5 text-ink hover:bg-g100 rounded-md transition-colors"
+              aria-label={t('openMenu')}
             >
-              <img
-                src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
-                alt=""
-                width={28}
-                height={19}
-                loading="lazy"
-                decoding="async"
-                className="w-[26px] h-[18px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
-              />
-              {en ? p.nombreEn : p.nombre}
-            </a>
-          ))}
-          <a href={homeAnchor('#como')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('howItWorks')}</a>
-          <a href={homeAnchor('#faq')} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('faq')}</a>
-          <a href={`/${locale}/contacto`} onClick={closeMenu} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100">{t('contact')}</a>
-          <button onClick={() => { switchLocale(); closeMenu() }} className="py-3.5 px-1 text-base font-bold text-ink border-b border-g100 text-left inline-flex items-center gap-2.5">
-            {locale === 'es' ? <FlagUS className="w-6 h-[17px]" /> : <FlagES className="w-6 h-[17px]" />}
-            <span>{locale === 'es' ? 'English' : 'Español'}</span>
-          </button>
-        </div>
-      )}
+              <Menu className="size-6" aria-hidden="true" />
+            </button>
+          </DrawerTrigger>
+          <DrawerContent className="p-0">
+            <DrawerHeader className="flex-row items-center justify-between gap-0 p-4 border-b border-g200 space-y-0">
+              <DrawerTitle className="font-heading text-base font-extrabold text-ink">
+                {t('menuTitle')}
+              </DrawerTitle>
+              <DrawerDescription className="sr-only">
+                {t('menuTitle')}
+              </DrawerDescription>
+              <DrawerClose asChild>
+                <button
+                  className="p-1.5 -mr-1.5 text-g600 hover:text-ink hover:bg-g100 rounded transition-colors"
+                  aria-label={t('closeMenu')}
+                >
+                  <X className="size-5" aria-hidden="true" />
+                </button>
+              </DrawerClose>
+            </DrawerHeader>
+            <div className="flex-1 overflow-y-auto pb-[env(safe-area-inset-bottom)]">
+              <p className="pt-4 pb-2 px-5 text-xs font-extrabold text-g500 uppercase tracking-wider">
+                {t('corridors')}
+              </p>
+              {PAISES_MVP.map(p => (
+                <DrawerClose asChild key={p.corredorId}>
+                  <Link
+                    href={`/${locale}/${en ? p.slugEn : p.slugEs}`}
+                    className="py-3 px-5 text-base font-bold text-ink border-b border-g100 flex items-center gap-3"
+                  >
+                    <Image
+                      src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
+                      alt=""
+                      width={26}
+                      height={18}
+                      unoptimized
+                      className="rounded-[2px] shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
+                    />
+                    {en ? p.nombreEn : p.nombre}
+                  </Link>
+                </DrawerClose>
+              ))}
+              <DrawerClose asChild>
+                <Link
+                  href={homeAnchor('#como')}
+                  className="py-3.5 px-5 text-base font-bold text-ink border-b border-g100 block"
+                >
+                  {t('howItWorks')}
+                </Link>
+              </DrawerClose>
+              <DrawerClose asChild>
+                <Link
+                  href={homeAnchor('#faq')}
+                  className="py-3.5 px-5 text-base font-bold text-ink border-b border-g100 block"
+                >
+                  {t('faq')}
+                </Link>
+              </DrawerClose>
+              <DrawerClose asChild>
+                <Link
+                  href={`/${locale}/contacto`}
+                  className="py-3.5 px-5 text-base font-bold text-ink border-b border-g100 block"
+                >
+                  {t('contact')}
+                </Link>
+              </DrawerClose>
+              <button
+                onClick={switchLocale}
+                className="w-full py-3.5 px-5 text-base font-bold text-ink border-b border-g100 text-left inline-flex items-center gap-2.5"
+              >
+                {locale === 'es' ? <FlagUS className="w-6 h-[17px]" /> : <FlagES className="w-6 h-[17px]" />}
+                <span>{locale === 'es' ? 'English' : 'Español'}</span>
+              </button>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
     </nav>
   )
 }

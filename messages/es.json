@@ -6,7 +6,10 @@
     "login": "Ingresar",
     "corridors": "Destinos",
     "sendTo": "Enviar a",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "menuTitle": "Menú",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "hero": {
     "badge": "Tasas actualizadas en tiempo real",
