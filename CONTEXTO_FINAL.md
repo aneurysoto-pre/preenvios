@@ -690,13 +690,15 @@ Cuando el volumen referido llegue a $50,000/mes:
 - [ ] Presencia en al menos 8 corredores activos
 - [ ] Evaluar dirección: crecer independiente / partnership / expansión con capital
 
-### Fase 7 — Sistema de defensa en profundidad (defense-in-depth)
+### Fase 7 — Sistema de defensa en profundidad (defense-in-depth) — PRE-LANZAMIENTO
 
 **Filosofía:** en 2026 los sistemas serios no se construyen con una sola línea de defensa. Se diseñan con capas cruzadas donde cada una puede ser el fallback de las otras. Análogo a salir a la calle con $100 cash + tarjeta de crédito como backup + celular con Apple Pay como backup de la tarjeta — si uno falla, los otros cubren.
 
 **Objetivo:** PreEnvios debe tener validación arquitectónica en los bordes de entrada de datos + 5 agentes activos independientes monitoreando + monitoreo pasivo estándar (BetterStack + Sentry) + founder como última línea. **8 capas cruzadas**: si 7 fallan, la 8va te avisa.
 
-**Costo adicional total: $0** (todo dentro de planes existentes). **Tiempo total: 20-30 hrs** de trabajo del empleado local + Claude Code.
+**Timing (decisión 2026-04-21):** los 5 agentes se construyen **antes del DNS cutover**, en los próximos días. No se difieren a post-launch. Razón: el founder quiere defensa completa desde el día 1, no ir agregando capas mientras ya hay usuarios reales expuestos. Los agentes 2, 3 y 5 arrancarán con thresholds conservadores (educated guesses sin tráfico real) y se re-tunearán con data de las primeras 2-4 semanas post-launch — eso es tuning, no construcción.
+
+**Costo adicional total: $0** (todo dentro de planes existentes). **Tiempo total: 20-30 hrs** de implementación por Claude Code (ejecutor) + supervisión del founder.
 
 #### Nivel arquitectónico (write-boundary validation)
 
@@ -704,13 +706,13 @@ Cuando el volumen referido llegue a $50,000/mes:
 
 #### Nivel agentes activos (observadores cruzados post-launch)
 
-- [ ] **Agente 2 — Data quality agent.** Cada hora consulta `/api/precios` para los 4 corredores MVP. Valida: devuelve 7+ operadores, sin campos null, rates dentro de rangos esperados. Alerta si anomalía. Implementación: Vercel Cron + 4-6 hrs build. Target: Mes 3 post-launch.
+- [ ] **Agente 2 — Data quality agent.** Cada hora consulta `/api/precios` para los 4 corredores MVP. Valida: devuelve 7+ operadores, sin campos null, rates dentro de rangos esperados. Alerta si anomalía. Implementación: Vercel Cron + 4-6 hrs build. **Target: pre-launch próximos días.** Arranca con thresholds conservadores, se re-tunean con data de primeras 2 semanas post-launch.
 
-- [ ] **Agente 3 — Database health agent.** Cada 30 min consulta Supabase directo: row counts por tabla (`precios`, `contactos`, `suscriptores_free`, `admin_login_attempts`). Alerta en 2 escenarios: (a) crecimiento súbito >5x del baseline (posible bot attack en suscripciones), (b) pérdida súbita >30% de rows (posible accidente o corrupción). Implementación: Supabase Edge Function + 3-4 hrs build. Target: Mes 3 post-launch.
+- [ ] **Agente 3 — Database health agent.** Cada 30 min consulta Supabase directo: row counts por tabla (`precios`, `contactos`, `suscriptores_free`, `admin_login_attempts`). Alerta en 2 escenarios: (a) crecimiento súbito >5x del baseline (posible bot attack en suscripciones), (b) pérdida súbita >30% de rows (posible accidente o corrupción). Implementación: Supabase Edge Function + 3-4 hrs build. **Target: pre-launch próximos días.** Baselines iniciales educated guess, se ajustan con data real.
 
-- [ ] **Agente 4 — E2E smoke test agent.** Cada 15 min corre Playwright headless que: navega a preenvios.com, selecciona corredor, escribe monto, click "Comparar", verifica que aparecen 7 remesadoras, click primer CTA, verifica que abre URL afiliada. Repite en viewport mobile + en `/es` y `/en`. Alerta si cualquier paso falla. Detecta lo que BetterStack no: botones rotos en mobile, CSS que colapsa en cierta resolución, routing que devuelve 200 pero render vacío. Implementación: GitHub Actions + Playwright + 6-8 hrs build. Target: Mes 2 post-launch.
+- [ ] **Agente 4 — E2E smoke test agent.** Cada 15 min corre Playwright headless que: navega a preenvios.com, selecciona corredor, escribe monto, click "Comparar", verifica que aparecen 7 remesadoras, click primer CTA, verifica que abre URL afiliada. Repite en viewport mobile + en `/es` y `/en`. Alerta si cualquier paso falla. Detecta lo que BetterStack no: botones rotos en mobile, CSS que colapsa en cierta resolución, routing que devuelve 200 pero render vacío. Implementación: GitHub Actions + Playwright + 6-8 hrs build. **Target: pre-launch próximos días.** Script se construye ahora apuntando a `preenvios.vercel.app` (staging); se cambia la URL target a `preenvios.com` el día del DNS cutover.
 
-- [ ] **Agente 5 — Business metrics agent.** Cada hora consulta GA4 Data API + Supabase: `click_operador` por operador/corredor, `suscripcion_free` confirmaciones, pageviews por ruta. Alerta si alguna métrica cae >30% vs baseline 7 días. Detecta regresiones silenciosas donde el sitio está "arriba" pero el embudo se rompió (ej. link afiliado cambió y nadie se dio cuenta). Implementación: Vercel Cron + GA4 Data API + 4-6 hrs build. Target: Mes 4 post-launch.
+- [ ] **Agente 5 — Business metrics agent.** Cada hora consulta GA4 Data API + Supabase: `click_operador` por operador/corredor, `suscripcion_free` confirmaciones, pageviews por ruta. Alerta si alguna métrica cae >30% vs baseline 7 días. Detecta regresiones silenciosas donde el sitio está "arriba" pero el embudo se rompió (ej. link afiliado cambió y nadie se dio cuenta). Implementación: Vercel Cron + GA4 Data API + 4-6 hrs build. **Target: pre-launch próximos días.** Arranca con thresholds placeholder; baseline real de GA4 se construye durante las primeras 2-4 semanas post-launch y ahí se ajustan los thresholds.
 
 #### Nivel monitoreo pasivo (observabilidad estándar)
 
@@ -728,19 +730,19 @@ Cuando el volumen referido llegue a $50,000/mes:
 - **UX bugs en dispositivos raros** — ej. un iPhone SE con iOS 16 que rompe la calculadora. Los agentes chequean viewports comunes, no todos. **Mitigación:** rutina humana del founder o empleado = usar el sitio como usuario real 1x/semana en 3 dispositivos distintos.
 - **Regulación/mercado externo** — cambios de política de Google, de FTC, de Meta, nuevo competidor fuerte. Ningún agente lo ve. **Mitigación:** lectura semanal del founder en Google Alerts para keywords del nicho.
 
-#### Trigger para arrancar cada agente
+#### Timing de implementación (TODOS pre-lanzamiento)
 
-| Agente | Cuándo implementar | Disparador |
-|--------|---------------------|------------|
-| 1 (validador ingress) | PRE-LANZAMIENTO | Antes del DNS cutover. No negociable. |
-| 4 (E2E smoke) | Mes 2 post-launch | Cuando el tráfico real empiece y los bugs visuales matter |
-| 2 (data quality) | Mes 3 post-launch | Cuando la base de usuarios confíe en las tasas mostradas |
-| 3 (DB health) | Mes 3 post-launch | Al mismo tiempo que #2 |
-| 5 (business metrics) | Mes 4 post-launch | Cuando haya baseline de métricas estable |
+| Agente | Cuándo | Notas de estado post-launch |
+|--------|--------|------------------------------|
+| 1 (validador ingress) | Pre-launch, próximos días | Completo día 1, thresholds ya tuneados con tasa banco central |
+| 2 (data quality) | Pre-launch, próximos días | Thresholds conservadores, re-tune con data semana 2-3 post-launch |
+| 3 (DB health) | Pre-launch, próximos días | Baselines educated guess, re-tune con data semana 2-3 post-launch |
+| 4 (E2E smoke) | Pre-launch, próximos días | Apunta a staging pre-cutover, se cambia URL a preenvios.com el día del cutover |
+| 5 (business metrics) | Pre-launch, próximos días | Thresholds placeholder, re-tune con baseline GA4 mes 1-2 post-launch |
 
-**Progressive buildout.** No se construye todo el día del launch — se construye con disciplina mensual por el empleado local + Claude Code supervisado.
+**Decisión (2026-04-21):** los 5 agentes se construyen antes del lanzamiento, no progresivamente post-launch. Razón: defensa completa desde el día 1, no agregar capas con usuarios expuestos.
 
-Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agente_validador_ingress.md`, `25_agente_e2e_smoke_test.md`, etc.). El doc sigue al código, no al revés.
+Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agente_validador_ingress.md`, `25_agente_data_quality.md`, etc.). El doc sigue al código, no al revés.
 
 ---
 
