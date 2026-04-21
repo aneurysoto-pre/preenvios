@@ -67,8 +67,8 @@ export default function AlertaForm({ corredorId, corredorNombre }: Props) {
 
   return (
     <div className="border border-[var(--color-g200)] rounded-[12px] px-4 py-3">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <div className="shrink-0 sm:max-w-[280px]">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+        <div className="shrink-0 sm:max-w-[280px] sm:pt-1">
           <h3 className="text-[14px] font-semibold text-[var(--color-ink)] leading-tight">
             {en ? "Get today's rate in your inbox" : 'Recibe la tasa de hoy en tu email'}
           </h3>
@@ -78,24 +78,36 @@ export default function AlertaForm({ corredorId, corredorNombre }: Props) {
               : `Alerta diaria gratis para ${corredorNombre}`}
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="flex-1 flex gap-2 w-full">
-          <input
-            type="email"
-            required
-            placeholder={en ? 'your@email.com' : 'tu@email.com'}
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="flex-1 min-w-0 px-3 py-2 rounded-[8px] border border-[var(--color-g200)] text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-green)] focus:border-transparent"
-          />
-          <button
-            type="submit"
-            disabled={status === 'loading'}
-            className="bg-[var(--color-green)] hover:bg-[var(--color-green-dark)] text-white px-4 py-2 rounded-[8px] font-bold text-[13px] transition-colors disabled:opacity-60 whitespace-nowrap"
+        <form onSubmit={handleSubmit} className="flex-1 w-full">
+          {/* Label asociado con htmlFor al input — resuelve a11y hallazgo
+              §1.1 del AUDIT_COMPLETO.md (input sin label). Visible arriba
+              del input, legible (font-bold, text-ink). */}
+          <label
+            htmlFor="alerta-email-input"
+            className="block text-[12px] font-bold text-[var(--color-ink-2)] mb-1.5"
           >
-            {status === 'loading'
-              ? (en ? 'Sending…' : 'Enviando…')
-              : (en ? 'Subscribe' : 'Suscribirme')}
-          </button>
+            {en ? 'Your email' : 'Tu correo electrónico'}
+          </label>
+          <div className="flex gap-2 w-full">
+            <input
+              id="alerta-email-input"
+              type="email"
+              required
+              placeholder={en ? 'your@email.com' : 'tu@email.com'}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="flex-1 min-w-0 px-3.5 py-2.5 rounded-[8px] border-[1.5px] border-[var(--color-g400)] text-[14px] bg-white text-[var(--color-ink)] placeholder:text-[var(--color-g500)] focus:outline-none focus:border-[var(--color-green)] focus:ring-2 focus:ring-[var(--color-green)]/20 transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="bg-[var(--color-green)] hover:bg-[var(--color-green-dark)] text-white px-4 py-2.5 rounded-[8px] font-bold text-[14px] transition-colors disabled:opacity-60 whitespace-nowrap shrink-0"
+            >
+              {status === 'loading'
+                ? (en ? 'Sending…' : 'Enviando…')
+                : (en ? 'Subscribe' : 'Suscribirme')}
+            </button>
+          </div>
         </form>
       </div>
       {status === 'error' && (
