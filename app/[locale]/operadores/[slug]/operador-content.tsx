@@ -83,7 +83,11 @@ export default function OperadorContent({ slug }: { slug: string }) {
       )}
 
       <div className="text-center mt-8">
-        <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-8 py-4 rounded-full font-extrabold text-base">
+        <a
+          href={`/${locale}`}
+          className="inline-block bg-[var(--color-blue)] px-8 py-4 rounded-full font-extrabold text-base hover:bg-[var(--color-blue-dark)] transition-colors"
+          style={{ color: '#fff', borderBottom: 'none' }}
+        >
           {en ? `Compare ${op.nombre} now` : `Comparar ${op.nombre} ahora`} →
         </a>
       </div>

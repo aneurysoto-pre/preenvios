@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
+import { PAISES_MVP } from '@/lib/paises'
 
 type TasaBC = {
   id: string
@@ -52,10 +53,14 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
       .then(data => { if (Array.isArray(data)) setTasas(data) })
   }, [])
 
-  // If filtering by country, show only that one; otherwise show first 4
+  // If filtering by country, show only that one; otherwise mostrar solo los 4 MVP
+  // en el orden definido en PAISES_MVP (Honduras primero por prioridad producto).
+  // La API /api/tasas-banco-central puede devolver paises adicionales (Colombia,
+  // Mexico, etc.) que todavia no tienen scraper activo ni pagina editorial — se
+  // filtran aqui para no exponer paises no-MVP en el landing.
   const visibles = filterCodigoPais
     ? tasas.filter(t => t.codigo_pais === filterCodigoPais)
-    : tasas.slice(0, 4)
+    : PAISES_MVP.map(p => tasas.find(t => t.codigo_pais === p.codigoPais)).filter(Boolean) as TasaBC[]
 
   if (visibles.length === 0) return null
 
