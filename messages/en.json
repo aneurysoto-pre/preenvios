@@ -180,6 +180,18 @@
       "cta": "Learn more"
     }
   },
+  "alertaForm": {
+    "headerTitle": "Get today's rate in your inbox",
+    "headerSubtitle": "Free daily alert for {pais}",
+    "emailLabel": "Your email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Subscribe",
+    "submitLoading": "Sending…",
+    "error": "Something went wrong. Try again.",
+    "disclaimer": "No spam. Unsubscribe anytime. CAN-SPAM compliant.",
+    "sentConfirm": "Check your email to confirm.",
+    "alreadySubscribed": "You're already subscribed for {pais}."
+  },
   "alertas": {
     "tag": "Free alerts",
     "heroTitle": "Today's best rate, in your inbox",

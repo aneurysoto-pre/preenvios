@@ -180,6 +180,18 @@
       "cta": "Conócenos"
     }
   },
+  "alertaForm": {
+    "headerTitle": "Recibe la tasa de hoy en tu email",
+    "headerSubtitle": "Alerta diaria gratis para {pais}",
+    "emailLabel": "Tu correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "submit": "Suscribirme",
+    "submitLoading": "Enviando…",
+    "error": "Algo salió mal. Intentá de nuevo.",
+    "disclaimer": "Sin spam. Cancela cuando quieras. Cumple CAN-SPAM.",
+    "sentConfirm": "Revisá tu email para confirmar.",
+    "alreadySubscribed": "Ya estás suscrito a {pais}."
+  },
   "alertas": {
     "tag": "Alertas gratis",
     "heroTitle": "La mejor tasa del día, en tu email",
