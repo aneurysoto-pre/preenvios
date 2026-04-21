@@ -690,6 +690,60 @@ Cuando el volumen referido llegue a $50,000/mes:
 - [ ] Presencia en al menos 8 corredores activos
 - [ ] Evaluar dirección: crecer independiente / partnership / expansión con capital
 
+### Fase 7 — Sistema de defensa en profundidad (defense-in-depth)
+
+**Filosofía:** en 2026 los sistemas serios no se construyen con una sola línea de defensa. Se diseñan con capas cruzadas donde cada una puede ser el fallback de las otras. Análogo a salir a la calle con $100 cash + tarjeta de crédito como backup + celular con Apple Pay como backup de la tarjeta — si uno falla, los otros cubren.
+
+**Objetivo:** PreEnvios debe tener validación arquitectónica en los bordes de entrada de datos + 5 agentes activos independientes monitoreando + monitoreo pasivo estándar (BetterStack + Sentry) + founder como última línea. **8 capas cruzadas**: si 7 fallan, la 8va te avisa.
+
+**Costo adicional total: $0** (todo dentro de planes existentes). **Tiempo total: 20-30 hrs** de trabajo del empleado local + Claude Code.
+
+#### Nivel arquitectónico (write-boundary validation)
+
+- [x] **Agente 1 — Validador de ingress en scrapers (BLOQUEANTE PRE-LANZAMIENTO).** Antes de que `savePrices()` guarde en Supabase, validar que cada fila cumple: tasa dentro de ±10% de la tasa del banco central correspondiente (fuente: tabla `tasas_bancos_centrales`), fee entre 0 y 50 USD, velocidad en enum permitido, operador en lista aprobada. Si falla, rechaza → no entra a DB → log en tabla `scraper_anomalies` → Sentry capture. Referencia: LOGICA_DE_NEGOCIO/08_scrapers.md § 6ter. Implementación estimada: 2-4 hrs. Ver CHECKLIST_PRE_LANZAMIENTO.md § 7.4 como requisito de cutover.
+
+#### Nivel agentes activos (observadores cruzados post-launch)
+
+- [ ] **Agente 2 — Data quality agent.** Cada hora consulta `/api/precios` para los 4 corredores MVP. Valida: devuelve 7+ operadores, sin campos null, rates dentro de rangos esperados. Alerta si anomalía. Implementación: Vercel Cron + 4-6 hrs build. Target: Mes 3 post-launch.
+
+- [ ] **Agente 3 — Database health agent.** Cada 30 min consulta Supabase directo: row counts por tabla (`precios`, `contactos`, `suscriptores_free`, `admin_login_attempts`). Alerta en 2 escenarios: (a) crecimiento súbito >5x del baseline (posible bot attack en suscripciones), (b) pérdida súbita >30% de rows (posible accidente o corrupción). Implementación: Supabase Edge Function + 3-4 hrs build. Target: Mes 3 post-launch.
+
+- [ ] **Agente 4 — E2E smoke test agent.** Cada 15 min corre Playwright headless que: navega a preenvios.com, selecciona corredor, escribe monto, click "Comparar", verifica que aparecen 7 remesadoras, click primer CTA, verifica que abre URL afiliada. Repite en viewport mobile + en `/es` y `/en`. Alerta si cualquier paso falla. Detecta lo que BetterStack no: botones rotos en mobile, CSS que colapsa en cierta resolución, routing que devuelve 200 pero render vacío. Implementación: GitHub Actions + Playwright + 6-8 hrs build. Target: Mes 2 post-launch.
+
+- [ ] **Agente 5 — Business metrics agent.** Cada hora consulta GA4 Data API + Supabase: `click_operador` por operador/corredor, `suscripcion_free` confirmaciones, pageviews por ruta. Alerta si alguna métrica cae >30% vs baseline 7 días. Detecta regresiones silenciosas donde el sitio está "arriba" pero el embudo se rompió (ej. link afiliado cambió y nadie se dio cuenta). Implementación: Vercel Cron + GA4 Data API + 4-6 hrs build. Target: Mes 4 post-launch.
+
+#### Nivel monitoreo pasivo (observabilidad estándar)
+
+- [x] BetterStack uptime (planeado activar el día del DNS cutover — ver AUDITORIA_DE_SEGURIDAD/monitoring.md Fase 1)
+- [x] Sentry error tracking (código instalado commit `ba107e5`, pendiente DSN en Vercel — Fase 2 monitoring)
+
+#### Nivel auditoría periódica
+
+- [x] Primera auditoría OWASP (completada 2026-04-19, ver AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md)
+- [ ] **Auditoría recurrente cada 60-90 días post-launch.** Re-ejecutar el checklist OWASP Top 10, revisar nuevas vulnerabilidades en dependencias (npm audit, Dependabot), reviewar incidentes Sentry del período. Formato: misma plantilla del 01_auditoria.
+- [ ] Auditoría externa profesional anual (post-revenue estable, ~$500-1,500 cada una)
+
+#### Gaps conscientes que NO cubre este stack
+
+- **UX bugs en dispositivos raros** — ej. un iPhone SE con iOS 16 que rompe la calculadora. Los agentes chequean viewports comunes, no todos. **Mitigación:** rutina humana del founder o empleado = usar el sitio como usuario real 1x/semana en 3 dispositivos distintos.
+- **Regulación/mercado externo** — cambios de política de Google, de FTC, de Meta, nuevo competidor fuerte. Ningún agente lo ve. **Mitigación:** lectura semanal del founder en Google Alerts para keywords del nicho.
+
+#### Trigger para arrancar cada agente
+
+| Agente | Cuándo implementar | Disparador |
+|--------|---------------------|------------|
+| 1 (validador ingress) | PRE-LANZAMIENTO | Antes del DNS cutover. No negociable. |
+| 4 (E2E smoke) | Mes 2 post-launch | Cuando el tráfico real empiece y los bugs visuales matter |
+| 2 (data quality) | Mes 3 post-launch | Cuando la base de usuarios confíe en las tasas mostradas |
+| 3 (DB health) | Mes 3 post-launch | Al mismo tiempo que #2 |
+| 5 (business metrics) | Mes 4 post-launch | Cuando haya baseline de métricas estable |
+
+**Progressive buildout.** No se construye todo el día del launch — se construye con disciplina mensual por el empleado local + Claude Code supervisado.
+
+Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agente_validador_ingress.md`, `25_agente_e2e_smoke_test.md`, etc.). El doc sigue al código, no al revés.
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)

@@ -173,6 +173,33 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 **Criterio de NO-GO:** si hay 2+ operadores MVP en estado "falla consistente sin feed ni workaround" el día del cutover, **no se activa el DNS**. Se corrige o se reduce el catálogo visible.
 
+### 7.5 🚨 Validador de ingress en scrapers — BLOQUEANTE PARA LANZAMIENTO
+
+**Sin esto el producto es inviable:** si un scraper empieza a devolver data basura en producción (ej. tasa 50 DOP cuando debería ser 60.50), los usuarios la ven inmediatamente en el comparador. Confianza perdida en segundos.
+
+**Es falla de arquitectura, no de monitoreo.** La solución no es detectarlo después, sino que data inválida **nunca entre a la DB**. Parte de la Fase 7 — Sistema de defensa en profundidad (ver [CONTEXTO_FINAL.md](CONTEXTO_FINAL.md)).
+
+**Checklist obligatorio antes del DNS cutover:**
+
+- [ ] Implementar función `validatePrice(price)` en `lib/scrapers/base.ts` que se ejecuta antes de `savePrices()`
+- [ ] Validaciones mínimas:
+  - [ ] Tasa dentro de ±10% de la tasa del banco central (fuente: tabla `tasas_bancos_centrales` por `codigo_pais`)
+  - [ ] Fee en rango [0, 50] USD
+  - [ ] Velocidad en enum permitido (`Segundos`, `Minutos`, `Horas`, `Días`)
+  - [ ] Operador en lista aprobada (7 MVP)
+- [ ] Si falla validación → no guardar + Sentry capture + log en nueva tabla `scraper_anomalies` (crear migración)
+- [ ] Si mismo operador acumula 3 anomalías consecutivas → usar `reportScraperFailure` existente para marcar stale
+- [ ] Smoke test del validador: introducir manualmente una tasa fuera de rango en un scraper, verificar que se rechaza y se loguea
+- [ ] Validador corre en producción por 48 hrs antes del cutover, confirmando que no genera falsos positivos con data real
+
+**Criterio de NO-GO:** sin el validador implementado y testeado, **no se activa el DNS**. Cualquier scraper bajo condiciones adversas puede envenenar el comparador público.
+
+**Implementación estimada:** 2-4 hrs de trabajo (Claude Code + supervisión founder). No es trabajo arquitectónico pesado — es una función de validación con tabla de bounds, rejection + logging.
+
+**Referencia completa:**
+- Arquitectura: [CONTEXTO_FINAL.md § Fase 7 — Agente 1](CONTEXTO_FINAL.md)
+- Contexto de scrapers: [LOGICA_DE_NEGOCIO/08_scrapers.md](LOGICA_DE_NEGOCIO/08_scrapers.md)
+
 ---
 
 ## 8. SEO y meta tags
