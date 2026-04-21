@@ -38,4 +38,10 @@ export const contactoSchema = z.object({
   website: z.string().max(0, 'invalid').optional().default(''),
 })
 
-export type ContactoInput = z.infer<typeof contactoSchema>
+// z.input = tipo que acepta el form en `defaultValues` (website opcional).
+// z.output = tipo post-parse (website siempre string por el .default('')).
+// El useForm necesita ambos cuando la schema aplica defaults.
+export type ContactoFormInput = z.input<typeof contactoSchema>
+export type ContactoFormOutput = z.output<typeof contactoSchema>
+// Alias legacy para el endpoint — usa el output (ya parseado).
+export type ContactoInput = ContactoFormOutput
