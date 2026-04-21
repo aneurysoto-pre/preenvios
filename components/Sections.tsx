@@ -1,8 +1,31 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { DollarSign, Zap, ShieldCheck, Search, BarChart3, Send } from 'lucide-react'
 import { PAISES_MVP } from '@/lib/paises'
+
+/**
+ * Re-scrolla a la seccion `targetId` cuando el componente se monta Y la URL
+ * tiene ese hash. Necesario porque StepsSection y FAQSection estan dentro de
+ * `LazyBelow` (dynamic import) — cuando el usuario llega a /es/#faq desde otra
+ * pagina, el browser intenta hacer jump al anchor antes de que el lazy bundle
+ * cargue el componente, y el scroll se queda donde estaba. Este hook corrige
+ * la race condition al auto-scrollear despues del mount.
+ */
+function useScrollToHashOnMount(targetId: string) {
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (window.location.hash !== '#' + targetId) return
+    const el = document.getElementById(targetId)
+    if (!el) return
+    // Defer un tick para dejar que el layout se estabilice post-mount
+    const timeoutId = setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+    return () => clearTimeout(timeoutId)
+  }, [targetId])
+}
 
 const BRANDS = ['Remitly', 'Wise', 'Xoom', 'Ria', 'WorldRemit', 'Western Union', 'MoneyGram']
 const BRAND_DOMAINS: Record<string, string> = {
@@ -71,13 +94,14 @@ export function WhySection({ region }: { region?: string } = {}) {
 
 export function StepsSection() {
   const t = useTranslations('steps')
+  useScrollToHashOnMount('como')
   const steps = [
     { n: 1, Icon: Search,     cls: 'from-blue to-blue-dark' },
     { n: 2, Icon: BarChart3,  cls: 'from-green to-green-dark' },
     { n: 3, Icon: Send,       cls: 'from-[#F97316] to-[#EA580C]' },
   ]
   return (
-    <section className="pt-[50px] pb-[90px] bg-gradient-to-b from-g50 to-white" id="como">
+    <section className="pt-[50px] pb-[90px] bg-gradient-to-b from-g50 to-white scroll-mt-[72px]" id="como">
       <div className="max-w-[1240px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto mb-14">
           <span className="inline-block text-xs font-extrabold text-blue uppercase tracking-[2px] mb-3.5 px-3.5 py-1.5 bg-blue-soft rounded-full">{t('tag')}</span>
@@ -140,9 +164,10 @@ export function CTASection() {
 
 export function FAQSection() {
   const t = useTranslations('faq')
+  useScrollToHashOnMount('faq')
   const keys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const
   return (
-    <section className="py-[90px] bg-g50" id="faq">
+    <section className="py-[90px] bg-g50 scroll-mt-[72px]" id="faq">
       <div className="max-w-[1240px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto mb-14">
           <span className="inline-block text-xs font-extrabold text-blue uppercase tracking-[2px] mb-3.5 px-3.5 py-1.5 bg-blue-soft rounded-full">{t('tag')}</span>
