@@ -346,20 +346,21 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                   </div>
                 </div>
                 {searchOpen && (
-                  // max-h-[340px] acota la altura para que 6+ paises no desborden la
-                  // card y escondan el input de monto abajo. Header (search input)
-                  // fijo arriba con flex-shrink-0; la lista de paises scrollea dentro
-                  // del overflow-y-auto si hay mas de ~5 items visibles.
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-g200 rounded-[14px] shadow-lg z-10 overflow-hidden max-h-[340px] flex flex-col">
+                  // Intento previo con flex + max-h fallo: un flex child con
+                  // overflow-y-auto necesita min-h-0 para poder shrinkear, sino
+                  // expande a su contenido e ignora el max-h del padre. Solucion
+                  // mas simple: max-height directo en el div scrollable de la lista,
+                  // sin flex. Search input arriba sin height constraint.
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-g200 rounded-[14px] shadow-lg z-10 overflow-hidden">
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
                       placeholder={locale === 'en' ? 'Search by country, DOP, HNL...' : 'Busca por país, DOP, HNL...'}
-                      className="w-full px-4 py-3 text-sm border-b border-g100 outline-none font-medium shrink-0"
+                      className="w-full px-4 py-3 text-sm border-b border-g100 outline-none font-medium"
                       autoFocus
                     />
-                    <div className="overflow-y-auto overscroll-contain">
+                    <div className="max-h-[260px] overflow-y-auto overscroll-contain">
                       {filteredCorredores.map(c => (
                         <button
                           key={c.id}
