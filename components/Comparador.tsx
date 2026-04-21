@@ -332,44 +332,54 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                 </span>
               </div>
 
-              {/* Country search */}
-              <div className="relative mb-2.5" ref={searchRef}>
-                <div
-                  className="bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue"
-                  onClick={() => setSearchOpen(!searchOpen)}
-                >
-                  <label className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</label>
-                  <div className="flex items-center gap-2.5">
-                    <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
-                    <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
-                    <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
-                  </div>
-                </div>
-                {searchOpen && (
-                  // Intento previo con flex + max-h fallo: un flex child con
-                  // overflow-y-auto necesita min-h-0 para poder shrinkear, sino
-                  // expande a su contenido e ignora el max-h del padre. Solucion
-                  // mas simple: max-height directo en el div scrollable de la lista,
-                  // sin flex. Search input arriba sin height constraint.
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-g200 rounded-[14px] shadow-lg z-10 overflow-hidden">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={e => setSearchQuery(e.target.value)}
-                      placeholder={locale === 'en' ? 'Search by country, DOP, HNL...' : 'Busca por país, DOP, HNL...'}
-                      className="w-full px-4 py-3 text-sm border-b border-g100 outline-none font-medium"
-                      autoFocus
-                    />
+              {/* ═════ COUNTRY PICKER ═════
+                  Diseño: reemplaza el slot del selector cuando esta abierto
+                  (inline expansion), NO dropdown absolute. Motivo: el hero
+                  section tiene overflow-hidden (necesario para el mask del
+                  grid decorativo); un dropdown absolute de 306px queda
+                  clipeado por la section cuando la lista crece a 6 paises.
+                  Al ser inline, el card crece naturalmente y la section
+                  crece con el. Cero clipping, scroll real en la lista. */}
+              <div className="mb-2.5" ref={searchRef}>
+                {searchOpen ? (
+                  <div className="bg-white border-[1.5px] border-blue rounded-[14px] overflow-hidden shadow-[0_4px_14px_-6px_rgba(10,79,229,.25)]">
+                    {/* Header: search input + close button */}
+                    <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-g100 bg-g50">
+                      <svg className="w-4 h-4 text-g500 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <circle cx="9" cy="9" r="6" />
+                        <path d="m14 14 3 3" strokeLinecap="round" />
+                      </svg>
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder={locale === 'en' ? 'Search country, DOP, HNL...' : 'Busca país, DOP, HNL...'}
+                        className="flex-1 bg-transparent border-none outline-none text-sm font-medium min-w-0 text-ink placeholder:text-g500"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => { setSearchOpen(false); setSearchQuery('') }}
+                        className="p-1 text-g500 hover:text-ink hover:bg-g100 rounded transition-colors shrink-0"
+                        aria-label={locale === 'en' ? 'Close' : 'Cerrar'}
+                      >
+                        <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                          <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+                        </svg>
+                      </button>
+                    </div>
+                    {/* Scrollable list — max-h directo, sin flex parent */}
                     <div className="max-h-[260px] overflow-y-auto overscroll-contain">
                       {filteredCorredores.map(c => (
                         <button
                           key={c.id}
+                          type="button"
                           onClick={() => selectCorredor(c.id)}
                           className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-g50 transition-colors ${c.id === corredor ? 'bg-blue-soft' : ''}`}
                         >
-                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover" />
+                          <img src={`https://flagcdn.com/w40/${c.codigo_pais}.png`} alt="" className="w-[28px] h-[20px] rounded-[2px] object-cover shrink-0" />
                           <span className="font-bold text-sm">{locale === 'en' ? c.nombre_en : c.nombre}</span>
-                          <span className="text-xs text-g500 ml-auto">{c.moneda}</span>
+                          <span className="text-xs text-g500 ml-auto shrink-0">{c.moneda}</span>
                         </button>
                       ))}
                       {filteredCorredores.length === 0 && (
@@ -377,6 +387,21 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
                       )}
                     </div>
                   </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full bg-g50 border-[1.5px] border-g200 rounded-[14px] px-3.5 py-3 cursor-pointer transition-colors hover:border-blue text-left"
+                    onClick={() => setSearchOpen(true)}
+                    aria-expanded={false}
+                    aria-haspopup="listbox"
+                  >
+                    <span className="block text-[11px] font-bold text-g500 uppercase tracking-wider mb-1">{t('search.destination')}</span>
+                    <span className="flex items-center gap-2.5">
+                      <img src={`https://flagcdn.com/w40/${corredorData.codigo_pais}.png`} alt="" className="w-[30px] h-[22px] rounded-[3px] object-cover shadow-[0_0_0_1px_var(--color-g200)]" />
+                      <span className="font-heading text-lg font-extrabold text-ink">{locale === 'en' ? corredorData.nombre_en : corredorData.nombre}</span>
+                      <svg className="w-3 h-3 text-g500 ml-auto" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                    </span>
+                  </button>
                 )}
               </div>
 
