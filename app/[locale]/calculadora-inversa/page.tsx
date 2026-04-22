@@ -25,5 +25,37 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function CalculadoraInversaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
-  return <CalculadoraInversaContent />
+  const en = locale === 'en'
+
+  // WebApplication schema — Google trata esto como herramienta interactiva.
+  // Genera rich snippets distintos a una página común (icono de calculadora,
+  // badge "Free tool").
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    url: `https://preenvios.com/${locale}/calculadora-inversa`,
+    inLanguage: locale,
+    name: en ? 'Reverse remittance calculator' : 'Calculadora inversa de remesas',
+    description: en
+      ? 'Calculate how much to send in USD so your family receives an exact amount in their currency. Honduras, Dominican Republic, Guatemala, El Salvador, Colombia, Mexico.'
+      : 'Calcula cuánto enviar en USD para que tu familia reciba un monto exacto en su moneda. Honduras, Rep. Dominicana, Guatemala, El Salvador, Colombia, México.',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any (web browser)',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    publisher: { '@id': 'https://preenvios.com/#organization' },
+  }
+
+  return (
+    <>
+      <CalculadoraInversaContent />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    </>
+  )
 }
