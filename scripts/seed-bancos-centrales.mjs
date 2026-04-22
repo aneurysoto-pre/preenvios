@@ -21,8 +21,6 @@ const tasas = [
   { id: 'el_salvador',        codigo_pais: 'sv', moneda: 'USD', nombre_banco: 'Banco Central de Reserva',               nombre_banco_en: 'Central Reserve Bank',                   siglas: 'BCR',  tasa: 1.00,  nota: 'USD oficial', nota_en: 'Official USD' },
   { id: 'colombia',           codigo_pais: 'co', moneda: 'COP', nombre_banco: 'Banco de la República',                  nombre_banco_en: 'Bank of the Republic',                   siglas: 'BR',   tasa: 4150.00, nota: '', nota_en: '' },
   { id: 'mexico',             codigo_pais: 'mx', moneda: 'MXN', nombre_banco: 'Banco de México',                        nombre_banco_en: 'Bank of Mexico',                         siglas: 'BM',   tasa: 17.15, nota: '', nota_en: '' },
-  { id: 'nicaragua',          codigo_pais: 'ni', moneda: 'NIO', nombre_banco: 'Banco Central de Nicaragua',             nombre_banco_en: 'Central Bank of Nicaragua',              siglas: 'BCN',  tasa: 36.62, nota: '', nota_en: '' },
-  { id: 'haiti',              codigo_pais: 'ht', moneda: 'HTG', nombre_banco: 'Banque de la République d\'Haïti',       nombre_banco_en: 'Bank of the Republic of Haiti',          siglas: 'BRH',  tasa: 131.50, nota: '', nota_en: '' },
 ]
 
 async function seed() {

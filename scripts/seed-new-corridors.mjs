@@ -1,5 +1,5 @@
 /**
- * Seed script — agrega 4 corredores nuevos (Colombia, México, Nicaragua, Haití)
+ * Seed script — agrega corredores nuevos (Colombia, México).
  * Ejecutar: SUPABASE_SERVICE_ROLE_KEY=xxx node scripts/seed-new-corridors.mjs
  */
 
@@ -18,8 +18,6 @@ if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
 const corredores = [
   { id: 'colombia',   nombre: 'Colombia',   nombre_en: 'Colombia',   moneda: 'COP', simbolo: '$',  bandera: '🇨🇴', codigo_pais: 'co', tasa_banco_central: 4150.00, prioridad: 5 },
   { id: 'mexico',     nombre: 'México',     nombre_en: 'Mexico',     moneda: 'MXN', simbolo: '$',  bandera: '🇲🇽', codigo_pais: 'mx', tasa_banco_central: 17.15,   prioridad: 6 },
-  { id: 'nicaragua',  nombre: 'Nicaragua',  nombre_en: 'Nicaragua',  moneda: 'NIO', simbolo: 'C$', bandera: '🇳🇮', codigo_pais: 'ni', tasa_banco_central: 36.62,   prioridad: 7 },
-  { id: 'haiti',      nombre: 'Haití',      nombre_en: 'Haiti',      moneda: 'HTG', simbolo: 'G',  bandera: '🇭🇹', codigo_pais: 'ht', tasa_banco_central: 131.50,  prioridad: 8 },
 ]
 
 const operadores = {
@@ -37,8 +35,6 @@ const operadores = {
 const tasasEstimadas = {
   colombia:  { remitly: 4180, wise: 4150, xoom: 4120, ria: 4130, worldremit: 4100, westernunion: 4090, moneygram: 4050 },
   mexico:    { remitly: 17.20, wise: 17.15, xoom: 17.00, ria: 17.05, worldremit: 16.95, westernunion: 16.90, moneygram: 16.80 },
-  nicaragua: { remitly: 36.70, wise: 36.62, xoom: 36.40, ria: 36.35, worldremit: 36.30, westernunion: 36.20, moneygram: 36.00 },
-  haiti:     { remitly: 132.50, wise: 131.50, xoom: 130.00, ria: 130.50, worldremit: 129.00, westernunion: 128.00, moneygram: 127.00 },
 }
 
 const fees = { remitly: 2.99, wise: 2.50, xoom: 4.99, ria: 0, worldremit: 1.99, westernunion: 0, moneygram: 1.99 }
@@ -47,12 +43,10 @@ const velocidades = { remitly: 'Minutos', wise: 'Segundos', xoom: 'Minutos', ria
 const links = {
   colombia:  { remitly: 'https://www.remitly.com/us/en/colombia', wise: 'https://wise.com/us/send-money/send-money-to-colombia', xoom: 'https://www.xoom.com/colombia/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/colombia', worldremit: 'https://www.worldremit.com/en/send-money/united-states/colombia', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
   mexico:    { remitly: 'https://www.remitly.com/us/en/mexico', wise: 'https://wise.com/us/send-money/send-money-to-mexico', xoom: 'https://www.xoom.com/mexico/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/mexico', worldremit: 'https://www.worldremit.com/en/send-money/united-states/mexico', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
-  nicaragua: { remitly: 'https://www.remitly.com/us/en/nicaragua', wise: 'https://wise.com/us/send-money/send-money-to-nicaragua', xoom: 'https://www.xoom.com/nicaragua/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/nicaragua', worldremit: 'https://www.worldremit.com/en/send-money/united-states/nicaragua', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
-  haiti:     { remitly: 'https://www.remitly.com/us/en/haiti', wise: 'https://wise.com/us/send-money/send-money-to-haiti', xoom: 'https://www.xoom.com/haiti/send-money', ria: 'https://www.riamoneytransfer.com/us/en/send-money-to/haiti', worldremit: 'https://www.worldremit.com/en/send-money/united-states/haiti', westernunion: 'https://www.westernunion.com', moneygram: 'https://www.moneygram.com' },
 }
 
 async function seed() {
-  console.log('🌱 Insertando 4 corredores nuevos...')
+  console.log(`🌱 Insertando ${corredores.length} corredores nuevos...`)
   const { error: e1 } = await supabase.from('corredores').upsert(corredores, { onConflict: 'id' })
   if (e1) { console.error('❌ Error corredores:', e1.message); process.exit(1) }
   console.log(`   ✅ ${corredores.length} corredores`)
@@ -84,7 +78,7 @@ async function seed() {
   if (e2) { console.error('❌ Error precios:', e2.message); process.exit(1) }
   console.log(`   ✅ ${rows.length} precios (${corredores.length} corredores × 7 operadores)`)
 
-  console.log('\n🎉 Seed completado. 4 nuevos corredores disponibles.')
+  console.log(`\n🎉 Seed completado. ${corredores.length} nuevos corredores disponibles.`)
 }
 
 seed()
