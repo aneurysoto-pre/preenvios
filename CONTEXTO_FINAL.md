@@ -777,6 +777,60 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 
 ---
 
+### Fase 9 — SEO foundation + iconos + observability validation (pre-lanzamiento, 2026-04-22)
+
+Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del checklist pre-lanzamiento en una sola sesión. Todo es pre-DNS cutover (el dominio `preenvios.com` sigue apuntando a GitHub Pages; el preview es `preenvios.vercel.app`).
+
+#### 9.1 Agente 1 — Validador de ingress en scrapers (Fase 7 capa arquitectónica)
+
+- [x] Migración `supabase/migrations/007_scraper_anomalies.sql` — tabla idempotente + 2 indexes + RLS deny-anon (completada 2026-04-22)
+- [x] `lib/scrapers/validator.ts` — 7 reglas: operador en whitelist 7 MVP, corredor en whitelist 6 MVP, `metodo_entrega` en enum (`bank`, `cash_pickup`, `home_delivery`, `mobile_wallet`), `velocidad` en enum, `fee ∈ [0, 50]` USD, `tasa > 0`, `tasa ± 10%` del banco central con fallback hardcoded. Cache de `tasas_bancos_centrales` al inicio del batch (1 query en lugar de N). "3 anomalías consecutivas" vía query a `scraper_anomalies` (serverless-safe, no contador in-memory) (completado 2026-04-22)
+- [x] Integración en `lib/scrapers/base.ts` `savePrices()` sin romper firma pública (completado 2026-04-22)
+- [x] Doc completa `LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md` + `TROUBLESHOOTING/27_contador_in_memory_serverless.md` (bug latente del contador existente de `reportScraperFailure`, documentado pero no arreglado — scope separado)
+- [ ] **Pendiente acción usuario:** ejecutar `007_scraper_anomalies.sql` en Supabase SQL Editor
+- [ ] **Pendiente smoke test del validador:** inyectar tasa inválida en un scraper, verificar que NO entra a `precios` y SÍ a `scraper_anomalies`
+- Commits: `9367a35` (implementación), `ba43809` (ampliación docs Sentry § 17 con integración de Agente 1)
+
+#### 9.2 Activación de Sentry DSN + smoke test end-to-end
+
+- [x] Signup del founder en sentry.io (proyecto `javascript-nextjs`)
+- [x] 5 env vars en Vercel: `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` en los 3 entornos (Production/Preview/Development)
+- [x] Endpoint temporal `/api/sentry-test` (commit `be65b1a`) → smoke test disparado → evento `Error` (Unhandled) + evento `scraper_anomaly` (tag del Agente 1) aparecieron en Sentry en <30s → endpoint eliminado (commit `7e3beac`)
+- [x] Docs: `SERVICIOS_EXTERNOS_DETALLE.md § 17` expandido al nivel de detalle de BetterStack/Resend (env vars, archivos config, integraciones en código, alertas recomendadas, pasos de activación, troubleshooting)
+- [x] Fase 2 monitoring cerrada. Ver sección "Nivel monitoreo pasivo" arriba para el estado actualizado
+
+#### 9.3 SEO foundation — `generateMetadata` + JSON-LD
+
+- [x] `generateMetadata` bilingüe (ES/EN) con `canonical` + `alternates.languages` en 7 páginas estáticas faltantes: `/terminos`, `/privacidad`, `/como-ganamos-dinero`, `/metodologia`, `/uso-de-marcas`, `/calculadora-inversa`, `/admin` (con `robots: noindex,nofollow`). Más home con descripción actualizada a 6 corredores MVP (antes decía 4) — commit `80990fb`
+- [x] `generateMetadata` dinámicas en `/tasa/[pair]` (6 slugs SSG), `/wiki/[slug]` (10 slugs SSG), `/blog/[slug]` (3 slugs dynamic) con fallback `robots:noindex` si el slug no existe — commit `367b3b3`
+- [x] JSON-LD Schema.org inline en 6 páginas: home (`@graph` con `WebSite + SearchAction + Organization + FAQPage` con las 6 preguntas de FAQ traducidas via `getTranslations`), `/nosotros` (`AboutPage + Organization`), `/contacto` (`ContactPage + ContactPoint`), `/calculadora-inversa` (`WebApplication`), `/blog` (`Blog + blogPost` array), `/wiki` (`CollectionPage + ItemList` de 10 artículos) — commit `8523e85`
+- [x] Fix `/disclaimers` descubierto en smoke test: era `export const metadata` estático mono-lingüe con `noindex,nofollow` (bug, no decisión). Reemplazado por `generateMetadata` bilingüe + canonical + alternates, indexable — commit `6bdce58`
+- **Resultado:** 19/19 páginas con metadata bilingüe + canonical + hreflang. 11 páginas con JSON-LD. `Organization` entity canonical con `@id` reutilizado en 4 páginas → Google consolida marca.
+- **Tech debt no abordado (scope separado):** `/blog/[slug]` sigue como `ƒ Dynamic` por faltarle `generateStaticParams()` — una línea para convertirlo a SSG como los otros. Se documenta en BACKLOG_POST_REFACTOR § 2.
+
+#### 9.4 Favicon + fuentes + preconnect
+
+- [x] Favicon migrado a pack estático diseñado con Montserrat (7 archivos: `app/favicon.ico` + 5 PNGs en `public/` + `apple-touch-icon`). `app/icon.tsx` y `app/apple-icon.tsx` (dinámicos con `ImageResponse` + `system-ui`) eliminados — una sola fuente de verdad. `app/manifest.ts` apunta a rutas estáticas. `app/[locale]/layout.tsx` agrega 3 `<link>` para PNGs — commit `316a6ef`
+- [x] Fuentes (Inter + Work Sans + Quicksand): ya estaban en `next/font/google` desde el refactor Fase 1. **No requirió cambios.**
+- [x] Preconnect (`flagcdn.com` + `cdn.brandfetch.io`): ya estaban en `app/[locale]/layout.tsx`. **No requirió cambios.**
+
+#### 9.5 Smoke test GA4 + eventos faltantes en forms
+
+- [x] Verificación curl de 12 URLs legales (6 páginas × 2 locales) → 10/12 OK, 2/12 con defectos en `/disclaimers` → arreglado en commit `6bdce58` (ver § 9.3)
+- [x] Eventos GA4 faltantes en forms de conversión crítica agregados (commit `6bdce58`):
+  - `trackEvent('contacto_enviado', { asunto, idioma })` en `app/[locale]/contacto/content.tsx` al submit exitoso
+  - `trackEvent('suscripcion_alertas', { idioma })` en `app/[locale]/alertas/content.tsx` al submit exitoso
+- [x] Comentario de inventario de `lib/tracking.ts` actualizado al estado real 2026-04-22 (7 eventos custom + tag Sentry del Agente 1)
+- [x] Doc permanente `TROUBLESHOOTING/28_ga4_smoke_test.md` con tabla de check + troubleshooting para futuros smoke tests
+- [ ] **Pendiente acción usuario:** Fase 2 de validación manual en GA4 Realtime — disparar los 8 eventos (6 custom + page_view automático + session_start) desde el browser y verificar que aparecen en el widget "Event count by Event name" en <30 seg c/u
+
+#### 9.6 Meta Pixel — DECISIÓN explícita del founder
+
+- **Pendiente por decisión estratégica del founder 2026-04-22:** Meta Pixel NO se instala hasta post-LLC. Sin Meta Pixel no se pueden activar campañas Meta Ads con optimización por conversión. El plan de marketing mes 1 (`plan-marketing-mes1-v2.md`) depende de esto — se activa día 30 May según el plan si la LLC está lista.
+- **Scope pendiente cuando toque:** agregar env var `NEXT_PUBLIC_FB_PIXEL_ID`, `<Script>` de fbevents.js en `app/[locale]/layout.tsx`, helper `fbq()` en `lib/tracking.ts` para `PageView`, `ViewContent`, `Lead`, `AddToWishlist`.
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)

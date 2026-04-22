@@ -68,10 +68,12 @@ Bajo. `getTranslations()` de next-intl es stable. El único riesgo es que algún
 
 ---
 
-## 2. Metadata + JSON-LD en 12 páginas
+## 2. Metadata + JSON-LD en 12 páginas — ✅ RESUELTO 2026-04-22
 
 **Fecha identificación:** 2026-04-21
-**Severidad:** ⚠️ Importante (SEO, ranking, CTR de resultados Google)
+**Fecha resolución:** 2026-04-22
+**Commits:** `80990fb` (metadata 7 estáticas + home desc), `367b3b3` (metadata dinámicas /tasa/[pair], /wiki/[slug], /blog/[slug]), `8523e85` (JSON-LD en 6 páginas), `6bdce58` (fix /disclaimers descubierto en smoke test).
+**Severidad original:** ⚠️ Importante (SEO, ranking, CTR de resultados Google)
 **Hallazgo en AUDIT_COMPLETO.md:** §11.1 + §11.3
 
 ### Contexto
@@ -125,6 +127,14 @@ Por JSON-LD:
 ### Riesgo
 
 Bajo. Next.js metadata API es declarativa, typecheck garantiza formato correcto. Validar con Google Rich Results Test y el Structured Data Testing Tool post-deploy.
+
+### Resumen de lo entregado (2026-04-22)
+
+- **19 páginas con `generateMetadata` bilingüe** (ES/EN) — 6 legales + 6 corredores + 10 wiki + 3 blog + home + alertas + contacto + nosotros + disclaimers + operadores + calculadora. `/admin` marcado `noindex,nofollow` intencional.
+- **11 páginas con JSON-LD Schema.org inline** — home tiene `@graph` con `WebSite + SearchAction + Organization + FAQPage`; nosotros `AboutPage + Organization`; contacto `ContactPage`; calculadora `WebApplication`; blog y wiki tienen `Blog` y `CollectionPage` con `ItemList` respectivamente; más las 5 páginas dinámicas que ya tenían (tasa, operadores, pais, wiki-article, blog-article).
+- **Organization entity canonical** con `@id` `https://preenvios.com/#organization` reutilizado en 4 páginas → Google consolida la marca.
+- **Home descripción actualizada a 6 corredores MVP** (agregó Colombia + México que faltaban).
+- **Tech debt no abordado (scope separado):** `/blog/[slug]` sigue siendo `ƒ Dynamic` por faltarle `generateStaticParams()` — una línea para convertirlo a SSG como las otras dinámicas.
 
 ---
 

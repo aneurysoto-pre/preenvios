@@ -31,6 +31,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [25](25_cta_scroll_y_calc_inversa.md) | CTA "Comparar ahora" no scrollea o calc inversa >4 países | 🟡 | 5-15m |
 | [26](26_scraper_revierte_afiliado.md) | Scraper revierte afiliado/link de un operador | 🔴 | 5m |
 | [27](27_contador_in_memory_serverless.md) | Contador failCounts in-memory no dispara marca stale en Vercel serverless (bug latente) | 🟢 | documentado, sin arreglo inmediato |
+| [28](28_ga4_smoke_test.md) | GA4 smoke test end-to-end (tabla de check 8 eventos) | 🟢 | rutina, no es un problema — sirve para validar tras cambios de tracking |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

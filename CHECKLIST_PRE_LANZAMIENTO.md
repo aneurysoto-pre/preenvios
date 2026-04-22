@@ -208,27 +208,45 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 ## 8. SEO y meta tags
 
-- [ ] /es tiene hreflang="es" y alternate hreflang="en"
-- [ ] /en tiene hreflang="en" y alternate hreflang="es"
-- [ ] /sitemap.xml genera URLs en ambos idiomas
-- [ ] /sitemap.xml incluye 5 páginas legales
-- [ ] /robots.txt referencia sitemap.xml
-- [ ] Title tag correcto: "PreEnvios.com — Compara remesadoras..."
-- [ ] Meta description presente
-- [ ] Cookie NEXT_LOCALE persiste idioma por 365 días
+**Completado 2026-04-22 (commits `80990fb`, `367b3b3`, `8523e85`, `6bdce58`):**
+
+- [x] `/es` tiene `hreflang="es"` y `alternate hreflang="en"` — configurado via `generateMetadata.alternates.languages` en cada page.tsx
+- [x] `/en` tiene `hreflang="en"` y `alternate hreflang="es"`
+- [x] `/sitemap.xml` genera URLs en ambos idiomas (ver `app/sitemap.ts`)
+- [x] `/sitemap.xml` incluye las 6 páginas legales (terminos, privacidad, como-ganamos-dinero, metodologia, uso-de-marcas, disclaimers)
+- [x] `/robots.txt` referencia sitemap.xml
+- [x] Title tags bilingües por página — 19/19 páginas con `generateMetadata` (home + 6 legales + 6 corredores + 10 wiki + 3 blog + alertas + contacto + nosotros + operadores + calculadora). `/admin` marcado `noindex, nofollow` intencional.
+- [x] Meta description presente en todas las páginas (155-175 chars cada una, bilingüe)
+- [x] JSON-LD Schema.org inline en 11 páginas — home tiene `@graph` con `WebSite + SearchAction + Organization + FAQPage`; resto tiene schemas específicos (AboutPage, ContactPage, WebApplication, Blog, CollectionPage, Article, etc.)
+- [x] `Organization` entity canonical con `@id` único reutilizado en 4 páginas → Google consolida la marca
+- [x] Favicon pack completo (`favicon.ico`, 16x16, 32x32, 180x180 apple-touch-icon, 192x192 + 512x512 Android) — diseño con Montserrat, commit `316a6ef`. Reemplaza al generado dinámicamente con system-ui.
+- [x] `app/manifest.ts` apunta a los iconos estáticos
+- [x] Cookie `NEXT_LOCALE` persiste idioma por 365 días (ya estaba desde refactor Fase 1)
+
+**Pendiente post-DNS cutover:**
+- [ ] Validar con Google Rich Results Test (https://search.google.com/test/rich-results) — debería mostrar WebSite + Organization + FAQPage válidos sin warnings
+- [ ] Submit sitemap en Google Search Console tras DNS cutover
+
+**Tech debt no bloqueante:**
+- `/blog/[slug]` sigue como ruta `ƒ Dynamic` por faltarle `generateStaticParams()`. Conversión a SSG es 1 línea pero fuera de scope del bullet SEO. Ver BACKLOG_POST_REFACTOR § 2.
 
 ---
 
 ## 9. Google Analytics GA4
 
-- [ ] Script de GA4 carga sin errores de consola (next/script afterInteractive)
-- [ ] Evento inicio_uso se dispara al empezar a escribir monto
-- [ ] Evento comparar_click se dispara al hacer clic en Comparar
-- [ ] Evento click_operador se dispara al hacer clic en "Enviar ahora"
-- [ ] Evento cambio_corredor se dispara al cambiar país
-- [ ] Evento cambio_metodo_entrega se dispara al cambiar método de entrega
-- [ ] Evento cambio_idioma se dispara al cambiar EN/ES
-- [ ] GA4 Real-Time muestra actividad cuando navegas el sitio
+Inventario de eventos custom (actualizado 2026-04-22 — ver `lib/tracking.ts` + `TROUBLESHOOTING/28_ga4_smoke_test.md` para tabla de smoke test).
+
+- [x] Script de GA4 carga sin errores de consola (next/script afterInteractive) — confirmado en producción
+- [x] Evento `click_operador` se dispara al hacer clic en "Enviar ahora" (validado con screenshot del dashboard, 2026-04-21)
+- [ ] Evento `inicio_uso` se dispara al empezar a escribir monto
+- [ ] Evento `comparar_click` se dispara al hacer clic en Comparar
+- [ ] Evento `cambio_corredor` se dispara al cambiar país
+- [ ] Evento `cambio_idioma` se dispara al cambiar EN/ES
+- [ ] Evento `contacto_enviado` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de contacto
+- [ ] Evento `suscripcion_alertas` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de alertas
+- [ ] GA4 Real-Time muestra actividad cuando navegas el sitio — ejecutar las 8 acciones de `TROUBLESHOOTING/28_ga4_smoke_test.md`
+
+**Removido del checklist (evento obsoleto):** `cambio_metodo_entrega` nunca se implementó en producto porque todos los scrapers producen `metodo_entrega: 'bank'` — no hay selector en UI, no hay evento.
 
 ---
 
@@ -291,23 +309,23 @@ Con esto la Fase 1 queda completada y H-09.1 avanza a "pendiente solo Fase 2 Sen
 - [x] `.env.example` documenta las 5 vars Sentry
 - [x] Build verificado: pasa sin DSN (SDK en no-op) y pasa con DSN configurado
 
-**Pendiente de completar:**
-- [ ] Signup en sentry.io (plan Developer Free)
-- [ ] Crear proyecto Next.js en Sentry, copiar DSN
-- [ ] Auth Token opcional para source map upload (Settings → Auth Tokens, scope `project:releases`)
-- [ ] Configurar en Vercel → Environment Variables (los 3 entornos):
-  - [ ] `NEXT_PUBLIC_SENTRY_DSN`
-  - [ ] `SENTRY_DSN`
-  - [ ] `SENTRY_ORG`
-  - [ ] `SENTRY_PROJECT`
-  - [ ] `SENTRY_AUTH_TOKEN` (opcional)
-- [ ] Redeploy y verificar que el build sigue OK con las env vars seteadas
-- [ ] Smoke test: trigger intencional de un error (ej. 500 en una ruta de testing) y verificar que aparece en Sentry dashboard con stack trace
+**Activación completada 2026-04-22:**
+- [x] Signup en sentry.io (plan Developer Free) — proyecto `javascript-nextjs`
+- [x] Crear proyecto Next.js en Sentry, copiar DSN
+- [x] Auth Token generado para source map upload (scope `project:releases`)
+- [x] Configurar en Vercel → Environment Variables (los 3 entornos):
+  - [x] `NEXT_PUBLIC_SENTRY_DSN`
+  - [x] `SENTRY_DSN`
+  - [x] `SENTRY_ORG`
+  - [x] `SENTRY_PROJECT`
+  - [x] `SENTRY_AUTH_TOKEN`
+- [x] Redeploy con las env vars seteadas (status Ready)
+- [x] Smoke test end-to-end 2026-04-22 17:33 UTC — endpoint temporal `/api/sentry-test` disparó 2 eventos (Error Unhandled + `scraper_anomaly` tag) que aparecieron en el dashboard Sentry en <30s. Endpoint eliminado después (commits `be65b1a` + `7e3beac`).
 
 ### 11.3 Cierre de H-09.1
 H-09.1 pasa de 🟡 EN PROCESO a 🟢 CERRADO cuando:
 - [ ] BetterStack: los 4 monitores activos apuntan a `preenvios.com`, status page pública activa, smoke test confirmado
-- [ ] Sentry: DSN configurado en Vercel, build en producción, error de prueba visible en dashboard
+- [x] Sentry: DSN configurado en Vercel, build en producción, error de prueba visible en dashboard (completado 2026-04-22)
 
 ---
 
