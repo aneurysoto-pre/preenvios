@@ -822,12 +822,244 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - `trackEvent('suscripcion_alertas', { idioma })` en `app/[locale]/alertas/content.tsx` al submit exitoso
 - [x] Comentario de inventario de `lib/tracking.ts` actualizado al estado real 2026-04-22 (7 eventos custom + tag Sentry del Agente 1)
 - [x] Doc permanente `TROUBLESHOOTING/28_ga4_smoke_test.md` con tabla de check + troubleshooting para futuros smoke tests
-- [ ] **Pendiente acción usuario:** Fase 2 de validación manual en GA4 Realtime — disparar los 8 eventos (6 custom + page_view automático + session_start) desde el browser y verificar que aparecen en el widget "Event count by Event name" en <30 seg c/u
+- [x] Fase 2 de validación manual en GA4 Realtime completada 2026-04-22: los 8 eventos (6 custom + page_view automático + session_start) disparados desde el browser, aparecieron en el widget "Event count by Event name" en <30 seg c/u. Founder confirmó "ya está validada, todo funciona en analytics". Commit del update: `3ef2fb3`
 
 #### 9.6 Meta Pixel — DECISIÓN explícita del founder
 
 - **Pendiente por decisión estratégica del founder 2026-04-22:** Meta Pixel NO se instala hasta post-LLC. Sin Meta Pixel no se pueden activar campañas Meta Ads con optimización por conversión. El plan de marketing mes 1 (`plan-marketing-mes1-v2.md`) depende de esto — se activa día 30 May según el plan si la LLC está lista.
 - **Scope pendiente cuando toque:** agregar env var `NEXT_PUBLIC_FB_PIXEL_ID`, `<Script>` de fbevents.js en `app/[locale]/layout.tsx`, helper `fbq()` en `lib/tracking.ts` para `PageView`, `ViewContent`, `Lead`, `AddToWishlist`.
+
+---
+
+### Fase 10 — Mejoras de calidad técnica (post-cutover progressive)
+
+**Contexto (2026-04-22):** esta fase consolida 6 bloques de mejoras identificadas en el diagnóstico exhaustivo. Son trabajos que NO bloquean el DNS cutover pero sí son necesarios para un producto maduro. Se ejecutan progresivamente en las semanas/meses siguientes al lanzamiento — cada item tiene checkbox para marcar cuando se completa.
+
+**Regla importante:** ningún item de esta fase requiere LLC, Payoneer o Meta Business verification. Todo es trabajo técnico interno. La única dependencia externa es Upstash Redis (plan Free ya activo) y GitHub Actions (gratis en repos privados con límite de minutos).
+
+**Bloques:**
+- **Bloque F:** Performance / LCP / Core Web Vitals (3-4h)
+- **Bloque G:** Accesibilidad (items remainder del refactor Fase 1) (1-2h)
+- **Bloque H:** Testing + CI (4-6h)
+- **Bloque J:** Rate-limit expansion (45 min)
+- **Bloque K:** Entorno / infraestructura (1-2h)
+- **Bloque L:** UX mejoras adicionales (1-2h)
+
+**Nota sobre bloques no incluidos:**
+- **Bloque I (Cookie consent CCPA/GDPR)** — se considera parte del bloque legal separado, NO aquí. Se documenta como pendiente en CHECKLIST_PRE_LANZAMIENTO.md bajo la sección de compliance legal.
+- **Bloque M (smoke tests formales)** — son acciones manuales del founder pre-cutover, no trabajo de desarrollo. Viven en CHECKLIST_PRE_LANZAMIENTO.md §13 y §14.
+
+---
+
+#### 10.F — Performance / LCP / Core Web Vitals (3-4h)
+
+**Por qué importa:** Google usa Core Web Vitals (LCP, INP, CLS) como factor de ranking desde 2021. Además afectan la percepción del usuario en los primeros segundos — si el sitio "se ve lento", el bounce rate sube y las conversiones caen. Este bloque aborda los 3 items del audit que NO se hicieron en el refactor Fase 1.
+
+- [ ] **10.F.1 — Migrar `<img>` a `next/image` en todo el proyecto** (~2h)
+  - **Qué es:** Next.js provee el componente `<Image>` (`next/image`) que genera automáticamente versiones WebP/AVIF, aplica lazy loading por default, y reserva espacio para evitar CLS.
+  - **Estado actual:** el proyecto tiene CERO uso de `next/image`. Los logos de operadores (Remitly, Wise, etc.), las banderas de FlagCDN, el avatar unificado y las imágenes del blog usan `<img>` nativo.
+  - **Impacto directo:** LCP (Largest Contentful Paint) — hoy la imagen más grande (logo de operador en Comparador) no tiene hints de tamaño → el browser la baja sin optimización, puede ser 50-200KB vs <20KB en WebP.
+  - **Archivos afectados:** `components/Comparador.tsx` (logos operadores), `components/TasasReferencia.tsx` (flags), `components/BannersPatrocinados.tsx` (iconos), `app/[locale]/operadores/[slug]/operador-content.tsx`, `app/[locale]/[pais]/pais-content.tsx`, `app/[locale]/nosotros/content.tsx`.
+  - **Precaución:** `next/image` requiere `width` + `height` explícitos (o `fill`). Si no se calculan bien, puede romper el layout visual. Validar con screenshots antes/después en desktop + iPhone.
+
+- [ ] **10.F.2 — Loading states en fetch `/api/precios` (Comparador)** (45 min)
+  - **Qué es:** cuando el usuario hace click en "Comparar", se hace un fetch a `/api/precios` que devuelve los 7 operadores. Hoy NO hay indicador visual mientras llega → el UI se queda "vacío" por 500-2000ms.
+  - **Solución:** agregar skeleton (tarjetas grises animadas) o spinner en el lugar donde van a aparecer los resultados. Similar patrón a lo que hace Monito.com.
+  - **Archivo afectado:** `components/Comparador.tsx` — estado `loading` ya existe, falta renderizar un componente visual en ese estado.
+  - **Ref:** AUDIT_COMPLETO.md §5.2.
+
+- [ ] **10.F.3 — Audit CLS (Cumulative Layout Shift) post-refactor** (30 min)
+  - **Qué es:** CLS mide si los elementos se mueven durante la carga. Si > 0.1, Google penaliza ranking.
+  - **Procedimiento:** correr Lighthouse en Chrome DevTools sobre `preenvios.vercel.app/es`, `/es/honduras`, `/es/calculadora-inversa`. Guardar scores. Si CLS > 0.1 en alguna, investigar con DevTools → Performance → Layout Shift Regions qué elemento se mueve.
+  - **Causas típicas:** imágenes sin dimensiones, fonts cargando con FOIT, elementos que cambian altura al hidratar React.
+  - **Output esperado:** doc `TROUBLESHOOTING/29_cls_investigation.md` con resultados del baseline + fix si aplica.
+
+**Criterio de cierre del Bloque F:** Lighthouse en `/es` muestra LCP ≤ 2.5s, CLS < 0.1, TTI < 3.8s en conexión 3G simulada. Todos los items marcados [x].
+
+---
+
+#### 10.G — Accesibilidad (items remainder del refactor Fase 1) (1-2h)
+
+**Por qué importa:** WCAG 2.1 AA es el estándar legal de accesibilidad en USA (ADA). El 15% de usuarios tiene alguna discapacidad visual/motriz. Además, los motores de búsqueda usan las mismas señales (alt text, semántica HTML) que los lectores de pantalla — SEO y a11y se refuerzan mutuamente.
+
+- [ ] **10.G.1 — Contraste `text-g500` sobre `bg-g50` en labels del Comparador** (20 min)
+  - **Qué es:** WCAG AA requiere contraste ≥ 4.5:1 entre texto y fondo. El color `text-g500` (~#737680) sobre `bg-g50` (~#F5F5F7) en los labels del Comparador está en el borde — herramientas como Lighthouse a11y a veces lo marcan como fail.
+  - **Solución:** subir el texto a `text-g600` (~#525458) o usar `font-weight: 600+` que la herramienta WCAG considera "texto grande" y reduce el requirement a 3:1.
+  - **Archivo:** `components/Comparador.tsx` (labels "Envías desde Estados Unidos", "País destino", "Método de entrega" si se reactivan).
+  - **Ref:** AUDIT_COMPLETO.md §1.3.
+
+- [ ] **10.G.2 — Verificar jerarquía H1-H6 en todas las páginas** (30 min)
+  - **Qué es:** cada página debe tener 1 solo `<h1>` (normalmente el título principal del contenido), seguido de `<h2>` para secciones, `<h3>` para sub-secciones. Saltar niveles (ej. `<h1>` → `<h3>`) confunde a lectores de pantalla y a Google.
+  - **Procedimiento:** instalar extensión Chrome "HeadingsMap" y revisar las 19 páginas del proyecto. Documentar violaciones en un doc nuevo `TROUBLESHOOTING/30_heading_hierarchy.md` antes de arreglar.
+  - **Ref:** AUDIT_COMPLETO.md §1.5.
+
+- [ ] **10.G.3 — Alt text descriptivo en flags** (15 min)
+  - **Qué es:** hoy los `<img>` de flags (flagcdn.com) tienen `alt=""` — las tratamos como decorativas. Pero en contexto de "selector de país", son informativas: un screen reader debe anunciar "Honduras" no "image".
+  - **Solución:** cambiar `alt=""` a `alt={nombre_pais}` donde se use la bandera para identificar país (Nav dropdown, Comparador selector, TasasReferencia cards).
+  - **Excepción:** dejar `alt=""` si al lado ya hay texto con el nombre del país (evita redundancia para lectores).
+  - **Ref:** AUDIT_COMPLETO.md §1.4.
+
+- [ ] **10.G.4 — Audit tap targets < 44×44px post-shadcn** (20 min)
+  - **Qué es:** Apple HIG y Material Design recomiendan mínimo 44×44px (iOS) / 48×48dp (Android) para cualquier elemento tap-able en mobile. Menos es casi imposible de tocar sin mistap.
+  - **Procedimiento:** abrir Chrome DevTools → Device Toolbar (iPhone 14 Pro preset) → Inspect cada botón, link, toggle del sitio. Medir bounding box en pixels. Hacer lista de violaciones.
+  - **Candidatos probables:** icon-only buttons (close X en drawer, toggles en Nav, botones del paginador del admin), labels clickeables pequeños.
+  - **Ref:** AUDIT_COMPLETO.md §3.1.
+
+- [ ] **10.G.5 — Agregar `htmlFor` a labels de inputs** (15 min)
+  - **Qué es:** cada `<label>` debe tener `htmlFor="<input-id>"` que matchee el `id` del input asociado. Sin eso, tapping el label NO enfoca el input (UX rota) y los screen readers no anuncian la relación.
+  - **Candidatos:** Comparador country picker label, Calculadora inversa monto input, TasasReferencia filter (si existe).
+  - **Ref:** AUDIT_COMPLETO.md §1.1 (fue marcado 🚨 CRÍTICO originalmente, no se abordó aún).
+
+**Criterio de cierre del Bloque G:** correr Lighthouse Accessibility audit en las 6 páginas principales y obtener score ≥ 95. Todos los items marcados [x].
+
+---
+
+#### 10.H — Testing + CI (4-6h)
+
+**Por qué importa:** hoy el proyecto NO tiene tests automáticos. Cada cambio se valida con `npm run typecheck` + `npm run build` + verificación manual. A medida que el codebase crece (ya son +150 archivos), la probabilidad de romper algo con un cambio inocente aumenta. Tests + CI son el safety net que permite al founder (o un dev futuro) cambiar código sin miedo.
+
+- [ ] **10.H.1 — Unit tests para `lib/scrapers/validator.ts`** (1.5h)
+  - **Por qué primero este:** es una **pure function** — sin I/O, sin async, sin dependencias. Input: `ScrapedPrice` + `BancoCentralCache`. Output: `ValidationResult`. Ideal para tests.
+  - **Tool:** Vitest (más rápido que Jest, nativo TypeScript, 0 config con Next 16).
+  - **Cobertura objetivo:** las 7 reglas del validador — 1 test por regla (valid case + invalid case) = ~14 tests.
+  - **Archivo nuevo:** `lib/scrapers/validator.test.ts`.
+  - **Comando:** agregar `"test": "vitest run"` en `package.json`.
+
+- [ ] **10.H.2 — Unit tests para `lib/ranking.ts`** (1h)
+  - **Qué cubre:** la fórmula del Preenvíos Score (5 criterios ponderados). Si el founder decide cambiar los pesos en el futuro (ej. dar más peso a `valor_afiliado`), los tests validan que el cambio no rompa el output para los casos existentes.
+  - **Cobertura objetivo:** 5-8 tests con precios mockeados que representen: mejor tasa, peor tasa, empate, afiliado vs no-afiliado, velocidad top, velocidad slow.
+  - **Archivo nuevo:** `lib/ranking.test.ts`.
+
+- [ ] **10.H.3 — Unit tests para schemas zod (`contacto`, `alerta`)** (45 min)
+  - **Qué cubre:** los schemas de zod son contratos. Si alguien cambia un field del schema, los tests fallan visiblemente en vez de crashear en producción.
+  - **Tests por schema:** valid input, email inválido, mensaje muy corto (contacto), honeypot lleno (anti-bot), enum inválido.
+  - **Archivo nuevo:** `lib/schemas/contacto.test.ts` + `lib/schemas/alerta.test.ts`.
+
+- [ ] **10.H.4 — GitHub Actions: typecheck + build + lint + test en PRs** (1h)
+  - **Qué es:** un workflow que corre en cada pull request para bloquear merge si algo falla.
+  - **Archivo nuevo:** `.github/workflows/ci.yml` con jobs: `npm ci`, `npm run typecheck`, `npm run lint`, `npm run test`, `npm run build`.
+  - **Costo:** GitHub Actions es gratis en repos privados hasta 2000 min/mes — un CI run tarda 2-3 min, con 200 runs/mes cabe cómodo.
+  - **Opcional:** `--production` para el build, o variables de entorno dummy si alguna ruta las requiere en build time.
+
+- [ ] **10.H.5 — Playwright smoke test básico** (2h — opcional pre-Agente 4)
+  - **Qué es:** un test E2E que simula un usuario real: navegar a home, escribir monto, click Comparar, verificar que aparecen 7 cards de operadores. Primera iteración simple.
+  - **Por qué antes del Agente 4:** el Agente 4 de Fase 7 es un Playwright headless que corre cada 15 min en GitHub Actions. Este paso construye la base de esos scripts — cuando llegue el momento de Agente 4, solo hay que escalarlo.
+  - **Archivo nuevo:** `tests/e2e/home.spec.ts`.
+  - **Comando:** `npm run test:e2e` que corre `playwright test`.
+
+**Criterio de cierre del Bloque H:** `.github/workflows/ci.yml` corriendo en todos los PRs. Coverage mínimo 70% sobre `lib/` (puramente lógica). Bloqueo de merge si CI falla. Todos los items marcados [x].
+
+---
+
+#### 10.J — Rate-limit expansion (45 min)
+
+**Por qué importa:** solo 3 endpoints del proyecto tienen rate-limit implementado: `admin-login` (5/15min), `contactos` (3/h), `alertas` (3/h). Los endpoints públicos consumidos por el front quedaron sin protección. Un atacante o bot puede llamar `/api/scrape` 1000 veces en un minuto y:
+- Agotar la cuota free de Supabase
+- Disparar Vercel serverless costs inesperados
+- Saturar Upstash Redis
+- Corromper la tabla `precios` (si logra bypassear auth del cron)
+
+- [ ] **10.J.1 — Auth + rate-limit para `/api/scrape`** (10 min)
+  - **Contexto:** este endpoint dispara los scrapers de los 7 operadores. Está diseñado para ser llamado por Vercel Cron 1 vez al día. Hoy está públicamente accesible sin auth.
+  - **Solución mínima:** agregar validación de header `x-vercel-cron` (Vercel setea automáticamente cuando el cron dispara) o secret compartido `process.env.CRON_SECRET` en el header `Authorization`.
+  - **Bonus:** rate-limit adicional (1 call / hora / IP) via Upstash Redis como defensa en profundidad.
+  - **Archivo:** `app/api/scrape/route.ts`.
+  - **Ref:** TROUBLESHOOTING/14_endpoint_cron_expuesto.md.
+
+- [ ] **10.J.2 — Rate-limit para `/api/precios`** (15 min)
+  - **Contexto:** endpoint público consumido por el Comparador del front. Legítimamente tiene alto volumen. Sin rate-limit, un bot puede scrapearlo infinitamente.
+  - **Solución:** Upstash `fixedWindow(60, '1 m')` — 60 requests por minuto por IP. Más que suficiente para uso legítimo humano.
+  - **Archivo:** `app/api/precios/route.ts`, helper `checkApiPublicRateLimit` nuevo en `lib/rate-limit.ts`.
+
+- [ ] **10.J.3 — Rate-limit para `/api/tasas-banco-central`** (10 min)
+  - **Contexto:** endpoint público consumido por `TasasReferencia.tsx`. Data pequeña y de cache agresivo, bajo riesgo, pero bajo costo también.
+  - **Solución:** mismo patrón que 10.J.2, quizás más permisivo (`120/1m`).
+
+- [ ] **10.J.4 — Rate-limit para `/api/historial-tasas`** (10 min)
+  - **Contexto:** endpoint que sirve gráficas de Recharts en `/tasa/[pair]`. Similar a banco central.
+
+**Criterio de cierre del Bloque J:** todos los endpoints de `/api/*` tienen rate-limit o auth. Ningún endpoint público sin protección. Todos los items marcados [x].
+
+---
+
+#### 10.K — Entorno / infraestructura (1-2h)
+
+**Por qué importa:** si el entorno de preview (preenvios.vercel.app — staging) comparte la base de datos con producción (preenvios.com), un push accidental a una feature branch puede corromper data real de usuarios. La regla universal de DevOps: NUNCA una DB prod es compartida con staging.
+
+- [ ] **10.K.1 — Verificar separación de DB Supabase preview vs production** (30 min)
+  - **Procedimiento:**
+    1. Ir a Vercel → Project Settings → Environment Variables
+    2. Ver si `NEXT_PUBLIC_SUPABASE_URL` tiene valores diferentes en Production vs Preview
+    3. Si es el mismo valor → todos los previews están golpeando la DB de prod (RIESGO)
+    4. Si son diferentes → verificar que el project preview apunta a un proyecto Supabase separado (puede ser Supabase Free tier diferente, o branch de DB si Supabase lo permite en tu plan)
+  - **Solución si están compartidos:** crear un proyecto Supabase separado para preview, copiar el schema (migrations), setear las env vars Preview en Vercel apuntando ahí.
+  - **Riesgo específico:** si un dev (o yo mismo) ejecuta una migration destructiva (`DROP TABLE`, `TRUNCATE`) en un branch, y el preview apunta a prod DB, borra data real.
+
+- [ ] **10.K.2 — Cache headers en assets estáticos** (30 min)
+  - **Contexto:** Vercel sirve assets de `public/` con cache headers default (`cache-control: public, max-age=0, must-revalidate`). Eso hace que cada request re-valide el archivo — innecesario para favicon, logos, fonts que no cambian nunca.
+  - **Solución:** configurar `next.config.ts` con `headers()` que dé `Cache-Control: public, max-age=31536000, immutable` a los archivos con hash en el nombre (Next los genera automáticamente para fonts y CSS).
+  - **Impacto:** reducciones de 30-50% en re-requests repetidos del mismo usuario.
+
+- [ ] **10.K.3 — Plan formal de post-DNS cutover** (45 min TU acción + 15 min yo)
+  - **Qué es:** playbook paso a paso del día del DNS cutover (cambiar `preenvios.com` de GitHub Pages a Vercel). Escrito como checklist para reducir probabilidad de errores bajo presión.
+  - **Contenido mínimo:**
+    1. Pre-cutover (T-1h): smoke test en staging Vercel, validar todas las env vars, verificar monitoreo Sentry activo
+    2. Cutover (T=0): cambiar DNS en Namecheap, esperar propagación 5-30 min
+    3. Post-cutover (T+5min): smoke test en preenvios.com (no vercel.app), validar GA4 + Sentry siguen capturando, Rich Results Test
+    4. Post-cutover (T+24h): review métricas de tráfico GA4, confirmar Search Console recibe sitemap
+    5. Rollback plan: si algo falla, revertir DNS a GitHub Pages (máximo 1 hora de downtime)
+  - **Archivo nuevo:** `DNS_CUTOVER_PLAYBOOK.md` en raíz del repo.
+
+**Criterio de cierre del Bloque K:** DB preview separada de prod, cache headers configurados, playbook DNS escrito. Todos los items marcados [x].
+
+---
+
+#### 10.L — UX mejoras adicionales (1-2h)
+
+**Por qué importa:** estos son polish items que mejoran percepción de calidad pero no son bloqueantes. Se implementan gradualmente según feedback real de usuarios post-lanzamiento.
+
+- [ ] **10.L.1 — Error boundaries (`error.tsx`)** (30 min)
+  - **Qué es:** archivos especiales de Next.js App Router que capturan errores de rendering en componentes y muestran una UI de fallback en lugar de la página en blanco default.
+  - **Archivos nuevos:** `app/[locale]/error.tsx` + `app/[locale]/not-found.tsx` + opcionalmente `app/global-error.tsx` para errores que escapan el layout.
+  - **Contenido:** pantalla amigable con mensaje "Algo salió mal, intenta de nuevo" + botón "Volver a la home" + link a `/contacto` si persiste. Bilingüe ES/EN.
+
+- [ ] **10.L.2 — Loading states globales (`loading.tsx`)** (15 min)
+  - **Qué es:** Next.js muestra automáticamente `loading.tsx` mientras la página del segmento se está renderizando (especialmente útil en rutas dinámicas como `/tasa/[pair]` que dependen de fetch).
+  - **Archivos nuevos:** `app/[locale]/loading.tsx` con un skeleton básico (logo + shimmer en el área de contenido).
+
+- [ ] **10.L.3 — Open Graph + Twitter Cards en páginas principales** (1h)
+  - **Qué es:** metadatos que controlan cómo se ve el link cuando alguien lo comparte en WhatsApp, Twitter, Facebook, etc. Hoy NO están configurados — los shares muestran título + URL nada más.
+  - **Impacto:** el plan de marketing v2 depende de shares en redes. Un OG con imagen + título + descripción tiene 3-5x mejor CTR que un share plain.
+  - **Scope:** agregar campos `openGraph` y `twitter` al `generateMetadata` de: home, `/tasa/[pair]`, `/operadores/[slug]`, `/[pais]`, blog posts.
+  - **Imagen OG:** 1200×630 con logo PreEnvios + "Compara remesadoras" + bandera del país destino (si aplica). Puede ser estática en `public/og/` o dinámica con `ImageResponse` en `app/[locale]/[route]/opengraph-image.tsx`.
+
+- [ ] **10.L.4 — Schema.org BreadcrumbList en rutas anidadas** (45 min — opcional)
+  - **Qué es:** structured data para las migas de pan (Home → Blog → Artículo). Google los usa para mostrar breadcrumbs en los resultados de búsqueda.
+  - **Rutas candidatas:** `/blog/[slug]`, `/wiki/[slug]`, `/operadores/[slug]`, `/tasa/[pair]`.
+  - **Ya existe `BreadcrumbList` en algunas** según AUDIT — verificar cuáles faltan.
+
+**Criterio de cierre del Bloque L:** error.tsx + loading.tsx en producción. OG/Twitter cards en home + 4 rutas dinámicas. Share preview validado con https://www.opengraph.xyz/. Todos los items marcados [x].
+
+---
+
+#### Instrucciones para quien tome el proyecto después
+
+Cuando un item de la Fase 10 se complete:
+
+1. Abrir este documento (`CONTEXTO_FINAL.md`)
+2. Cambiar `[ ]` por `[x]` en el item correspondiente
+3. Agregar al final del item: `(completado YYYY-MM-DD, commit SHA corto)`
+4. Si el item descubrió un bug o tech debt adicional, agregarlo al BACKLOG_POST_REFACTOR.md con descripción
+5. Si el item generó un doc nuevo (ej. troubleshooting), agregar la entry al índice de ese directorio
+
+El orden de ejecución sugerido de la Fase 10 (de mayor a menor ROI):
+
+1. **10.J (rate-limit)** — 45 min, protege endpoints críticos
+2. **10.K.1 (separación DB)** — 30 min, evita corrupción accidental
+3. **10.L.1 (error boundaries)** — 30 min, mejora UX de errores reales
+4. **10.H.1 + 10.H.4 (validator tests + CI)** — 2.5h, safety net para todo lo siguiente
+5. **10.F.1 (next/image)** — 2h, LCP directo
+6. **El resto** — orden libre según disponibilidad
 
 ---
 
