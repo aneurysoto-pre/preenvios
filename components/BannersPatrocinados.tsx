@@ -51,11 +51,7 @@ const BANNERS: Banner[] = [
     Icon: Bell,
     bgCls: 'bg-[#F0FDF4] border-[#BBF7D0]',
     iconCls: 'bg-[#00A859]',
-    // Apunta a /nosotros (pagina institucional) — el texto del banner
-    // sigue siendo "Alertas diarias gratis" como hook CTA, pero lleva
-    // al usuario a conocer el proyecto. Si se decide tener pagina
-    // dedicada de alertas en el futuro, actualizar este path.
-    path: '/nosotros',
+    path: '/alertas',
   },
   {
     id: 'nosotros',
