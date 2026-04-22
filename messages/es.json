@@ -217,6 +217,25 @@
     "ctaText": "Escríbenos. Respondemos todo — usuarios, prensa, remesadoras, inversionistas.",
     "ctaButton": "Contáctanos"
   },
+  "alertas": {
+    "heroTag": "Alertas gratis",
+    "heroTitle": "La mejor tasa del día, en tu email",
+    "heroLede": "Suscríbete gratis y recibe la tasa más alta del día para tu corredor. Sin spam. Te desuscribes cuando quieras.",
+    "formTitle": "Suscríbete gratis",
+    "email": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "submit": "Suscribirme",
+    "submitting": "Suscribiendo…",
+    "successTitle": "¡Listo!",
+    "successText": "Te suscribimos a las alertas diarias. Revisa tu bandeja de entrada en los próximos días.",
+    "successNew": "Suscribir otro email",
+    "errorRateLimit": "Has hecho muchos intentos. Vuelve a intentar en {minutes} minutos.",
+    "errorGeneric": "Hubo un problema. Intenta de nuevo en unos minutos.",
+    "privacyNote": "No compartimos tu email con nadie. Puedes darte de baja cuando quieras escribiendo a contact@preenvios.com.",
+    "benefit1": "Tasas actualizadas de 7 remesadoras",
+    "benefit2": "Solo enviamos cuando hay algo útil",
+    "benefit3": "100% gratis · sin registro complejo"
+  },
   "contacto": {
     "heroTag": "Contacto",
     "heroTitle": "Escríbenos",

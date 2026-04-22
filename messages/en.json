@@ -217,6 +217,25 @@
     "ctaText": "Write to us. We reply to everything — users, press, providers, investors.",
     "ctaButton": "Contact us"
   },
+  "alertas": {
+    "heroTag": "Free alerts",
+    "heroTitle": "The best daily rate, in your inbox",
+    "heroLede": "Subscribe free and get the best rate of the day for your corridor. No spam. Unsubscribe anytime.",
+    "formTitle": "Subscribe free",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "submit": "Subscribe",
+    "submitting": "Subscribing…",
+    "successTitle": "You're in!",
+    "successText": "You're subscribed to daily alerts. Check your inbox in the next few days.",
+    "successNew": "Subscribe another email",
+    "errorRateLimit": "Too many attempts. Try again in {minutes} minutes.",
+    "errorGeneric": "Something went wrong. Try again in a few minutes.",
+    "privacyNote": "We never share your email. Unsubscribe anytime by emailing contact@preenvios.com.",
+    "benefit1": "Updated rates from 7 remittance providers",
+    "benefit2": "We only email when there's something useful",
+    "benefit3": "100% free · no complex signup"
+  },
   "contacto": {
     "heroTag": "Contact",
     "heroTitle": "Write to us",
