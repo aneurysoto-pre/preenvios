@@ -87,6 +87,13 @@ export default async function LocaleLayout({
             request a esos hosts cuando los componentes montan. */}
         <link rel="preconnect" href="https://flagcdn.com" />
         <link rel="preconnect" href="https://cdn.brandfetch.io" />
+        {/* Favicons PNG adicionales — app/favicon.ico es el ICO legacy que
+            Next.js auto-linkea como <link rel="icon"> default. Los PNGs
+            a continuacion cubren los tamanos especificos que algunos
+            browsers prefieren (Chrome 32px, Safari iOS 180px, etc). */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="alternate" hrefLang="es" href="https://preenvios.com/es" />
         <link rel="alternate" hrefLang="en" href="https://preenvios.com/en" />
         <link rel="alternate" hrefLang="x-default" href="https://preenvios.com/es" />

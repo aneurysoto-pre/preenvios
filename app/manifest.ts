@@ -12,8 +12,9 @@ import type { MetadataRoute } from 'next'
  * - theme_color: tinta el address bar mobile (tambien va en viewport
  *   meta de layout.tsx para que tome efecto inmediato en el primer load)
  * - background_color: fondo del splash screen al instalar
- * - icons: referencia a los iconos dinamicos generados por app/icon.tsx
- *   y app/apple-icon.tsx (Next.js los sirve en /icon y /apple-icon)
+ * - icons: archivos estaticos en /public (pack de favicon disenado con
+ *   Montserrat, 2026-04-22). Reemplazo de los dinamicos anteriores que
+ *   usaban system-ui — los estaticos tienen la "P" correctamente kerneada.
  *
  * Nota: el default locale del manifest es 'es' porque routing.ts define
  * defaultLocale: 'es' y el usuario que instala la PWA probablemente viene
@@ -33,14 +34,31 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: 'es',
     icons: [
       {
-        src: '/icon',
+        src: '/favicon-16x16.png',
+        sizes: '16x16',
+        type: 'image/png',
+      },
+      {
+        src: '/favicon-32x32.png',
         sizes: '32x32',
         type: 'image/png',
       },
       {
-        src: '/apple-icon',
+        src: '/apple-touch-icon.png',
         sizes: '180x180',
         type: 'image/png',
+      },
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
       },
     ],
   }
