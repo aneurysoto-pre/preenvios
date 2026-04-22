@@ -28,6 +28,7 @@ import {
   type ContactoFormInput,
   type ContactoFormOutput,
 } from '@/lib/schemas/contacto'
+import { trackEvent } from '@/lib/tracking'
 
 /**
  * /contacto rebuilt con shadcn Form (Commit 3 del plan post-limpieza
@@ -78,6 +79,10 @@ export default function ContactoContent() {
         body: JSON.stringify(values),
       })
       if (res.status === 200) {
+        trackEvent('contacto_enviado', {
+          asunto: values.asunto,
+          idioma: values.idioma,
+        })
         setState({ kind: 'success' })
         form.reset({
           nombre: '',

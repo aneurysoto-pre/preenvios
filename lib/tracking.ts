@@ -10,15 +10,18 @@
  * implementaciones locales cuando se refactoricen (Fase 1). El tipado de
  * window.gtag vive en types/global.d.ts.
  *
- * Eventos que actualmente usa el proyecto (inventario de Fase 0.3 audit):
- *   - cambio_corredor, cambio_metodo_entrega, inicio_uso, comparar_click,
- *     click_operador (Comparador)
+ * Eventos que actualmente usa el proyecto (inventario actualizado 2026-04-22):
+ *   - cambio_corredor, inicio_uso, comparar_click, click_operador (Comparador)
  *   - cambio_idioma (Nav)
- *   - contacto_enviado (contacto/content.tsx)
+ *   - contacto_enviado (app/[locale]/contacto/content.tsx — con params
+ *     `asunto` + `idioma` para segmentar el embudo en GA4)
+ *   - suscripcion_alertas (app/[locale]/alertas/content.tsx — con param
+ *     `idioma` para comparar adopción ES vs EN)
+ *   - scraper_anomaly (lib/scrapers/validator.ts → Sentry captureMessage,
+ *     no gtag — ver LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md)
  *
- * Al refactorizar cada componente, PRESERVAR el nombre exacto y params
- * del evento — son contratos con GA4 property que rompen los dashboards
- * si cambian.
+ * PRESERVAR el nombre exacto y params de cada evento — son contratos
+ * con GA4 property que rompen los dashboards si cambian.
  */
 
 export type GTagParams = Record<string, unknown>

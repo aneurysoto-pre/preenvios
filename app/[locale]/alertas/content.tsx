@@ -21,6 +21,8 @@ import {
   type AlertaFormInput,
   type AlertaFormOutput,
 } from '@/lib/schemas/alerta'
+import { trackEvent } from '@/lib/tracking'
+import { useLocale } from 'next-intl'
 
 /**
  * /alertas rebuilt con shadcn Form — commit 2 del rebuild post-cleanup
@@ -49,6 +51,7 @@ type SubmitState =
 
 export default function AlertasContent() {
   const t = useTranslations('alertas')
+  const locale = useLocale()
   const [state, setState] = useState<SubmitState>({ kind: 'idle' })
 
   const form = useForm<AlertaFormInput, unknown, AlertaFormOutput>({
@@ -69,6 +72,7 @@ export default function AlertasContent() {
         body: JSON.stringify(values),
       })
       if (res.status === 200) {
+        trackEvent('suscripcion_alertas', { idioma: locale === 'en' ? 'en' : 'es' })
         setState({ kind: 'success' })
         form.reset({ email: '', website: '' })
         return
