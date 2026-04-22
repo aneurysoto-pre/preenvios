@@ -30,17 +30,31 @@ const LazyBelow = dynamic(() => import('@/components/Sections').then(m => {
   return { default: Combo }
 }))
 
-export default function PaisContent({ slug }: { slug: string }) {
+export default function PaisContent({ slug, initialMonto }: { slug: string; initialMonto?: number }) {
   const locale = useLocale()
   const en = locale === 'en'
   const pais = findPaisBySlug(slug)!
   const nombre = en ? pais.nombreEn : pais.nombre
+  const pageUrl = initialMonto
+    ? `https://preenvios.com/${locale}/${slug}/${initialMonto}`
+    : `https://preenvios.com/${locale}/${slug}`
+  const pageName = initialMonto
+    ? (en ? `Send $${initialMonto} to ${nombre}` : `Enviar $${initialMonto} a ${nombre}`)
+    : (en ? `Send money to ${nombre}` : `Enviar dinero a ${nombre}`)
+  const pageDesc = initialMonto
+    ? (en
+        ? `Compare remittance providers to send $${initialMonto} USD to ${nombre}.`
+        : `Compara remesadoras para enviar $${initialMonto} USD a ${nombre}.`)
+    : (en
+        ? `Compare remittance providers to send money to ${nombre}.`
+        : `Compara remesadoras para enviar dinero a ${nombre}.`)
 
   return (
     <main>
       <Nav />
       <Comparador
         defaultCorredor={pais.corredorId}
+        defaultMonto={initialMonto}
         heroTitle={en ? `Sending money to ${nombre}?` : `Envías dinero a ${nombre}?`}
         heroHighlight={en ? 'Compare and save in seconds.' : 'Compara y ahorra en segundos.'}
         heroLede={en ? `See in seconds how much arrives in ${nombre}` : `Revisa en segundos cuánto llega a ${nombre}`}
@@ -55,16 +69,15 @@ export default function PaisContent({ slug }: { slug: string }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: en ? `Send money to ${nombre}` : `Enviar dinero a ${nombre}`,
-        url: `https://preenvios.com/${locale}/${slug}`,
-        description: en
-          ? `Compare remittance providers to send money to ${nombre}.`
-          : `Compara remesadoras para enviar dinero a ${nombre}.`,
+        name: pageName,
+        url: pageUrl,
+        description: pageDesc,
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'PreEnvios', item: `https://preenvios.com/${locale}` },
             { '@type': 'ListItem', position: 2, name: nombre, item: `https://preenvios.com/${locale}/${slug}` },
+            ...(initialMonto ? [{ '@type': 'ListItem', position: 3, name: `$${initialMonto} USD`, item: pageUrl }] : []),
           ],
         },
       })}} />

@@ -70,5 +70,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     pages.push({ url: `${BASE_URL}/en/${p.slugEn}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}`, en: `${BASE_URL}/en/${p.slugEn}` } } })
   }
 
+  // Páginas país+monto (SSG). 4 montos × 6 países × 2 locales = 48 URLs.
+  // Indexables con canonical + alternates ES/EN apuntando al mismo monto.
+  const MONTOS_SSG = [100, 200, 500, 1000]
+  for (const p of PAISES_MVP) {
+    for (const m of MONTOS_SSG) {
+      pages.push({
+        url: `${BASE_URL}/es/${p.slugEs}/${m}`,
+        lastModified: now,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+        alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}/${m}`, en: `${BASE_URL}/en/${p.slugEn}/${m}` } },
+      })
+      pages.push({
+        url: `${BASE_URL}/en/${p.slugEn}/${m}`,
+        lastModified: now,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+        alternates: { languages: { es: `${BASE_URL}/es/${p.slugEs}/${m}`, en: `${BASE_URL}/en/${p.slugEn}/${m}` } },
+      })
+    }
+  }
+
   return pages
 }

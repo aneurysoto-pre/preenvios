@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
+import { useRouter, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { rankProviders, type Precio, type PrecioRanked } from '@/lib/ranking'
 import { trackEvent } from '@/lib/tracking'
 import { CountryPicker, type Corredor } from '@/components/comparador/country-picker'
+import { PAISES_MVP } from '@/lib/paises'
 
 // ═══════════════════════════════════════
 // DATOS ESTÁTICOS
@@ -36,6 +38,9 @@ const LOGOS: Record<string, string> = {
 
 type ComparadorProps = {
   defaultCorredor?: string
+  /** Pre-rellenar el monto (p.ej. cuando la URL incluye /{locale}/{pais}/{monto}).
+   *  No dispara scroll auto ni llama onCompararClick. */
+  defaultMonto?: number
   /** Override hero title line 1 (default: from translations) */
   heroTitle?: string
   /** Override hero highlight line 2 (default: from translations) */
@@ -51,11 +56,13 @@ type ComparadorProps = {
 type SortKey = 'best' | 'fastest' | 'cheapest'
 const VELOCIDAD_RANK: Record<string, number> = { 'Segundos': 4, 'Seconds': 4, 'Minutos': 3, 'Minutes': 3, 'Horas': 2, 'Hours': 2, 'Días': 1, 'Days': 1 }
 
-export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, heroLede, children }: ComparadorProps = {}) {
+export default function Comparador({ defaultCorredor, defaultMonto, heroTitle, heroHighlight, heroLede, children }: ComparadorProps = {}) {
   const t = useTranslations()
   const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
   const [corredor, setCorredor] = useState(defaultCorredor || 'honduras')
-  const [monto, setMonto] = useState('')
+  const [monto, setMonto] = useState(defaultMonto ? String(defaultMonto) : '')
   const [metodo] = useState('bank')
   const [precios, setPrecios] = useState<Precio[]>([])
   const [loading, setLoading] = useState(false)
@@ -166,6 +173,23 @@ export default function Comparador({ defaultCorredor, heroTitle, heroHighlight, 
       return
     }
     trackEvent('comparar_click', { monto: montoNum, corredor, metodo, segundos_hasta_comparar: secs() })
+
+    // URL push SEO — solo el click de "Comparar" modifica URL (el dropdown de
+    // país y el typing del monto NO). Reglas: entero en [10, 10000] -> push
+    // /{locale}/{pais}/{monto}; fuera de rango o no entero -> push /{locale}/{pais}
+    // sin monto. Si la nueva URL es igual a la actual, no-op.
+    const paisData = PAISES_MVP.find(p => p.corredorId === corredor)
+    if (paisData) {
+      const paisSlug = locale === 'en' ? paisData.slugEn : paisData.slugEs
+      const montoEntero = Math.round(montoNum)
+      const inRange = montoEntero >= 10 && montoEntero <= 10000 && montoEntero === montoNum
+      const newPath = inRange
+        ? `/${locale}/${paisSlug}/${montoEntero}`
+        : `/${locale}/${paisSlug}`
+      if (pathname !== newPath) {
+        router.push(newPath, { scroll: false })
+      }
+    }
 
     // Loading full-screen estilo Monito: pantalla blanca cubre todo mientras
     // el scroll smooth termina y el usuario percibe 'buscando las mejores tasas'.
