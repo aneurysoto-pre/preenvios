@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'PreEnvios.com — Compare remittance providers. Send more for less.'
       : 'PreEnvios.com — Compara remesadoras. Envía más por menos.',
     description: en
-      ? 'Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram. Send more money to Honduras, Dominican Republic, Guatemala and El Salvador. 100% free, no signup.'
-      : 'Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Envía más dinero a Honduras, República Dominicana, Guatemala y El Salvador. 100% gratis, sin registro.',
+      ? 'Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram. Send more money to Honduras, Dominican Republic, Guatemala, El Salvador, Colombia and Mexico. 100% free, no signup.'
+      : 'Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Envía más dinero a Honduras, República Dominicana, Guatemala, El Salvador, Colombia y México. 100% gratis, sin registro.',
     alternates: {
       canonical: `https://preenvios.com/${locale}`,
       languages: {
