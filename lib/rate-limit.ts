@@ -14,6 +14,7 @@
  * Política actual:
  * - Admin login: 5 intentos / 15 min / IP (fixed window)
  * - Contacto form: 3 envíos / 1 hora / IP (fixed window)
+ * - Alertas form: 3 suscripciones / 1 hora / IP (fixed window)
  *
  * Sobre el bucketing de @upstash/ratelimit: el library almacena keys
  * como `{prefix}:{identifier}:{bucket_id}` donde bucket_id =
@@ -31,6 +32,7 @@ import { Redis } from '@upstash/redis'
 
 let _adminLoginLimiter: Ratelimit | null = null
 let _contactoLimiter: Ratelimit | null = null
+let _alertaLimiter: Ratelimit | null = null
 
 function getAdminLoginLimiter(): Ratelimit {
   if (_adminLoginLimiter) return _adminLoginLimiter
@@ -52,6 +54,17 @@ function getContactoLimiter(): Ratelimit {
     prefix: 'rl:contacto',
   })
   return _contactoLimiter
+}
+
+function getAlertaLimiter(): Ratelimit {
+  if (_alertaLimiter) return _alertaLimiter
+  _alertaLimiter = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.fixedWindow(3, '1 h'),
+    analytics: true,
+    prefix: 'rl:alerta',
+  })
+  return _alertaLimiter
 }
 
 export function getClientIp(request: Request): string {
@@ -96,6 +109,28 @@ export async function checkContactoRateLimit(ip: string): Promise<RateLimitResul
     const limiter = getContactoLimiter()
     const res = await limiter.limit(ip)
     console.log('[rate-limit] contacto', {
+      ip,
+      success: res.success,
+      limit: res.limit,
+      remaining: res.remaining,
+      resetInSeconds: Math.max(0, Math.ceil((res.reset - Date.now()) / 1000)),
+    })
+    if (res.success) {
+      return { allowed: true, retryAfterSeconds: 0, remaining: res.remaining }
+    }
+    const retryAfterSeconds = Math.max(1, Math.ceil((res.reset - Date.now()) / 1000))
+    return { allowed: false, retryAfterSeconds, remaining: 0 }
+  } catch (err) {
+    console.error('[rate-limit] upstash error:', err)
+    return { allowed: true, retryAfterSeconds: 0, remaining: 3 }
+  }
+}
+
+export async function checkAlertaRateLimit(ip: string): Promise<RateLimitResult> {
+  try {
+    const limiter = getAlertaLimiter()
+    const res = await limiter.limit(ip)
+    console.log('[rate-limit] alerta', {
       ip,
       success: res.success,
       limit: res.limit,
