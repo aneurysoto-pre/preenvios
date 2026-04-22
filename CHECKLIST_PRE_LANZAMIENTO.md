@@ -427,9 +427,55 @@ Protocolo obligatorio antes de activar el DNS. Correr desde desktop + mobile rea
 
 ---
 
-## 15. Después del cambio de DNS
+## 15. Compliance legal (BLOQUEANTE pre-cutover)
 
-### 15.1 Verificación inmediata (primera hora)
+Esta sección asegura que el sitio cumple requisitos legales antes de recibir tráfico real — especialmente de California (CCPA) y la UE (GDPR). Violar estas leyes después del cutover puede generar multas de $2,500 a €20M según jurisdicción. Todos los items son implementables sin LLC (son compliance técnico, no societario).
+
+### 15.1 🍪 Cookie consent banner (CCPA + GDPR) — el item más crítico
+
+**Problema:** hoy PreEnvios carga Google Analytics GA4 (`G-6RBFS2812S`) automáticamente en cada pageview sin pedir consentimiento al usuario. Bajo CCPA, un usuario californiano tiene derecho a opt-out de "venta de datos" (GA4 en modo default cuenta como eso). Bajo GDPR, un usuario europeo debe dar consentimiento ACTIVO antes de que se carguen cookies de analytics. Sin banner, estás en violación desde el minuto 1 de tráfico pagado.
+
+**Solución mínima aceptable:**
+
+- [ ] Instalar librería **`vanilla-cookieconsent`** (cookieconsent.orestbida.com) — opensource, 0 dependencias, ~10KB, soporte ES/EN nativo, cumple GDPR + CCPA + LGPD (Brasil futuro)
+  - Alternativa más simple: `react-cookie-consent` (1 componente, menos config, pero menos granular)
+  - Recomendado: vanilla-cookieconsent por flexibilidad a largo plazo
+- [ ] Integrar en `app/[locale]/layout.tsx` — mover el `<Script>` de gtag a disparo condicional después de "Aceptar cookies" del usuario
+- [ ] Textos del banner bilingües ES/EN con link a `/privacidad` y `/terminos`
+- [ ] Opciones del banner: "Aceptar todas" / "Rechazar todas" / "Personalizar" (mínimo)
+- [ ] Granularidad: al menos 2 categorías — "Necesarias" (no bloqueables, incluye Vercel Analytics) y "Analytics" (GA4 + eventuales otras)
+- [ ] Testear en Chrome + Safari + Firefox + iPhone Safari: primera visita muestra banner, click "Aceptar" → GA4 carga + evento `page_view`; click "Rechazar" → GA4 NO carga + evento page_view NO dispara
+- [ ] Validar con Chrome DevTools Network tab filtro `collect` — debe aparecer SOLO después de consentimiento
+- [ ] Verificar que el banner NO bloquea el contenido crítico (el Comparador debe ser interactuable antes de decidir)
+
+**Tiempo estimado:** 1-1.5 horas. **No requiere backend nuevo ni tabla DB.**
+
+### 15.2 Privacy policy — revisión de fondo
+
+- [x] Página `/privacidad` existe con derecho a borrado CCPA/GDPR (ya hecho en Fase 1.5)
+- [ ] Revisar que menciona explícitamente:
+  - Cookies de analytics (GA4) — sí se usan, sí se pide consentimiento
+  - Que NO se venden datos personales a terceros
+  - Email de contacto para solicitudes de borrado (actual: `contact@preenvios.com`)
+  - Plazo de respuesta (actual: 30 días, compatible con CCPA y GDPR)
+- [ ] Si el banner del 15.1 introduce nuevas tecnologías (ej. categoría "Marketing" para futuro Meta Pixel), actualizar la privacy policy consistentemente
+
+### 15.3 FTC disclosure en links afiliados
+
+- [x] Disclaimer #4 cerca de botones "Enviar ahora" en el comparador (ya hecho en Fase 1.5)
+- [x] Página `/como-ganamos-dinero` con detalle (ya hecho)
+- [ ] Verificar visualmente que el disclaimer no se oculta en mobile (audit post-refactor)
+
+### 15.4 Footer global con links legales visibles
+
+- [x] Links a `/terminos`, `/privacidad`, `/como-ganamos-dinero`, `/uso-de-marcas`, `/metodologia`, `/disclaimers` en footer (ya hecho 2026-04-18 + 2026-04-22)
+- [ ] Verificar que el footer es visible en todas las páginas (incluyendo rutas anidadas como `/blog/[slug]` y `/tasa/[pair]`)
+
+---
+
+## 16. Después del cambio de DNS
+
+### 16.1 Verificación inmediata (primera hora)
 - [ ] `preenvios.com` carga el sitio Next.js (no el MVP viejo)
 - [ ] HTTPS funciona correctamente (certificado válido)
 - [ ] Redirect de www a sin-www funciona (o viceversa según config)
@@ -439,13 +485,13 @@ Protocolo obligatorio antes de activar el DNS. Correr desde desktop + mobile rea
 - [ ] Configurar `SENTRY_DSN` en Vercel + redeploy (ver § 11.2)
 - [ ] Cambiar URL target del Agente 4 (E2E) de `preenvios.vercel.app` a `preenvios.com`
 
-### 15.2 Limpieza y cleanup (primera semana)
+### 16.2 Limpieza y cleanup (primera semana)
 - [ ] MVP viejo (`index.html` en GH Pages) se archiva o elimina del repo
 - [ ] Crear Status Page pública en `status.preenvios.com` con BetterStack
 
 ---
 
-## 16. Cadencias institucionales post-lanzamiento
+## 17. Cadencias institucionales post-lanzamiento
 
 Tareas recurrentes que se institucionalizan después del cutover. Todas son blockers de calidad del producto, no opcionales.
 

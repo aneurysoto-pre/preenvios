@@ -838,6 +838,8 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 **Regla importante:** ningún item de esta fase requiere LLC, Payoneer o Meta Business verification. Todo es trabajo técnico interno. La única dependencia externa es Upstash Redis (plan Free ya activo) y GitHub Actions (gratis en repos privados con límite de minutos).
 
 **Bloques:**
+- **Bloque A:** Endurecimiento de seguridad — 5 vulnerabilidades documentadas (2-4h)
+- **Bloque E:** Documentación técnica pendiente (30 min)
 - **Bloque F:** Performance / LCP / Core Web Vitals (3-4h)
 - **Bloque G:** Accesibilidad (items remainder del refactor Fase 1) (1-2h)
 - **Bloque H:** Testing + CI (4-6h)
@@ -846,8 +848,79 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 - **Bloque L:** UX mejoras adicionales (1-2h)
 
 **Nota sobre bloques no incluidos:**
-- **Bloque I (Cookie consent CCPA/GDPR)** — se considera parte del bloque legal separado, NO aquí. Se documenta como pendiente en CHECKLIST_PRE_LANZAMIENTO.md bajo la sección de compliance legal.
-- **Bloque M (smoke tests formales)** — son acciones manuales del founder pre-cutover, no trabajo de desarrollo. Viven en CHECKLIST_PRE_LANZAMIENTO.md §13 y §14.
+- **Bloque I (Cookie consent CCPA/GDPR)** — vive en `CHECKLIST_PRE_LANZAMIENTO.md § 15 Compliance legal` como BLOQUEANTE pre-cutover. NO está en Fase 10 porque es legal, no calidad técnica; y porque es bloqueante (la Fase 10 es progressive post-cutover).
+- **Bloque M (smoke tests formales)** — son acciones manuales del founder pre-cutover, no trabajo de desarrollo. Viven en `CHECKLIST_PRE_LANZAMIENTO.md § 13 y § 14`.
+
+---
+
+#### 10.A — Endurecimiento de seguridad (2-4h)
+
+**Por qué importa:** los 5 items de este bloque son vulnerabilidades documentadas en `TROUBLESHOOTING/14-18` y `AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md` que NO se arreglaron antes del cutover. Cada una tiene un vector de explotación real — aunque bajo (el sitio es chico y poco conocido), van a escalar cuando haya tráfico real post-launch.
+
+- [ ] **10.A.1 — 🔒 Endpoint cron expuesto: `/api/scrape` sin auth** (10 min) — severidad ALTA
+  - **Qué es:** el endpoint que dispara los scrapers (llamado por Vercel Cron 1 vez al día) está público sin autenticación. Cualquiera puede hacer `curl https://preenvios.com/api/scrape` y disparar los 7 scrapers.
+  - **Ataques posibles:** agotar cuota Supabase (rate writes), disparar Vercel serverless costs, saturar Upstash, bloquear IPs de los operadores (Western Union, Remitly) contra el bot de Vercel.
+  - **Solución:** validar header `x-vercel-cron` (Vercel lo setea auto) o `Authorization: Bearer <CRON_SECRET>` (env var nueva). Ver `TROUBLESHOOTING/14_endpoint_cron_expuesto.md` para código ejemplo.
+  - **Archivo:** `app/api/scrape/route.ts`.
+  - **Ref:** TROUBLESHOOTING/14.
+
+- [ ] **10.A.2 — 🔒 Admin login hardening** (30-60 min) — severidad ALTA
+  - **Qué es:** el login de `/admin` tiene rate-limit (commit `5fc6ab1` agregó `checkAdminLoginRateLimit` en `lib/rate-limit.ts`, 5 intentos / 15 min / IP). Pero el token de sesión NO rota y el password único está como env var sin rotación documentada.
+  - **Ataques posibles:** si el token se filtra, acceso al admin permanente hasta cambio manual de env var.
+  - **Solución:** ver `TROUBLESHOOTING/15_admin_login_vulnerable.md` — recomienda rotación de token + HttpOnly cookie con expiración corta + documentar cambio periódico de `ADMIN_PASSWORD`.
+  - **Archivos:** `lib/admin-auth.ts`, `app/api/admin/auth/route.ts`.
+  - **Ref:** TROUBLESHOOTING/15 + AUDITORIA_DE_SEGURIDAD/01_auditoria § H-03.1.
+
+- [ ] **10.A.3 — 🔒 Webhook Twilio sin validación HMAC** (20 min) — severidad ALTA
+  - **Qué es:** el webhook `/api/whatsapp/webhook` que recibe mensajes de Twilio NO valida el header `X-Twilio-Signature`. Cualquiera con la URL puede enviar POSTs falsos simulando mensajes de usuarios.
+  - **Ataques posibles:** spoofing de mensajes (simular que `+1XXX` preguntó la tasa → el bot responde a un destino falso), agotar rate-limits, disparar logs basura.
+  - **Solución:** validar HMAC con la librería de Twilio (`twilio.validateRequest()`) antes de procesar el body. Detallado en `TROUBLESHOOTING/16_webhook_twilio_sin_firma.md`.
+  - **Archivo:** `app/api/whatsapp/webhook/route.ts`.
+  - **Ref:** TROUBLESHOOTING/16 + AUDITORIA_DE_SEGURIDAD/01_auditoria § H-03.4.
+  - **Nota:** el bot WhatsApp está actualmente pausado (requiere Meta Business verification post-LLC). Arreglar esto antes de re-activarlo.
+
+- [ ] **10.A.4 — 🔒 Suscripción alertas — validar post-rebuild** (15 min) — severidad MEDIA
+  - **Qué es:** el form de `/alertas` fue reescrito 2026-04-22 con shadcn Form + honeypot + rate-limit (3/h/IP). Re-verificar que las protecciones siguen vigentes — `TROUBLESHOOTING/17_suscripcion_free_spam.md` fue escrito cuando existía `/api/suscripcion-free` (endpoint distinto, ya eliminado).
+  - **Procedimiento:** revisar `app/api/alertas/route.ts` + `TROUBLE/17` — actualizar el doc o eliminarlo si ya no aplica al endpoint nuevo.
+  - **Archivos:** `app/api/alertas/route.ts`, `lib/rate-limit.ts` (limiter `checkAlertaRateLimit`), `TROUBLESHOOTING/17_suscripcion_free_spam.md` (revisar).
+  - **Ref:** TROUBLESHOOTING/17.
+
+- [ ] **10.A.5 — 🔒 Headers de seguridad globales** (20 min) — severidad MEDIA
+  - **Qué es:** el sitio NO setea CSP (Content Security Policy), X-Frame-Options, Referrer-Policy ni Permissions-Policy. Defaults de Vercel son básicos pero no protegen contra clickjacking, inyección de scripts, fuga de referrers a partners.
+  - **Solución:** configurar `next.config.ts` con `headers()` que añada:
+    - `Content-Security-Policy` restrictiva (permitir solo self + googletagmanager + sentry.io + flagcdn.com + brandfetch.io)
+    - `X-Frame-Options: DENY` (anti clickjacking)
+    - `Referrer-Policy: strict-origin-when-cross-origin` (no fugar paths a terceros)
+    - `Permissions-Policy: camera=(), microphone=(), geolocation=()` (denegar features no usadas)
+  - **Detallado en:** `TROUBLESHOOTING/18_headers_seguridad_globales.md`.
+  - **Archivo:** `next.config.ts`.
+  - **Ref:** TROUBLESHOOTING/18.
+
+**Criterio de cierre del Bloque A:** los 5 items marcados [x]. Los docs TROUBLESHOOTING/14-18 pueden actualizarse con "✅ RESUELTO [fecha, commit]" al completar cada uno.
+
+---
+
+#### 10.E — Documentación técnica pendiente (30 min)
+
+**Por qué importa:** estos docs evitan que conocimiento operacional se pierda cuando el founder no está presente o cuando un dev nuevo toma el proyecto. La inversión de 30 minutos ahorra horas de re-descubrimiento futuro.
+
+- [ ] **10.E.1 — Actualizar `TROUBLESHOOTING/04_whatsapp_bot_no_responde.md`** (10 min)
+  - **Contexto:** el doc fue escrito antes de la limpieza de Nicaragua y Haití del 2026-04-22. Menciona códigos de moneda (NIO, HTG) que ya NO están en el `CORREDOR_MAP` del webhook. Si alguien lee el doc para diagnosticar el bot post-reactivación, puede seguir instrucciones obsoletas.
+  - **Revisar:** que todos los códigos mencionados (DOP, HNL, GTQ, SVC/USD, COP, MXN) están vigentes, que no quedan referencias a NIO/HTG/nicaragua/haiti.
+  - **Verificación:** `grep -iE "nicaragua|haiti|NIO|HTG" TROUBLESHOOTING/04_whatsapp_bot_no_responde.md` debe devolver 0 matches.
+
+- [ ] **10.E.2 — Escribir `TROUBLESHOOTING/29_scrapers_manual_run.md`** (20 min)
+  - **Qué es:** doc paso a paso de cómo correr los scrapers manualmente — crítico para el smoke test pre-cutover (CHECKLIST § 7.4 línea 164) y para debugging cuando algo falla en producción.
+  - **Contenido mínimo:**
+    - Cómo llamar `/api/scrape` manualmente (curl con auth header del Bloque 10.A.1 post-fix)
+    - Qué esperar en la respuesta (status 200, JSON con `saved`, `errors`, eventuales rechazos del Agente 1)
+    - Cómo verificar en Supabase que la tabla `precios` se actualizó (query: `SELECT operador, corredor, tasa, actualizado_en FROM precios ORDER BY actualizado_en DESC LIMIT 20;`)
+    - Cómo revisar `scraper_anomalies` si hubo rechazos del validador
+    - Cómo interpretar logs en Vercel → Functions → `/api/scrape`
+  - **Archivo nuevo:** `TROUBLESHOOTING/29_scrapers_manual_run.md`
+  - **También:** actualizar `TROUBLESHOOTING/README.md` con entry para el doc 29.
+
+**Criterio de cierre del Bloque E:** los 2 docs actualizados/escritos. Los 2 items marcados [x].
 
 ---
 
@@ -1000,17 +1073,7 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - **Solución:** configurar `next.config.ts` con `headers()` que dé `Cache-Control: public, max-age=31536000, immutable` a los archivos con hash en el nombre (Next los genera automáticamente para fonts y CSS).
   - **Impacto:** reducciones de 30-50% en re-requests repetidos del mismo usuario.
 
-- [ ] **10.K.3 — Plan formal de post-DNS cutover** (45 min TU acción + 15 min yo)
-  - **Qué es:** playbook paso a paso del día del DNS cutover (cambiar `preenvios.com` de GitHub Pages a Vercel). Escrito como checklist para reducir probabilidad de errores bajo presión.
-  - **Contenido mínimo:**
-    1. Pre-cutover (T-1h): smoke test en staging Vercel, validar todas las env vars, verificar monitoreo Sentry activo
-    2. Cutover (T=0): cambiar DNS en Namecheap, esperar propagación 5-30 min
-    3. Post-cutover (T+5min): smoke test en preenvios.com (no vercel.app), validar GA4 + Sentry siguen capturando, Rich Results Test
-    4. Post-cutover (T+24h): review métricas de tráfico GA4, confirmar Search Console recibe sitemap
-    5. Rollback plan: si algo falla, revertir DNS a GitHub Pages (máximo 1 hora de downtime)
-  - **Archivo nuevo:** `DNS_CUTOVER_PLAYBOOK.md` en raíz del repo.
-
-**Criterio de cierre del Bloque K:** DB preview separada de prod, cache headers configurados, playbook DNS escrito. Todos los items marcados [x].
+**Criterio de cierre del Bloque K:** DB preview separada de prod, cache headers configurados. Todos los items marcados [x]. El playbook del DNS cutover se trabaja por separado en la sección destacada debajo.
 
 ---
 
@@ -1042,6 +1105,74 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 ---
 
+---
+
+### 🚨 DÍA CRÍTICO DEL PROYECTO — DNS Cutover (HORA CERO)
+
+> **Este es el día más riesgoso de todo el roadmap.** Un error acá puede dejar el sitio caído con tráfico pagado activo, perder posicionamiento SEO acumulado, o romper integraciones con servicios externos. Se elevó fuera de Fase 10 (era sub-item 10.K.3) porque merece su propia sección destacada para que nadie lo subestime.
+
+**Qué es el cutover:** cambiar los DNS de `preenvios.com` en Namecheap — de apuntar al sitio viejo en GitHub Pages a apuntar al deploy Next.js en Vercel. Es una operación de minutos técnicos con consecuencias de días si algo falla.
+
+**Pre-requisitos NO negociables antes de hacer el cutover:**
+- [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app`
+- [ ] Migración 007 (`scraper_anomalies`) corrida en Supabase
+- [ ] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth)
+- [ ] Bloque 10.K.1 completado (DB preview separada de producción)
+- [ ] CHECKLIST §15 Compliance legal completado (cookie consent banner funcionando)
+- [ ] CHECKLIST §13 Smoke test formal pre-cutover ejecutado con todas las acciones OK
+- [ ] CHECKLIST §14 Pre-DNS checklist final con todos los items [x]
+
+**Deliverables del playbook:**
+
+- [ ] **Escribir `DNS_CUTOVER_PLAYBOOK.md`** en raíz del repo con el procedimiento paso a paso. Contenido mínimo estructurado como checklist temporal:
+
+  **Pre-cutover (T-1h):**
+  - Correr smoke test en staging Vercel (todas las páginas, forms, comparador)
+  - Validar todas las env vars en Vercel (Production + Preview + Development)
+  - Verificar Sentry capturando en producción
+  - Verificar GA4 midiendo en producción
+  - Verificar BetterStack monitores configurados apuntando a `preenvios.com`
+  - Screenshot del estado actual del sitio en GitHub Pages (evidencia pre-cutover)
+  - Notificar a equipo si existe ventana de mantenimiento
+
+  **Cutover (T=0):**
+  - Login a Namecheap → Domain List → `preenvios.com` → Advanced DNS
+  - Cambiar A record a la IP de Vercel (`76.76.21.21` o la que Vercel indique)
+  - Cambiar CNAME `www` apuntando a `cname.vercel-dns.com`
+  - Guardar cambios, anotar timestamp exacto
+  - Esperar propagación: 5-30 minutos típicos (ver con `dig preenvios.com`)
+
+  **Post-cutover (T+5min):**
+  - Smoke test en `preenvios.com` (no en `vercel.app`): home carga, HTTPS OK, comparador funcional
+  - Validar que Cloudflare NO está interceptando (debe ser Vercel direct)
+  - Verificar GA4 Real-Time: una visita propia dispara `page_view` con `hostname: preenvios.com`
+  - Verificar Sentry: forzar un error test y ver que aparece con environment production
+  - Validar con Google Rich Results Test: https://search.google.com/test/rich-results → ingresar `preenvios.com/es`
+  - Validar preview de shares: OG card correctamente
+
+  **Post-cutover (T+24h):**
+  - Review métricas de tráfico GA4 vs 24h previas a cutover
+  - Confirmar Google Search Console recibe sitemap nuevo (puede tardar hasta 72h en empezar a rastrear)
+  - Revisar errores en Sentry — cualquier spike inesperado
+  - Verificar que BetterStack monitoreó 24h sin false alerts
+  - Verificar que el Agente 4 (E2E Playwright) cambió su URL target a `preenvios.com`
+
+  **Rollback plan (si algo falla críticamente):**
+  - Decisión de rollback se toma en los primeros 30 minutos post-cutover
+  - En Namecheap → Advanced DNS → revertir A record y CNAME a los valores de GitHub Pages
+  - Downtime total estimado: 1 hora (propagación ida + vuelta)
+  - Los datos de Supabase NO se tocan (la DB no depende del dominio)
+  - Post-rollback: comunicar a marketing que pause campañas si había alguna activa
+  - Escribir post-mortem del rollback en `TROUBLESHOOTING/` antes del siguiente intento
+
+- [ ] **Ejecutar el playbook el día del cutover** — TU acción, no código. Pre-requisito: playbook escrito + checklist pre-cutover completo.
+
+- [ ] **Documentar el cutover real** — post-ejecución, escribir `TROUBLESHOOTING/30_dns_cutover_YYYY-MM-DD.md` con: timeline real, issues encontrados, tiempo de propagación observado, métricas antes/después, decisiones tomadas. Esto es evidencia institucional por si alguna vez hay que hacer otro cutover o auditoría legal.
+
+**Criterio de cierre del cutover exitoso:** 48 horas en producción con 0 errores críticos en Sentry, GA4 midiendo correctamente, BetterStack sin false alerts, tráfico llegando a Vercel confirmable en analytics.
+
+---
+
 #### Instrucciones para quien tome el proyecto después
 
 Cuando un item de la Fase 10 se complete:
@@ -1054,12 +1185,16 @@ Cuando un item de la Fase 10 se complete:
 
 El orden de ejecución sugerido de la Fase 10 (de mayor a menor ROI):
 
-1. **10.J (rate-limit)** — 45 min, protege endpoints críticos
-2. **10.K.1 (separación DB)** — 30 min, evita corrupción accidental
-3. **10.L.1 (error boundaries)** — 30 min, mejora UX de errores reales
-4. **10.H.1 + 10.H.4 (validator tests + CI)** — 2.5h, safety net para todo lo siguiente
-5. **10.F.1 (next/image)** — 2h, LCP directo
-6. **El resto** — orden libre según disponibilidad
+1. **10.A.1 + 10.A.3 (seguridad crítica)** — 30 min, cierra las 2 vulnerabilidades más explotables
+2. **10.J (rate-limit)** — 45 min, protege endpoints críticos
+3. **10.K.1 (separación DB)** — 30 min, evita corrupción accidental
+4. **10.L.1 (error boundaries)** — 30 min, mejora UX de errores reales
+5. **10.E (docs pendientes)** — 30 min, fija conocimiento operacional antes de seguir
+6. **10.H.1 + 10.H.4 (validator tests + CI)** — 2.5h, safety net para todo lo siguiente
+7. **10.F.1 (next/image)** — 2h, LCP directo
+8. **El resto** — orden libre según disponibilidad
+
+**Antes del DNS cutover** ejecutar los items marcados como pre-requisito en la sección "DÍA CRÍTICO" arriba.
 
 ---
 
@@ -1108,28 +1243,34 @@ El orden de ejecución sugerido de la Fase 10 (de mayor a menor ROI):
 ---
 
 ## Reglas del proyecto que no cambian
+
+### Reglas de producto y estrategia
 1. No construir app móvil hasta 5,000 usuarios activos/mes en la web
 2. No agregar corredor nuevo hasta que el anterior genere $3,000/mes estables
 3. No levantar capital externo antes del mes 18
 4. No rediseñar el landing — solo agregar contenido a los slots vacíos
 5. Publicar tasa de cambio todos los días hábiles en redes sociales — sin excepción
 6. Nunca esconder que somos un comparador independiente — es el activo más valioso
+
+### Reglas técnicas de UX e internacionalización
 7. Idioma por defecto siempre ES (2026-04-18). No detectar Accept-Language — solo cambiar a EN si el usuario lo elige manualmente desde el botón EN/ES del nav. La cookie `NEXT_LOCALE` persiste esa elección
 8. El nav usa el label "Destinos" (ES) / "Destinations" (EN) para la sección de países soportados — no "Corredores" ni "Countries"
 9. En páginas de país (`/[locale]/[pais]`), el `defaultCorredor` que recibe el Comparador siempre gana sobre la cookie `preenvios_corredor`. La cookie solo aplica en la home
 10. La página `/nosotros` es **anónima** — representa solo la marca "Preenvíos". No incluir nombre personal de fundador, foto, biografía individual ni iniciales en avatar. Si futuros mandatos piden volver a agregar al fundador, levantar la inconsistencia con esta regla antes de ejecutar
 11. Los iconos decorativos dentro del sitio (secciones Por qué / Cómo funciona) usan `lucide-react`. Para banderas (idioma y países de corredor en la navegación principal) usar **SVGs inline**, NO emojis — Windows no renderiza flag emojis y los muestra como letras ("us", "es") que parecen un error. Los emojis de bandera en el dropdown de corredores se conservan porque ya están en `PAISES_MVP` y funcionan bien visualmente en mobile/Mac, pero si hay queja en Windows se migrarán a SVG también
 12. Footer tiene 4 columnas de contenido + brand: Producto / Recursos / Empresa / Legal. Si se agrega una página nueva, elegir la columna semánticamente más cercana en lugar de inventar una quinta
-7. Revisar métricas una vez por semana — no todos los días
-8. El número que importa cada semana: clics en "Enviar ahora"
-9. Ninguna decisión de dirección estratégica antes del mes 18
-10. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
-11. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
-12. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
-13. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
-14. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
-15. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
-16. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
+
+### Reglas operacionales y de negocio
+13. Revisar métricas una vez por semana — no todos los días
+14. El número que importa cada semana: clics en "Enviar ahora"
+15. Ninguna decisión de dirección estratégica antes del mes 18
+16. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
+17. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
+18. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
+19. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
+20. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
+21. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
+22. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
 
 ---
 
