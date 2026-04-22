@@ -710,7 +710,7 @@ Cuando el volumen referido llegue a $50,000/mes:
 #### Nivel monitoreo pasivo (observabilidad estándar)
 
 - [x] BetterStack uptime (planeado activar el día del DNS cutover — ver AUDITORIA_DE_SEGURIDAD/monitoring.md Fase 1)
-- [x] Sentry error tracking (código instalado commit `ba107e5`, pendiente DSN en Vercel — Fase 2 monitoring)
+- [x] Sentry error tracking — DSN activo en Vercel (Production/Preview/Development). Smoke test end-to-end 2026-04-22 capturando eventos `Error` automáticos + `Sentry.captureMessage('scraper_anomaly', ...)` del Agente 1. Proyecto Sentry: `javascript-nextjs`. Cierra Fase 2 monitoring.
 
 #### Nivel auditoría periódica
 

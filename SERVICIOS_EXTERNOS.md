@@ -24,7 +24,7 @@ impact.com           $0        $0
 cj affiliate         $0        $0
 payoneer             $0        $0       (fees por transacción, no mensual)
 betterstack          $0        $0
-sentry               $0        $0       (errors + scraper_anomaly tag desde 2026-04-22; pendiente DSN)
+sentry               $0        $0       (errors + scraper_anomaly tag; DSN activo desde 2026-04-22, proyecto: javascript-nextjs)
 proxy scrapers       $0        $0       (fallback táctico $3-30 si un scraper bloquea post-lanzamiento)
 ─────────────────────────────────────────
 TOTAL / mes          $1        $46

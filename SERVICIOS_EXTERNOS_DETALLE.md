@@ -28,7 +28,7 @@ Referencia completa de cada servicio externo del proyecto con env vars, dashboar
 | 14 | CJ Affiliate (afiliados) | Free | $0 | 🔴 Bloqueado — requiere Payoneer primero |
 | 15 | Payoneer (cobros) | Free | $0 | 🟡 Pendiente de abrir |
 | 16 | BetterStack (uptime + status page) | Free | $0 | 🟡 Pendiente signup (Fase 1 monitoring) |
-| 17 | Sentry (error tracking + scraper anomalies) | Developer (Free) | $0 | 🟡 Código instalado + integrado con Agente 1 (tag `scraper_anomaly`) — pendiente DSN en Vercel |
+| 17 | Sentry (error tracking + scraper anomalies) | Developer (Free) | $0 | ✅ Operativo — DSN activo, smoke test 2026-04-22 OK, tag `scraper_anomaly` del Agente 1 capturando |
 | **TOTAL GASTO MENSUAL ACTUAL** | | | **~$1.25** | |
 
 **Leyenda:**
@@ -507,7 +507,7 @@ Cualquiera de estos 3 dispara el upgrade:
 | **Dashboard** | https://sentry.io |
 | **Costo mensual** | $0 |
 | **SDK** | `@sentry/nextjs ^10.49.0` (instalado 2026-04-20, commit `ba107e5`) |
-| **Estado** | 🟡 Código instalado + configurado — **pendiente signup + DSN en Vercel** (bloquea captura en producción; sin DSN los eventos se descartan silenciosamente) |
+| **Estado** | ✅ Operativo — DSN activo en Vercel (Production/Preview/Development). Smoke test pasó 2026-04-22 con evento `Error` + evento `scraper_anomaly` capturados end-to-end. Proyecto Sentry: `javascript-nextjs` |
 
 ### Variables de entorno (gestionadas en Vercel → Project Settings → Environment Variables)
 
@@ -601,13 +601,13 @@ Esto permite commitear todo el código de instrumentación ahora y activar el se
 
 1. **Signup** en https://sentry.io con el email del founder. Plan Developer (Free).
 2. Crear org `preenvios` (o similar — slug único).
-3. Crear proyecto **Next.js** → nombre `preenvios-web` (o similar). Sentry ofrece el DSN al finalizar.
+3. Crear proyecto **Next.js** — el wizard lo nombra por default `javascript-nextjs` (así quedó en PreEnvios, 2026-04-22). Sentry ofrece el DSN al finalizar.
 4. Copiar el DSN (formato `https://abc123@o456.ingest.sentry.io/789`).
 5. En Vercel → Project Settings → Environment Variables, agregar **para Production, Preview, Development**:
    - `SENTRY_DSN=<DSN>`
    - `NEXT_PUBLIC_SENTRY_DSN=<DSN>` (mismo valor)
    - `SENTRY_ORG=preenvios` (o el slug real)
-   - `SENTRY_PROJECT=preenvios-web` (o el slug real)
+   - `SENTRY_PROJECT=javascript-nextjs` (valor real 2026-04-22; si renombrás el proyecto en sentry.io → Settings, actualizar acá y regenerar DSN)
 6. (Opcional) Generar `SENTRY_AUTH_TOKEN` en sentry.io → User Auth Tokens → scope `project:releases`. Agregarlo en Vercel para habilitar source maps.
 7. **Redeploy** (Vercel → Deployments → Redeploy latest) para que las env vars lleguen al runtime.
 8. **Smoke test:** visitar `https://preenvios.vercel.app/api/sentry-test` (si se crea endpoint de test) o forzar un error en DevTools. Verificar que aparece en el dashboard Sentry en <30 segundos.
@@ -646,7 +646,7 @@ Esto permite commitear todo el código de instrumentación ahora y activar el se
 9. [ ] Re-aplicar a Impact.com después de 30-60 días de tráfico demostrable
 10. [ ] Aplicar a FlexOffers — ya aplicado, seguimiento de aprobación
 11. [ ] Signup BetterStack + crear 5 monitores + status page `status.preenvios.com` (Fase 1 monitoring — ver monitoring.md)
-12. [ ] Signup Sentry + agregar `SENTRY_DSN`/`NEXT_PUBLIC_SENTRY_DSN` en Vercel (Fase 2 monitoring — cierra H-09.1 auditoría)
+12. [x] Signup Sentry + agregar las 5 env vars en Vercel + smoke test end-to-end (completado 2026-04-22 — cierra H-09.1 auditoría y Fase 2 monitoring)
 
 ---
 
