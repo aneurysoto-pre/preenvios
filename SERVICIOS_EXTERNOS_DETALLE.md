@@ -28,7 +28,7 @@ Referencia completa de cada servicio externo del proyecto con env vars, dashboar
 | 14 | CJ Affiliate (afiliados) | Free | $0 | 🔴 Bloqueado — requiere Payoneer primero |
 | 15 | Payoneer (cobros) | Free | $0 | 🟡 Pendiente de abrir |
 | 16 | BetterStack (uptime + status page) | Free | $0 | 🟡 Pendiente signup (Fase 1 monitoring) |
-| 17 | Sentry (error tracking) | Developer (Free) | $0 | 🟡 Código instalado — pendiente DSN (Fase 2 monitoring) |
+| 17 | Sentry (error tracking + scraper anomalies) | Developer (Free) | $0 | 🟡 Código instalado + integrado con Agente 1 (tag `scraper_anomaly`) — pendiente DSN en Vercel |
 | **TOTAL GASTO MENSUAL ACTUAL** | | | **~$1.25** | |
 
 **Leyenda:**
@@ -498,45 +498,138 @@ Cualquiera de estos 3 dispara el upgrade:
 
 ---
 
-## 17. Sentry (error tracking)
+## 17. Sentry (error tracking + scraper anomaly observability)
 
 | Campo | Valor |
 |-------|-------|
-| **Propósito** | Captura excepciones de aplicación (server + client + edge) con stack traces, agrupación automática, context (user, URL, release). Complementa BetterStack detectando errores con HTTP 200 en apariencia correcto |
+| **Propósito** | Captura excepciones de aplicación (server + client + edge runtime) con stack traces, agrupación automática, breadcrumbs, context (user, URL, release, commit). Desde 2026-04-22 también captura eventos `scraper_anomaly` del Agente 1 (Fase 7 defense-in-depth). Complementa BetterStack: BetterStack detecta "el sitio se cayó"; Sentry detecta "el sitio responde 200 pero un error silencioso está corrompiendo data o la UX". |
 | **Plan** | Developer (Free) |
 | **Dashboard** | https://sentry.io |
 | **Costo mensual** | $0 |
-| **Estado** | 🟡 Código instalado + configurado 2026-04-20 — pendiente signup + DSN en Vercel (Fase 2 monitoring) |
+| **SDK** | `@sentry/nextjs ^10.49.0` (instalado 2026-04-20, commit `ba107e5`) |
+| **Estado** | 🟡 Código instalado + configurado — **pendiente signup + DSN en Vercel** (bloquea captura en producción; sin DSN los eventos se descartan silenciosamente) |
 
-### Variables de entorno
-- `NEXT_PUBLIC_SENTRY_DSN` — DSN expuesto al cliente (OK, es público por diseño como el GA Measurement ID)
-- `SENTRY_DSN` — mismo valor, para server-side init
-- `SENTRY_ORG` — slug de la org Sentry
-- `SENTRY_PROJECT` — slug del proyecto Sentry
-- `SENTRY_AUTH_TOKEN` — opcional, habilita upload de source maps al build
+### Variables de entorno (gestionadas en Vercel → Project Settings → Environment Variables)
+
+| Env var | Expuesta cliente | Obligatoria | Propósito |
+|---------|------------------|-------------|-----------|
+| `SENTRY_DSN` | NO | Sí (server) | DSN server-side (Node runtime de Next.js). Si está vacía, SDK no-op. |
+| `NEXT_PUBLIC_SENTRY_DSN` | SÍ | Sí (client) | Mismo DSN para el bundle client. OK exponerlo — es público por diseño como el GA Measurement ID. Sin él, errores en el browser no se reportan. |
+| `SENTRY_ORG` | NO | Opcional | Slug de la org Sentry — habilita el Sentry Webpack plugin para upload de source maps en el build. Sin esto, los errores muestran código minificado. |
+| `SENTRY_PROJECT` | NO | Opcional | Slug del proyecto — junto con `SENTRY_ORG` para source maps. |
+| `SENTRY_AUTH_TOKEN` | NO | Opcional | Token con scope `project:releases` para que el CI suba source maps. Generarlo en sentry.io → User Auth Tokens. |
+
+**Setear en los 3 entornos de Vercel:** Production, Preview, Development. Los valores son los mismos (Sentry diferencia por el tag `environment` que el SDK setea automáticamente desde `VERCEL_ENV || NODE_ENV`).
+
+### Archivos de configuración en el proyecto
+
+| Archivo | Runtime | Qué configura |
+|---------|---------|---------------|
+| `sentry.server.config.ts` | Node (API routes, server components, middleware en Node runtime) | `Sentry.init({ dsn, tracesSampleRate: 0.1 })`. `enabled: !!dsn` para ser no-op sin DSN. |
+| `sentry.edge.config.ts` | Edge (middleware en edge runtime, si aplica) | Similar al server pero para el runtime edge de Next.js. |
+| `instrumentation.ts` | Next 16 | Re-exporta `register()` de `@sentry/nextjs` — Next.js lo invoca al boot para inicializar el SDK en el runtime correcto. |
+| `instrumentation-client.ts` | Browser | Inicialización client-side (replays, breadcrumbs DOM, Next Router integration). |
+| `next.config.ts` | Build | `withSentryConfig()` wrapping del export — tunneling de eventos para bypass ad-blockers + upload de source maps en CI. |
+
+**Regla:** cualquier cambio en las opciones de `Sentry.init()` (sample rates, integrations, beforeSend filters) se hace en los 2-3 archivos simultáneamente para que server y client se comporten igual.
+
+### Integraciones en código del proyecto (dónde Sentry es invocado explícitamente)
+
+| Archivo | Llamada | Tag / context | Cuándo dispara |
+|---------|---------|---------------|----------------|
+| `lib/scrapers/validator.ts` | `Sentry.captureMessage('scraper_anomaly', { level: 'warning', tags: { scraper_anomaly: 'true', operador, corredor }, extra: { price, issues } })` | `scraper_anomaly` | Cada fila rechazada por `validatePrice()`. Fase 7 Agente 1. |
+| Errores automáticos en API routes | Captura default del SDK | `transaction` (ruta) + `request` (URL/método) | Cualquier excepción no-handleada en un endpoint. |
+| Errores automáticos en componentes React | Next.js Error Boundary → Sentry | `transaction` (página) | Render errors del cliente. |
+| Unhandled promise rejections | Captura default del SDK | — | Promesas rechazadas sin `.catch()`. |
+
+**Tag strategy para filtrar en el dashboard:**
+
+- `scraper_anomaly=true` — eventos del Agente 1 (Fase 7). Filtra con `tag:scraper_anomaly=true`.
+- `operador=<slug>` — filtra anomalías por remesadora (ej. `tag:operador=remitly`).
+- `corredor=<slug>` — filtra anomalías por país (ej. `tag:corredor=dominican_republic`).
+- `environment=production|preview|development` — auto-seteado desde `VERCEL_ENV`.
 
 ### Límites del plan Developer Free (relevantes)
-- **5,000 eventos/mes** (errors + transactions combinados)
+
+- **5,000 eventos/mes** combinados (errors + captureMessage + transactions)
 - **1 usuario** en la org
-- **50 Session Replays/mes**
-- **30 días** de retención de datos
-- 1 proyecto
+- **50 Session Replays/mes** — útil para reproducir bugs de UX
+- **30 días** de retención
+- **1 proyecto**
+- **Alerts ilimitadas por email**
+- **Source maps** incluidos (requieren `SENTRY_AUTH_TOKEN`)
 
 ### Uso estimado actual vs límite
-- Pre-lanzamiento sin DSN activo: 0 eventos
-- Estimación post-activación con tráfico moderado: < 500 eventos/mes (< 10% del plan)
+
+| Momento | Eventos/mes estimados | % del plan |
+|---------|----------------------|------------|
+| Pre-lanzamiento sin DSN activo | 0 | 0% |
+| Post-activación, tráfico moderado (2-5K visitas/día) | 200-500 | 4-10% |
+| Post-activación con scrapers estables | +30-60 (anomalías esporádicas) | +1% |
+| Post-activación con scraper roto temporalmente | +100-300 en 1 día (burst) | spike dentro del plan |
+
+Margen holgado para absorber picos. Si un scraper falla consistentemente genera ~3-10 anomalías por corrida de `/api/scrape`; aunque el cron corre cada 15 min, el Agente 1 marca stale a los 3+ consecutivos → auto-limita el ruido de ese operador.
 
 ### Umbral para upgrade a Team ($26/mes)
-- > 5K eventos/mes (~alta tasa de errores en producción, o >100 transactions/día)
-- Más usuarios en la org (equipo)
-- Más proyectos (ej. mobile app futura en Fase 5)
-- Retención > 30 días para análisis histórico
+
+- **>5K eventos/mes sostenidos** (no picos puntuales) — síntoma de tasa alta de errores o de monitoreo excesivo.
+- **Más de 1 persona** necesita acceso (equipo futuro, ver `EQUIPO_Y_ESCALA.md`).
+- **Más proyectos** — cuando se agregue app mobile Fase 5 o un microservicio separado.
+- **Retención >30 días** para análisis de trends históricos.
+
+### Alertas recomendadas (configurar en sentry.io → Alerts)
+
+Cuando se active el DSN, crear estas 4 rules (todas a `contact@preenvios.com` o a un webhook de Slack si se setea):
+
+1. **Cualquier error nuevo en producción** — trigger: `event.environment:production AND is_first_seen:true`. Avisa cuando aparece un error que nunca se había visto. Nivel: inmediato.
+2. **Ráfaga de errores** — trigger: `event.environment:production AND event.count > 10 in 5m`. Indica regresión o caída parcial. Nivel: inmediato.
+3. **Scraper anomaly burst** — trigger: `event.tags.scraper_anomaly:true AND event.count > 20 in 1h`. Indica que un scraper está devolviendo data basura masivamente (Agente 1 ya marcó stale; la alerta es para investigar). Nivel: 1h delay, digest.
+4. **Cron `/api/scrape` falló** — trigger: `transaction:"/api/scrape" AND level:error`. El cron se rompió, no va a haber actualizaciones hasta arreglar. Nivel: inmediato.
 
 ### Comportamiento sin DSN
-El SDK está configurado con `enabled: !!process.env.SENTRY_DSN` — si no hay DSN, queda en no-op sin errores. El build de Next.js funciona igual. Esto permite commitear el código ahora y activar el servicio cuando el user complete el signup.
 
-### Referencia
-- Setup técnico completo en [AUDITORIA_DE_SEGURIDAD/monitoring.md § Fase 2](AUDITORIA_DE_SEGURIDAD/monitoring.md)
+El SDK usa `enabled: !!process.env.SENTRY_DSN` en los 3 configs — si no hay DSN:
+
+- `Sentry.init()` es no-op
+- `Sentry.captureException()` y `Sentry.captureMessage()` retornan sin enviar nada
+- El build de Next.js funciona normalmente (no requiere DSN para compilar)
+- Los eventos se loguean a `console.error` / `console.warn` en el server y `console.*` en el browser — visibles en Vercel logs y DevTools
+
+Esto permite commitear todo el código de instrumentación ahora y activar el servicio cuando el founder complete el signup. No hay riesgo de "crashear por Sentry mal configurado".
+
+### Pasos de activación (orden exacto cuando toque)
+
+1. **Signup** en https://sentry.io con el email del founder. Plan Developer (Free).
+2. Crear org `preenvios` (o similar — slug único).
+3. Crear proyecto **Next.js** → nombre `preenvios-web` (o similar). Sentry ofrece el DSN al finalizar.
+4. Copiar el DSN (formato `https://abc123@o456.ingest.sentry.io/789`).
+5. En Vercel → Project Settings → Environment Variables, agregar **para Production, Preview, Development**:
+   - `SENTRY_DSN=<DSN>`
+   - `NEXT_PUBLIC_SENTRY_DSN=<DSN>` (mismo valor)
+   - `SENTRY_ORG=preenvios` (o el slug real)
+   - `SENTRY_PROJECT=preenvios-web` (o el slug real)
+6. (Opcional) Generar `SENTRY_AUTH_TOKEN` en sentry.io → User Auth Tokens → scope `project:releases`. Agregarlo en Vercel para habilitar source maps.
+7. **Redeploy** (Vercel → Deployments → Redeploy latest) para que las env vars lleguen al runtime.
+8. **Smoke test:** visitar `https://preenvios.vercel.app/api/sentry-test` (si se crea endpoint de test) o forzar un error en DevTools. Verificar que aparece en el dashboard Sentry en <30 segundos.
+9. **Configurar alertas** (ver sección "Alertas recomendadas" arriba).
+10. Marcar completado en `CONTEXTO_FINAL.md` Fase 2 monitoring + `CHECKLIST_PRE_LANZAMIENTO.md § 11.2`.
+
+### Troubleshooting rápido
+
+| Síntoma | Causa probable | Fix |
+|---------|----------------|-----|
+| Errors no aparecen en dashboard | DSN faltante o incorrecto en Vercel | Verificar las 2 env vars (`SENTRY_DSN` + `NEXT_PUBLIC_SENTRY_DSN`) coinciden y apuntan al proyecto correcto. Redeploy. |
+| Source maps ofuscados (no se ve el código fuente en el stack trace) | `SENTRY_AUTH_TOKEN` faltante o sin permisos | Generar token con scope `project:releases` y agregar a Vercel env vars. Redeploy. |
+| Eventos cliente aparecen, server no | `SENTRY_DSN` setea solo en una env (ej. Production pero no Preview) | Setear en los 3 entornos. |
+| Spike > 5K eventos/día | Loop infinito que captura + un ad-blocker bloquea tunneling | Revisar `beforeSend` en `sentry.client.config.ts` (si existe) para filtrar patrones repetidos. Considerar upgrade. |
+| `Sentry.captureMessage` no dispara desde `validator.ts` | SDK no inicializó por DSN faltante | Ya es fail-open intencionalmente — verificar env vars como en primer síntoma. |
+
+### Referencia interna
+
+- Setup técnico inicial en [AUDITORIA_DE_SEGURIDAD/monitoring.md § Fase 2](AUDITORIA_DE_SEGURIDAD/monitoring.md)
+- Integración con Agente 1 en [LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md](LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md) § "Decisiones de diseño" punto 5
+- Plan Fase 7 defense-in-depth en [CONTEXTO_FINAL.md § Fase 7](CONTEXTO_FINAL.md)
+- Ítem pendiente en el checklist: [CHECKLIST_PRE_LANZAMIENTO.md § 11.2](CHECKLIST_PRE_LANZAMIENTO.md)
 
 ---
 
