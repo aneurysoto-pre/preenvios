@@ -20,24 +20,18 @@ const CORREDOR_MAP: Record<string, string> = {
   svc: 'el_salvador',
   cop: 'colombia',
   mxn: 'mexico',
-  nio: 'nicaragua',
-  htg: 'haiti',
   rd: 'dominican_republic',
   hn: 'honduras',
   gt: 'guatemala',
   sv: 'el_salvador',
   co: 'colombia',
   mx: 'mexico',
-  ni: 'nicaragua',
-  ht: 'haiti',
   dominicana: 'dominican_republic',
   honduras: 'honduras',
   guatemala: 'guatemala',
   salvador: 'el_salvador',
   colombia: 'colombia',
   mexico: 'mexico',
-  nicaragua: 'nicaragua',
-  haiti: 'haiti',
 }
 
 const CORREDOR_NAMES: Record<string, Record<string, string>> = {
@@ -47,8 +41,6 @@ const CORREDOR_NAMES: Record<string, Record<string, string>> = {
   el_salvador: { es: 'El Salvador', en: 'El Salvador' },
   colombia: { es: 'Colombia', en: 'Colombia' },
   mexico: { es: 'México', en: 'Mexico' },
-  nicaragua: { es: 'Nicaragua', en: 'Nicaragua' },
-  haiti: { es: 'Haití', en: 'Haiti' },
 }
 
 function detectLanguage(text: string): 'es' | 'en' {
