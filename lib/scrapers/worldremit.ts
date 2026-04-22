@@ -11,8 +11,6 @@ const CORREDORES = [
   { id: 'el_salvador',        moneda: 'USD', country: 'SV', link: 'https://www.worldremit.com' },
   { id: 'colombia',           moneda: 'COP', country: 'CO', link: 'https://www.worldremit.com/en/send-money/united-states/colombia' },
   { id: 'mexico',             moneda: 'MXN', country: 'MX', link: 'https://www.worldremit.com/en/send-money/united-states/mexico' },
-  { id: 'nicaragua',          moneda: 'NIO', country: 'NI', link: 'https://www.worldremit.com/en/send-money/united-states/nicaragua' },
-  { id: 'haiti',              moneda: 'HTG', country: 'HT', link: 'https://www.worldremit.com/en/send-money/united-states/haiti' },
 ]
 
 export async function scrapeWorldRemit(): Promise<{ saved: number; errors: string[] }> {

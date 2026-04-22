@@ -9,8 +9,6 @@ export const CORREDORES_DATA = [
   { id: 'el_salvador',        slug: 'usd-svc', nombre: 'El Salvador',      nombre_en: 'El Salvador',        moneda: 'USD', bandera: '🇸🇻', codigo: 'sv' },
   { id: 'colombia',           slug: 'usd-cop', nombre: 'Colombia',         nombre_en: 'Colombia',           moneda: 'COP', bandera: '🇨🇴', codigo: 'co' },
   { id: 'mexico',             slug: 'usd-mxn', nombre: 'México',           nombre_en: 'Mexico',             moneda: 'MXN', bandera: '🇲🇽', codigo: 'mx' },
-  { id: 'nicaragua',          slug: 'usd-nio', nombre: 'Nicaragua',        nombre_en: 'Nicaragua',          moneda: 'NIO', bandera: '🇳🇮', codigo: 'ni' },
-  { id: 'haiti',              slug: 'usd-htg', nombre: 'Haití',            nombre_en: 'Haiti',              moneda: 'HTG', bandera: '🇭🇹', codigo: 'ht' },
 ]
 
 export const OPERADORES_DATA = [

@@ -11,8 +11,6 @@ const CORREDORES = [
   { id: 'el_salvador',        moneda: 'USD', country: 'SLV', link: '' },
   { id: 'colombia',           moneda: 'COP', country: 'COL', link: '' },
   { id: 'mexico',             moneda: 'MXN', country: 'MEX', link: '' },
-  { id: 'nicaragua',          moneda: 'NIO', country: 'NIC', link: '' },
-  { id: 'haiti',              moneda: 'HTG', country: 'HTI', link: '' },
 ]
 
 export async function scrapeMoneyGram(): Promise<{ saved: number; errors: string[] }> {

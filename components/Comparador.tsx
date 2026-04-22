@@ -12,11 +12,9 @@ import { CountryPicker, type Corredor } from '@/components/comparador/country-pi
 // DATOS ESTÁTICOS
 // ═══════════════════════════════════════
 // 6 corredores activos expuestos en el buscador del hero: Honduras, RD,
-// Guatemala, El Salvador, Colombia y México. Nicaragua y Haití existen en
-// Supabase (seed-new-corridors.mjs) pero no se muestran en UI hasta tener
-// scraper validado + pagina editorial. Orden refleja la prioridad de producto
-// (Honduras = MVP #1). PAISES_MVP en lib/paises.ts mantiene el mismo orden
-// por consistencia. Si se reordena aca, reordenar tambien alla.
+// Guatemala, El Salvador, Colombia y México. Orden refleja la prioridad de
+// producto (Honduras = MVP #1). PAISES_MVP en lib/paises.ts mantiene el
+// mismo orden por consistencia. Si se reordena aca, reordenar tambien alla.
 const CORREDORES: Corredor[] = [
   { id: 'honduras',           nombre: 'Honduras',        nombre_en: 'Honduras',           moneda: 'HNL', simbolo: 'L',    codigo_pais: 'hn', aliases: ['hn','hnl','hon','hondur','catracho'] },
   { id: 'dominican_republic', nombre: 'Rep. Dominicana', nombre_en: 'Dominican Republic', moneda: 'DOP', simbolo: 'RD$', codigo_pais: 'do', aliases: ['do','dop','dom','dominicana','dominican','rd','republica'] },

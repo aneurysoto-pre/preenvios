@@ -11,8 +11,6 @@ const CORREDORES = [
   { id: 'el_salvador',        moneda: 'USD', country: 'SV', link: '' },
   { id: 'colombia',           moneda: 'COP', country: 'CO', link: '' },
   { id: 'mexico',             moneda: 'MXN', country: 'MX', link: '' },
-  { id: 'nicaragua',          moneda: 'NIO', country: 'NI', link: '' },
-  { id: 'haiti',              moneda: 'HTG', country: 'HT', link: '' },
 ]
 
 export async function scrapeWesternUnion(): Promise<{ saved: number; errors: string[] }> {

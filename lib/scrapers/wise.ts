@@ -12,8 +12,6 @@ const CORREDORES = [
   { id: 'el_salvador',        moneda: 'USD', link: 'https://wise.com/send' },
   { id: 'colombia',           moneda: 'COP', link: 'https://wise.com/us/send-money/send-money-to-colombia' },
   { id: 'mexico',             moneda: 'MXN', link: 'https://wise.com/us/send-money/send-money-to-mexico' },
-  { id: 'nicaragua',          moneda: 'NIO', link: 'https://wise.com/us/send-money/send-money-to-nicaragua' },
-  { id: 'haiti',              moneda: 'HTG', link: 'https://wise.com/us/send-money/send-money-to-haiti' },
 ]
 
 export async function scrapeWise(): Promise<{ saved: number; errors: string[] }> {

@@ -12,8 +12,6 @@ const CORREDORES = [
   { id: 'el_salvador',        moneda: 'USD', country: 'SLV', link: 'https://www.remitly.com' },
   { id: 'colombia',           moneda: 'COP', country: 'COL', link: 'https://www.remitly.com/us/en/colombia' },
   { id: 'mexico',             moneda: 'MXN', country: 'MEX', link: 'https://www.remitly.com/us/en/mexico' },
-  { id: 'nicaragua',          moneda: 'NIO', country: 'NIC', link: 'https://www.remitly.com/us/en/nicaragua' },
-  { id: 'haiti',              moneda: 'HTG', country: 'HTI', link: 'https://www.remitly.com/us/en/haiti' },
 ]
 
 export async function scrapeRemitly(): Promise<{ saved: number; errors: string[] }> {

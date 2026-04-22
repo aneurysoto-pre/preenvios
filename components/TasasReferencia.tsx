@@ -38,8 +38,6 @@ const COUNTRY_NAMES: Record<string, Record<string, string>> = {
   sv: { es: 'El Salvador', en: 'El Salvador' },
   co: { es: 'Colombia', en: 'Colombia' },
   mx: { es: 'México', en: 'Mexico' },
-  ni: { es: 'Nicaragua', en: 'Nicaragua' },
-  ht: { es: 'Haití', en: 'Haiti' },
 }
 
 /** @param filterCodigoPais — if set, show only this country's rate card (e.g. 'gt') */
@@ -57,8 +55,8 @@ export default function TasasReferencia({ filterCodigoPais }: { filterCodigoPais
 
   // If filtering by country, show only that one; otherwise mostrar los 6
   // corredores activos (HN, DR, GT, SV, CO, MX) en el orden definido en
-  // PAISES_MVP. La API puede devolver paises adicionales (Nicaragua, Haiti)
-  // que todavia no estan en UI — se filtran aqui.
+  // PAISES_MVP. La API puede devolver paises adicionales que todavia no
+  // estan en UI — se filtran aqui.
   const visibles = filterCodigoPais
     ? tasas.filter(t => t.codigo_pais === filterCodigoPais)
     : PAISES_MVP.map(p => tasas.find(t => t.codigo_pais === p.codigoPais)).filter(Boolean) as TasaBC[]

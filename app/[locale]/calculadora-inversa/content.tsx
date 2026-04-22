@@ -5,8 +5,7 @@ import { useLocale } from 'next-intl'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
 
-// 6 corredores activos (HN, DR, GT, SV, CO, MX). Nicaragua y Haiti existen en
-// Supabase (precios seed) pero NO se exponen hasta tener scraper validado.
+// 6 corredores activos (HN, DR, GT, SV, CO, MX).
 // codigo_pais: ISO 3166-1 alpha-2 para flagcdn.com (PNG flags, funcionan en Windows
 // donde los emoji flags 🇩🇴🇭🇳🇬🇹🇸🇻🇨🇴🇲🇽 renderizan como las letras "do","hn","gt"...).
 const CORREDORES = [

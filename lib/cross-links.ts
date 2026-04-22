@@ -85,8 +85,6 @@ export function getTasaSlug(corredorId: string): string | null {
     el_salvador: 'usd-svc',
     colombia: 'usd-cop',
     mexico: 'usd-mxn',
-    nicaragua: 'usd-nio',
-    haiti: 'usd-htg',
   }
   return map[corredorId] || null
 }
