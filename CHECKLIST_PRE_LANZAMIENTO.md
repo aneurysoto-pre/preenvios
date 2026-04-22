@@ -238,13 +238,13 @@ Inventario de eventos custom (actualizado 2026-04-22 — ver `lib/tracking.ts` +
 
 - [x] Script de GA4 carga sin errores de consola (next/script afterInteractive) — confirmado en producción
 - [x] Evento `click_operador` se dispara al hacer clic en "Enviar ahora" (validado con screenshot del dashboard, 2026-04-21)
-- [ ] Evento `inicio_uso` se dispara al empezar a escribir monto
-- [ ] Evento `comparar_click` se dispara al hacer clic en Comparar
-- [ ] Evento `cambio_corredor` se dispara al cambiar país
-- [ ] Evento `cambio_idioma` se dispara al cambiar EN/ES
-- [ ] Evento `contacto_enviado` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de contacto
-- [ ] Evento `suscripcion_alertas` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de alertas
-- [ ] GA4 Real-Time muestra actividad cuando navegas el sitio — ejecutar las 8 acciones de `TROUBLESHOOTING/28_ga4_smoke_test.md`
+- [x] Evento `inicio_uso` se dispara al empezar a escribir monto (validado 2026-04-22)
+- [x] Evento `comparar_click` se dispara al hacer clic en Comparar (validado 2026-04-22)
+- [x] Evento `cambio_corredor` se dispara al cambiar país (validado 2026-04-22)
+- [x] Evento `cambio_idioma` se dispara al cambiar EN/ES (validado 2026-04-22)
+- [x] Evento `contacto_enviado` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de contacto (validado 2026-04-22)
+- [x] Evento `suscripcion_alertas` (NUEVO 2026-04-22 commit `6bdce58`) se dispara al submit exitoso del form de alertas (validado 2026-04-22)
+- [x] GA4 Real-Time muestra actividad cuando navegas el sitio — smoke test de `TROUBLESHOOTING/28_ga4_smoke_test.md` ejecutado y los 8 eventos aparecen en el widget "Event count by Event name" (validado 2026-04-22 por founder)
 
 **Removido del checklist (evento obsoleto):** `cambio_metodo_entrega` nunca se implementó en producto porque todos los scrapers producen `metodo_entrega: 'bank'` — no hay selector en UI, no hay evento.
 
