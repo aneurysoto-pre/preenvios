@@ -98,6 +98,7 @@ export default function CalculadoraInversaContent() {
               <span className="text-lg font-bold text-g500">{corredorData.simbolo}</span>
               <input
                 type="number"
+                inputMode="decimal"
                 value={monto}
                 onChange={e => setMonto(e.target.value)}
                 placeholder="0"
