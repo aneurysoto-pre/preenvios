@@ -1,92 +1,109 @@
-# Proceso 11 — Nuevos corredores (Fase 4.2 + Fase 8)
+# Proceso 11 — Nuevos corredores (guía genérica de incorporación)
 
 ## Descripción
 
-Expansión del catálogo en dos etapas:
+Guía técnica para agregar un corredor nuevo al catálogo MVP de PreEnvios. El proceso se ejecuta como unidad lógica end-to-end: cada paso debe completarse antes de exponer el corredor en la UI pública. La decisión de qué país incorporar se toma fuera de este documento — ver `CONTEXTO_FINAL.md` sección "Integraciones futuras / alcance post-MVP".
 
-1. **2026-04-16 (Fase 4.2)** — De 4 a 8 corredores en Supabase. Se agregaron Colombia (COP), México (MXN), Nicaragua (NIO) y Haití (HTG) con 7 operadores cada uno en tabla `precios`. La UI pública se mantuvo en los 4 MVP (HN, RD, GT, SV) porque no había data validada ni páginas editoriales específicas.
+**Estado actual (2026-04-22):** MVP vigente con 6 corredores — Honduras, República Dominicana, Guatemala, El Salvador, Colombia, México.
 
-2. **2026-04-21 (Fase 8)** — De 4 a 6 corredores en la UI pública. Colombia y México pasan del estado "en DB pero oculto" a "visible en todas las superficies" (Comparador, calculadora inversa, Nav, TasasReferencia, páginas editoriales `/es/mexico` y `/es/colombia`). Nicaragua y Haití siguen ocultos en UI hasta tener scraper validado + página editorial propia.
+---
 
 ## Pasos del flujo
 
 ### 1. Datos en Supabase
-- 4 registros en tabla `corredores` (CO, MX, NI, HT) con moneda, símbolo, bandera, código país, tasa banco central
-- 28 registros en tabla `precios` (4 corredores × 7 operadores) con tasas estimadas, fees, velocidades y links
-- Total en Supabase: 8 corredores, 56 precios
-- Migración idempotente `supabase/migrations/006_mexico_colombia_mvp.sql` reafirma CO/MX en caso de ejecución desde cero o de regresión
 
-### 2. Componentes actualizados
+- Insertar 1 registro en tabla `corredores` con: `id` (slug), `nombre`, `nombre_en`, `moneda` (código ISO 4217), `simbolo`, `bandera` (emoji), `codigo_pais` (ISO alpha-2 lowercase), `tasa_banco_central`, `prioridad`, `activo=true`
+- Insertar 1 registro en tabla `tasas_bancos_centrales` con: `id` (mismo slug del corredor), `codigo_pais`, `moneda`, `nombre_banco`, `nombre_banco_en`, `siglas`, `tasa`, `actualizado_en`
+- Insertar 7 registros en tabla `precios` (1 por operador MVP) con: `operador`, `corredor` (slug), `metodo_entrega='bank'`, `tasa` estimada inicial (se reemplaza por scraper), `fee`, `velocidad`, `nombre_operador`, `rating`, `reviews`, `afiliado`, `link`, `confiabilidad`, `metodos_disponibles`
+- Crear migración idempotente en `supabase/migrations/NNN_<slug>_corredor.sql` (CREATE/UPSERT con `IF NOT EXISTS` + `ON CONFLICT DO UPDATE`)
 
-| Componente | Cambio |
-|------------|--------|
-| `Comparador.tsx` | Array CORREDORES = 6 visibles en UI (HN, RD, GT, SV, CO, MX). NI/HT siguen en `/api/precios` pero sin entry en UI |
-| Calculadora inversa | 6 corredores (coinciden con Comparador) |
-| 7 scrapers | Cada uno incluye los 8 corredores con country codes y links — lista no se recorta |
-| WhatsApp bot | CORREDOR_MAP tiene los 8 con aliases (paisa, chilango, nica, ayiti, etc.) |
-| `lib/paises.ts` | `PAISES_MVP` = 6 entries. Propaga a Nav, TasasReferencia, sitemap, páginas editoriales dinámicas |
-| `components/TasasReferencia.tsx` | Grid `lg:grid-cols-3` (2 filas de 3) para las 6 tarjetas. BR color gold oscuro para contraste |
+### 2. Componentes que se actualizan
 
-### 3. Estado por corredor
+| Archivo | Cambio |
+|---------|--------|
+| `lib/paises.ts` | Agregar entry al array `PAISES_MVP` con `corredorId`, `nombre`, `nombreEn`, `codigoPais`, `slugEs`, `slugEn`, `moneda` |
+| `lib/corredores.ts` | Agregar entry al array `CORREDORES_DATA` (slug, nombre, nombreEn, moneda, bandera, codigo) |
+| `lib/cross-links.ts` | Agregar entry al map `getTasaSlug` para que `/tasa/usd-xxx` resuelva correctamente |
+| `components/Comparador.tsx` | Agregar entry al array `CORREDORES` con `id`, `nombre`, `nombreEn`, `moneda`, `simbolo`, `codigoPais`, `aliases` (2-5 sinónimos populares del país para el buscador) |
+| `app/[locale]/calculadora-inversa/content.tsx` | Agregar entry con los mismos campos que Comparador |
+| `components/TasasReferencia.tsx` | Agregar entry al map `COUNTRY_NAMES` (key = codigoPais, values es/en) |
+| 7 scrapers en `lib/scrapers/*.ts` | Agregar entry al array `CORREDORES` interno con `id`, `moneda`, `country`, `link` |
+| `app/api/whatsapp/webhook/route.ts` | Agregar entries al `CORREDOR_MAP` (código moneda + código país + nombre) y al `CORREDOR_NAMES` |
+| `messages/es.json` + `messages/en.json` | Actualizar FAQ si corresponde (sección "faq.*") |
 
-| Corredor | Moneda | Prioridad | En UI pública | Notas |
-|----------|--------|-----------|---------------|-------|
-| 🇭🇳 Honduras | HNL | 1 | ✅ Sí | MVP original, target #1 de marketing mes 1 |
-| 🇩🇴 Rep. Dominicana | DOP | 2 | ✅ Sí | MVP original |
-| 🇬🇹 Guatemala | GTQ | 3 | ✅ Sí | MVP original |
-| 🇸🇻 El Salvador | USD | 4 | ✅ Sí | MVP original, dolarizado |
-| 🇨🇴 Colombia | COP | 5 | ✅ Sí (desde 2026-04-21) | Fase 8 — pre-launch |
-| 🇲🇽 México | MXN | 6 | ✅ Sí (desde 2026-04-21) | Fase 8 — pre-launch |
-| 🇳🇮 Nicaragua | NIO | 7 | ❌ Oculto | Data en DB, sin scraper validado ni editorial |
-| 🇭🇹 Haití | HTG | 8 | ❌ Oculto | Data en DB, sin scraper validado ni editorial |
+### 3. Validador de ingress (Agente 1 — Fase 7)
 
-### 4. Tasas iniciales
-Las tasas de los 4 corredores nuevos son estimaciones basadas en Wise mid-market rate al momento del seed. Se reemplazan automáticamente cuando los scrapers estén activos con datos en tiempo real.
+Antes de que el scraper escriba en la tabla `precios`, el validador debe aceptar el corredor nuevo:
 
-### 5. Pendiente para CO/MX (Fase 8)
-- Bounds MX/CO en validador de ingress (Agente 1, Fase 7) — COP ±10% de 4150, MXN ±10% de 17.15
-- Smoke test formal del flujo completo en ambos corredores (`CHECKLIST § 13`)
-- Contenido SEO específico (blog posts por corredor) — post-launch progresivo
-- Acción manual del usuario: ejecutar `supabase/migrations/006_mexico_colombia_mvp.sql` en Supabase SQL Editor
+- Agregar el corredor a la whitelist del validador (`lib/scrapers/validator.ts`)
+- Definir bounds de tasa del banco central ±10% como fallback si la tabla `tasas_bancos_centrales` no tiene registro
+- Documentar los bounds en el comentario de la whitelist
 
-### 6. Decisión de marketing
-La inclusión de MX y CO en el catálogo no cambia el plan de marketing del mes 1 post-launch. Honduras sigue siendo el único corredor con ad spend en el mes 1. MX y CO se apoyan en tráfico orgánico (SEO) y se evalúan para ad sets del mes 2-3 con data real de conversión. Referencia: `PLAN_MARKETING_MES_1.md` permanece intacto.
+### 4. Scrapers (validación de sourcing)
 
-## Archivos modificados
-- `scripts/seed-new-corridors.mjs` — seed para los 4 corredores nuevos (Fase 4.2)
-- `scripts/seed-bancos-centrales.mjs` — incluye MX y CO
-- `supabase/migrations/006_mexico_colombia_mvp.sql` — migración idempotente (Fase 8)
-- `components/Comparador.tsx` — 6 corredores en el selector público
-- `app/[locale]/calculadora-inversa/content.tsx` — 6 corredores
-- `components/TasasReferencia.tsx` — grid 3-col para 6 tarjetas, color BR oscuro
-- `lib/paises.ts` — PAISES_MVP = 6 entries (propaga a Nav, sitemap, páginas editoriales, operadores)
-- `lib/scrapers/*.ts` — 7 scrapers, cada uno con los 8 corredores
-- `app/api/whatsapp/webhook/route.ts` — 8 corredores en el mapa de aliases
-- `messages/es.json` + `en.json` — FAQ q3, q5 y misión actualizadas
+Por cada uno de los 7 operadores MVP, verificar que el corredor nuevo está disponible en su API o HTML:
+
+- **Tier 3 (scraping directo):** confirmar que la URL del operador responde con la tasa del corredor
+- **Tier 2 (affiliate feeds):** verificar que la red (CJ / Impact / Partnerize) lista el corredor en su feed
+- **Tier 4 (Wise API pública):** confirmar que `api.wise.com/v1/rates` soporta el par USD→<MONEDA>
+
+Si algún operador no soporta el corredor nuevo, decidir: (a) omitir ese operador para ese corredor específico, (b) usar tasa de referencia banco central como fallback, o (c) esperar hasta que lo soporte. No hacer "scraping fake" — mejor mostrar 6 operadores honestos que 7 con data inventada.
+
+### 5. SEO y contenido editorial
+
+- Página editorial `/[locale]/<slug-pais>` — se genera automáticamente vía `app/[locale]/[pais]/page.tsx` + `generateStaticParams` con `PAISES_MVP`. Copy adapta dinámicamente con `heroTitle: "Envías dinero a <País>?"`
+- Página histórica de tasa `/[locale]/tasa/usd-<moneda>` — se genera via `app/[locale]/tasa/[pair]/page.tsx`
+- Sitemap (`app/sitemap.ts`) lo recoge automáticamente si el corredor está en `PAISES_MVP` — no requiere edición manual
+- Blog post específico por corredor (post-launch progresivo, no bloqueante)
+
+### 6. Validación pre-merge
+
+Antes de considerar el corredor "en MVP":
+
+- `npm run typecheck` — sin errores
+- `npm run build` — sin errores
+- Smoke test en `/es/<slug>` y `/en/<slug>` — la página carga con contenido correcto
+- Smoke test en Comparador — el corredor aparece en el dropdown y el monto se calcula correctamente
+- Smoke test en calculadora inversa — el corredor aparece en los tabs
+- Ejecutar `/api/scrape` manual y verificar que los 7 operadores guardan precios para el corredor nuevo sin errores
+- Verificar en Supabase Table Editor que `precios` tiene 7 rows frescas (`actualizado_en` reciente) para el corredor
+
+### 7. Decisión de marketing
+
+Agregar un corredor al catálogo NO implica ad spend automático. El plan de marketing del mes 1 post-launch prioriza Honduras. Corredores nuevos se apoyan en tráfico orgánico (SEO) inicialmente y se evalúan para ad sets del mes 2-3 con data real de conversión. Referencia: `PLAN_MARKETING_MES_1.md` + `plan-marketing-mes1-v2.md`.
 
 ---
 
-## 7. UX de navegación al escalar (+10 países)
+## UX de navegación al escalar (umbral de refactor)
 
-**Regla a aplicar cuando PAISES_MVP supere 10 países activos:**
+**Regla a aplicar cuando `PAISES_MVP` supere 10 países activos:**
 
 El dropdown "Destinos" (desktop) y la lista en el drawer mobile del Nav deben refactorizarse a un **submenu colapsable agrupado por región**. Hoy con 6 países listados directos = OK, la UX es clara y no requiere jerarquía. Con 10+ países la UX degrada por scroll largo en el drawer mobile y falta de jerarquía visual en el dropdown desktop — el usuario pierde tiempo escaneando una lista plana larga.
 
-**Agrupamiento propuesto por región (cuando toque):**
-
-| Grupo | Países MVP actuales | Capacidad en DB |
-|-------|---------------------|-----------------|
-| **Centroamérica** | Honduras, Guatemala, El Salvador | + Nicaragua, Costa Rica, Panamá |
-| **Caribe** | República Dominicana | + Haití, Cuba, Puerto Rico |
-| **Sudamérica (norte)** | Colombia | + Venezuela, Ecuador, Perú |
-| **Sudamérica (sur)** | — | + Bolivia, Argentina, Chile |
-| **Norteamérica** | México | — |
-
 **Archivos que deberán refactorizarse cuando llegue la fase:**
-- `components/Nav.tsx` — tanto DropdownMenu (desktop) como el Drawer mobile. Usar `DropdownMenuSub` de shadcn para submenus desktop y accordion o tabs agrupados en mobile.
-- `components/comparador/country-picker.tsx` — Command list con CommandGroup separators por región (cmdk soporta `<CommandGroup heading="Centroamérica">` nativo)
+
+- `components/Nav.tsx` — tanto DropdownMenu (desktop) como el Drawer mobile. Usar `DropdownMenuSub` de shadcn para submenus desktop y accordion o tabs agrupados en mobile
+- `components/comparador/country-picker.tsx` — Command list con CommandGroup separators por región (cmdk soporta `<CommandGroup heading="...">` nativo)
 - `lib/paises.ts` — agregar campo `region` a cada país para filtrado/agrupación
 
-**Criterio de activación:** al agregar el país #10 a `PAISES_MVP` (post-Fase 8 expansión futura — Nicaragua, Haití, Perú, Colombia+, etc. son candidatos).
+**Criterio de activación:** al agregar el país #10 a `PAISES_MVP`.
 
-**Estimación del refactor futuro:** ~3-4h (no es urgente ahora).
+**Estimación del refactor futuro:** ~3-4h. No es urgente mientras el catálogo esté ≤10 países.
+
+---
+
+## Archivos típicos modificados en una incorporación
+
+Lista de referencia (puede variar según la profundidad del país):
+
+- `supabase/migrations/NNN_<slug>_corredor.sql`
+- `lib/paises.ts`
+- `lib/corredores.ts`
+- `lib/cross-links.ts`
+- `lib/scrapers/validator.ts` (bounds nuevo corredor)
+- `lib/scrapers/{remitly,wise,xoom,ria,worldremit,westernunion,moneygram}.ts` (7 archivos)
+- `components/Comparador.tsx`
+- `components/TasasReferencia.tsx`
+- `app/[locale]/calculadora-inversa/content.tsx`
+- `app/api/whatsapp/webhook/route.ts`
+- `messages/es.json` + `messages/en.json` (solo si toca copy de FAQ)

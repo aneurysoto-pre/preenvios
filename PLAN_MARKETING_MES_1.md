@@ -97,7 +97,6 @@ Nota: al pasar de $200 a $500, Meta Ads pasa de ser ~35% del tráfico a ser el m
 
 ### 2.4 Por qué no apuntamos a otros segmentos en mes 1
 
-- **Colombianos, mexicanos, nicaragüenses, haitianos:** el producto los soporta pero el contenido editorial está menos desarrollado. Fase 4.
 - **18-27:** envían menos y buscan por tiktok buzz, no intent de remesa. Veremos si llegan por TikTok orgánico de rebote.
 - **55+:** baja penetración de smartphone y desconfianza de sitios nuevos. No vale el costo de convertirlos en mes 1.
 

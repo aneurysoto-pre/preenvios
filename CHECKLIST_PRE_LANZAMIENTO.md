@@ -31,10 +31,10 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 ## 2. Comparador
 
 ### 2.1 Selector de país destino
-- [ ] Dropdown muestra los 8 corredores (HN, DO, GT, SV, CO, MX, NI, HT)
+- [ ] Dropdown muestra los 6 corredores MVP (HN, DO, GT, SV, CO, MX)
 - [ ] Buscar por código de moneda funciona (DOP → República Dominicana)
 - [ ] Buscar por código de país funciona (HN → Honduras)
-- [ ] Buscar por aliases funciona (paisa → Colombia, nica → Nicaragua, ayiti → Haití)
+- [ ] Buscar por aliases funciona (paisa → Colombia, catracho → Honduras)
 - [ ] Bandera del país se muestra correctamente
 
 ### 2.2 Monto

@@ -3,6 +3,9 @@
 Comparador independiente de remesas para la diáspora latinoamericana en EE.UU.
 Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram.
 
+**MVP actual (6 corredores):** Honduras, República Dominicana, Guatemala, El Salvador, Colombia, México.
+**Integraciones futuras:** nuevos corredores se evaluarán post-launch según demanda orgánica, sourcing disponible y señales reales de usuarios. Ver `CONTEXTO_FINAL.md` y `LOGICA_DE_NEGOCIO/11_nuevos_corredores.md` para política y proceso.
+
 - [Contexto MVP](CONTEXTO_MVP.md)
 - [Contexto Final / Roadmap](CONTEXTO_FINAL.md)
 

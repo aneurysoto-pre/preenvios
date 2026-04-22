@@ -12,11 +12,11 @@ Completado el 2026-04-16 como parte de Fase 2.
 URL: `preenvios.com/[locale]/calculadora-inversa`
 
 ### 2. Elige corredor
-**4 botones (desde 2026-04-18, solo MVP):** Rep. Dominicana, Honduras, Guatemala, El Salvador.
+**6 botones (MVP 2026-04):** Honduras, República Dominicana, Guatemala, El Salvador, Colombia, México.
 
-Antes (hasta 2026-04-17) se mostraban 7 países (RD, HN, GT, Colombia, México, Nicaragua, Haití) pero Colombia/México/Nicaragua/Haití no tienen scraper activo ni datos validados — sus tasas eran seed estático. La calculadora inversa ahora se limita a los 4 MVP mismos que el comparador principal.
+La calculadora inversa se limita a los mismos corredores MVP que el comparador principal — cualquier cambio de catálogo en `lib/paises.ts` debe propagarse aquí.
 
-El Salvador fue agregado al array aunque es USD→USD: con `tasa=1` la fórmula produce `USD enviados = monto_recibido + fee`, semánticamente correcto (monto en destino = monto origen - fee, así que origen = destino + fee). Utilidad menor que RD/HN/GT pero coherente.
+El Salvador está incluido aunque sea USD→USD: con `tasa=1` la fórmula produce `USD enviados = monto_recibido + fee`, semánticamente correcto (monto en destino = monto origen - fee, así que origen = destino + fee). Utilidad menor que RD/HN/GT pero coherente.
 
 ### 3. Escribe monto recibido
 Ejemplo: 12,000 DOP

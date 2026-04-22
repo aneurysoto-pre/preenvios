@@ -311,7 +311,7 @@ No hay keys en uno y no en el otro a nivel top. Los sub-keys también match en l
 - `components/BannersPatrocinados.tsx` — todo en `title_es/title_en/offer_es/offer_en` inline, no via t()
 - `components/Sections.tsx:483` LogoStrip comment sobre brandfetch — no hay hardcoded públicos
 
-**Impacto:** cambiar copy requiere tocar código, no el JSON. También rompe si algún día añades un 3er idioma (portugués para diáspora brasileña).
+**Impacto:** cambiar copy requiere tocar código, no el JSON. También rompe si algún día añades un 3er idioma.
 
 **Se resuelve durante refactor:** SÍ — durante refactor de Comparador (commit 1) y BannersPatrocinados (commit 5) migro todos los strings a `messages/{es,en}.json` con keys bien estructuradas.
 

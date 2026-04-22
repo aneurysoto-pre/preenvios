@@ -9,8 +9,8 @@ Dos problemas relacionados introducidos/arreglados el 2026-04-18:
 - Click en botón "Comparar ahora →" del bloque "Listo para enviar más por menos?" no hace nada visible, o scrollea a un lugar vacío, o el header fixed tapa el destino
 - El click funciona en desktop pero no en mobile (o viceversa)
 - En páginas de país (/honduras, /guatemala, etc.) el mismo botón no funciona
-- La página `/es/calculadora-inversa` muestra tabs de Colombia / México / Nicaragua / Haití (no son MVP)
-- La calculadora inversa NO muestra El Salvador (debería estar en los 4 MVP)
+- La página `/es/calculadora-inversa` muestra tabs fuera de los 6 corredores MVP
+- La calculadora inversa NO muestra todos los corredores MVP (ej. falta El Salvador)
 
 ## Causas y soluciones (ordenadas de más probable a menos probable)
 
@@ -70,9 +70,9 @@ Arreglo:
    ```bash
    grep -c "id: '" app/[locale]/calculadora-inversa/content.tsx
    ```
-   Debe dar exactamente 4 (una línea por corredor MVP)
-2. Si aparecen colombia/mexico/nicaragua/haiti: eliminar esas líneas. Son corredores válidos en Supabase pero sin scraper ni página editorial — no se exponen en UI hasta que estén listos
-3. Si falta `el_salvador`: agregarlo con `{ id: 'el_salvador', moneda: 'USD', simbolo: '$', bandera: '🇸🇻' }`
+   Debe dar exactamente 6 (una línea por corredor MVP: HN, DO, GT, SV, CO, MX)
+2. Si aparecen corredores fuera de los 6 MVP: eliminar esas líneas. La calculadora inversa se limita al catálogo de `lib/paises.ts`
+3. Si falta algún MVP: agregarlo con el mismo formato que los demás (ej. `{ id: 'el_salvador', moneda: 'USD', simbolo: '$', bandera: '🇸🇻' }`)
 
 ### 🎯 Causa 6 — En páginas de país el botón no scrollea
 Contexto: /honduras, /guatemala, etc. renderizan el mismo `<Comparador />` que expone `id="calculadora"` en el hero. Si el botón no funciona ahí pero sí en home, algo raro pasa.

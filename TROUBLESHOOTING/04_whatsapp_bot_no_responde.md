@@ -44,7 +44,7 @@ Arreglo:
    ```
 
 ### 🎯 Causa 4 — Texto no matchea `CORREDOR_MAP`
-Contexto: el bot acepta solo códigos exactos: DOP, HNL, GTQ, SVC, COP, MXN, NIO, HTG. "Dominican" o "dominicana" NO matchea y cae al help.
+Contexto: el bot acepta solo códigos exactos de los corredores MVP: DOP, HNL, GTQ, SVC/USD, COP, MXN. "Dominican" o "dominicana" NO matchea y cae al help.
 
 Arreglo:
 1. Pedir al usuario enviar código exacto (el mensaje de ayuda los lista)

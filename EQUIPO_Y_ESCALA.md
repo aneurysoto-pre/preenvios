@@ -48,14 +48,13 @@ Esto cuesta lo mismo que un remote senior part-time sin monitoring, con **4x la 
 | **Rango salarial neto** | **$1,500 - $2,000 USD/mes** según nivel (junior-mid) |
 | **Costo real al contratador** | **$1,800 - $2,400 USD/mes** (cargas RD: TSS, INFOTEP, regalía pascual ≈ 15-20%) |
 | **Trigger para contratar** | Tráfico orgánico llegando + founder dedica >2 hrs/día a bugs/features durante 2+ semanas seguidas. Se puede adelantar vs modelo tradicional porque el empleado NO es solo "developer que escala" — es también operador del stack de defensa desde día 1. |
-| **Por qué RD (no Argentina/Colombia)** | Timezone UTC-4 = 1 hora con Miami EST (80% del target diáspora HN/DO/GT/SV está East Coast USA). Presencial + supervisión diaria. Control cultural. Costo competitivo. |
+| **Por qué RD** | Timezone UTC-4 = 1 hora con Miami EST (80% del target diáspora HN/DO/GT/SV está East Coast USA). Presencial + supervisión diaria. Control cultural. Costo competitivo. |
 
 #### Análisis timezone (por qué RD gana)
 
 | Ubicación | Diferencia con Miami (EST) | Diferencia con LA (PST) |
 |-----------|----------------------------|--------------------------|
 | **RD (UTC-4)** | 1 hora | 4 horas |
-| Argentina (UTC-3) | 2 horas | 5 horas |
 | Colombia (UTC-5) | 0 horas | 3 horas |
 | México (UTC-6) | 1 hora | 2 horas |
 
@@ -228,7 +227,7 @@ Sumar ~15-20% por cargas (TSS, INFOTEP, regalía pascual) para obtener costo rea
 | Data analyst | $1.5-2K/mes | $2-3K/mes | $3-4.5K/mes |
 | Diseñador UX/UI freelance | $15-30/hr | $30-60/hr | $60-100/hr |
 
-**Ranking de mercados LATAM remoto por ratio calidad/costo:** Argentina (tech maduro, inflación a favor del contratador USD), Colombia (timezone USA Central, inglés fluido), México (muy cerca del target cultural). Evitar Venezuela (inestabilidad de pagos internacionales).
+**Ranking de mercados LATAM remoto por ratio calidad/costo:** Colombia (timezone USA Central, inglés fluido), México (muy cerca del target cultural), RD (timezone EST óptimo, presencial viable para founder).
 
 ---
 

@@ -126,7 +126,6 @@ Sin cambios vs v1.
 
 ### 2.4 Por qué no apuntamos a otros segmentos en mes 1
 
-- **Colombianos, mexicanos, nicaragüenses, haitianos:** fase 4.
 - **18-27:** envían menos. Los capturamos por rebote.
 - **55+:** baja penetración de smartphone. Aun así, el avatar de marca (señor 50+ camisa azul) los atrae — bonus demográfico, no target primario.
 
@@ -373,7 +372,7 @@ Debajo del eslogan, en tipografía Inter 500, tamaño menor:
 
 **Audio:** voz natural del actor (no TTS), grabada con micrófono lavalier. Música ambiente de parque levísima (pájaros lejanos). Sin música pop ni beat.
 
-**Casting:** Fiverr búsqueda "latin senior actor male 55 65" o "latino hispanic senior talking head video". Rango $75-150 por los 5 videos si se graban en una sesión de 1 día (4-5 hrs). Alternativa: contactar a talento local latino-americano en ciudades de USA con accent neutro español. Preferido: ES neutro (sin acento fuerte específico) para audiencia pan-LATAM. Aspecto NO chileno ni argentino (la audiencia es Centroamérica / Caribe).
+**Casting:** Fiverr búsqueda "latin senior actor male 55 65" o "latino hispanic senior talking head video". Rango $75-150 por los 5 videos si se graban en una sesión de 1 día (4-5 hrs). Alternativa: contactar a talento local latino-americano en ciudades de USA con accent neutro español. Preferido: ES neutro (sin acento fuerte específico) para audiencia pan-LATAM — priorizar rasgos alineados al target (Centroamérica / Caribe).
 
 **Guion shot-by-shot:**
 

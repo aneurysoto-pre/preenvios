@@ -99,23 +99,19 @@ negociar Revenue Share directo con Remitly y Wise.
 
 ## Corredores — expansión por fases
 
-### Fase MVP (activos desde el inicio)
+### Fase MVP — 6 corredores activos
 | Corredor | Moneda | Código | Prioridad |
 |----------|--------|--------|-----------|
 | USA → Honduras | Lempira | HNL | 🥇 Primera |
 | USA → República Dominicana | Peso Dominicano | DOP | 🥈 Segunda |
 | USA → Guatemala | Quetzal | GTQ | 🥉 Tercera |
 | USA → El Salvador | Dólar Americano | USD | 4️⃣ Cuarta |
+| USA → Colombia | Peso Colombiano | COP | 5️⃣ Quinta |
+| USA → México | Peso Mexicano | MXN | 6️⃣ Sexta |
 
-### Fase 4 — Expansión Latinoamérica
-| Corredor | Moneda | Código |
-|----------|--------|--------|
-| USA → Colombia | Peso Colombiano | COP |
-| USA → México | Peso Mexicano | MXN |
-| USA → Haití | Gourde | HTG |
-| USA → Nicaragua | Córdoba | NIO |
-| USA → Ecuador | Dólar Americano | USD |
-| USA → Perú | Sol | PEN |
+### Integraciones futuras / alcance post-MVP
+
+PreEnvios está diseñado para agregar nuevos corredores sin fricción arquitectónica (ver `LOGICA_DE_NEGOCIO/11_nuevos_corredores.md` para el proceso técnico). La decisión de qué países incorporar después del MVP se tomará en base a: volumen real de búsqueda orgánica post-lanzamiento, disponibilidad de scrapers o feeds de afiliados, y demanda explícita desde comments/emails de usuarios. **No hay compromiso de países específicos** hasta que esa data exista.
 
 ### Fase 5 — Expansión Europa
 | Corredor | Desde | Moneda destino |
@@ -482,8 +478,6 @@ Estas keywords deben guiar los títulos, meta descriptions, H1 y contenido del b
 #### 4.2 — Nuevos corredores
 - [x] Agregar corredor USA → Colombia con operadores y afiliados (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
 - [x] Agregar corredor USA → México (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
-- [x] Agregar corredor USA → Nicaragua (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
-- [x] Agregar corredor USA → Haití (completado 2026-04-16 — 7 operadores, tasas estimadas en Supabase)
 - [ ] Crear contenido SEO específico por cada nuevo corredor
 
 #### 4.2.1 — Factor valor_afiliado en algoritmo de ranking (2026-04-18)
@@ -520,13 +514,12 @@ Fix aplicado:
 - [x] Footer link "Destinos" actualizado de `/${locale}/#comparar` a `/${locale}/#calculadora` — antes el link del footer tenía el mismo bug (scrolleaba a sección oculta) (completado 2026-04-18)
 - [x] En páginas de país (/honduras, /guatemala, /el-salvador, /republica-dominicana) el botón funciona igual porque ambas rutas renderizan el mismo `<Comparador />` que expone `id="calculadora"` (completado 2026-04-18)
 
-**Calculadora inversa (`/[locale]/calculadora-inversa`)**: mostraba 7 países (RD, HN, GT + Colombia, México, Nicaragua, Haití) — sin El Salvador. Debía mostrar solo los 4 del MVP.
-- [x] `CORREDORES` array reducido a los 4 del MVP: Rep. Dominicana, Honduras, Guatemala, El Salvador. Se agregó El Salvador (faltaba) con moneda USD. Eliminados Colombia, México, Nicaragua, Haití (completado 2026-04-18)
-- [x] Las filas de Supabase (seed-new-corridors) NO se tocan — los 4 corredores no-MVP siguen en DB para que `/api/precios` los siga sirviendo. Solo se oculta en UI de la calculadora inversa (completado 2026-04-18)
-- [x] Tabs con `flex-wrap` para que los 4 botones se apilen bien en mobile <375px si hiciera falta (completado 2026-04-18)
+**Calculadora inversa (`/[locale]/calculadora-inversa`)**: se alinea con el catálogo MVP — debe mostrar los mismos corredores que el comparador principal.
+- [x] `CORREDORES` array ajustado a los corredores MVP vigentes (completado 2026-04-18)
+- [x] Tabs con `flex-wrap` para que los botones se apilen bien en mobile <375px si hiciera falta (completado 2026-04-18)
 - [x] El Salvador con tasa=1 (dolarizado) en la fórmula `(montoNum / p.tasa) + p.fee` produce `monto + fee`, que es semánticamente correcto (lo que enviaron = lo que recibieron + comisión) (completado 2026-04-18)
 
-**Regla del proyecto (actualizada 2026-04-21):** la calculadora inversa, el buscador del hero, las páginas editoriales por país y `/tasa/[pair]` públicas exponen 6 corredores activos (HN, RD, GT, SV, CO, MX). Nicaragua y Haití siguen en Supabase pero ocultos en UI hasta tener scraper con data validada + página editorial propia. La regla original de "solo 4 MVP" se relajó a 6 porque los scrapers ya cubren MX/CO y el catálogo más amplio mejora SEO pre-launch sin añadir deuda técnica.
+**Regla del proyecto (actualizada 2026-04-22):** la calculadora inversa, el buscador del hero, las páginas editoriales por país y `/tasa/[pair]` públicas exponen los 6 corredores MVP activos (HN, DO, GT, SV, CO, MX). Cualquier corredor fuera de ese conjunto no aparece en UI pública ni en el código de la aplicación. Ver sección "Integraciones futuras / alcance post-MVP" para la política de expansión.
 
 #### 4.2.7 — Banderas SVG en selector idioma + círculos Steps reducidos (2026-04-18)
 - [x] Selector de idioma reemplaza emojis 🇺🇸/🇪🇸 por SVGs inline. Motivo: Windows NO renderiza flag emojis — los muestra como los dos Regional Indicator letters ("us", "es") lo cual se veía "us English" con "us" minúsculas como texto suelto. Se definen 2 componentes locales en `components/Nav.tsx`: `<FlagUS />` (13 barras rojas + cantón azul sobre blanco, viewBox 60×30) y `<FlagES />` (rojo-amarillo-rojo horizontal, viewBox 60×40). Ambos con `rounded-[2px]` + sombra sutil para integrarse al diseño. Se usa en desktop y mobile menu (completado 2026-04-18)
@@ -778,8 +771,7 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 - [ ] DMARC policy inicial en `p=none` para monitoreo; subir a `p=quarantine` tras 2 semanas sin falsos positivos
 
 **No se incluye en esta fase:**
-- Nicaragua y Haití: siguen en Fase 4 (post-launch) hasta tener data validada
-- Perú y Ecuador: fase 4 también
+- Corredores fuera del MVP actual (6 países): se evalúan post-launch según la política descrita en la sección "Integraciones futuras / alcance post-MVP" de este documento
 - Wiki escrita: el founder la escribe manual post-launch (no IA por policy Google/Meta)
 - Blog SEO: post-launch progresivo
 

@@ -23,7 +23,7 @@ Arreglo:
    const supabaseAdmin = createClient(/* ... service_role */)
    const today = new Date().toISOString().slice(0, 10)
 
-   for (const corredor of ['dominican_republic','honduras','guatemala','el_salvador','colombia','mexico','nicaragua','haiti']) {
+   for (const corredor of ['honduras','dominican_republic','guatemala','el_salvador','colombia','mexico']) {
      const { data } = await supabaseAdmin.from('precios').select('tasa').eq('corredor', corredor).eq('metodo_entrega', 'bank').eq('activo', true)
      if (!data || data.length === 0) continue
      const tasas = data.map(d => d.tasa).filter(Boolean)

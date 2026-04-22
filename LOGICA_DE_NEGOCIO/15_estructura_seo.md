@@ -19,8 +19,6 @@ Completado el 2026-04-17 como Fase 4.1 del roadmap.
 - `/[locale]/tasa/usd-svc` — El Salvador
 - `/[locale]/tasa/usd-cop` — Colombia
 - `/[locale]/tasa/usd-mxn` — México
-- `/[locale]/tasa/usd-nio` — Nicaragua
-- `/[locale]/tasa/usd-htg` — Haití
 
 Cada página incluye: tasa actual del mejor operador, gráfica Recharts de 30 días, tabla comparativa de 7 operadores, CTA al comparador, Schema.org ExchangeRateSpecification.
 
