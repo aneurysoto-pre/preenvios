@@ -264,10 +264,21 @@ Código de símbolos:
 
 ### Totales del mes v2
 
-- **5 videos madre producidos** (vs 17 piezas únicas en v1) → 71% menos esfuerzo de producción por video, redistribuido en calidad.
-- **17 publicaciones de video** en TikTok + 17 réplicas en Reels IG = **34 posts de video** en el mes.
-- **15-20 micro-intros producidas** (3-5 variaciones por video madre) como assets de re-publicación.
-- **12 carruseles estáticos Instagram** (sin cambios vs v1).
+**Videos producidos en el mes: SOLO 5.** Los 5 videos madre (VM#1 a VM#5) son el 100% de la producción audiovisual del mes. No hay más. No se produce ningún video adicional.
+
+Esos 5 videos se **rotan y se publican 17 veces en TikTok + 17 veces en Reels Instagram** (misma pieza, distinto canal). En promedio cada video se publica 7 veces en el mes — pero el Video Madre #1 (el tío) se publica 14 veces por ser el video estrella, y los otros cuatro entre 4-6 veces cada uno.
+
+Resumen numérico claro:
+
+- **5 videos madre producidos** = 100% de la producción audiovisual del mes.
+- **34 publicaciones de video** en total = 17 slots en TikTok + 17 slots en Reel IG (el mismo video se publica en ambas plataformas el mismo día).
+- Eso significa que **cada video madre se publica ~7 veces en promedio** (5 videos × 7 apariciones ≈ 35 publicaciones, ajustado a 34 en calendar).
+- Las **25 micro-intros** (5 variaciones × 5 videos madre) son variantes del primer medio segundo para que el algoritmo vea cada publicación como "nueva". NO son videos nuevos — son 0.5 seg de intro que se pegan al mismo core video.
+- **1 outro maestro** de 2 seg con el eslogan + jingle — reutilizado en los 5 videos.
+
+Otros deliverables del mes (no son video):
+
+- **12 carruseles estáticos Instagram** (sin cambios vs v1 — son educativos, no branding).
 - **~31 stories Instagram** (1/día — sin cambios).
 - **~24 posts Facebook en grupos diaspóricos** (sin cambios).
 - **4 reviews semanales + 1 review final** (sin cambios).
@@ -275,16 +286,24 @@ Código de símbolos:
 
 ### Conteo de apariciones por video madre
 
-| Video | Apariciones en TikTok | Apariciones en Reel IG | Total posts |
+Recordatorio: esto NO son videos distintos. Es el mismo video publicándose varias veces en el mes.
+
+| Video producido | Veces publicado en TikTok | Veces publicado en Reel IG | Total publicaciones en el mes |
 |-------|----------------------|------------------------|-------------|
 | VM#1 · El tío del parque | 7 | 7 | **14** |
 | VM#2 · La pantalla del celular | 3 | 3 | 6 |
 | VM#3 · El viernes honesto | 3 | 3 | 6 |
 | VM#4 · Los 4 números | 2 | 2 | 4 |
 | VM#5 · La señora del barrio | 2 | 2 | 4 |
-| **TOTAL** | **17** | **17** | **34** |
+| **Videos únicos: 5** | **17 publicaciones** | **17 publicaciones** | **34 publicaciones de los mismos 5 videos** |
 
 El Video Madre #1 (el tío) se lleva el 41% de todas las apariciones — por diseño. Es el "brand avatar" que los seguidores empiezan a reconocer a la 3ra-4ta vez. Ese reconocimiento es el activo más valioso que construye el mes 1.
+
+**Todos los 5 videos comparten:**
+- El mismo eslogan de cierre: "Antes del envío, PreEnvios." (idéntico en los 5)
+- El mismo outro maestro con jingle (idéntico en los 5)
+- La misma estructura de guion: pregunta calmada → contexto suave → respuesta → cierre (idéntica en los 5)
+- El mismo tono: honesto, tranquilo, sin alarmismo, sin regañar, sin gritos (idéntico en los 5)
 
 ---
 
