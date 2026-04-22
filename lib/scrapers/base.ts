@@ -8,6 +8,12 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
+import {
+  loadBancoCentralCache,
+  validatePrice,
+  logAnomaly,
+  checkConsecutiveAnomalies,
+} from './validator'
 
 const USER_AGENT = 'PreenviosBot/1.0 contact@preenvios.com'
 const MIN_DELAY_MS = 2000
@@ -62,7 +68,18 @@ export function getHeaders(): Record<string, string> {
 }
 
 /**
- * Guarda precios scraped en Supabase via upsert
+ * Guarda precios scraped en Supabase via upsert, con validación de ingress
+ * (Agente 1 — Fase 7). Cada fila se valida ANTES de llegar a la DB:
+ *   - Si pasa → upsert normal en tabla `precios`
+ *   - Si falla → log en `scraper_anomalies` + Sentry + eventual marcado
+ *     stale si hay 3+ anomalías consecutivas del mismo par.
+ *
+ * Firma pública intacta: retorna { saved, errors } como siempre. Los
+ * rechazos por validación NO cuentan como `errors` (son datos inválidos,
+ * no fallas técnicas) — se registran en scraper_anomalies aparte.
+ *
+ * Ver lib/scrapers/validator.ts para reglas y
+ * LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md para diseño.
  */
 export async function savePrices(prices: ScrapedPrice[]): Promise<{
   saved: number
@@ -71,7 +88,35 @@ export async function savePrices(prices: ScrapedPrice[]): Promise<{
   const errors: string[] = []
   let saved = 0
 
+  // 1 query al inicio del batch — cache en memoria para todas las
+  // validaciones siguientes.
+  const bancoCentralCache = await loadBancoCentralCache(supabaseAdmin)
+
   for (const price of prices) {
+    const result = validatePrice(price, bancoCentralCache)
+    if (!result.valid) {
+      // Registrar anomalía (scraper_anomalies + Sentry). NO escribir en precios.
+      await logAnomaly(supabaseAdmin, price, result.issues)
+
+      // ¿3+ anomalías consecutivas del mismo par en la última hora?
+      // Si sí, marcar precios del operador como stale (protege al usuario
+      // mientras el scraper se arregla). Query serverless-safe a
+      // scraper_anomalies — no usa contador in-memory.
+      const shouldMarkStale = await checkConsecutiveAnomalies(
+        supabaseAdmin,
+        price.operador,
+        price.corredor,
+      )
+      if (shouldMarkStale) {
+        await reportScraperFailure(
+          price.operador,
+          `3+ anomalías consecutivas en ${price.corredor} dentro de la última hora — ver scraper_anomalies`,
+        )
+      }
+      // Continuar con las demás filas del batch — NO crashear.
+      continue
+    }
+
     const { error } = await supabaseAdmin
       .from('precios')
       .upsert(

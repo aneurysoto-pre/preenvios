@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS precios (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   operador TEXT NOT NULL,                       -- 'remitly', 'wise', etc.
   corredor TEXT NOT NULL REFERENCES corredores(id),
-  metodo_entrega TEXT NOT NULL DEFAULT 'bank',  -- 'bank', 'cash_pickup', 'delivery', 'mobile'
+  metodo_entrega TEXT NOT NULL DEFAULT 'bank',  -- enum (2026-04-22): 'bank', 'cash_pickup', 'home_delivery', 'mobile_wallet' — enforced por Agente 1 (lib/scrapers/validator.ts)
   tasa NUMERIC(12,4) NOT NULL DEFAULT 0,
   fee NUMERIC(8,2) NOT NULL DEFAULT 0,
   velocidad TEXT NOT NULL DEFAULT 'Minutos',    -- 'Segundos', 'Minutos', 'Horas', 'Días'

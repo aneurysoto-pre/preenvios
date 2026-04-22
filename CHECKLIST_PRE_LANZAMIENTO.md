@@ -181,16 +181,20 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 **Checklist obligatorio antes del DNS cutover:**
 
-- [ ] Implementar función `validatePrice(price)` en `lib/scrapers/base.ts` que se ejecuta antes de `savePrices()`
-- [ ] Validaciones mínimas:
-  - [ ] Tasa dentro de ±10% de la tasa del banco central (fuente: tabla `tasas_bancos_centrales` por `codigo_pais`)
-  - [ ] Fee en rango [0, 50] USD
-  - [ ] Velocidad en enum permitido (`Segundos`, `Minutos`, `Horas`, `Días`)
-  - [ ] Operador en lista aprobada (7 MVP)
-- [ ] Si falla validación → no guardar + Sentry capture + log en nueva tabla `scraper_anomalies` (crear migración)
-- [ ] Si mismo operador acumula 3 anomalías consecutivas → usar `reportScraperFailure` existente para marcar stale
-- [ ] Smoke test del validador: introducir manualmente una tasa fuera de rango en un scraper, verificar que se rechaza y se loguea
-- [ ] Validador corre en producción por 48 hrs antes del cutover, confirmando que no genera falsos positivos con data real
+- [x] Implementar función `validatePrice(price)` en `lib/scrapers/validator.ts`, integrada en `savePrices()` dentro de `lib/scrapers/base.ts` (completado 2026-04-22)
+- [x] Validaciones (7 reglas):
+  - [x] Tasa dentro de ±10% de la tasa del banco central (fuente: tabla `tasas_bancos_centrales` cacheada por batch + fallbacks hardcoded; tolerancia 0 para El Salvador USD)
+  - [x] Fee en rango [0, 50] USD
+  - [x] Velocidad en enum permitido (`Segundos`, `Minutos`, `Horas`, `Días`)
+  - [x] Operador en whitelist de 7 MVP
+  - [x] Corredor en whitelist de 6 MVP (HN, DO, GT, SV, CO, MX)
+  - [x] Método de entrega en enum (`bank`, `cash_pickup`, `home_delivery`, `mobile_wallet`)
+  - [x] Tasa > 0 (defensivo)
+- [x] Si falla validación → no guardar + Sentry capture con tag `scraper_anomaly` + log en nueva tabla `scraper_anomalies` (migración 007 — completada 2026-04-22)
+- [x] Si mismo (operador, corredor) acumula 3 anomalías consecutivas en la última hora → `reportScraperFailure` marca precios stale (patrón serverless-safe vía query a `scraper_anomalies`, no contador in-memory)
+- [ ] **Pendiente acción usuario:** ejecutar `supabase/migrations/007_scraper_anomalies.sql` en Supabase SQL Editor
+- [ ] **Pendiente smoke test:** introducir manualmente una tasa fuera de rango en un scraper, verificar que se rechaza y se loguea (ver procedimiento en `LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md` § "Smoke test manual")
+- [ ] **Pendiente ventana observación:** el validador debe correr en producción ≥48 hrs antes del cutover confirmando que no genera falsos positivos con data real
 
 **Criterio de NO-GO:** sin el validador implementado y testeado, **no se activa el DNS**. Cualquier scraper bajo condiciones adversas puede envenenar el comparador público.
 

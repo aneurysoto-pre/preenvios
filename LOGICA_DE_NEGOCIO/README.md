@@ -63,6 +63,8 @@ Qué hace esta pieza y por qué existe.
 | 18 | [18_core_web_vitals.md](18_core_web_vitals.md) | Core Web Vitals + cross-links internos SEO | Fase 4.1 |
 | 19 | [19_banners_patrocinados.md](19_banners_patrocinados.md) | Banners mock (Banreservas, Banco Popular, Viamericas, Boss Money) entre hero y resultados. Slot `<Comparador>{children}</Comparador>` | Fase 4.3 — preparación |
 
+| 24 | [24_agente_validador_ingress.md](24_agente_validador_ingress.md) | Agente 1 del stack defense-in-depth: validatePrice() en el write boundary entre scrapers y Supabase | Fase 7 |
+
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)
 ### Fase 4.5 — cerrada 2026-04-16 (6/6 checkboxes completados)
