@@ -38,8 +38,8 @@
   --radius-xl: 32px;
 }
 
-html { scroll-behavior: smooth; overflow-x: hidden; }
-body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; }
 
 /* ═════════════════════════════════════════════════════════════
    Comparador results (design parity with original preenvios.com HTML)
