@@ -161,6 +161,79 @@ aprobado, integrar su API de pricing.
 - Esto es una solución temporal hasta que R2 complete.
 - Requiere 10h de trabajo inicial + 2-4h/mes de mantenimiento.
 
+## Validación de supuestos (pre-cutover, ~1h de lectura sin código)
+
+La decisión de diferir scrapers hasta post-LLC + partner APIs descansa en 2
+supuestos no verificados al momento de tomarla (2026-04-23). Antes del DNS
+cutover, ambos deben chequearse contra la documentación oficial de cada red.
+Si alguno se cae, el plan R2 no es viable solo y hay que mezclar con Fase R3
+(reverse-engineer + proxy) como puente real, no como fallback teórico.
+
+### Supuesto 1 — "Los programas de afiliado darán APIs de pricing"
+
+**No todos los programas entregan APIs de pricing.** Muchos solo dan
+deep links con clickid para tracking, feeds de productos (catálogos sin
+pricing en vivo), o pricing embedded en URLs para calculators. Pricing
+API JSON con tasa + fee + velocidad por corredor es data operacional que
+muchos operadores reservan para partners estratégicos, no para afiliados
+de entrada.
+
+**Acción de validación — por programa, responder 2 preguntas:**
+
+| Programa | Operadores | Q1: ¿qué entrega? (deeplink / feed / pricing API / combo) | Q2: ¿qué exigen para aprobar? (tráfico / dominio / contenido / tiempo) |
+|----------|-----------|----------------------------------------------------------|-----------------------------------------------------------------------|
+| **Impact.com** | Remitly | _pendiente verificar en impact.com/advertisers_ | _pendiente_ |
+| **Partnerize** | Wise | _pendiente verificar en partnerize.com_ | _pendiente_ |
+| **CJ Affiliate** | Xoom, Ria, WorldRemit, Western Union, MoneyGram | _pendiente verificar en cj.com_ | _pendiente_ |
+| **FlexOffers** | MoneyGram, Western Union (redundante con CJ) | _pendiente verificar en flexoffers.com_ | _pendiente_ |
+
+**Resultado esperado:** si Q1 da "pricing API" en al menos 4/7 operadores, el
+plan R2 cubre el catálogo MVP. Si da "pricing API" en menos de 4/7, hay que
+pivotar a una mezcla R2 + R3 real.
+
+### Supuesto 2 — "Los programas me aprobarán una vez aplique"
+
+La mayoría de las redes exige un piso de legitimidad para aprobar:
+
+- **Dominio activo con tráfico demostrable** (típicamente 100-1000 visitas
+  mensuales verificables con GA4 o similar).
+- **Contenido relevante al nicho** (SEO de remesas, guías, comparativas).
+- **Tiempo mínimo desde registro del dominio** (algunos exigen 3-6 meses).
+
+**La circularidad del problema:** necesito tráfico para ser aprobado →
+necesito scrapers funcionales para dar valor al usuario → atraer tráfico →
+ser aprobado. Sin ningún operador con data real post-cutover, `preenvios.com`
+es un comparador vacío y las redes rechazan la aplicación.
+
+**Mitigación parcial que ya está en el plan:** Fase R1 (Wise API pública,
+2-3h, $0) ejecutable sin LLC, da 1/7 operador con data real. Eso es poco
+para convencer a una red seria de que Preenvios es un comparador legítimo.
+El piso aceptable — sin pivotar a R3 — requiere además contenido SEO real
+(blog con 5-10 posts, wiki con 10+ artículos, páginas editoriales por país
+completadas con copy original del founder, no placeholders).
+
+### Triggers para replantear el plan
+
+Si tras la validación de supuestos ocurre cualquiera de estos casos:
+
+1. **Q1 revela que menos de 4/7 operadores dan pricing API vía afiliación**
+   → el plan R2 solo cubre parcialmente el catálogo MVP. Hay que decidir:
+   - Achicar el catálogo visible a los 2-3 operadores con API real.
+   - O ejecutar R3 (reverse-engineer + proxy $49/mes) para los operadores
+     sin API, aceptando que es deuda técnica de 1-3 meses.
+
+2. **Q2 revela criterios de aprobación imposibles sin DNS cutover primero**
+   (ej. exigen 1000 visitas/mes en `preenvios.com` para revisar aplicación)
+   → hay que lanzar `preenvios.com` antes de tener afiliados aprobados, lo
+   cual obliga a decidir:
+   - Lanzar con banner de data manual + Wise API (Escenario C del CHECKLIST).
+   - O ejecutar R3 pre-cutover para tener 4-6 operadores funcionales el día
+     del launch.
+
+3. **Respuestas mixtas o ambiguas** → ejecutar R1 (Wise API) pre-cutover
+   de todas formas (no tiene downside, es gratis), y mantener la decisión de
+   diferir R2/R3 hasta tener claridad.
+
 ## Criterios para reconsiderar la decisión de diferir
 
 Revisar este plan y eventualmente adelantar la reactivación si ocurre CUALQUIERA
