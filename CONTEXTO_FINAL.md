@@ -700,7 +700,7 @@ Cuando el volumen referido llegue a $50,000/mes:
 
 **Objetivo:** PreEnvios debe tener validación arquitectónica en los bordes de entrada de datos + 5 agentes activos independientes monitoreando + monitoreo pasivo estándar (BetterStack + Sentry) + founder como última línea. **8 capas cruzadas**: si 7 fallan, la 8va te avisa.
 
-**Timing (decisión 2026-04-21):** los 5 agentes se construyen **antes del DNS cutover**, en los próximos días. No se difieren a post-launch. Razón: el founder quiere defensa completa desde el día 1, no ir agregando capas mientras ya hay usuarios reales expuestos. Los agentes 2, 3 y 5 arrancarán con thresholds conservadores (educated guesses sin tráfico real) y se re-tunearán con data de las primeras 2-4 semanas post-launch — eso es tuning, no construcción.
+**Timing (decisión 2026-04-21 + ajuste 2026-04-23):** los agentes 1, 2, 3, 4 se construyen **antes del DNS cutover**. El **Agente 5 se difirió a post-lanzamiento** (decisión 2026-04-23) por 3 blockers: setup GCP/GA4 Data API de 2-3h inevitable, y sobre todo porque el agente mide "caída vs baseline 7 días" — pre-launch no hay baseline real → cualquier threshold es guess → falsos positivos garantizados. Interim solution activa: GA4 Custom Alerts built-in cubre ~80% del valor sin código. Agente 5 real se construye cuando haya 4+ semanas de tráfico acumulado post-cutover. Razón del ajuste: el founder quiere defensa completa desde el día 1 pero NO construir agentes que solo pueden calibrarse correctamente después, eso es trabajo duplicado (construir + re-construir thresholds). "LANZA BIEN, NO LANZES RÁPIDO".
 
 **Costo adicional total: $0** (todo dentro de planes existentes). **Tiempo total: 20-30 hrs** de implementación por Claude Code (ejecutor) + supervisión del founder.
 
@@ -714,9 +714,41 @@ Cuando el volumen referido llegue a $50,000/mes:
 
 - [ ] **Agente 3 — Database health agent.** Cada 30 min consulta Supabase directo: row counts por tabla (`precios`, `contactos`, `suscriptores_free`, `admin_login_attempts`). Alerta en 2 escenarios: (a) crecimiento súbito >5x del baseline (posible bot attack en suscripciones), (b) pérdida súbita >30% de rows (posible accidente o corrupción). Implementación: Supabase Edge Function + 3-4 hrs build. **Target: pre-launch próximos días.** Baselines iniciales educated guess, se ajustan con data real.
 
-- [ ] **Agente 4 — E2E smoke test agent.** Cada 15 min corre Playwright headless que: navega a preenvios.com, selecciona corredor, escribe monto, click "Comparar", verifica que aparecen 7 remesadoras, click primer CTA, verifica que abre URL afiliada. Repite en viewport mobile + en `/es` y `/en`. Alerta si cualquier paso falla. Detecta lo que BetterStack no: botones rotos en mobile, CSS que colapsa en cierta resolución, routing que devuelve 200 pero render vacío. Implementación: GitHub Actions + Playwright + 6-8 hrs build. **Target: pre-launch próximos días.** Script se construye ahora apuntando a `preenvios.vercel.app` (staging); se cambia la URL target a `preenvios.com` el día del DNS cutover.
+- [ ] **Agente 4 — E2E smoke test agent.** Cada 15-30 min corre Playwright headless que: navega a preenvios.com, selecciona corredor, escribe monto, click "Comparar", verifica que aparecen cards de remesadoras, click primer CTA, verifica que abre URL afiliada. Repite en viewport mobile + en `/es` y `/en`. Alerta si cualquier paso falla. Detecta lo que BetterStack no: botones rotos en mobile, CSS que colapsa en cierta resolución, routing que devuelve 200 pero render vacío. Implementación: GitHub Actions + Playwright + Chromium (solo) + 6-8 hrs build. **Target: pre-launch — inmediatamente después del Agente 3 cuando llegue el momento.** Script se construye ahora apuntando a `preenvios.vercel.app` (alias de prod); se cambia la URL target a `preenvios.com` el día del DNS cutover.
 
-- [ ] **Agente 5 — Business metrics agent.** Cada hora consulta GA4 Data API + Supabase: `click_operador` por operador/corredor, `suscripcion_free` confirmaciones, pageviews por ruta. Alerta si alguna métrica cae >30% vs baseline 7 días. Detecta regresiones silenciosas donde el sitio está "arriba" pero el embudo se rompió (ej. link afiliado cambió y nadie se dio cuenta). Implementación: Vercel Cron + GA4 Data API + 4-6 hrs build. **Target: pre-launch próximos días.** Arranca con thresholds placeholder; baseline real de GA4 se construye durante las primeras 2-4 semanas post-launch y ahí se ajustan los thresholds.
+  **Análisis de dependencia con scrapers (2026-04-23):** 9 de 11 checks del Agente 4 son 100% independientes de scrapers (home carga, routing, mobile menu, cookie banner, dropdowns, input validación, CTA afiliada link). Los 2 restantes (cards aparecen, calculadora inversa) dependen de que la DB tenga rows en `precios` — NO dependen de que esas rows sean frescas. Hoy prod tiene 42 filas stale pero presentes → los tests pasan. El Agente 4 NO es defectuoso por scrapers rotos. Si algún día `precios` queda vacío, tests fallan — eso sería bug real que queremos detectar.
+
+  **Diseño desacoplado:** los tests usan threshold flexible `E2E_MIN_CARDS` via env var. Pre-reactivación scrapers: `E2E_MIN_CARDS=1` (permissive, solo detecta "comparador vacío"). Post-reactivación: subir a `E2E_MIN_CARDS=7` via 1 edit de env var sin tocar tests.
+
+  **Cadencia 15 min vs GitHub Actions free tier 2000 min/mes:** decisión pendiente — 15 min cabe solo si cada run queda <40s post-cache de browsers. Si se extiende, bajar a 30 min (48 runs/día × 1min ≈ 1440 min/mes, cabe). Alternativa: upgrade GitHub Pro ($4/mes).
+
+  **Commits planeados (5):** (1) setup Playwright + config + test home; (2) flow completo comparador × 4 combos (ES/EN × desktop/mobile); (3) endpoint `/api/agents/e2e-alert` + lib; (4) workflow `.github/workflows/agent-e2e.yml`; (5) doc Proceso 30.
+
+- [ ] **Agente 5 — Business metrics agent. DIFERIDO A POST-LANZAMIENTO (decisión 2026-04-23).** Cada hora consulta GA4 Data API + Supabase: `click_operador` por operador/corredor, `suscripcion_alertas` (tabla `alertas_email`), pageviews por ruta. Alerta si alguna métrica cae >30% vs baseline 7 días. Detecta regresiones silenciosas donde el sitio está "arriba" pero el embudo se rompió (ej. link afiliado cambió y nadie se dio cuenta). Implementación: Vercel Cron + GA4 Data API + 4-6 hrs build + **2-3 hrs de setup previo GA4 Data API (service account GCP + credenciales OAuth)**. Estimación revisada total: **7-8 hrs** (no 4-6 hrs).
+
+  **Por qué diferido (2026-04-23):** 3 blockers identificados antes de poder construir:
+  1. ~~Tabla `suscriptores_free` inexistente~~ ✅ RESUELTO — la tabla real es `alertas_email`, formalizada en migración 010 (commit `1c25b66` del 2026-04-23).
+  2. **GA4 Data API requiere setup GCP no trivial:** service account, credenciales OAuth2, permisos en la propiedad GA4. ~2-3h de setup previo, inevitable.
+  3. **Baseline inexistente pre-launch:** el agente alerta si métrica cae >30% vs baseline 7 días, pero pre-launch no hay tráfico real → baseline inexistente → threshold arbitrario → falsos positivos/negativos garantizados. No tiene sentido construir hasta tener data real.
+
+  **Interim solution activa (2026-04-23):** GA4 Custom Alerts built-in (feature gratis nativa de GA4) cubren ~80% del valor del agente sin código. Configurar en Analytics → Admin → Custom Alerts. Alertas iniciales sugeridas (thresholds permissive hasta tener baseline real):
+  - `click_operador` — cae >70% semana vs semana (semanal).
+  - `comparar_click` — cae >70% semana vs semana (semanal).
+  - `contacto_enviado` — sube >5x sobre promedio 7 días (diaria) — anti-spam.
+  - `suscripcion_alertas` — sube >10x sobre promedio 7 días (diaria) — anti-bot.
+  - `page_view` — cae >80% día vs día (diaria) — detecta caída masiva de tráfico.
+
+  Post-launch con 7 días de baseline: ajustar thresholds a valores estándar (30% caídas, 2x spikes).
+
+  **Criterio para activar el Agente 5 full (no solo GA4 Alerts):**
+  - [ ] 4+ semanas post-DNS cutover con tráfico acumulado.
+  - [ ] Baseline GA4 estable confirmado (varianza diaria <20% en conditions normales).
+  - [ ] GA4 Custom Alerts insuficientes — ej. necesitás correlacionar GA4 + Supabase (click por corredor específico × operador × día) que GA4 Alerts no soporta.
+  - [ ] Setup GCP + service account ejecutado.
+
+  Si esos 4 criterios se cumplen, construir el Agente 5 full: ~7-8h distribuidas en ~5 commits (setup credenciales + lib + endpoint `/api/agents/business-metrics` + workflow pg_cron + doc Proceso 31). Mismo patrón que Agente 3 (pg_cron + pg_net → endpoint Next.js → Sentry con fingerprint).
+
+  **Doc operacional:** el Proceso 31 (pendiente) documentará los pasos concretos de setup GCP + configuración de GA4 Custom Alerts interim + migración a agente full cuando llegue el momento.
 
 #### Nivel monitoreo pasivo (observabilidad estándar)
 
@@ -734,19 +766,19 @@ Cuando el volumen referido llegue a $50,000/mes:
 - **UX bugs en dispositivos raros** — ej. un iPhone SE con iOS 16 que rompe la calculadora. Los agentes chequean viewports comunes, no todos. **Mitigación:** rutina humana del founder o empleado = usar el sitio como usuario real 1x/semana en 3 dispositivos distintos.
 - **Regulación/mercado externo** — cambios de política de Google, de FTC, de Meta, nuevo competidor fuerte. Ningún agente lo ve. **Mitigación:** lectura semanal del founder en Google Alerts para keywords del nicho.
 
-#### Timing de implementación (TODOS pre-lanzamiento)
+#### Timing de implementación (actualizado 2026-04-23)
 
-| Agente | Cuándo | Notas de estado post-launch |
-|--------|--------|------------------------------|
-| 1 (validador ingress) | Pre-launch, próximos días | Completo día 1, thresholds ya tuneados con tasa banco central |
-| 2 (data quality) | Pre-launch, próximos días | Thresholds conservadores, re-tune con data semana 2-3 post-launch |
-| 3 (DB health) | Pre-launch, próximos días | Baselines educated guess, re-tune con data semana 2-3 post-launch |
-| 4 (E2E smoke) | Pre-launch, próximos días | Apunta a staging pre-cutover, se cambia URL a preenvios.com el día del cutover |
-| 5 (business metrics) | Pre-launch, próximos días | Thresholds placeholder, re-tune con baseline GA4 mes 1-2 post-launch |
+| Agente | Cuándo | Estado actual | Notas |
+|--------|--------|---------------|-------|
+| 1 (validador ingress) | ✅ Pre-launch — completado 2026-04-22 | Operativo (migración 007 + smoke test 2026-04-23 OK) | Thresholds ya tuneados con tasa banco central. Activo cuando scrapers vuelvan a escribir. |
+| 2 (data quality) | Pre-launch | Pausado — depende de scrapers funcionando | Alerta permanente con scrapers rotos (data stale) → sin valor hasta reactivación post-LLC (Proceso 28). |
+| 3 (DB health) | ✅ Pre-launch — activado 2026-04-23 en prod | Cron `*/30` activo, primera corrida exitosa pendiente validación | Doc Proceso 29. Thresholds absolutos v1, migran a ratios post-7-días de baseline. |
+| 4 (E2E smoke) | Pre-launch — próximo en roadmap | Pendiente — 6-8h de trabajo en 5 commits | Diseño desacoplado de scrapers via env var `E2E_MIN_CARDS`. Análisis de dependencia confirma 9/11 tests independientes. |
+| 5 (business metrics) | **POST-lanzamiento** | Diferido — 3 blockers (ver definición arriba) | Interim: GA4 Custom Alerts built-in cubren ~80% del valor. Activar Agente 5 full cuando: 4+ semanas post-cutover con tráfico acumulado + baseline estable + Custom Alerts insuficientes. |
 
-**Decisión (2026-04-21):** los 5 agentes se construyen antes del lanzamiento, no progresivamente post-launch. Razón: defensa completa desde el día 1, no agregar capas con usuarios expuestos.
+**Decisión actualizada (2026-04-23):** agentes 1, 3 completados. Agentes 2 y 4 pre-launch, agente 5 post-lanzamiento. No se construye el 5 pre-launch porque cualquier threshold es guess sin data real (construcción + reconstrucción = trabajo duplicado). Interim con GA4 Alerts built-in.
 
-Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agente_validador_ingress.md`, `25_agente_data_quality.md`, etc.). El doc sigue al código, no al revés.
+Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agente_validador_ingress.md`, `29_agente_db_health.md`). El doc sigue al código, no al revés. Proceso 31 para Agente 5 se escribe cuando se active el agente real (no ahora — sería doc hipotético sin implementación).
 
 ---
 
