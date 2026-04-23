@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale } from 'next-intl'
+import Image from 'next/image'
 import { OPERADORES_DATA, CORREDORES_DATA } from '@/lib/corredores'
 import { PAISES_MVP } from '@/lib/paises'
 import { OPERATOR_COMPETITORS, BLOG_LINKS } from '@/lib/cross-links'
@@ -30,13 +31,12 @@ export default function OperadorContent({ slug }: { slug: string }) {
         {PAISES_MVP.map(p => (
           <li key={p.corredorId}>
             <a href={`/${locale}/${en ? p.slugEn : p.slugEs}`} className="text-[var(--color-blue)] font-semibold hover:underline inline-flex items-center gap-1.5">
-              <img
+              <Image
                 src={`https://flagcdn.com/w40/${p.codigoPais}.png`}
                 alt=""
                 width={22}
                 height={15}
                 loading="lazy"
-                decoding="async"
                 className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.08)] shrink-0"
               />
               <span>{en ? p.nombreEn : p.nombre}</span>

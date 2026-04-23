@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
+import Image from 'next/image'
 import Nav from '@/components/Nav'
 import { Footer } from '@/components/Sections'
 
@@ -77,13 +78,12 @@ export default function CalculadoraInversaContent() {
                     corredor === c.id ? 'bg-ink text-white border-ink' : 'bg-white text-g600 border-g200 hover:border-blue'
                   }`}
                 >
-                  <img
+                  <Image
                     src={`https://flagcdn.com/w40/${c.codigo_pais}.png`}
                     alt=""
                     width={24}
                     height={16}
                     loading="lazy"
-                    decoding="async"
                     className="w-[22px] h-[15px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(15,23,42,.1)]"
                   />
                   {en ? c.nombre_en : c.nombre}

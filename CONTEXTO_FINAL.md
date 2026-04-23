@@ -970,7 +970,7 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 **Por qué importa:** Google usa Core Web Vitals (LCP, INP, CLS) como factor de ranking desde 2021. Además afectan la percepción del usuario en los primeros segundos — si el sitio "se ve lento", el bounce rate sube y las conversiones caen. Este bloque aborda los 3 items del audit que NO se hicieron en el refactor Fase 1.
 
-- [ ] **10.F.1 — Migrar `<img>` a `next/image` en todo el proyecto** (~2h)
+- [x] **10.F.1 — Migrar `<img>` a `next/image`** (completado 2026-04-23) — grep exhaustivo detectó solo 2 archivos con `<img>` real (el resto ya estaba migrado o usa SVG inline): `app/[locale]/calculadora-inversa/content.tsx` y `app/[locale]/operadores/[slug]/operador-content.tsx`. Ambos eran flags de flagcdn.com (hostname ya permitido en `next.config.ts` remotePatterns). Migrados a `<Image>` manteniendo width/height/alt/className; removido `decoding="async"` (manejado internamente por next/image). Typecheck + build limpios.
   - **Qué es:** Next.js provee el componente `<Image>` (`next/image`) que genera automáticamente versiones WebP/AVIF, aplica lazy loading por default, y reserva espacio para evitar CLS.
   - **Estado actual:** el proyecto tiene CERO uso de `next/image`. Los logos de operadores (Remitly, Wise, etc.), las banderas de FlagCDN, el avatar unificado y las imágenes del blog usan `<img>` nativo.
   - **Impacto directo:** LCP (Largest Contentful Paint) — hoy la imagen más grande (logo de operador en Comparador) no tiene hints de tamaño → el browser la baja sin optimización, puede ser 50-200KB vs <20KB en WebP.
