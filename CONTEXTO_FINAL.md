@@ -880,14 +880,16 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 **Regla importante:** ningún item de esta fase requiere LLC, Payoneer o Meta Business verification. Todo es trabajo técnico interno. La única dependencia externa es Upstash Redis (plan Free ya activo) y GitHub Actions (gratis en repos privados con límite de minutos).
 
-**Bloques:**
+**Bloques (post-filtro 2026-04-23 — ver `feedback_no_fix_sin_evidencia` en memoria):**
 - **Bloque A:** Endurecimiento de seguridad — 5 vulnerabilidades documentadas (2-4h)
 - **Bloque E:** Documentación técnica pendiente (30 min)
 - **Bloque F:** Performance / LCP / Core Web Vitals (3-4h)
-- **Bloque H:** Testing + CI (4-6h)
-- **Bloque J:** Rate-limit expansion (45 min)
-- **Bloque K:** Entorno / infraestructura (1-2h)
-- **Bloque L:** UX mejoras adicionales (1-2h)
+- **Bloque H:** Testing unitario — solo lib/ pure functions (opcionales, post-cutover)
+- **Bloque J:** Rate-limit `/api/precios` — diferido, activar post-cutover si hay saturación
+- **Bloque K:** Entorno / infraestructura (K.1 completado 2026-04-23)
+- **Bloque L:** OG + Twitter Cards — integral para plan marketing con shares en redes sociales (1h)
+
+**Bloques descartados 2026-04-23:** 10.G (accesibilidad completo), 10.H.4 (CI GitHub Actions — pre-launch sin team), 10.H.5 (Playwright básico — duplicado con Agente 4 Fase 7), 10.J.1 (rate-limit /api/scrape — auth CRON_SECRET ya protege), 10.J.3, 10.J.4 (rate-limits de endpoints sin uso significativo), 10.K.2 (cache headers — Vercel/Next ya cubren), 10.L.1 (error boundaries — sin evidencia de crashes), 10.L.2 (loading.tsx globales — Next default funciona), 10.L.4 (BreadcrumbList — ya marcado opcional).
 
 **Nota sobre bloques no incluidos:**
 - **Bloque I (Cookie consent CCPA/GDPR)** — vive en `CHECKLIST_PRE_LANZAMIENTO.md § 15 Compliance legal` como BLOQUEANTE pre-cutover. NO está en Fase 10 porque es legal, no calidad técnica; y porque es bloqueante (la Fase 10 es progressive post-cutover).
@@ -1013,50 +1015,21 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - **Tests por schema:** valid input, email inválido, mensaje muy corto (contacto), honeypot lleno (anti-bot), enum inválido.
   - **Archivo nuevo:** `lib/schemas/contacto.test.ts` + `lib/schemas/alerta.test.ts`.
 
-- [ ] **10.H.4 — GitHub Actions: typecheck + build + lint + test en PRs** (1h)
-  - **Qué es:** un workflow que corre en cada pull request para bloquear merge si algo falla.
-  - **Archivo nuevo:** `.github/workflows/ci.yml` con jobs: `npm ci`, `npm run typecheck`, `npm run lint`, `npm run test`, `npm run build`.
-  - **Costo:** GitHub Actions es gratis en repos privados hasta 2000 min/mes — un CI run tarda 2-3 min, con 200 runs/mes cabe cómodo.
-  - **Opcional:** `--production` para el build, o variables de entorno dummy si alguna ruta las requiere en build time.
-
-- [ ] **10.H.5 — Playwright smoke test básico** (2h — opcional pre-Agente 4)
-  - **Qué es:** un test E2E que simula un usuario real: navegar a home, escribir monto, click Comparar, verificar que aparecen 7 cards de operadores. Primera iteración simple.
-  - **Por qué antes del Agente 4:** el Agente 4 de Fase 7 es un Playwright headless que corre cada 15 min en GitHub Actions. Este paso construye la base de esos scripts — cuando llegue el momento de Agente 4, solo hay que escalarlo.
-  - **Archivo nuevo:** `tests/e2e/home.spec.ts`.
-  - **Comando:** `npm run test:e2e` que corre `playwright test`.
-
-**Criterio de cierre del Bloque H:** `.github/workflows/ci.yml` corriendo en todos los PRs. Coverage mínimo 70% sobre `lib/` (puramente lógica). Bloqueo de merge si CI falla. Todos los items marcados [x].
+**Criterio de cierre del Bloque H:** tests unitarios opcionales sobre `lib/` para casos críticos de lógica pura. No es bloqueante del cutover. CI workflow (10.H.4 original) descartado 2026-04-23 — pre-launch con equipo de 1 persona no justifica el setup vs validación manual actual. Playwright básico (10.H.5 original) descartado — duplicado con el Agente 4 de Fase 7 que se hará completo cuando llegue su turno.
 
 ---
 
-#### 10.J — Rate-limit expansion (45 min)
+#### 10.J — Rate-limit `/api/precios` (diferido post-cutover)
 
-**Por qué importa:** solo 3 endpoints del proyecto tienen rate-limit implementado: `admin-login` (5/15min), `contactos` (3/h), `alertas` (3/h). Los endpoints públicos consumidos por el front quedaron sin protección. Un atacante o bot puede llamar `/api/scrape` 1000 veces en un minuto y:
-- Agotar la cuota free de Supabase
-- Disparar Vercel serverless costs inesperados
-- Saturar Upstash Redis
-- Corromper la tabla `precios` (si logra bypassear auth del cron)
+**Post-filtro 2026-04-23:** 3 items descartados (J.1, J.3, J.4). Queda solo J.2 diferido para activar post-cutover si se observa saturación. Ver razón de descarte en el bloque sumario arriba.
 
-- [ ] **10.J.1 — Auth + rate-limit para `/api/scrape`** (10 min)
-  - **Contexto:** este endpoint dispara los scrapers de los 7 operadores. Está diseñado para ser llamado por Vercel Cron 1 vez al día. Hoy está públicamente accesible sin auth.
-  - **Solución mínima:** agregar validación de header `x-vercel-cron` (Vercel setea automáticamente cuando el cron dispara) o secret compartido `process.env.CRON_SECRET` en el header `Authorization`.
-  - **Bonus:** rate-limit adicional (1 call / hora / IP) via Upstash Redis como defensa en profundidad.
-  - **Archivo:** `app/api/scrape/route.ts`.
-  - **Ref:** TROUBLESHOOTING/14_endpoint_cron_expuesto.md.
+- [ ] **10.J.2 — Rate-limit para `/api/precios`** (15 min — **diferido, activar solo si hace falta post-cutover**)
+  - **Contexto:** endpoint público consumido por el Comparador del front. Legítimamente tiene alto volumen. Sin rate-limit, un bot podría scrapearlo infinitamente.
+  - **Criterio para activar:** observar post-cutover. Si Supabase Free tier se satura con queries o si algún scraper externo empieza a consumir bandwidth desmedido → activar. Hoy sin tráfico, el rate-limit no se necesita.
+  - **Solución cuando se active:** Upstash `fixedWindow(60, '1 m')` — 60 requests por minuto por IP. Helper `checkApiPublicRateLimit` nuevo en `lib/rate-limit.ts`.
+  - **Archivo:** `app/api/precios/route.ts`.
 
-- [ ] **10.J.2 — Rate-limit para `/api/precios`** (15 min)
-  - **Contexto:** endpoint público consumido por el Comparador del front. Legítimamente tiene alto volumen. Sin rate-limit, un bot puede scrapearlo infinitamente.
-  - **Solución:** Upstash `fixedWindow(60, '1 m')` — 60 requests por minuto por IP. Más que suficiente para uso legítimo humano.
-  - **Archivo:** `app/api/precios/route.ts`, helper `checkApiPublicRateLimit` nuevo en `lib/rate-limit.ts`.
-
-- [ ] **10.J.3 — Rate-limit para `/api/tasas-banco-central`** (10 min)
-  - **Contexto:** endpoint público consumido por `TasasReferencia.tsx`. Data pequeña y de cache agresivo, bajo riesgo, pero bajo costo también.
-  - **Solución:** mismo patrón que 10.J.2, quizás más permisivo (`120/1m`).
-
-- [ ] **10.J.4 — Rate-limit para `/api/historial-tasas`** (10 min)
-  - **Contexto:** endpoint que sirve gráficas de Recharts en `/tasa/[pair]`. Similar a banco central.
-
-**Criterio de cierre del Bloque J:** todos los endpoints de `/api/*` tienen rate-limit o auth. Ningún endpoint público sin protección. Todos los items marcados [x].
+**Criterio de cierre del Bloque J:** activar 10.J.2 solo si se observa saturación real post-cutover. No es bloqueante.
 
 ---
 
@@ -1074,40 +1047,24 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - **Smoke test validado 2026-04-23:** branch efímera `test/preview-db-separation` → preview deploy con URL única → insertado contacto test desde form `/contacto` → verificado que aparece SOLO en DB preview, NO en prod. Branch borrada post-test.
   - **Ref:** `supabase/preview_setup_all.sql` (script reejecutable si hay que recrear preview en el futuro).
 
-- [ ] **10.K.2 — Cache headers en assets estáticos** (30 min)
-  - **Contexto:** Vercel sirve assets de `public/` con cache headers default (`cache-control: public, max-age=0, must-revalidate`). Eso hace que cada request re-valide el archivo — innecesario para favicon, logos, fonts que no cambian nunca.
-  - **Solución:** configurar `next.config.ts` con `headers()` que dé `Cache-Control: public, max-age=31536000, immutable` a los archivos con hash en el nombre (Next los genera automáticamente para fonts y CSS).
-  - **Impacto:** reducciones de 30-50% en re-requests repetidos del mismo usuario.
-
-**Criterio de cierre del Bloque K:** DB preview separada de prod, cache headers configurados. Todos los items marcados [x]. El playbook del DNS cutover se trabaja por separado en la sección destacada debajo.
+**Criterio de cierre del Bloque K:** K.1 completado 2026-04-23 (DB preview separada de prod). Cache headers (10.K.2 original) descartado post-filtro 2026-04-23 — Vercel + Next.js ya aplican cache headers correctos a assets con hash, optimización redundante. El playbook del DNS cutover se trabaja por separado en la sección destacada debajo.
 
 ---
 
-#### 10.L — UX mejoras adicionales (1-2h)
+#### 10.L — Open Graph + Twitter Cards (integral para marketing con shares)
 
-**Por qué importa:** estos son polish items que mejoran percepción de calidad pero no son bloqueantes. Se implementan gradualmente según feedback real de usuarios post-lanzamiento.
-
-- [ ] **10.L.1 — Error boundaries (`error.tsx`)** (30 min)
-  - **Qué es:** archivos especiales de Next.js App Router que capturan errores de rendering en componentes y muestran una UI de fallback en lugar de la página en blanco default.
-  - **Archivos nuevos:** `app/[locale]/error.tsx` + `app/[locale]/not-found.tsx` + opcionalmente `app/global-error.tsx` para errores que escapan el layout.
-  - **Contenido:** pantalla amigable con mensaje "Algo salió mal, intenta de nuevo" + botón "Volver a la home" + link a `/contacto` si persiste. Bilingüe ES/EN.
-
-- [ ] **10.L.2 — Loading states globales (`loading.tsx`)** (15 min)
-  - **Qué es:** Next.js muestra automáticamente `loading.tsx` mientras la página del segmento se está renderizando (especialmente útil en rutas dinámicas como `/tasa/[pair]` que dependen de fetch).
-  - **Archivos nuevos:** `app/[locale]/loading.tsx` con un skeleton básico (logo + shimmer en el área de contenido).
+**Post-filtro 2026-04-23:** 3 items descartados (L.1, L.2, L.4). Queda solo L.3 porque el plan de marketing del mes 1 incluye shares en redes sociales (Instagram, TikTok, Facebook, X) — sin OG cards los links comparten plain, CTR 3-5x menor. Los otros 3 items eran polish preventivo sin evidencia de bug visible.
 
 - [ ] **10.L.3 — Open Graph + Twitter Cards en páginas principales** (1h)
   - **Qué es:** metadatos que controlan cómo se ve el link cuando alguien lo comparte en WhatsApp, Twitter, Facebook, etc. Hoy NO están configurados — los shares muestran título + URL nada más.
   - **Impacto:** el plan de marketing v2 depende de shares en redes. Un OG con imagen + título + descripción tiene 3-5x mejor CTR que un share plain.
   - **Scope:** agregar campos `openGraph` y `twitter` al `generateMetadata` de: home, `/tasa/[pair]`, `/operadores/[slug]`, `/[pais]`, blog posts.
-  - **Imagen OG:** 1200×630 con logo PreEnvios + "Compara remesadoras" + bandera del país destino (si aplica). Puede ser estática en `public/og/` o dinámica con `ImageResponse` en `app/[locale]/[route]/opengraph-image.tsx`.
+  - **Imagen OG:** 1200×630 con logo PreEnvios + "Compara remesadoras" + bandera del país destino (si aplica). Dos approaches:
+    - **A.** Estática en `public/og/` — imágenes diseñadas custom, requiere diseño previo.
+    - **B.** Dinámica con `ImageResponse` en `app/[locale]/[route]/opengraph-image.tsx` — código puro sin assets adicionales, recomendada.
+  - **Decisión de approach pendiente:** founder elige A o B antes de codear.
 
-- [ ] **10.L.4 — Schema.org BreadcrumbList en rutas anidadas** (45 min — opcional)
-  - **Qué es:** structured data para las migas de pan (Home → Blog → Artículo). Google los usa para mostrar breadcrumbs en los resultados de búsqueda.
-  - **Rutas candidatas:** `/blog/[slug]`, `/wiki/[slug]`, `/operadores/[slug]`, `/tasa/[pair]`.
-  - **Ya existe `BreadcrumbList` en algunas** según AUDIT — verificar cuáles faltan.
-
-**Criterio de cierre del Bloque L:** error.tsx + loading.tsx en producción. OG/Twitter cards en home + 4 rutas dinámicas. Share preview validado con https://www.opengraph.xyz/. Todos los items marcados [x].
+**Criterio de cierre del Bloque L:** OG/Twitter cards en home + 4 rutas dinámicas. Share preview validado con https://www.opengraph.xyz/ post-deploy.
 
 ---
 
@@ -1190,16 +1147,22 @@ Cuando un item de la Fase 10 se complete:
 4. Si el item descubrió un bug o tech debt adicional, agregarlo al BACKLOG_POST_REFACTOR.md con descripción
 5. Si el item generó un doc nuevo (ej. troubleshooting), agregar la entry al índice de ese directorio
 
-El orden de ejecución sugerido de la Fase 10 (de mayor a menor ROI):
+Orden de ejecución (estado post-filtro 2026-04-23):
 
-1. **10.A.1 + 10.A.3 (seguridad crítica)** — 30 min, cierra las 2 vulnerabilidades más explotables
-2. **10.J (rate-limit)** — 45 min, protege endpoints críticos
-3. **10.K.1 (separación DB)** — 30 min, evita corrupción accidental
-4. **10.L.1 (error boundaries)** — 30 min, mejora UX de errores reales
-5. **10.E (docs pendientes)** — 30 min, fija conocimiento operacional antes de seguir
-6. **10.H.1 + 10.H.4 (validator tests + CI)** — 2.5h, safety net para todo lo siguiente
-7. **10.F.1 (next/image)** — 2h, LCP directo
-8. **El resto** — orden libre según disponibilidad
+**Completados:** 10.A.1, 10.E.1, 10.E.2, 10.F.1, 10.F.2, 10.K.1.
+
+**Pendientes que SÍ se ejecutan (si surgen):**
+1. **10.L.3 (OG + Twitter Cards)** — 1h, integral para el plan de marketing con shares sociales.
+2. **10.A.2, 10.A.4, 10.A.5** — items de seguridad restantes (admin hardening, alertas, headers).
+3. **10.F.3 (Lighthouse CLS audit)** — 30 min, requiere intervención tuya en Chrome DevTools.
+4. **10.H.1, 10.H.2, 10.H.3** — unit tests `lib/` (opcional, post-cutover).
+5. **DNS_CUTOVER_PLAYBOOK.md** + ejecución del cutover + documentación post.
+
+**Pendientes diferidos:**
+- **10.J.2** — rate-limit `/api/precios` — activar solo si se observa saturación post-cutover.
+- **10.A.3** — Twilio HMAC — diferido hasta reactivar bot WhatsApp post-LLC + Meta Business verification.
+
+**Descartados (no se ejecutan):** 10.G entero, 10.H.4, 10.H.5, 10.J.1, 10.J.3, 10.J.4, 10.K.2, 10.L.1, 10.L.2, 10.L.4. Ver razones en el sumario de bloques arriba.
 
 **Antes del DNS cutover** ejecutar los items marcados como pre-requisito en la sección "DÍA CRÍTICO" arriba.
 
