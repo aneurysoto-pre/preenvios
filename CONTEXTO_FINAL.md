@@ -977,7 +977,7 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - **Archivos afectados:** `components/Comparador.tsx` (logos operadores), `components/TasasReferencia.tsx` (flags), `components/BannersPatrocinados.tsx` (iconos), `app/[locale]/operadores/[slug]/operador-content.tsx`, `app/[locale]/[pais]/pais-content.tsx`, `app/[locale]/nosotros/content.tsx`.
   - **Precaución:** `next/image` requiere `width` + `height` explícitos (o `fill`). Si no se calculan bien, puede romper el layout visual. Validar con screenshots antes/después en desktop + iPhone.
 
-- [ ] **10.F.2 — Loading states en fetch `/api/precios` (Comparador)** (45 min)
+- [x] **10.F.2 — Loading states en fetch `/api/precios` (Comparador)** (completado 2026-04-23) — reemplazado el div de texto `{t('results.loading')}` por 3 skeleton cards animados (`ResultCardSkeleton`) con `animate-pulse`. Replican el layout exacto de `ResultCard` (.cmp-card + .cmp-brand + 3 .cmp-col + CTA) → zero layout shift cuando llegan los resultados reales. Accesible con `role="status"` + `aria-label` + `aria-busy`. Typecheck + build limpios.
   - **Qué es:** cuando el usuario hace click en "Comparar", se hace un fetch a `/api/precios` que devuelve los 7 operadores. Hoy NO hay indicador visual mientras llega → el UI se queda "vacío" por 500-2000ms.
   - **Solución:** agregar skeleton (tarjetas grises animadas) o spinner en el lugar donde van a aparecer los resultados. Similar patrón a lo que hace Monito.com.
   - **Archivo afectado:** `components/Comparador.tsx` — estado `loading` ya existe, falta renderizar un componente visual en ese estado.

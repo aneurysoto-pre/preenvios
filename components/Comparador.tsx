@@ -429,7 +429,16 @@ export default function Comparador({ defaultCorredor, defaultMonto, heroTitle, h
 
             {/* Results cards */}
             {loading ? (
-              <div className="text-center py-16 text-g500">{t('results.loading')}</div>
+              <div
+                className="cmp-card-list"
+                role="status"
+                aria-label={t('results.loading')}
+                aria-busy="true"
+              >
+                {[0, 1, 2].map((i) => (
+                  <ResultCardSkeleton key={i} />
+                ))}
+              </div>
             ) : ranked.length === 0 ? (
               <div className="bg-white border-[1.5px] border-dashed border-g300 rounded-[22px] p-12 text-center">
                 <div className="text-[40px] mb-3" aria-hidden="true">🕑</div>
@@ -562,6 +571,42 @@ function ResultCard({ p, i, sortKey, esUSD, moneda, locale, t, onClick }: {
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 10h10m0 0l-4-4m4 4l-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </a>
       )}
+    </article>
+  )
+}
+
+// ═══════════════════════════════════════
+// RESULT CARD SKELETON — placeholder animado mientras carga /api/precios
+// Replica la estructura del layout `.cmp-card` (grid: brand + 3 cols + CTA).
+// 3 instancias se renderizan mientras `loading=true`. Zero layout shift
+// porque usa las mismas clases `.cmp-card` y `.cmp-col` que las cards reales.
+// ═══════════════════════════════════════
+function ResultCardSkeleton() {
+  return (
+    <article className="cmp-card animate-pulse" aria-hidden="true">
+      <div className="cmp-brand">
+        <div className="cmp-logo bg-g200 rounded-full" style={{ width: 36, height: 36 }} />
+        <div className="cmp-brand-info">
+          <div className="h-4 bg-g200 rounded w-24 mb-1.5" />
+          <div className="h-3 bg-g100 rounded w-32 mb-1" />
+          <div className="h-3 bg-g100 rounded w-20" />
+        </div>
+      </div>
+      <div className="cmp-col">
+        <div className="h-3 bg-g100 rounded w-10 mb-1.5" />
+        <div className="h-5 bg-g200 rounded w-16 mb-1" />
+        <div className="h-3 bg-g100 rounded w-14" />
+      </div>
+      <div className="cmp-col">
+        <div className="h-3 bg-g100 rounded w-8 mb-1.5" />
+        <div className="h-5 bg-g200 rounded w-12 mb-1" />
+        <div className="h-3 bg-g100 rounded w-16" />
+      </div>
+      <div className="cmp-col">
+        <div className="h-3 bg-g100 rounded w-14 mb-1.5" />
+        <div className="h-5 bg-g200 rounded w-20" />
+      </div>
+      <div className="h-10 bg-g200 rounded-full w-full" />
     </article>
   )
 }
