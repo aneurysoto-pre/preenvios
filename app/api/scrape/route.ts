@@ -12,11 +12,17 @@ import { runAllScrapers } from '@/lib/scrapers'
  * envio de emails aqui.
  */
 export async function GET(request: NextRequest) {
-  // Verificar que viene de Vercel Cron o tiene el secret correcto
+  // Auth del endpoint cron. Hard-fail si CRON_SECRET no esta seteada — sin
+  // este check, si alguien borra la env var por error, el endpoint queda
+  // publico al mundo y cualquiera dispara los 7 scrapers.
+  // Ref: TROUBLESHOOTING/14 Causa 1, FASE 10 BLOQUE A.1.
   const authHeader = request.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
 
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+  }
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
