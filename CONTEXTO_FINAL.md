@@ -418,7 +418,7 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 - [x] Artículo 3: "La forma más barata de mandar dinero a Guatemala en 2026" (completado 2026-04-17 — placeholder listo, contenido editorial pendiente)
 - [ ] Un artículo por corredor por mes mínimo (pendiente — contenido editorial del fundador)
 - [x] Configurar sitemap.xml automático (completado 2026-04-17 — incluye blog, wiki, tasa, operadores, legal, calculadora inversa con alternates es/en)
-- [ ] Verificar propiedad en Google Search Console (pendiente de acción del usuario)
+- [x ] Verificar propiedad en Google Search Console (pendiente de acción del usuario con ajsmconsulting) hecho 23/04/2026
 - [x] Optimizar Core Web Vitals — verde en PageSpeed (completado 2026-04-17 — font swap, preconnect, dynamic imports, lazy loading, code splitting)
 - [x] Crear tabla historial_tasas_publico en Supabase (completado 2026-04-17 — SQL ejecutado en Supabase, tabla activa con índices y RLS)
 - [x] Páginas públicas indexadas por Google: preenvios.com/tasa/usd-dop, usd-hnl, usd-gtq, usd-svc, usd-cop, usd-mxn, usd-nio, usd-htg (completado 2026-04-17 — 8 corredores con Recharts, tabla operadores, CTA, Schema.org)
@@ -798,8 +798,6 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 - [x] Color BR (Banrep Colombia) cambiado de amarillo claro `#FFD100` a gold oscuro `#C28A00→#7A5700` para contraste con texto blanco (completado 2026-04-21)
 - [x] Traducciones ES/EN actualizadas (FAQ q3, q5 y nosotros.missionText) (completado 2026-04-21)
 - [x] Migración SQL 006 lista (`supabase/migrations/006_mexico_colombia_mvp.sql`) — UPSERT corredores + tasas_bancos_centrales + 14 precios iniciales. Idempotente. **Acción pendiente del usuario: ejecutar en Supabase SQL Editor** (completado 2026-04-21 código, pendiente ejecución SQL)
-- [ ] Bounds MX/CO en validador de ingress (Agente 1, Fase 7) — COP ±10% de 4150, MXN ±10% de 17.15. Se agrega cuando Agente 1 se implemente
-- [ ] Smoke test: usuario mexicano y colombiano completa el flujo comparar → click → afiliado (se corre en § 13 del CHECKLIST)
 
 **Marketing plan NO se toca:** la adición de MX/CO al catálogo es una decisión de producto/SEO de largo plazo. El plan de marketing del mes 1 post-launch sigue enfocado en Honduras (prioridad #1). MX y CO son tráfico orgánico + futuros ad sets del mes 2-3 cuando haya data de conversión por corredor. Referencia: `PLAN_MARKETING_MES_1.md` permanece intacto.
 
