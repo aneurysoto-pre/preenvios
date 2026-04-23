@@ -14,7 +14,7 @@ export default function BlogIndex() {
   const locale = useLocale()
   const en = locale === 'en'
   return (
-    <LegalPage tag="Blog" title={en ? 'Remittance guides and comparisons' : 'Guías y comparaciones de remesas'} backLabel={en ? '← Back to home' : '← Volver al inicio'} updatedLabel={en ? 'Last updated' : 'Última actualización'}>
+    <LegalPage tag="Blog" title={en ? 'Remittance guides and comparisons' : 'Guías y comparaciones de remesas'} updatedLabel={en ? 'Last updated' : 'Última actualización'}>
       <p>{en ? 'Articles coming soon. We are preparing in-depth guides for each corridor.' : 'Artículos próximamente. Estamos preparando guías detalladas para cada corredor.'}</p>
       <div className="flex flex-col gap-4 mt-8">
         {ARTICLES.map(a => (

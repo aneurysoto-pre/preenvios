@@ -3,18 +3,15 @@
 import Nav from './Nav'
 import { Footer } from './Sections'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function LegalPage({
   tag,
   title,
   children,
-  backLabel: _backLabel,
   updatedLabel,
 }: {
   tag: string
   title: string
   children: React.ReactNode
-  backLabel: string
   updatedLabel: string
 }) {
   return (

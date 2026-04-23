@@ -6,7 +6,7 @@ export default function UsoMarcasContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
   return (
-    <LegalPage tag={t('legal.trademarksTag')} title={t('legal.trademarksTitle')} backLabel={t('legal.backToHome')} updatedLabel={t('legal.lastUpdated')}>
+    <LegalPage tag={t('legal.trademarksTag')} title={t('legal.trademarksTitle')} updatedLabel={t('legal.lastUpdated')}>
       <div className="highlight-box"><p><strong>{t('disclaimers.d6')}</strong></p></div>
       <h2>{en ? 'Trademarks used on this site' : 'Marcas usadas en este sitio'}</h2>
       <p>{en ? 'The following names and logos are registered trademarks of their respective owners:' : 'Los siguientes nombres y logos son marcas registradas de sus respectivos dueños:'}</p>

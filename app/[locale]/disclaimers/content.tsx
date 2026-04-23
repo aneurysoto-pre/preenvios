@@ -10,7 +10,6 @@ export default function DisclaimersContent() {
     <LegalPage
       tag={en ? 'Legal' : 'Legal'}
       title={en ? 'Disclaimers' : 'Disclaimers'}
-      backLabel={t('legal.backToHome')}
       updatedLabel={t('legal.lastUpdated')}
     >
       <p>

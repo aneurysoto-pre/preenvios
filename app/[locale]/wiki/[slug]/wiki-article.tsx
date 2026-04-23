@@ -22,7 +22,6 @@ export default function WikiArticle({ slug }: { slug: string }) {
     <LegalPage
       tag="Wiki"
       title={title}
-      backLabel={en ? '← Back to wiki' : '← Volver a la wiki'}
       updatedLabel={en ? 'Last updated' : 'Última actualización'}
     >
       <div className="text-center py-16">

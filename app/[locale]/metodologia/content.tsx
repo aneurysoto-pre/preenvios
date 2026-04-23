@@ -6,7 +6,7 @@ export default function MetodologiaContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
   return (
-    <LegalPage tag={t('legal.methodologyTag')} title={t('legal.methodologyTitle')} backLabel={t('legal.backToHome')} updatedLabel={t('legal.lastUpdated')}>
+    <LegalPage tag={t('legal.methodologyTag')} title={t('legal.methodologyTitle')} updatedLabel={t('legal.lastUpdated')}>
       <h2>Preenvíos Score</h2>
       <p>{en ? 'Each remittance provider receives a score from 0 to 100 based on 5 weighted criteria. This score determines the order of results in the comparator.' : 'Cada remesadora recibe un puntaje de 0 a 100 basado en 5 criterios ponderados. Este puntaje determina el orden de los resultados en el comparador.'}</p>
 

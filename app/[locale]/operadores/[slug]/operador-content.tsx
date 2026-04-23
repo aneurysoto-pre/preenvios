@@ -21,7 +21,6 @@ export default function OperadorContent({ slug }: { slug: string }) {
     <LegalPage
       tag={en ? 'Provider review' : 'Review de remesadora'}
       title={op.nombre}
-      backLabel={en ? '← Back to home' : '← Volver al inicio'}
       updatedLabel={en ? 'Last updated' : 'Última actualización'}
     >
       <p className="text-lg leading-relaxed">{en ? op.desc_en : op.desc_es}</p>

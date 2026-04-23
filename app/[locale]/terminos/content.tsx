@@ -6,7 +6,7 @@ export default function TerminosContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
   return (
-    <LegalPage tag={t('legal.termsTag')} title={t('legal.termsTitle')} backLabel={t('legal.backToHome')} updatedLabel={t('legal.lastUpdated')}>
+    <LegalPage tag={t('legal.termsTag')} title={t('legal.termsTitle')} updatedLabel={t('legal.lastUpdated')}>
       <div className="highlight-box"><p><strong>{t('disclaimers.d2')}</strong></p></div>
       <h2>{en ? 'What is PreEnvios.com' : 'Qué es PreEnvios.com'}</h2>
       <p>{t('disclaimers.d2')}</p>

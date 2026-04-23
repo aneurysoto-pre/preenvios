@@ -6,7 +6,7 @@ export default function PrivacidadContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
   return (
-    <LegalPage tag={t('legal.privacyTag')} title={t('legal.privacyTitle')} backLabel={t('legal.backToHome')} updatedLabel={t('legal.lastUpdated')}>
+    <LegalPage tag={t('legal.privacyTag')} title={t('legal.privacyTitle')} updatedLabel={t('legal.lastUpdated')}>
       <div className="highlight-box"><p><strong>{t('disclaimers.d2')}</strong></p></div>
       <h2>{en ? 'What data we collect' : 'Qué datos recopilamos'}</h2>
       <p>{en ? 'PreEnvios.com uses Google Analytics (GA4) to measure site traffic. This includes:' : 'PreEnvios.com utiliza Google Analytics (GA4) para medir el tráfico del sitio. Esto incluye:'}</p>

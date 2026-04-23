@@ -18,7 +18,6 @@ export default function WikiIndex() {
     <LegalPage
       tag="Wiki"
       title={en ? 'Remittance education center' : 'Centro educativo de remesas'}
-      backLabel={en ? '← Back to home' : '← Volver al inicio'}
       updatedLabel={en ? 'Last updated' : 'Última actualización'}
     >
       <p>{en

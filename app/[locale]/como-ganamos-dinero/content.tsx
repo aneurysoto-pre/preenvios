@@ -6,7 +6,7 @@ export default function ComoGanamosContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
   return (
-    <LegalPage tag={t('legal.howWeEarnTag')} title={t('legal.howWeEarnTitle')} backLabel={t('legal.backToHome')} updatedLabel={t('legal.lastUpdated')}>
+    <LegalPage tag={t('legal.howWeEarnTag')} title={t('legal.howWeEarnTitle')} updatedLabel={t('legal.lastUpdated')}>
       <div className="highlight-box"><p><strong>{t('disclaimers.d4')}</strong></p></div>
       <h2>{en ? 'How does PreEnvios generate revenue?' : '¿Cómo genera ingresos PreEnvios?'}</h2>
       <p>{en ? 'PreEnvios.com is free for users. We generate revenue through affiliate programs with some of the remittance providers we compare. When you click "Send now" and complete a transfer through one of our partner links, the provider pays us a commission.' : 'PreEnvios.com es gratis para los usuarios. Generamos ingresos a través de programas de afiliados con algunas de las remesadoras que comparamos. Cuando haces clic en "Enviar ahora" y completas una transferencia a través de uno de nuestros enlaces de afiliado, la remesadora nos paga una comisión.'}</p>

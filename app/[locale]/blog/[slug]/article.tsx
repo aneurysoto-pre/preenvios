@@ -14,7 +14,7 @@ export default function BlogArticle({ slug }: { slug: string }) {
   const relatedOperadores = (links?.operadores || []).map(s => OPERADORES_DATA.find(o => o.slug === s)).filter(Boolean)
 
   return (
-    <LegalPage tag="Blog" title={title} backLabel={en ? '← Back to blog' : '← Volver al blog'} updatedLabel={en ? 'Last updated' : 'Última actualización'}>
+    <LegalPage tag="Blog" title={title} updatedLabel={en ? 'Last updated' : 'Última actualización'}>
       <div className="text-center py-16">
         <div className="text-5xl mb-4">📝</div>
         <h2 className="font-extrabold text-xl mb-3">{en ? 'Coming soon' : 'Próximamente'}</h2>
