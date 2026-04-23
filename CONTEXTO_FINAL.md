@@ -1115,8 +1115,8 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 **Qué es el cutover:** cambiar los DNS de `preenvios.com` en Namecheap — de apuntar al sitio viejo en GitHub Pages a apuntar al deploy Next.js en Vercel. Es una operación de minutos técnicos con consecuencias de días si algo falla.
 
 **Pre-requisitos NO negociables antes de hacer el cutover:**
-- [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app`
-- [ ] Migración 007 (`scraper_anomalies`) corrida en Supabase
+- [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app` — Agente 1 [x] 2026-04-23 (commit `f1fefc0`); Agentes 2, 3, 4, 5 pendientes
+- [x] Migración 007 (`scraper_anomalies`) corrida en Supabase prod (2026-04-23, verificación post-run: 1-4-3-0)
 - [x] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth — commit `53c7d18`, 2026-04-23)
 - [x] Bloque 10.K.1 completado (DB preview separada de producción — proyecto `preenvios-preview` + commit `edaa553`, 2026-04-23)
 - [x] CHECKLIST §15.1 Cookie consent banner CCPA + GDPR funcionando (commit `d064dcc`, 2026-04-23)
