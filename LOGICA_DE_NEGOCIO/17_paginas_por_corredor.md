@@ -6,6 +6,7 @@ Páginas SEO editoriales para los 6 corredores activos: Honduras, República Dom
 
 - **2026-04-17 (Fase 4.1.2)** — 4 páginas iniciales: HN, RD, GT, SV.
 - **2026-04-21 (Fase 8)** — Colombia y México agregadas al catálogo público. Las páginas se generan automáticamente porque la ruta `app/[locale]/[pais]/page.tsx` llama a `generateStaticParams()` iterando `PAISES_MVP`; basta con agregar las entries correspondientes a `lib/paises.ts` (slugs, corredorId, códigoPais, bancos populares).
+- **2026-04-22 (Fase 10)** — Ruta hija `/{locale}/{pais}/{monto}` para URLs indexables con monto específico (4 montos canónicos × 6 países × 2 locales = 48 SSG). El click en "Comparar" promueve la URL; el dropdown y el typing no modifican URL. Detalles completos en Proceso 25.
 
 ## Estructura de URLs
 

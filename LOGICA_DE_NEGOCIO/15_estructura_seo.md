@@ -49,10 +49,18 @@ Categorías: Fundamentos (5), Guías por corredor (3), Educación financiera (2)
 
 Tabla `historial_tasas_publico` está **activa en Supabase desde 2026-04-17** con índices y RLS. `/api/historial-tasas` la consulta sin errores; solo falta que los scrapers escriban snapshots diarios para poblar las gráficas.
 
+### Páginas país + monto (agregadas 2026-04-22, Fase 10)
+`/{locale}/{pais}/{monto}` — 48 URLs SSG indexables (4 montos canónicos × 6 países × 2 locales)
+con montos [100, 200, 500, 1000] USD. Target SEO: queries transaccionales con intención clara
+("enviar 200 dólares a Honduras", "send 500 USD to Mexico"). Ver Proceso 25 para el detalle
+completo (validación de params, redirect server-side, regla "URL solo cambia en click
+Comparar", JSON-LD breadcrumb extendido).
+
 ### Sitemap dinámico
 `app/sitemap.ts` genera todas las URLs con alternates es/en:
 - 2 homes, 10 legales, 16 tasas históricas, 14 operadores, 8 blog, 22 wiki, 2 calculadora inversa
-- Total: ~74 URLs indexables
+- 12 países editoriales (Proceso 17) + 48 país+monto (Proceso 25)
+- Total: ~122 URLs indexables
 
 ## Archivos creados
 
