@@ -139,6 +139,28 @@ Opción 2 solo si las afiliaciones tardan más de lo esperado.
 
 ### Orden de ejecución recomendado
 
+**Fase R0 (puente manual, 2h/día durante primeras 2-4 semanas post-launch):**
+actualización manual diaria de las tasas desde el admin panel, ejecutada por
+el founder o un asistente humano.
+
+- **Justificación:** las tasas de remesas tienen tolerancia natural de ±0.X%
+  entre fuentes — un valor manualmente copiado del sitio oficial de cada
+  operador es 100% aceptable funcionalmente. No es "hack", es el estándar
+  de calidad realista cuando APIs todavía no están integradas.
+- **Trabajo humano estimado:** ~2h/día en una PC, revisando 7 operadores ×
+  6 corredores = 42 valores que se ingresan en `/admin`. Se puede sistematizar
+  con un spreadsheet de referencia que replica los campos del form.
+- **Cuándo se activa:** si el DNS cutover se hace antes de que R1 + R2
+  cubran al menos 4/7 operadores con data real automatizada. Es el **"plan
+  B humano"** — garantiza que el sitio lanza con data fresca diaria incluso
+  sin scrapers ni APIs partners aún integradas.
+- **Cuándo se retira:** cuando R1 + R2 cubran ≥4/7 operadores, la carga
+  humana baja a solo los 2-3 sin API. Cuando cubran 7/7, se deja de hacer.
+- **Filosofía detrás (founder 2026-04-23):** "LANZA BIEN, NO LANZES RÁPIDO".
+  Es preferible trabajar 2h/día durante el piloto para tener data correcta
+  y ajustar el producto con feedback real, que lanzar con data estática de
+  placeholder o con scrapers remendados que rompen en 1-3 meses.
+
 **Fase R1 (quick win, ~3h):** activar Wise API pública.
 - No requiere LLC ni aprobación.
 - Es gratis y estable.
@@ -161,56 +183,54 @@ aprobado, integrar su API de pricing.
 - Esto es una solución temporal hasta que R2 complete.
 - Requiere 10h de trabajo inicial + 2-4h/mes de mantenimiento.
 
-## Validación de supuestos (pre-cutover, ~1h de lectura sin código)
+## Validación de supuestos (actualizado 2026-04-23 con evidencia real del founder)
 
-La decisión de diferir scrapers hasta post-LLC + partner APIs descansa en 2
-supuestos no verificados al momento de tomarla (2026-04-23). Antes del DNS
-cutover, ambos deben chequearse contra la documentación oficial de cada red.
-Si alguno se cae, el plan R2 no es viable solo y hay que mezclar con Fase R3
-(reverse-engineer + proxy) como puente real, no como fallback teórico.
+La decisión de diferir scrapers hasta post-LLC + partner APIs descansaba
+en 2 supuestos que parecían no verificados desde afuera — pero el founder
+ya había tomado acción antes de la decisión y tiene evidencia empírica
+que respalda ambos. Documento el estado real de cada uno para trazabilidad.
 
-### Supuesto 1 — "Los programas de afiliado darán APIs de pricing"
+### Supuesto 1 — "Los programas de afiliado darán APIs de pricing y/o feeds útiles"
 
-**No todos los programas entregan APIs de pricing.** Muchos solo dan
-deep links con clickid para tracking, feeds de productos (catálogos sin
-pricing en vivo), o pricing embedded en URLs para calculators. Pricing
-API JSON con tasa + fee + velocidad por corredor es data operacional que
-muchos operadores reservan para partners estratégicos, no para afiliados
-de entrada.
+**Estado:** ✅ **Parcialmente validado empíricamente 2026-04-23.**
 
-**Acción de validación — por programa, responder 2 preguntas:**
+El founder envió correos a los 4 programas describiendo su intención y
+preguntando por requisitos/entregables previos, en lugar de hacer
+aplicación ciega. Resultado:
 
-| Programa | Operadores | Q1: ¿qué entrega? (deeplink / feed / pricing API / combo) | Q2: ¿qué exigen para aprobar? (tráfico / dominio / contenido / tiempo) |
-|----------|-----------|----------------------------------------------------------|-----------------------------------------------------------------------|
-| **Impact.com** | Remitly | _pendiente verificar en impact.com/advertisers_ | _pendiente_ |
-| **Partnerize** | Wise | _pendiente verificar en partnerize.com_ | _pendiente_ |
-| **CJ Affiliate** | Xoom, Ria, WorldRemit, Western Union, MoneyGram | _pendiente verificar en cj.com_ | _pendiente_ |
-| **FlexOffers** | MoneyGram, Western Union (redundante con CJ) | _pendiente verificar en flexoffers.com_ | _pendiente_ |
+| Programa | Operadores | Estado | Notas |
+|----------|-----------|--------|-------|
+| **CJ Affiliate** | Xoom, Ria, WorldRemit, Western Union, MoneyGram | ✅ **APROBADO** (pre-aplicación) | Response directo recibido. Falta formalizar aplicación completa. |
+| **Impact.com** | Remitly | 🟡 Conversaciones abiertas con agente directo | No con servicio al cliente genérico — con account manager real. Aplicación formal pospuesta hasta estar mejor preparado (dominio activo + contenido). |
+| **FlexOffers** | MoneyGram, Western Union (redundante con CJ) | 🟡 Conversaciones abiertas con agente directo | Mismo patrón que Impact. |
+| **Partnerize** | Wise | _pendiente contactar_ | Wise además tiene API pública gratis (Fase R1), por lo cual Partnerize es redundante si R1 se activa. |
 
-**Resultado esperado:** si Q1 da "pricing API" en al menos 4/7 operadores, el
-plan R2 cubre el catálogo MVP. Si da "pricing API" en menos de 4/7, hay que
-pivotar a una mezcla R2 + R3 real.
+**Lectura del founder:** la escritura previa a agentes directos (no soporte
+general) filtra pre-aprobación y deja claras las condiciones antes de que
+la aplicación formal entre al pipeline. Plan: aplicar formalmente cuando
+`preenvios.com` esté live con contenido real + al menos 1 operador con
+data real (Wise API vía R1).
 
-### Supuesto 2 — "Los programas me aprobarán una vez aplique"
+### Supuesto 2 — "Los programas me aprobarán cuando aplique"
 
-La mayoría de las redes exige un piso de legitimidad para aprobar:
+**Estado:** ✅ **Validado empíricamente con CJ (pre-aprobado) y contactos
+directos con Impact y FlexOffers.**
 
-- **Dominio activo con tráfico demostrable** (típicamente 100-1000 visitas
-  mensuales verificables con GA4 o similar).
-- **Contenido relevante al nicho** (SEO de remesas, guías, comparativas).
-- **Tiempo mínimo desde registro del dominio** (algunos exigen 3-6 meses).
+La circularidad "necesito tráfico para ser aprobado → necesito scrapers
+para tráfico" se mitiga en la práctica porque:
 
-**La circularidad del problema:** necesito tráfico para ser aprobado →
-necesito scrapers funcionales para dar valor al usuario → atraer tráfico →
-ser aprobado. Sin ningún operador con data real post-cutover, `preenvios.com`
-es un comparador vacío y las redes rechazan la aplicación.
+1. Los 4 programas SÍ aceptan pre-conversaciones que filtran requisitos
+   antes de la aplicación formal (demostrado).
+2. CJ aprobó sin exigencia de tráfico pre-aplicación.
+3. Impact y FlexOffers tienen conversaciones abiertas con agentes directos,
+   no con servicio genérico — camino distinto al aplicante anónimo.
 
-**Mitigación parcial que ya está en el plan:** Fase R1 (Wise API pública,
-2-3h, $0) ejecutable sin LLC, da 1/7 operador con data real. Eso es poco
-para convencer a una red seria de que Preenvios es un comparador legítimo.
-El piso aceptable — sin pivotar a R3 — requiere además contenido SEO real
-(blog con 5-10 posts, wiki con 10+ artículos, páginas editoriales por país
-completadas con copy original del founder, no placeholders).
+**Piso de legitimidad que el founder ya está construyendo pre-aplicación:**
+- SEO foundation completo (metadata bilingüe + JSON-LD en 19 páginas — Fase 9.3).
+- 6 corredores MVP con páginas editoriales y URLs SSG para montos específicos (Proceso 25).
+- Cookie consent CCPA/GDPR + privacy/terms/disclaimers — legitimidad legal.
+- Admin panel + monitoreo (Fase 4.5).
+- Defense-in-depth empezando (Agente 1, Sentry, BetterStack pendiente).
 
 ### Triggers para replantear el plan
 

@@ -21,13 +21,37 @@ con HTTP 403. Se evaluaron 7 opciones para solucionarlo (reverse-engineering,
 proxy residencial, HTML scraping, data manual, agregador comercial, API
 oficial, partner APIs).
 
-**Se eligió: partner APIs post-LLC.** Razón: gastar 10+ horas y $30-50/mes en
-una solución temporal (Opción 2 del análisis) que va a ser reemplazada en 1-3
-meses por APIs oficiales de afiliados (Opción 6) que son gratis y estables, no
-tiene ROI. El preview donde corren los scrapers hoy (`preenvios.vercel.app`) no
-tiene tráfico real — `preenvios.com` sigue apuntando al MVP estático en GitHub
-Pages. El founder puede actualizar tasas manualmente en `/admin` mientras
-tanto.
+**Se eligió: partner APIs post-LLC + puente manual humano (2h/día) en las
+primeras semanas post-launch si hace falta.** Razón: gastar 10+ horas y
+$30-50/mes en una solución temporal (Opción 2 del análisis) que va a ser
+reemplazada en 1-3 meses por APIs oficiales de afiliados (Opción 6) que son
+gratis y estables, no tiene ROI. El preview donde corren los scrapers hoy
+(`preenvios.vercel.app`) no tiene tráfico real — `preenvios.com` sigue
+apuntando al MVP estático en GitHub Pages.
+
+**La decisión NO es especulativa.** El founder ya tiene evidencia empírica:
+CJ Affiliate **pre-aprobó** pre-aplicación (cubre Xoom/Ria/WorldRemit/WU/MG).
+Impact (Remitly) y FlexOffers tienen **conversaciones abiertas con agentes
+directos**, no con servicio genérico. Partnerize (Wise) queda redundante
+porque Wise tiene API pública gratis. Las aplicaciones formales se hacen
+cuando `preenvios.com` esté live con contenido real + Wise API activa, para
+maximizar la probabilidad de approval rápido.
+
+**Puente humano (Fase R0):** durante las primeras 2-4 semanas post-launch si
+R1+R2 todavía no cubren 4/7 operadores, el founder actualiza tasas manualmente
+en `/admin` — ~2h/día de trabajo. Las tasas de remesas tienen tolerancia ±0.X%
+entre fuentes, por lo cual un valor copiado del sitio oficial del operador
+es 100% aceptable funcionalmente.
+
+## Filosofía de proyecto que guía esta decisión
+
+> **"LANZA BIEN, NO LANZES RÁPIDO"** — founder, 2026-04-23.
+
+Preferimos 2h/día de trabajo humano durante el piloto para lanzar con data
+correcta y ajustar el producto con feedback real, que lanzar con data estática
+placeholder, con scrapers remendados que rompen en 1-3 meses, o con data ruta
+visible al usuario. Esta regla se aplica en todas las decisiones pre-cutover
+del proyecto, no solo en scrapers.
 
 ## Por qué este archivo existe en la raíz
 
@@ -86,9 +110,16 @@ plan de reactivación (Fase R1/R2/R3 de `LOGICA_DE_NEGOCIO/28_scrapers_plan_dife
 
 - **Fecha de la decisión:** 2026-04-23
 - **Quién decidió:** founder (Aneury Soto)
-- **Evidencia que soportó la decisión:** run manual del endpoint con JSON de
-  errores de los 7 operadores + análisis técnico de costo/riesgo de las 7
-  opciones alternativas (ver Proceso 28).
+- **Evidencia que soportó la decisión:**
+  1. Run manual del endpoint con JSON de errores de los 7 operadores
+     confirmando el bug.
+  2. Análisis técnico de costo/riesgo de las 7 opciones alternativas
+     (detalle en Proceso 28).
+  3. **CJ Affiliate pre-aprobado** — email recibido antes de aplicación
+     formal (cubre 5/7 operadores: Xoom, Ria, WorldRemit, WU, MG).
+  4. **Impact.com y FlexOffers con conversaciones abiertas** con agentes
+     directos (no servicio genérico) — filtra requisitos pre-aplicación.
+  5. Wise tiene API pública gratuita disponible sin aprobación (Fase R1).
 - **Próxima revisión obligatoria de la decisión:** antes del DNS cutover de
   `preenvios.com` a Vercel (pre-cutover está bloqueado por este item — ver
   CHECKLIST_PRE_LANZAMIENTO.md).
