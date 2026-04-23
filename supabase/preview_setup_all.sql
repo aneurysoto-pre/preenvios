@@ -279,6 +279,42 @@ CREATE POLICY "scraper_anomalies_deny_anon_delete" ON scraper_anomalies FOR DELE
 
 
 -- ───────────────────────────────────────────────────────────────────────
+-- Migración 010: Tabla alertas_email (form público /alertas)
+-- Replica migration 010_alertas_email.sql. Incluida aquí para que el
+-- setup de preview desde cero quede sincronizado con prod (schema
+-- creado ad-hoc el 2026-04-22, formalizado al repo el 2026-04-23).
+-- ───────────────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS alertas_email (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  activo BOOLEAN NOT NULL DEFAULT true,
+  desactivado_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS alertas_email_created_at_idx
+  ON alertas_email (created_at DESC);
+
+CREATE INDEX IF NOT EXISTS alertas_email_activo_idx
+  ON alertas_email (activo) WHERE activo = true;
+
+ALTER TABLE alertas_email ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "alertas_email_deny_anon_select" ON alertas_email;
+CREATE POLICY "alertas_email_deny_anon_select" ON alertas_email FOR SELECT TO anon USING (false);
+
+DROP POLICY IF EXISTS "alertas_email_deny_anon_insert" ON alertas_email;
+CREATE POLICY "alertas_email_deny_anon_insert" ON alertas_email FOR INSERT TO anon WITH CHECK (false);
+
+DROP POLICY IF EXISTS "alertas_email_deny_anon_update" ON alertas_email;
+CREATE POLICY "alertas_email_deny_anon_update" ON alertas_email FOR UPDATE TO anon USING (false);
+
+DROP POLICY IF EXISTS "alertas_email_deny_anon_delete" ON alertas_email;
+CREATE POLICY "alertas_email_deny_anon_delete" ON alertas_email FOR DELETE TO anon USING (false);
+
+
+-- ───────────────────────────────────────────────────────────────────────
 -- Seed adicional: 4 corredores MVP originales (HN, DO, GT, SV)
 -- Estos NO venían en ninguna migración (se crearon con scripts mjs antes).
 -- Tasas de banco central: valores aproximados abril 2026 — ajustables.
@@ -326,5 +362,6 @@ ON CONFLICT (id) DO UPDATE SET
 --   (SELECT count(*) FROM tasas_bancos_centrales)             AS tasas_bc_count,        -- esperado: 6
 --   (SELECT count(*) FROM precios)                            AS precios_count,         -- esperado: 14 (solo MX + CO)
 --   (SELECT count(*) FROM contactos)                          AS contactos_count,       -- esperado: 0
+--   (SELECT count(*) FROM alertas_email)                      AS alertas_email_count,   -- esperado: 0
 --   (SELECT count(*) FROM scraper_anomalies)                  AS anomalies_count,       -- esperado: 0
---   (SELECT count(*) FROM pg_policies WHERE schemaname='public') AS policies_total;    -- esperado: 10+ (4 contactos + 4 anomalies + 3 public reads)
+--   (SELECT count(*) FROM pg_policies WHERE schemaname='public') AS policies_total;    -- esperado: 14+ (4 contactos + 4 alertas_email + 4 anomalies + 3 public reads)
