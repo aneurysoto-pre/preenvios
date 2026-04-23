@@ -12,26 +12,48 @@ Completado el 2026-04-16 como Bloque 5 de la Fase 1.
 1. Se hace push a la rama `main` del repo `aneurysoto-pre/preenvios`
 2. Vercel detecta el push via webhook de GitHub
 3. Vercel ejecuta `npm install` + `next build`
-4. Si el build es exitoso, el deploy se publica en `preenvios.vercel.app`
+4. Si el build es exitoso, el deploy se publica en `preenvios.vercel.app` (alias canónico de prod) y, post-cutover, en `preenvios.com`
 5. Build time típico: 25-35 segundos
 
+**Importante:** `preenvios.vercel.app` NO es una URL de preview — es el
+alias permanente del último deploy de `main`. Cualquier smoke test en esa
+URL toca producción, no staging. Para testear contra preview hay que usar
+una URL de branch específica (ver sección 2).
+
 ### 2. Preview deployments
-1. Se hace push a cualquier rama que no sea `main` (ej: `feature/nueva-funcionalidad`)
-2. Vercel genera un deploy con URL única (ej: `preenvios-git-feature-xyz-aneurysoto.vercel.app`)
-3. Se puede revisar la rama en producción sin afectar el sitio principal
-4. Verificado con rama `test/verify-preview` — deploy ID BBviLHHJY, status Ready
+1. Se hace push a cualquier rama que no sea `main` (ej: `feature/nueva-funcionalidad`, `test/db-separation`)
+2. Vercel genera un deploy con URL única (ej: `preenvios-git-feature-xyz-aneurysoto-pre.vercel.app` o `preenvios-<hash>.vercel.app`)
+3. Ese deploy usa las env vars scope **Preview** (Supabase apunta a DB `preenvios-preview`, ver Proceso 27)
+4. Se puede revisar la rama en un entorno aislado sin afectar producción ni los clientes reales
+5. Verificado con rama `test/verify-preview` (deploy ID BBviLHHJY) en 2026-04-16 y con rama `test/preview-db-separation` en 2026-04-23 para validar separación de DB
 
 ### 3. Variables de entorno
-Configuradas en Vercel Project Settings → Environment Variables:
 
-| Variable | Qué es |
-|----------|--------|
-| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Key pública para lectura de datos |
-| `SUPABASE_SERVICE_ROLE_KEY` | Key privada para escritura (scrapers, seed) |
-| `NEXT_PUBLIC_GA_ID` | ID de Google Analytics GA4 |
+Configuradas en Vercel Project Settings → Environment Variables. Desde
+2026-04-23 (FASE 10 BLOQUE K.1) las 3 variables de Supabase están
+**separadas por scope** — Production y Preview/Development apuntan a
+proyectos Supabase distintos:
 
-Las mismas 4 variables están duplicadas en GitHub Secrets (Settings → Secrets → Actions) como redundancia para GitHub Actions futuro.
+| Variable | Scope "Production" | Scope "Preview + Development" |
+|----------|--------------------|-------------------------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto `preenvios` (prod) | URL del proyecto `preenvios-preview` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key del prod | anon key del preview |
+| `SUPABASE_SERVICE_ROLE_KEY` | service_role key del prod | service_role key del preview |
+
+Las demás variables siguen compartidas entre los 3 scopes:
+
+| Variable | Qué es | Scopes |
+|----------|--------|--------|
+| `NEXT_PUBLIC_GA_ID` | ID de Google Analytics GA4 | Production + Preview + Development |
+| `CRON_SECRET` | Auth de `/api/scrape` (Vercel Cron) | Production + Preview + Development |
+| `UPSTASH_REDIS_REST_URL` / `_TOKEN` | Rate-limit en endpoints públicos | Production + Preview + Development |
+| `SENTRY_DSN` | Error tracking | Production + Preview + Development |
+| `ADMIN_PASSWORD` | Auth del admin panel | Production + Preview + Development |
+
+Detalle completo y razón por la que solo Supabase está separada: Proceso 27.
+
+Las variables están duplicadas en GitHub Secrets (Settings → Secrets → Actions)
+como redundancia para GitHub Actions futuro.
 
 ### 4. Seguridad de credenciales
 - `.env.local` existe solo en la máquina del desarrollador — está en `.gitignore`

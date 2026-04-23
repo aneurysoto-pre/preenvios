@@ -260,8 +260,9 @@ Las siguientes configuraciones no son opcionales — son base de seguridad y man
 - El archivo .env.example se commitea SIN valores reales, solo con los nombres de las variables, para que nuevos colaboradores sepan qué configurar
 
 ### Vercel deploy automático
-- Rama main del repositorio aneurysoto-pre/preenvios = deploy a producción automático en preenvios.com
-- Cualquier otra rama (feature/*, fix/*) = preview deployment automático con URL única generada por Vercel
+- Rama main del repositorio aneurysoto-pre/preenvios = deploy a producción automático en preenvios.com (post-cutover) + alias canónico `preenvios.vercel.app`
+- Cualquier otra rama (feature/*, fix/*, test/*) = preview deployment automático con URL única generada por Vercel (ej. `preenvios-git-<branch>-aneurysoto-pre.vercel.app`)
+- **Separación DB producción ↔ preview (desde 2026-04-23, FASE 10 BLOQUE K.1):** `main` deploy escribe en proyecto Supabase `preenvios` (prod, clientes reales); branches de desarrollo escriben en `preenvios-preview` (solo founder + devs). Las 3 env vars de Supabase tienen valores distintos por scope en Vercel. Cambios destructivos en branches ya no pueden corromper data real. Detalle en [LOGICA_DE_NEGOCIO/27_db_preview_vs_produccion.md](LOGICA_DE_NEGOCIO/27_db_preview_vs_produccion.md).
 - Rollback instantáneo disponible desde el dashboard de Vercel si un deploy rompe producción
 - Webhook de Slack o email opcional para notificar deploys exitosos y fallidos
 
