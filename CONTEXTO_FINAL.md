@@ -788,9 +788,9 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 - [x] `lib/scrapers/validator.ts` — 7 reglas: operador en whitelist 7 MVP, corredor en whitelist 6 MVP, `metodo_entrega` en enum (`bank`, `cash_pickup`, `home_delivery`, `mobile_wallet`), `velocidad` en enum, `fee ∈ [0, 50]` USD, `tasa > 0`, `tasa ± 10%` del banco central con fallback hardcoded. Cache de `tasas_bancos_centrales` al inicio del batch (1 query en lugar de N). "3 anomalías consecutivas" vía query a `scraper_anomalies` (serverless-safe, no contador in-memory) (completado 2026-04-22)
 - [x] Integración en `lib/scrapers/base.ts` `savePrices()` sin romper firma pública (completado 2026-04-22)
 - [x] Doc completa `LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md` + `TROUBLESHOOTING/27_contador_in_memory_serverless.md` (bug latente del contador existente de `reportScraperFailure`, documentado pero no arreglado — scope separado)
-- [ ] **Pendiente acción usuario:** ejecutar `007_scraper_anomalies.sql` en Supabase SQL Editor
-- [ ] **Pendiente smoke test del validador:** inyectar tasa inválida en un scraper, verificar que NO entra a `precios` y SÍ a `scraper_anomalies`
-- Commits: `9367a35` (implementación), `ba43809` (ampliación docs Sentry § 17 con integración de Agente 1)
+- [x] **Migración 007 aplicada en prod 2026-04-23** — Supabase SQL Editor, verificación post-run (tabla_existe=1, policies=4, indexes=3, filas=0)
+- [x] **Smoke test del validador ejecutado 2026-04-23** — branch efímera `test/smoke-agente1` (ya borrada) con endpoint temporal `/api/test-agente1` apuntando a DB preview. 3 mocks enviados a `savePrices()`: 1 válido (Remitly/Honduras/tasa 24.95) + 2 inválidos (tasa 999 fuera ±10%, `metodo_entrega='pigeon'` fuera de enum). Resultado: `saved=1`, `errors=[]`, 2 filas en `scraper_anomalies` con `campo_invalido` correcto. Sentry capturó los 2 eventos `scraper_anomaly`. Agente 1 end-to-end validado.
+- Commits: `9367a35` (implementación), `ba43809` (ampliación docs Sentry § 17 con integración de Agente 1), `cb8d622` (endpoint smoke test, branch efímera ya borrada)
 
 #### 9.2 Activación de Sentry DSN + smoke test end-to-end
 
