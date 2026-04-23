@@ -38,7 +38,11 @@ export async function POST(request: NextRequest) {
 
   const result = await checkDbHealth(supabase)
 
-  // 1 Sentry event por issue (permite agrupar por tags en Sentry UI).
+  // 1 Sentry event por issue con fingerprint custom — sin esto Sentry
+  // agrupa todo bajo 1 issue porque el stack trace de captureMessage es
+  // identico (mismo for loop, mismo archivo). Con fingerprint
+  // [agent, table, metric] cada combinacion tabla+metrica es un issue
+  // separado en Sentry UI, con su propia escalacion, alertas e historial.
   for (const issue of result.issues) {
     Sentry.captureMessage(`db_health: ${issue.table}.${issue.metric}`, {
       level: 'warning',
@@ -53,6 +57,7 @@ export async function POST(request: NextRequest) {
         observed_value: issue.observed_value,
         message: issue.message,
       },
+      fingerprint: ['db_health', issue.table, issue.metric],
     })
   }
 
