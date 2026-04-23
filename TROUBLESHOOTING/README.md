@@ -32,6 +32,7 @@ Guía operativa para cuando algo se rompe en PreEnvios.com. **Un archivo por pro
 | [26](26_scraper_revierte_afiliado.md) | Scraper revierte afiliado/link de un operador | 🔴 | 5m |
 | [27](27_contador_in_memory_serverless.md) | Contador failCounts in-memory no dispara marca stale en Vercel serverless (bug latente) | 🟢 | documentado, sin arreglo inmediato |
 | [28](28_ga4_smoke_test.md) | GA4 smoke test end-to-end (tabla de check 8 eventos) | 🟢 | rutina, no es un problema — sirve para validar tras cambios de tracking |
+| [29](29_scrapers_manual_run.md) | Correr scrapers manualmente (curl + verificar DB + scraper_anomalies) | 🟢 | 5-10m — rutina, diagnóstico, validación post-deploy |
 
 ### Seguridad (vulnerabilidades activas que hay que endurecer)
 | # | Título | Gravedad | Tiempo al fix |

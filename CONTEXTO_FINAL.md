@@ -946,12 +946,12 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 **Por qué importa:** estos docs evitan que conocimiento operacional se pierda cuando el founder no está presente o cuando un dev nuevo toma el proyecto. La inversión de 30 minutos ahorra horas de re-descubrimiento futuro.
 
-- [ ] **10.E.1 — Actualizar `TROUBLESHOOTING/04_whatsapp_bot_no_responde.md`** (10 min)
+- [x] **10.E.1 — Actualizar `TROUBLESHOOTING/04_whatsapp_bot_no_responde.md`** (verificado 2026-04-23, ya hecho en limpieza del 2026-04-22 commits `12bbc6e` + `8ae146e` + `5b32854` + `9eaae25`)
   - **Contexto:** el doc fue escrito antes de la limpieza de Nicaragua y Haití del 2026-04-22. Menciona códigos de moneda (NIO, HTG) que ya NO están en el `CORREDOR_MAP` del webhook. Si alguien lee el doc para diagnosticar el bot post-reactivación, puede seguir instrucciones obsoletas.
   - **Revisar:** que todos los códigos mencionados (DOP, HNL, GTQ, SVC/USD, COP, MXN) están vigentes, que no quedan referencias a NIO/HTG/nicaragua/haiti.
   - **Verificación:** `grep -iE "nicaragua|haiti|NIO|HTG" TROUBLESHOOTING/04_whatsapp_bot_no_responde.md` debe devolver 0 matches.
 
-- [ ] **10.E.2 — Escribir `TROUBLESHOOTING/29_scrapers_manual_run.md`** (20 min)
+- [x] **10.E.2 — Escribir `TROUBLESHOOTING/29_scrapers_manual_run.md`** (completado 2026-04-23) — doc 6 pasos (curl + lectura JSON + verificar tabla precios + revisar scraper_anomalies + logs Vercel + Sentry) + workaround manual para Fase R0. Entrada en TROUBLESHOOTING/README.md.
   - **Qué es:** doc paso a paso de cómo correr los scrapers manualmente — crítico para el smoke test pre-cutover (CHECKLIST § 7.4 línea 164) y para debugging cuando algo falla en producción.
   - **Contenido mínimo:**
     - Cómo llamar `/api/scrape` manualmente (curl con auth header del Bloque 10.A.1 post-fix)
