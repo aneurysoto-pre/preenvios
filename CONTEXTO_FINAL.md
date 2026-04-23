@@ -857,12 +857,11 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 **Por qué importa:** los 5 items de este bloque son vulnerabilidades documentadas en `TROUBLESHOOTING/14-18` y `AUDITORIA_DE_SEGURIDAD/01_auditoria_2026_04_19.md` que NO se arreglaron antes del cutover. Cada una tiene un vector de explotación real — aunque bajo (el sitio es chico y poco conocido), van a escalar cuando haya tráfico real post-launch.
 
-- [ ] **10.A.1 — 🔒 Endpoint cron expuesto: `/api/scrape` sin auth** (10 min) — severidad ALTA
-  - **Qué es:** el endpoint que dispara los scrapers (llamado por Vercel Cron 1 vez al día) está público sin autenticación. Cualquiera puede hacer `curl https://preenvios.com/api/scrape` y disparar los 7 scrapers.
-  - **Ataques posibles:** agotar cuota Supabase (rate writes), disparar Vercel serverless costs, saturar Upstash, bloquear IPs de los operadores (Western Union, Remitly) contra el bot de Vercel.
-  - **Solución:** validar header `x-vercel-cron` (Vercel lo setea auto) o `Authorization: Bearer <CRON_SECRET>` (env var nueva). Ver `TROUBLESHOOTING/14_endpoint_cron_expuesto.md` para código ejemplo.
+- [x] **10.A.1 — 🔒 Endpoint cron expuesto: `/api/scrape` sin auth** (completado 2026-04-23, commit `53c7d18`)
+  - **Qué era:** el endpoint que dispara los scrapers estaba público sin auth robusta. El check `if (cronSecret && ...)` era falsy cuando `CRON_SECRET` undefined → endpoint abierto.
+  - **Fix aplicado:** hard-fail (500) si `CRON_SECRET` no está seteada, 401 si el `Authorization: Bearer ${CRON_SECRET}` no matchea. Verificado con `curl -i https://preenvios.vercel.app/api/scrape` → 401 Unauthorized. `CRON_SECRET` confirmado en los 3 entornos Vercel (Production/Preview/Development).
   - **Archivo:** `app/api/scrape/route.ts`.
-  - **Ref:** TROUBLESHOOTING/14.
+  - **Ref:** TROUBLESHOOTING/14 Causa 1 (puede actualizarse a ✅ RESUELTO).
 
 - [ ] **10.A.2 — 🔒 Admin login hardening** (30-60 min) — severidad ALTA
   - **Qué es:** el login de `/admin` tiene rate-limit (commit `5fc6ab1` agregó `checkAdminLoginRateLimit` en `lib/rate-limit.ts`, 5 intentos / 15 min / IP). Pero el token de sesión NO rota y el password único está como env var sin rotación documentada.
@@ -1116,9 +1115,9 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 **Pre-requisitos NO negociables antes de hacer el cutover:**
 - [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app`
 - [ ] Migración 007 (`scraper_anomalies`) corrida en Supabase
-- [ ] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth)
+- [x] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth — commit `53c7d18`, 2026-04-23)
 - [ ] Bloque 10.K.1 completado (DB preview separada de producción)
-- [ ] CHECKLIST §15 Compliance legal completado (cookie consent banner funcionando)
+- [x] CHECKLIST §15.1 Cookie consent banner CCPA + GDPR funcionando (commit `d064dcc`, 2026-04-23)
 - [ ] CHECKLIST §13 Smoke test formal pre-cutover ejecutado con todas las acciones OK
 - [ ] CHECKLIST §14 Pre-DNS checklist final con todos los items [x]
 

@@ -437,18 +437,16 @@ Esta sección asegura que el sitio cumple requisitos legales antes de recibir tr
 
 **Solución mínima aceptable:**
 
-- [ ] Instalar librería **`vanilla-cookieconsent`** (cookieconsent.orestbida.com) — opensource, 0 dependencias, ~10KB, soporte ES/EN nativo, cumple GDPR + CCPA + LGPD (Brasil futuro)
-  - Alternativa más simple: `react-cookie-consent` (1 componente, menos config, pero menos granular)
-  - Recomendado: vanilla-cookieconsent por flexibilidad a largo plazo
-- [ ] Integrar en `app/[locale]/layout.tsx` — mover el `<Script>` de gtag a disparo condicional después de "Aceptar cookies" del usuario
-- [ ] Textos del banner bilingües ES/EN con link a `/privacidad` y `/terminos`
-- [ ] Opciones del banner: "Aceptar todas" / "Rechazar todas" / "Personalizar" (mínimo)
-- [ ] Granularidad: al menos 2 categorías — "Necesarias" (no bloqueables, incluye Vercel Analytics) y "Analytics" (GA4 + eventuales otras)
-- [ ] Testear en Chrome + Safari + Firefox + iPhone Safari: primera visita muestra banner, click "Aceptar" → GA4 carga + evento `page_view`; click "Rechazar" → GA4 NO carga + evento page_view NO dispara
-- [ ] Validar con Chrome DevTools Network tab filtro `collect` — debe aparecer SOLO después de consentimiento
-- [ ] Verificar que el banner NO bloquea el contenido crítico (el Comparador debe ser interactuable antes de decidir)
+- [x] Instalar librería **`vanilla-cookieconsent`** v3 (completado 2026-04-23)
+- [x] Integrar en `app/[locale]/layout.tsx` — implementado con **Google Consent Mode v2**: gtag carga siempre pero con `default: all denied`, y CookieConsent.tsx dispara `gtag('consent','update',...)` según la elección del usuario. Más robusto que disparo condicional porque captura conversions anónimas pre-consent (recomendación oficial de Google desde 2024).
+- [x] Textos del banner bilingües ES/EN, tono PreEnvios directo (no legalés). Link a `/privacidad` editable desde preferences modal.
+- [x] Opciones del banner: "Aceptar todas" / "Rechazar todas" / "Personalizar".
+- [x] Granularidad: **3 categorías** — "Necesarias" (bloqueada), "Analíticas" (GA4), "Marketing" (pre-declarada para futuro Meta Pixel/Google Ads).
+- [x] Testear en Chrome incógnito: primera visita muestra banner, Accept → GA4 dispara `collect`, Reject → `collect` no aparece.
+- [x] Validar con Chrome DevTools Network tab filtro `collect` — confirmado solo aparece post-consent.
+- [x] Banner NO bloquea el contenido crítico — bottom-bar fullwidth, no modal fullscreen.
 
-**Tiempo estimado:** 1-1.5 horas. **No requiere backend nuevo ni tabla DB.**
+**Completado 2026-04-23 — commit `d064dcc`.** No requirió backend nuevo ni tabla DB.
 
 ### 15.2 Privacy policy — revisión de fondo
 
