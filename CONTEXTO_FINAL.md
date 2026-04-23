@@ -1058,14 +1058,15 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 
 **Por qué importa:** si el entorno de preview (preenvios.vercel.app — staging) comparte la base de datos con producción (preenvios.com), un push accidental a una feature branch puede corromper data real de usuarios. La regla universal de DevOps: NUNCA una DB prod es compartida con staging.
 
-- [ ] **10.K.1 — Verificar separación de DB Supabase preview vs production** (30 min)
-  - **Procedimiento:**
-    1. Ir a Vercel → Project Settings → Environment Variables
-    2. Ver si `NEXT_PUBLIC_SUPABASE_URL` tiene valores diferentes en Production vs Preview
-    3. Si es el mismo valor → todos los previews están golpeando la DB de prod (RIESGO)
-    4. Si son diferentes → verificar que el project preview apunta a un proyecto Supabase separado (puede ser Supabase Free tier diferente, o branch de DB si Supabase lo permite en tu plan)
-  - **Solución si están compartidos:** crear un proyecto Supabase separado para preview, copiar el schema (migrations), setear las env vars Preview en Vercel apuntando ahí.
-  - **Riesgo específico:** si un dev (o yo mismo) ejecuta una migration destructiva (`DROP TABLE`, `TRUNCATE`) en un branch, y el preview apunta a prod DB, borra data real.
+- [x] **10.K.1 — Separación de DB Supabase preview vs production** (completado 2026-04-23)
+  - **Estado inicial detectado:** las 3 env vars de Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) estaban compartidas entre Production + Preview + Development → todos los previews escribían directo en la DB de prod.
+  - **Solución aplicada:**
+    1. Creado proyecto Supabase nuevo `preenvios-preview` (Free tier, misma región que prod).
+    2. Corrido script `supabase/preview_setup_all.sql` (commit `edaa553`) que concatena las 7 migraciones 001..007 + seed de los 4 corredores MVP originales (HN, DO, GT, SV). Resultado: 6 corredores, 6 tasas BC, 14 precios iniciales (MX/CO via migration 006).
+    3. Reconfigurado Vercel env vars: las 3 de Supabase ahora tienen 2 entries cada una — scope "Production" con valores prod, scope "Preview + Development" con valores del proyecto nuevo.
+    4. Redeployado preview.
+  - **Smoke test validado 2026-04-23:** branch efímera `test/preview-db-separation` → preview deploy con URL única → insertado contacto test desde form `/contacto` → verificado que aparece SOLO en DB preview, NO en prod. Branch borrada post-test.
+  - **Ref:** `supabase/preview_setup_all.sql` (script reejecutable si hay que recrear preview en el futuro).
 
 - [ ] **10.K.2 — Cache headers en assets estáticos** (30 min)
   - **Contexto:** Vercel sirve assets de `public/` con cache headers default (`cache-control: public, max-age=0, must-revalidate`). Eso hace que cada request re-valide el archivo — innecesario para favicon, logos, fonts que no cambian nunca.
@@ -1116,7 +1117,7 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 - [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app`
 - [ ] Migración 007 (`scraper_anomalies`) corrida en Supabase
 - [x] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth — commit `53c7d18`, 2026-04-23)
-- [ ] Bloque 10.K.1 completado (DB preview separada de producción)
+- [x] Bloque 10.K.1 completado (DB preview separada de producción — proyecto `preenvios-preview` + commit `edaa553`, 2026-04-23)
 - [x] CHECKLIST §15.1 Cookie consent banner CCPA + GDPR funcionando (commit `d064dcc`, 2026-04-23)
 - [ ] CHECKLIST §13 Smoke test formal pre-cutover ejecutado con todas las acciones OK
 - [ ] CHECKLIST §14 Pre-DNS checklist final con todos los items [x]
