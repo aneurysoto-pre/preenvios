@@ -281,5 +281,23 @@
     "deleteRequestDesc": "Para solicitar la eliminación de tus datos personales, envía un correo a",
     "deleteRequestEmail": "contact@preenvios.com",
     "deleteRequestNote": "Responderemos en un plazo máximo de 30 días conforme a CCPA y GDPR."
+  },
+  "cookies": {
+    "title": "Usamos cookies para mejorar tu experiencia",
+    "description": "PreEnvios usa cookies propias y de Google Analytics para medir cómo se usa el comparador y mejorarlo. No vendemos tus datos a nadie. Tú eliges qué aceptar.",
+    "linkPolicy": "Ver política de privacidad",
+    "acceptAll": "Aceptar todas",
+    "rejectAll": "Rechazar todas",
+    "customize": "Personalizar",
+    "save": "Guardar preferencias",
+    "settingsTitle": "Preferencias de cookies",
+    "settingsDescription": "Aquí puedes elegir qué cookies aceptas. Las necesarias siempre están activas porque el sitio no funciona sin ellas.",
+    "closeLabel": "Cerrar",
+    "categoryNecessary": "Necesarias",
+    "categoryNecessaryDesc": "Cookies básicas para que el sitio funcione: recordar tu idioma, tu país favorito y tu sesión si inicias una. No se pueden desactivar.",
+    "categoryAnalytics": "Analíticas",
+    "categoryAnalyticsDesc": "Google Analytics nos dice qué funciona y qué no. Por ejemplo: cuántas personas encontraron la remesa más barata. Anónimo y agregado.",
+    "categoryMarketing": "Marketing",
+    "categoryMarketingDesc": "Por ahora no usamos cookies de marketing. En el futuro podríamos medir conversiones de anuncios (Google Ads, Meta). Tú decides si las permites desde ya."
   }
 }

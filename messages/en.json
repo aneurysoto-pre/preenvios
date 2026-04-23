@@ -281,5 +281,23 @@
     "deleteRequestDesc": "To request deletion of your personal data, send an email to",
     "deleteRequestEmail": "contact@preenvios.com",
     "deleteRequestNote": "We will respond within 30 days in compliance with CCPA and GDPR."
+  },
+  "cookies": {
+    "title": "We use cookies to improve your experience",
+    "description": "PreEnvios uses first-party cookies and Google Analytics to measure how people use the comparator and improve it. We don't sell your data. You choose what to accept.",
+    "linkPolicy": "See privacy policy",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "customize": "Customize",
+    "save": "Save preferences",
+    "settingsTitle": "Cookie preferences",
+    "settingsDescription": "Here you can choose which cookies you accept. The necessary ones are always on because the site doesn't work without them.",
+    "closeLabel": "Close",
+    "categoryNecessary": "Necessary",
+    "categoryNecessaryDesc": "Basic cookies for the site to work: remembering your language, your preferred country, and your session if you start one. These can't be disabled.",
+    "categoryAnalytics": "Analytics",
+    "categoryAnalyticsDesc": "Google Analytics tells us what works and what doesn't. Example: how many people found the cheapest remittance. Anonymous and aggregated.",
+    "categoryMarketing": "Marketing",
+    "categoryMarketingDesc": "We don't use marketing cookies today. In the future we might measure ad conversions (Google Ads, Meta). You decide whether to allow them from now."
   }
 }

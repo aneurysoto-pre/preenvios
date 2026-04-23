@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing'
 import Script from 'next/script'
 import { Inter, Work_Sans, Quicksand } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
+import CookieConsent from '@/components/CookieConsent'
 import '../globals.css'
 
 // next/font/google — reemplaza el <link> externo a googleapis.com que
@@ -99,14 +100,22 @@ export default async function LocaleLayout({
         <link rel="alternate" hrefLang="x-default" href="https://preenvios.com/es" />
       </head>
       <body className="font-sans text-ink bg-white leading-relaxed">
+        {/* Google Consent Mode v2 — default denied hasta consent explicito.
+            GA4 carga en modo pingback (conversions anonimas agregadas, 0
+            personal data) hasta que CookieConsent.tsx llame
+            gtag('consent','update',...). Ref: CHECKLIST §15.1 */}
+        <Script id="gtag-consent-default" strategy="beforeInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});`}
+        </Script>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{send_page_view:true});`}
+          {`gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{send_page_view:true});`}
         </Script>
         <NextIntlClientProvider messages={messages}>
+          <CookieConsent />
           {children}
         </NextIntlClientProvider>
       </body>

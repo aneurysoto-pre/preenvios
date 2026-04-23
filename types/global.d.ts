@@ -22,11 +22,11 @@ export {}
 
 declare global {
   interface Window {
-    gtag?: (
-      command: string,
-      eventName: string,
-      params?: Record<string, unknown>
-    ) => void
+    // gtag acepta varios signatures distintos (event, config, consent, js).
+    // Tipamos con unknown[] para permitir todos sin sacrificar el warning
+    // cuando alguien lo llama desde codigo no-casteado. El helper tipado
+    // seguro vive en lib/tracking.ts.
+    gtag?: (...args: unknown[]) => void
     dataLayer?: unknown[]
   }
 }
