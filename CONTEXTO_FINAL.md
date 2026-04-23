@@ -1247,11 +1247,11 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 Estas tareas son responsabilidad del usuario, no de Claude Code. Se completan en paralelo al desarrollo o después del lanzamiento.
 
 ### Redes sociales de Preenvios
-- [ ] Crear Instagram @preenviosdotcom
-- [ ] Crear TikTok @preenvios
-- [ ] Crear Facebook Page Preenvios.com
-- [ ] Crear cuenta X/Twitter @preenviosdotcom
-- [ ] Logo versión cuadrada 1080x1080 para redes (Canva gratis)
+- [x] Crear Instagram @preenviosdotcom (completado 2026-04-23)
+- [x] Crear TikTok @preenvios (completado 2026-04-23)
+- [x] Crear Facebook Page Preenvios.com (completado 2026-04-23)
+- [x] Crear cuenta X/Twitter @preenviosdotcom (completado 2026-04-23)
+- [x] Logo versión cuadrada 1080x1080 para redes (Canva gratis) (completado 2026-04-23)
 - [ ] Bio unificada en las 4 redes con link a preenvios.com
 
 ### Cuentas financieras y pago de afiliados
