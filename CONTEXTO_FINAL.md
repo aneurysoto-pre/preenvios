@@ -884,7 +884,6 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 - **Bloque A:** Endurecimiento de seguridad — 5 vulnerabilidades documentadas (2-4h)
 - **Bloque E:** Documentación técnica pendiente (30 min)
 - **Bloque F:** Performance / LCP / Core Web Vitals (3-4h)
-- **Bloque G:** Accesibilidad (items remainder del refactor Fase 1) (1-2h)
 - **Bloque H:** Testing + CI (4-6h)
 - **Bloque J:** Rate-limit expansion (45 min)
 - **Bloque K:** Entorno / infraestructura (1-2h)
@@ -990,42 +989,6 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
   - **Output esperado:** doc `TROUBLESHOOTING/29_cls_investigation.md` con resultados del baseline + fix si aplica.
 
 **Criterio de cierre del Bloque F:** Lighthouse en `/es` muestra LCP ≤ 2.5s, CLS < 0.1, TTI < 3.8s en conexión 3G simulada. Todos los items marcados [x].
-
----
-
-#### 10.G — Accesibilidad (items remainder del refactor Fase 1) (1-2h)
-
-**Por qué importa:** WCAG 2.1 AA es el estándar legal de accesibilidad en USA (ADA). El 15% de usuarios tiene alguna discapacidad visual/motriz. Además, los motores de búsqueda usan las mismas señales (alt text, semántica HTML) que los lectores de pantalla — SEO y a11y se refuerzan mutuamente.
-
-- [ ] **10.G.1 — Contraste `text-g500` sobre `bg-g50` en labels del Comparador** (20 min)
-  - **Qué es:** WCAG AA requiere contraste ≥ 4.5:1 entre texto y fondo. El color `text-g500` (~#737680) sobre `bg-g50` (~#F5F5F7) en los labels del Comparador está en el borde — herramientas como Lighthouse a11y a veces lo marcan como fail.
-  - **Solución:** subir el texto a `text-g600` (~#525458) o usar `font-weight: 600+` que la herramienta WCAG considera "texto grande" y reduce el requirement a 3:1.
-  - **Archivo:** `components/Comparador.tsx` (labels "Envías desde Estados Unidos", "País destino", "Método de entrega" si se reactivan).
-  - **Ref:** AUDIT_COMPLETO.md §1.3.
-
-- [ ] **10.G.2 — Verificar jerarquía H1-H6 en todas las páginas** (30 min)
-  - **Qué es:** cada página debe tener 1 solo `<h1>` (normalmente el título principal del contenido), seguido de `<h2>` para secciones, `<h3>` para sub-secciones. Saltar niveles (ej. `<h1>` → `<h3>`) confunde a lectores de pantalla y a Google.
-  - **Procedimiento:** instalar extensión Chrome "HeadingsMap" y revisar las 19 páginas del proyecto. Documentar violaciones en un doc nuevo `TROUBLESHOOTING/30_heading_hierarchy.md` antes de arreglar.
-  - **Ref:** AUDIT_COMPLETO.md §1.5.
-
-- [ ] **10.G.3 — Alt text descriptivo en flags** (15 min)
-  - **Qué es:** hoy los `<img>` de flags (flagcdn.com) tienen `alt=""` — las tratamos como decorativas. Pero en contexto de "selector de país", son informativas: un screen reader debe anunciar "Honduras" no "image".
-  - **Solución:** cambiar `alt=""` a `alt={nombre_pais}` donde se use la bandera para identificar país (Nav dropdown, Comparador selector, TasasReferencia cards).
-  - **Excepción:** dejar `alt=""` si al lado ya hay texto con el nombre del país (evita redundancia para lectores).
-  - **Ref:** AUDIT_COMPLETO.md §1.4.
-
-- [ ] **10.G.4 — Audit tap targets < 44×44px post-shadcn** (20 min)
-  - **Qué es:** Apple HIG y Material Design recomiendan mínimo 44×44px (iOS) / 48×48dp (Android) para cualquier elemento tap-able en mobile. Menos es casi imposible de tocar sin mistap.
-  - **Procedimiento:** abrir Chrome DevTools → Device Toolbar (iPhone 14 Pro preset) → Inspect cada botón, link, toggle del sitio. Medir bounding box en pixels. Hacer lista de violaciones.
-  - **Candidatos probables:** icon-only buttons (close X en drawer, toggles en Nav, botones del paginador del admin), labels clickeables pequeños.
-  - **Ref:** AUDIT_COMPLETO.md §3.1.
-
-- [ ] **10.G.5 — Agregar `htmlFor` a labels de inputs** (15 min)
-  - **Qué es:** cada `<label>` debe tener `htmlFor="<input-id>"` que matchee el `id` del input asociado. Sin eso, tapping el label NO enfoca el input (UX rota) y los screen readers no anuncian la relación.
-  - **Candidatos:** Comparador country picker label, Calculadora inversa monto input, TasasReferencia filter (si existe).
-  - **Ref:** AUDIT_COMPLETO.md §1.1 (fue marcado 🚨 CRÍTICO originalmente, no se abordó aún).
-
-**Criterio de cierre del Bloque G:** correr Lighthouse Accessibility audit en las 6 páginas principales y obtener score ≥ 95. Todos los items marcados [x].
 
 ---
 
