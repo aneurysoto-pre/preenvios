@@ -67,6 +67,7 @@ Qué hace esta pieza y por qué existe.
 | 25 | [25_urls_pais_monto.md](25_urls_pais_monto.md) | URLs dinámicas /{locale}/{pais}/{monto}: 48 SSG + validación server-side + push URL solo en click Comparar | Fase 10 |
 | 26 | [26_cookies_consent.md](26_cookies_consent.md) | Cookie consent banner CCPA + GDPR con Google Consent Mode v2: 3 categorías, qué cookies usamos y por qué, flujo del usuario | CHECKLIST §15.1 |
 | 27 | [27_db_preview_vs_produccion.md](27_db_preview_vs_produccion.md) | Separación DB Supabase preview vs producción: por qué, arquitectura, env vars por scope, cómo aplicar migraciones nuevas sin romper prod | FASE 10 BLOQUE K.1 |
+| 28 | [28_scrapers_plan_diferido.md](28_scrapers_plan_diferido.md) | ⚠️ Scrapers rotos desde 2026-04-17. Decisión: diferir arreglo hasta post-LLC + APIs de partners. 7 opciones evaluadas, plan de reactivación R1/R2/R3, criterios de urgencia | Post-LLC |
 
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)

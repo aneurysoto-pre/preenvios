@@ -353,16 +353,26 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 - [x] Proceso documentado de eliminación de datos personales a solicitud del usuario (CCPA / GDPR compliance) (completado 2026-04-16 — incluido en página /privacidad con email contact@preenvios.com y plazo 30 días)
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
+
+> ⚠️ **ESTADO REAL 2026-04-23 — LOS 7 SCRAPERS ESTÁN ROTOS EN PRODUCCIÓN.**
+> Los checkboxes `[x]` de esta fase significan que el CÓDIGO existe y fue
+> escrito en 2026-04-16. La funcionalidad en producción falló el 2026-04-17
+> cuando los operadores cambiaron sus APIs internas (HTTP 401/403/404).
+> Decisión 2026-04-23: diferir arreglo hasta post-LLC + aprobación en programas
+> de afiliados. Cualquier `[x]` abajo debe re-verificarse antes de confiar en
+> él. Plan completo: [LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md](LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md).
+> Resumen ejecutivo: [SCRAPERS_IMPORTANTE.md](SCRAPERS_IMPORTANTE.md) en raíz.
+
 - [ ] Configurar Upstash Redis para cache de precios (diferido — se activa cuando sea necesario)
-- [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16)
-- [x] Crear scraper para Ria (completado 2026-04-16)
+- [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16, **falla con HTTP 401 desde 2026-04-17** — reemplazar por Wise API pública oficial post-LLC, ver Proceso 28 Fase R1)
+- [x] Crear scraper para Ria (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
 - [x] Crear scraper para Boss Money (completado 2026-04-16 — placeholder, se activa en Fase 4)
-- [x] Crear Vercel Cron Job — ejecuta scrapers una vez al día a las 7:00 AM UTC (completado 2026-04-16 — vercel.json con schedule "0 7 * * *", Hobby plan permite 1 cron/día)
-- [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16)
+- [x] Crear Vercel Cron Job — ejecuta scrapers una vez al día a las 7:00 AM UTC (completado 2026-04-16 — vercel.json con schedule "0 7 * * *", Hobby plan permite 1 cron/día). **Cron corre OK y retorna 200, pero `saved=0` silencioso por scrapers rotos — Proceso 28.**
+- [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16, **técnicamente correcto cuando hay data que guardar; desde 2026-04-17 ningún scraper devuelve data — Proceso 28**)
 - [ ] Upstash Redis cachea los últimos precios para servir rápido (diferido — se activa cuando sea necesario)
-- [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16)
-- [x] Crear scraper para Western Union (protección alta — puede requerir proxy) (completado 2026-04-16)
-- [x] Crear scraper para Remitly (protección alta — puede requerir proxy) (completado 2026-04-16)
+- [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
+- [x] Crear scraper para Western Union (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 403 desde 2026-04-17, Cloudflare bloqueo** — Proceso 28)
+- [x] Crear scraper para Remitly (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
 - [ ] Configurar proxies rotativos si Western Union o Remitly bloquean (diferido — se activa cuando sea necesario)
 - [x] Dashboard interno para monitorear estado de scrapers (completado 2026-04-16 — /api/admin/dashboard)
 - [x] Agregar campo método_entrega a la tabla precios en Supabase (completado 2026-04-16 — campo ya existe desde Fase 1)
@@ -746,7 +756,7 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 
 **México y Colombia al catálogo público MVP:**
 
-- [x] Scrapers de los 7 operadores ya incluyen `corredor=mexico` y `corredor=colombia` en su array CORREDORES (remitly, wise, xoom, ria, worldremit, westernunion, moneygram). Validación con data real se verifica tras primer cron en smoke test (completado 2026-04-21)
+- [x] Scrapers de los 7 operadores ya incluyen `corredor=mexico` y `corredor=colombia` en su array CORREDORES (remitly, wise, xoom, ria, worldremit, westernunion, moneygram). Validación con data real se verifica tras primer cron en smoke test (completado 2026-04-21). **⚠️ Los 7 scrapers están rotos en prod desde 2026-04-17 — MX/CO tampoco validados aún con data real. Ver Proceso 28.**
 - [x] Agregado al array `CORREDORES` en `components/Comparador.tsx` con aliases (completado 2026-04-21)
 - [x] Agregado a `lib/paises.ts` (`PAISES_MVP`) — propaga auto a Nav dropdown, TasasReferencia, sitemap, páginas editoriales dinámicas (completado 2026-04-21)
 - [x] Agregado a `app/[locale]/calculadora-inversa/content.tsx` (completado 2026-04-21)
@@ -763,7 +773,7 @@ Cada agente al implementarse se documenta en `LOGICA_DE_NEGOCIO/` (ej. `24_agent
 
 **Calidad de data sources (sube del Tier 3 a Tier 4 para Wise):**
 
-- [ ] Integrar [Wise API pública](https://api.wise.com/v1/rates) para reemplazar/complementar scraper Wise. Es gratuita, no requiere aprobación, más confiable que scraping. Simplifica el pipeline y reduce dependencia de Tier 3 para 1 de los 7 operadores. Estimación: 2-3 hrs
+- [ ] **[PRIORIDAD POST-LLC — Fase R1 del Proceso 28]** Integrar [Wise API pública](https://api.wise.com/v1/rates) para reemplazar/complementar scraper Wise. Es gratuita, no requiere aprobación, más confiable que scraping. Simplifica el pipeline y reduce dependencia de Tier 3 para 1 de los 7 operadores. **Post-2026-04-23 elevada de "pendiente general" a "quick win del plan de reactivación de scrapers"** — es el ÚNICO operador de los 7 cuya data source se puede arreglar sin esperar aprobación de afiliados. Puede ejecutarse incluso antes de la LLC si se decide recuperar al menos 1/7 operador antes del DNS cutover. Estimación: 2-3 hrs. Ver detalle en [LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md](LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md).
 
 **Email deliverability (crítico para alertas gratis y confirmaciones):**
 
@@ -1117,6 +1127,7 @@ Bloque de trabajo enfocado del día 2026-04-22 que cierra varios pendientes del 
 **Pre-requisitos NO negociables antes de hacer el cutover:**
 - [ ] Los 5 agentes de Fase 7 (defense-in-depth) construidos y probados en `preenvios.vercel.app` — Agente 1 [x] 2026-04-23 (commit `f1fefc0`); Agentes 2, 3, 4, 5 pendientes
 - [x] Migración 007 (`scraper_anomalies`) corrida en Supabase prod (2026-04-23, verificación post-run: 1-4-3-0)
+- [ ] **🚨 NUEVO 2026-04-23 — Estado de scrapers validado o plan de reactivación ejecutado.** Los 7 scrapers MVP están rotos en prod desde 2026-04-17. El día del cutover hay que decidir 1 de 3 escenarios (A/B/C en CHECKLIST §7.4 actualizado). No lanzar con `saved=0` silencioso. Ver [SCRAPERS_IMPORTANTE.md](SCRAPERS_IMPORTANTE.md) + [LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md](LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md).
 - [x] Bloque 10.A Item 10.A.1 completado (`/api/scrape` con auth — commit `53c7d18`, 2026-04-23)
 - [x] Bloque 10.K.1 completado (DB preview separada de producción — proyecto `preenvios-preview` + commit `edaa553`, 2026-04-23)
 - [x] CHECKLIST §15.1 Cookie consent banner CCPA + GDPR funcionando (commit `d064dcc`, 2026-04-23)
