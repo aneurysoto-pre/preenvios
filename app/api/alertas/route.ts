@@ -11,6 +11,8 @@ import { checkAlertaRateLimit, getClientIp } from '@/lib/rate-limit'
  * 2. Parse con zod (mismo schema que el cliente usa via react-hook-form).
  * 3. Honeypot `website` — si viene con valor, responde 200 fake.
  * 4. Insert a Supabase `alertas_email` con service_role (bypass RLS).
+ *    Guarda corredor + idioma si el cliente los envia (landing editorial
+ *    por pais) — NULL si no (form legacy de /alertas). Migracion 011.
  *    Si duplicate key (code 23505 en Postgres, email ya suscrito),
  *    responde 200 OK silencioso — no revela si el email ya existia
  *    (no-enumeration).
@@ -51,26 +53,30 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { website, email } = parsed.data
+  const { website, email, corredor, idioma } = parsed.data
 
   if (website && website.length > 0) {
     console.warn('[api/alertas] honeypot triggered', { ip, email })
     return NextResponse.json({ ok: true }, { status: 200 })
   }
 
-  const { error } = await supabaseAdmin.from('alertas_email').insert({ email })
+  const { error } = await supabaseAdmin.from('alertas_email').insert({
+    email,
+    corredor: corredor ?? null,
+    idioma: idioma ?? null,
+  })
 
   if (error) {
     // Postgres 23505 = unique violation (email ya suscrito).
     // Respondemos 200 silent — no-enumeration, no revelamos si existia.
     if (error.code === '23505') {
-      console.log('[api/alertas] duplicate email (silent 200)', { ip, email })
+      console.log('[api/alertas] duplicate email (silent 200)', { ip, email, corredor, idioma })
       return NextResponse.json({ ok: true }, { status: 200 })
     }
     console.error('[api/alertas] supabase insert error:', error)
     return NextResponse.json({ error: 'db_error' }, { status: 500 })
   }
 
-  console.log('[api/alertas] subscribed', { ip, email })
+  console.log('[api/alertas] subscribed', { ip, email, corredor, idioma })
   return NextResponse.json({ ok: true }, { status: 200 })
 }
