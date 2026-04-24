@@ -9,8 +9,7 @@
  * devuelve un objeto (pais tiene entry en data/corredores/*.ts), se
  * renderiza el landing editorial modelo A en lugar de TasasReferencia +
  * LazyBelow. Feature flag "por datos" que permite rollout progresivo
- * pais por pais. Ver LOGICA_DE_NEGOCIO/28_landing_editorial_pais.md
- * (creado en Commit 10).
+ * pais por pais. Ver LOGICA_DE_NEGOCIO/30_landing_editorial_pais.md.
  */
 
 import dynamic from 'next/dynamic'

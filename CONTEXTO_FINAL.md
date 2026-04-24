@@ -1166,6 +1166,43 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 
 ---
 
+### Fase 11 — Landing editorial por país (modelo A Magazine) — rollout progresivo
+
+**Contexto (2026-04-24):** las páginas `/[locale]/[pais]` y `/[locale]/[pais]/[monto]` pasan a soportar un **landing editorial extendido** debajo del disclaimer del Comparador. Reemplaza `<TasasReferencia />` + `<LazyBelow />` (Sections genéricas de LatAm) cuando el país tiene entry en `data/corredores/<pais>.ts`. El patrón es un feature flag "por datos" — los países sin entry siguen renderizando el layout legacy, los con entry "upgradean" automáticamente al editorial.
+
+**Arquitectura completa documentada en [LOGICA_DE_NEGOCIO/30_landing_editorial_pais.md](LOGICA_DE_NEGOCIO/30_landing_editorial_pais.md)** — incluye patrón híbrido (data TS + messages JSON), checklist para agregar país nuevo en 5 pasos, tech debts documentados.
+
+**Rollout por país:**
+
+- [x] **Honduras** — port completo 2026-04-24, branch `feat/landing-editorial-honduras` → merge a main post-validación visual del founder en preview URL. Incluye stats macroeconómicos (BCH 2025, CEPAL 2024, US Census 2020), 6 ciudades destacadas (Tegucigalpa, SPS, Roatán, Copán Ruinas, La Ceiba, Choluteca), 6 errores comunes, 7 FAQ específicas del corredor, form alertas duplicado (hero + CTA final) con GA4 tracking segmentado por `location` (`hero` vs `cta_final`).
+- [ ] República Dominicana — pendiente, próximo candidato
+- [ ] Guatemala
+- [ ] El Salvador
+- [ ] Colombia
+- [ ] México
+
+**Commits del port Honduras (10):**
+
+| # | Hash | Alcance |
+|---|------|---------|
+| 1 | `7955b1e` | `feat(fonts)`: Fraunces serif → clase Tailwind `font-editorial` |
+| 2 | `c24ad43` | `feat(db)`: migration 011 agrega `corredor` + `idioma` a `alertas_email` |
+| — | `b1febfc` | `docs(proceso 27)`: checklist migraciones + incidente 2026-04-24 (docs-only, scope separado) |
+| 3 | `2d915f8` | `feat(api)`: `/api/alertas` acepta `corredor` + `idioma` |
+| 4 | `92bf8a4` | `docs(tracking)`: contrato de `suscripcion_alertas` extendido con params nuevos |
+| 5 | `5101b08` | `feat(lib)`: `getTasaBancoCentral` server helper (cache por-request con `React.cache`) |
+| 6 | `4d9c92b` | `feat(data)`: `data/corredores/honduras.ts` + types + registry con feature flag |
+| 7 | `ba2bf9c` | `feat(i18n)`: `landing.editorial.honduras.*` ES + `comingSoon` EN |
+| 8 | `7e0c53e` | `feat(components)`: `landing-editorial/` (AlertaInlineForm + LandingEditorial + EnglishComingSoon) |
+| 9 | `b500446` | `feat(pais)`: integración feature-flag en `pais-content.tsx` |
+| 10 | (este) | `docs`: Proceso 30 + update CONTEXTO_FINAL |
+
+**Incidente durante el port:** los 4 primeros commits (1, 2, extra, 3) se pushearon por error directo a `main` en lugar de a feature branch. Revertidos con Opción B (4 commits `git revert` no-destructivos en main, hashes `00cff1c`, `6074f05`, `3c22a0d`, `a4d36a7`) y recreados en branch. Aprendizaje guardado en memoria persistente `feedback_feature_branch_no_main.md` y consolidado como regla: trabajo multi-commit va SIEMPRE en feature branch para aprovechar previews.
+
+**Acción pendiente:** founder valida visualmente en preview URL `preenvios-git-feat-landing-editorial-honduras-aneurysoto-pres-projects.vercel.app`, itera (push adicionales a la branch si hace falta), y cuando apruebe → merge a main (producción dormida hasta DNS cutover).
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)
