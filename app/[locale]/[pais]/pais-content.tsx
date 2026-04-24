@@ -4,11 +4,20 @@
  * Country page — EXACT COPY of the landing principal (/es, /en).
  * Only difference: hero text is adapted to the country name.
  * Everything else is identical: same components, same order, same design.
+ *
+ * Landing editorial por pais (2026-04-24): si `getCorredorContent(corredorId)`
+ * devuelve un objeto (pais tiene entry en data/corredores/*.ts), se
+ * renderiza el landing editorial modelo A en lugar de TasasReferencia +
+ * LazyBelow. Feature flag "por datos" que permite rollout progresivo
+ * pais por pais. Ver LOGICA_DE_NEGOCIO/28_landing_editorial_pais.md
+ * (creado en Commit 10).
  */
 
 import dynamic from 'next/dynamic'
 import { useLocale } from 'next-intl'
 import { findPaisBySlug } from '@/lib/paises'
+import { getCorredorContent } from '@/data/corredores'
+import type { TasaBancoCentral } from '@/lib/tasas-banco-central'
 import Nav from '@/components/Nav'
 import Comparador from '@/components/Comparador'
 import { Footer } from '@/components/Sections'
@@ -30,11 +39,27 @@ const LazyBelow = dynamic(() => import('@/components/Sections').then(m => {
   return { default: Combo }
 }))
 
-export default function PaisContent({ slug, initialMonto }: { slug: string; initialMonto?: number }) {
+// Dynamic para que el bundle solo se cargue en paises con editorial
+// (hoy solo Honduras). Los 5 paises restantes del MVP siguen usando
+// TasasReferencia + LazyBelow hasta que se agreguen a data/corredores/.
+const LandingEditorial = dynamic(() =>
+  import('@/components/landing-editorial').then(m => ({ default: m.LandingEditorial })),
+)
+
+export default function PaisContent({
+  slug,
+  initialMonto,
+  initialTasa,
+}: {
+  slug: string
+  initialMonto?: number
+  initialTasa?: TasaBancoCentral | null
+}) {
   const locale = useLocale()
   const en = locale === 'en'
   const pais = findPaisBySlug(slug)!
   const nombre = en ? pais.nombreEn : pais.nombre
+  const editorialData = getCorredorContent(pais.corredorId)
   const pageUrl = initialMonto
     ? `https://preenvios.com/${locale}/${slug}/${initialMonto}`
     : `https://preenvios.com/${locale}/${slug}`
@@ -62,8 +87,23 @@ export default function PaisContent({ slug, initialMonto }: { slug: string; init
         <BannersPatrocinados />
       </Comparador>
       <OfertasDestacadas hidden={true} />
-      <TasasReferencia />
-      <LazyBelow />
+
+      {/* Renderizado condicional: landing editorial si el pais tiene
+          entry en data/corredores/ (feature flag por datos), fallback
+          a comportamiento legacy (TasasReferencia + LazyBelow) si no. */}
+      {editorialData ? (
+        <LandingEditorial
+          data={editorialData}
+          tasa={initialTasa ?? null}
+          locale={locale === 'en' ? 'en' : 'es'}
+          slugEs={pais.slugEs}
+        />
+      ) : (
+        <>
+          <TasasReferencia />
+          <LazyBelow />
+        </>
+      )}
 
       {/* Schema.org (invisible — for Google) */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
