@@ -15,8 +15,11 @@
  *   - cambio_idioma (Nav)
  *   - contacto_enviado (app/[locale]/contacto/content.tsx — con params
  *     `asunto` + `idioma` para segmentar el embudo en GA4)
- *   - suscripcion_alertas (app/[locale]/alertas/content.tsx — con param
- *     `idioma` para comparar adopción ES vs EN)
+ *   - suscripcion_alertas (2 origenes):
+ *     · app/[locale]/alertas/content.tsx — form legacy, solo param `idioma`
+ *     · landing editorial por pais (Commit 8+) — params `idioma` + `corredor`
+ *       + `location` ('hero' | 'cta_final'). Permite segmentar en GA4 cual
+ *       form duplicado del landing convierte mejor por pais.
  *   - scraper_anomaly (lib/scrapers/validator.ts → Sentry captureMessage,
  *     no gtag — ver LOGICA_DE_NEGOCIO/24_agente_validador_ingress.md)
  *

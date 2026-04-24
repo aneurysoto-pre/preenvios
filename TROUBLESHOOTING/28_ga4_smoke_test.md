@@ -39,7 +39,7 @@
 | 4 | Comparador → click botón "Comparar" | `comparar_click` | [components/Comparador.tsx:168](../components/Comparador.tsx#L168) | Params: `monto`, `corredor`, `metodo`, `segundos_hasta_comparar` |
 | 5 | En resultados, click "Enviar ahora" en cualquier operador | `click_operador` | [components/Comparador.tsx:196](../components/Comparador.tsx#L196) | Params: `event_label` (nombre operador), `corredor`, `monto`, `posicion` |
 | 6 | Nav → click toggle idioma (ES → EN) | `cambio_idioma` | [components/Nav.tsx:101](../components/Nav.tsx#L101) | Params: `idioma_anterior`, `idioma_nuevo` |
-| 7 | Ir a `/es/alertas` → escribir email + click "Suscribirme" | `suscripcion_alertas` | [app/[locale]/alertas/content.tsx](../app/%5Blocale%5D/alertas/content.tsx) | Dispara solo si el POST al `/api/alertas` devuelve 200. Params: `idioma` |
+| 7 | Ir a `/es/alertas` → escribir email + click "Suscribirme" | `suscripcion_alertas` | [app/[locale]/alertas/content.tsx](../app/%5Blocale%5D/alertas/content.tsx) | Dispara solo si el POST al `/api/alertas` devuelve 200. Params form legacy: `idioma`. Desde el landing editorial por país (Honduras+, Commit 8+ del port 2026-04-24), el evento incluye además `corredor` + `location` ('hero' \| 'cta_final') para segmentar qué form duplicado convierte mejor |
 | 8 | Ir a `/es/contacto` → llenar form + click "Enviar mensaje" | `contacto_enviado` | [app/[locale]/contacto/content.tsx](../app/%5Blocale%5D/contacto/content.tsx) | Dispara solo si el POST a `/api/contactos` devuelve 200. Params: `asunto`, `idioma` |
 
 **Automáticos extra que también deberías ver** (sin acción específica):
@@ -133,4 +133,4 @@ scroll                 1+
 - Si **se renombra** un evento: preservar el nombre viejo en un row separado marcado "legacy" por 30 días para que GA4 dashboards viejos no se rompan
 - Si **se elimina** un evento: mover a sección "Históricos removidos" con fecha y razón
 
-**Última actualización:** 2026-04-22 (agregado `suscripcion_alertas` + `contacto_enviado` en el commit `6bdce58`).
+**Última actualización:** 2026-04-24 (contrato de `suscripcion_alertas` extendido — desde el landing editorial por país el evento incluye `corredor` + `location`. El form legacy de `/es/alertas` sigue enviando solo `idioma`, sin cambios). 2026-04-22 (agregado `suscripcion_alertas` + `contacto_enviado` en el commit `6bdce58`).
