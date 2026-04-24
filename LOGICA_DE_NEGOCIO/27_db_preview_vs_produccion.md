@@ -117,108 +117,22 @@ compartidos" que el preview puede tocar sin romper prod).
 
 ## Cómo aplicar una migración nueva (flujo correcto)
 
-### Checklist obligatorio — copiar en cada PR / commit message de migración
+Cuando en el futuro se cree una migración `008_xxx.sql`:
 
-```
-☐ 1. Archivo creado en supabase/migrations/NNN_*.sql
-☐ 2. SQL idempotente verificado (IF NOT EXISTS, DROP + CREATE, ON CONFLICT)
-☐ 3. Bloque correspondiente agregado a supabase/preview_setup_all.sql
-☐ 4. Ejecutado en preview (preenvios-preview) vía Supabase SQL Editor
-☐ 5. Smoke test en preview pasado (schema + índices + policies verificados)
-☐ 6. Ejecutado en prod (preenvios) vía Supabase SQL Editor
-☐ 7. Verificación post-run en prod ejecutada
-☐ 8. Ambos checkboxes confirmados antes de que código que depende del
-     schema nuevo llegue a main
-```
-
-### Detalle paso a paso
-
-1. **Crear el archivo** en `supabase/migrations/NNN_xxx.sql` con SQL idempotente
-   (`CREATE TABLE IF NOT EXISTS`, `DROP POLICY IF EXISTS` + `CREATE POLICY`,
-   `ADD COLUMN IF NOT EXISTS`, `ON CONFLICT DO UPDATE`).
-2. **Actualizar `supabase/preview_setup_all.sql`** agregando el bloque de la
-   nueva migración en orden. **NO es opcional** — si se olvida, al
-   reinicializar preview desde cero la migración no se incluye y preview
-   diverge silenciosamente del schema de prod (ver "Incidente 2026-04-24").
-3. **Correrlo en preview primero** (proyecto `preenvios-preview`) via Supabase
-   SQL Editor — probar que no rompe nada y que hace lo esperado.
-4. **Si el smoke test pasa en preview, correr el mismo SQL en prod** (proyecto
+1. **Crear el archivo** en `supabase/migrations/008_xxx.sql` (idempotente con
+   `CREATE TABLE IF NOT EXISTS`, `DROP POLICY IF EXISTS` + `CREATE POLICY`).
+2. **Correrlo en preview primero** (proyecto `preenvios-preview`) — probar
+   que no rompe nada y que hace lo esperado.
+3. **Si el smoke test pasa en preview, correr el mismo SQL en prod** (proyecto
    `preenvios`). Nunca al revés.
-5. **Verificación post-run** — correr queries `information_schema.columns`,
-   `pg_indexes`, `pg_policies` contra ambas DBs y confirmar que el schema quedó
-   idéntico.
+4. **Opcional pero recomendado:** actualizar el script
+   `supabase/preview_setup_all.sql` para incluir la nueva migración — así si
+   en el futuro hay que recrear el proyecto preview (Supabase Free tier se
+   pausa tras 7 días sin actividad), el script se vuelve a ejecutar entero y
+   queda listo sin olvidos.
 
-Si se salta el paso 3 y se aplica directo en prod, se pierde la "red de
+Si se salta el paso 2 y se aplica directo en prod, se pierde la "red de
 seguridad" de probar primero — el punto entero de tener el preview.
-
-Si se salta el paso 2 (actualizar `preview_setup_all.sql`), preview queda
-desincronizado — ver "Incidente 2026-04-24".
-
-## Incidente 2026-04-24 — divergencia prod vs preview (lección)
-
-**Qué pasó:** Al intentar correr la migración 011 en preview, Supabase SQL
-Editor devolvió error `relation "alertas_email" does not exist`. La migración
-010 (que formalizó la tabla `alertas_email` al repo el 2026-04-23, commit
-`1c25b66`) nunca se aplicó en preview — después de ese commit nadie re-ejecutó
-el script de preview. Preview quedó con las 5 tablas de migraciones 001-007 y
-prod avanzó a 10 tablas.
-
-**Impacto:** 24hs de divergencia sin detectar. Detectado solo porque la
-migración 011 requería `ALTER TABLE alertas_email` que falló en preview. Si la
-011 hubiera creado una tabla nueva en vez de extender una existente, el drift
-podría haber pasado desapercibido mucho más tiempo.
-
-**Causa raíz:** el paso 2 del checklist se ejecutó correctamente cuando se
-commiteó la migración 010 (el script `preview_setup_all.sql` se actualizó),
-pero el paso 3 ("correr en preview") nunca se hizo porque no había un prompt
-visible que lo exigiera — solo narrativa en este doc. El proceso dependía
-puramente de que alguien recordara.
-
-**Mitigación aplicada:**
-- Checklist con 8 items explícitos (antes eran 4 pasos narrativos).
-- La migración 011 (commit `c24ad43`) incluye actualización del preview_setup.
-- La resolución del incidente requirió re-correr `preview_setup_all.sql`
-  completo en preview para sincronizar.
-
-**Mitigación futura (deuda técnica pendiente):** ver sección "Automatización
-futura" abajo.
-
-## Automatización futura (deuda técnica documentada)
-
-El checklist manual es defensa-en-profundidad pero depende de disciplina
-humana. **Va a fallar otra vez** eventualmente. La solución estructural es
-automatizar con un GitHub Action que aplique las migraciones a preview en
-cada push.
-
-### Opción recomendada — GitHub Action con `psql`
-
-**Qué hace:** workflow `.github/workflows/apply-migrations-preview.yml` que
-corre en cada push a `main` y a cualquier branch, lee
-`supabase/migrations/*.sql` en orden y los ejecuta con `psql` contra la
-connection string del proyecto preview. Como las migraciones son
-idempotentes, re-ejecutar todas en cada push es safe y garantiza sync.
-
-**Requiere:**
-- 1 GitHub secret: `SUPABASE_PREVIEW_DB_URL` (Session pooler connection string
-  del proyecto `preenvios-preview`, sacado del Dashboard → Project Settings →
-  Database → Connection string).
-- ~40 líneas de YAML.
-- 30-45 min de setup.
-
-**Costo:** $0 — cabe en GitHub Actions Free tier (2000 min/mes).
-
-**Cuándo implementar:** post-port del landing editorial Honduras. Prioridad
-media — no bloquea el port pero evita repetir el incidente 2026-04-24.
-Schedulear como trabajo dedicado de ~1h.
-
-### Alternativas evaluadas y descartadas (por ahora)
-
-- **Supabase CLI + `supabase db push`**: más idiomático pero requiere
-  reestructurar las 11 migraciones existentes al formato CLI. Overkill para
-  el volumen actual del proyecto.
-- **Supabase Branching**: feature nativa que da una DB branch por git branch
-  automáticamente. Requiere Supabase Pro ($25/mes) — evaluar cuando el
-  proyecto upgradée post-cutover.
 
 ## Reinicializar preview desde cero (si Supabase pausa el proyecto)
 
