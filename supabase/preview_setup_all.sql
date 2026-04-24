@@ -315,6 +315,23 @@ CREATE POLICY "alertas_email_deny_anon_delete" ON alertas_email FOR DELETE TO an
 
 
 -- ───────────────────────────────────────────────────────────────────────
+-- Migración 011: alertas_email + corredor + idioma (landing editorial)
+-- Replica migration 011_alertas_email_corredor_idioma.sql. El form de
+-- alertas de cada página editorial (Sección 0 hero + Sección 6 CTA)
+-- pasa a guardar contexto país + locale para fidelización por corredor.
+-- ───────────────────────────────────────────────────────────────────────
+
+ALTER TABLE alertas_email ADD COLUMN IF NOT EXISTS corredor TEXT;
+ALTER TABLE alertas_email ADD COLUMN IF NOT EXISTS idioma TEXT;
+
+CREATE INDEX IF NOT EXISTS alertas_email_corredor_idx
+  ON alertas_email (corredor) WHERE corredor IS NOT NULL;
+
+COMMENT ON COLUMN alertas_email.corredor IS 'CorredorId del país desde el que se suscribió (ej. honduras, mexico). NULL = suscripción genérica sin contexto país (form de /alertas) o registro previo a migración 011.';
+COMMENT ON COLUMN alertas_email.idioma IS 'Locale activo cuando se suscribió (es | en). Determina idioma de emails futuros. NULL para registros previos a migración 011.';
+
+
+-- ───────────────────────────────────────────────────────────────────────
 -- Seed adicional: 4 corredores MVP originales (HN, DO, GT, SV)
 -- Estos NO venían en ninguna migración (se crearon con scripts mjs antes).
 -- Tasas de banco central: valores aproximados abril 2026 — ajustables.
