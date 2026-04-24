@@ -214,24 +214,65 @@ sesiones futuras:
 
 ## Regla arquitectónica reforzada durante el port
 
-El 2026-04-24, post-deploy inicial a la preview URL, el founder reportó scroll
-horizontal **solo** en `/es/honduras`. Diagnóstico: el wrapper `<div absolute
-w-0 h-0 overflow-hidden>` del honeypot en
-[`AlertaInlineForm.tsx`](../components/landing-editorial/AlertaInlineForm.tsx)
-no tenía ancestro con `position: relative` → el browser anclaba el absolute
-al viewport/`<body>` y Mobile Safari calculaba un ancho del documento mayor
-al viewport visual. Páginas con el form renderizado 2 veces (seccion 0 +
-seccion 6 del landing editorial) exponían el bug; los otros 5 países MVP, al
-no tener landing editorial, no tenían el form y no exponían nada.
+### Incidente 2026-04-24 — scroll horizontal en /es/honduras
 
-**Fix arquitectónico**: agregar `relative` al `<form>` — el honeypot
-`absolute` queda anclado a su contenedor lógico (el form), no al viewport.
+Post-deploy inicial a la preview URL, el founder reportó scroll horizontal
+**solo** en `/es/honduras`. El bug NO aparecía en main (sin landing editorial)
+ni en los otros 5 países MVP (tampoco tenían landing editorial).
 
-**Regla consolidada (ver CONTEXTO_FINAL § Reglas arquitectónicas de CSS/DOM,
-regla 13):** PROHIBIDO `overflow-x: hidden` en cualquier scope (global,
-section, card). Si un elemento causa scroll horizontal, el fix correcto es
-encontrar ese elemento y corregirlo en su raíz — nunca taparlo con
-`overflow-x: hidden` como red de seguridad.
+**Intento de fix fallido** (commit `155680a`): agregar `relative` al `<form>`
+para anclar el honeypot `absolute` al form y no al viewport. **NO resolvió el
+bug** — era el sospechoso equivocado.
+
+**Diagnóstico correcto** vía bisect sistemático (commits `9bed277`, `fc3401a`,
+`9ca5596`):
+
+1. Bisect externo de secciones del `LandingEditorial`: solo Sección 0 activa
+   → bug persiste → Sección 0 es el culprit (descarta las otras 7 secciones).
+2. Sub-bisect dentro de Sección 0: `BISECT_SUB = 'tasa-only'` (solo card tasa,
+   sin `AlertaInlineForm`) → bug desaparece → el `AlertaInlineForm` es el
+   culprit.
+3. Sub-bisect interno del `AlertaInlineForm`: `BISECT_FORM_OMIT = 'button'`
+   (form sin el `<button>` submit) → bug desaparece → el `<button>` en modo
+   compact es el culprit específico.
+
+**Causa raíz real**: el `formLayoutClass` del compact mode era `'flex gap-2'`
+(row en mobile), combinando:
+
+- `<input type="email" className="flex-1 min-w-0 ...">` — teóricamente debería
+  colapsar al 0, pero Mobile Safari mantiene un `min-content` intrínseco en
+  inputs email con autocomplete + placeholder.
+- `<button className="... shrink-0 whitespace-nowrap px-4 py-2 ...">` — no
+  puede ceder ancho (shrink-0 explícito) ni wrappear el texto.
+
+En mobile estrecho el container `<form>` se expande más allá del viewport
+porque ni input ni button pueden ceder suficiente ancho.
+
+### Fix arquitectónico aplicado
+
+Cambiar `formLayoutClass` en [`AlertaInlineForm.tsx`](../components/landing-editorial/AlertaInlineForm.tsx):
+
+```ts
+// Antes:
+const formLayoutClass = isLarge ? 'flex flex-col sm:flex-row gap-2' : 'flex gap-2'
+
+// Después (fix):
+const formLayoutClass = 'flex flex-col sm:flex-row gap-2'
+```
+
+Mobile → stacked (input encima, button debajo), sin conflicto de widths.
+Desktop (≥640px) → side-by-side como siempre. El form grande (`isLarge`, usado
+en Sección 6) ya usaba este patrón desde el inicio — aquí lo propagamos al
+compact para consistencia.
+
+**Regla consolidada** — ver CONTEXTO_FINAL § Reglas arquitectónicas de CSS/DOM:
+
+- **Regla 13**: PROHIBIDO `overflow-x: hidden` en cualquier scope (global,
+  section, card). Si algo causa scroll horizontal, el fix correcto es
+  encontrarlo y corregirlo en su raíz — nunca taparlo.
+- **Regla 14**: Forms inline con `<input>` + `<button>` van SIEMPRE stacked
+  en mobile (`flex flex-col sm:flex-row gap-2`), NUNCA `flex gap-2` (row en
+  mobile). Regla nacida de este mismo incidente.
 
 ## Relacionados
 

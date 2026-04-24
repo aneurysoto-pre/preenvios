@@ -1267,18 +1267,19 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 
 ### Reglas arquitectónicas de CSS/DOM
 13. **PROHIBIDO `overflow-x: hidden` en cualquier scope** (global `body`/`html`, sección, componente, card, wrapper). Es un parche que oculta el síntoma pero deja el elemento que desborda sin arreglar — cuando se toque ese elemento en el futuro, el bug vuelve. Regla nacida del bug histórico que persiguió al proyecto (commit `5329a11` removió `overflow-x: hidden` global impuesto durante ese episodio) y reafirmada el 2026-04-24 cuando un `<div absolute w-0 h-0>` del honeypot sin ancestro `relative` causó scroll horizontal en `/es/honduras` (solo ahí porque es la única página con `AlertaInlineForm` renderizado 2 veces). **Si un elemento causa scroll horizontal, el fix correcto es encontrar ese elemento y corregirlo en su raíz** — typical causes: `position: absolute` sin ancestro `relative`, `width` fijo > viewport móvil, texto con `whitespace-nowrap` que no wrappea, imágenes sin `max-width: 100%`. `overflow-x: hidden` como fix SOLO se acepta en ventanas muy específicas (carrousels, story bars) donde es deliberado y el comportamiento esperado — no como red de seguridad global.
+14. **Forms inline con `<input>` + `<button>` van SIEMPRE stacked en mobile** (`flex flex-col sm:flex-row gap-2`), NUNCA `flex gap-2` (row en mobile). Razón: el patrón `<button shrink-0 whitespace-nowrap>` + `<input flex-1 min-w-0>` en flex-row causa scroll horizontal en Mobile Safari porque el input con `min-w-0` NO colapsa al 0 real (bug conocido de Safari con inputs email/autocomplete: mantienen un `min-content` intrínseco), mientras el button con `shrink-0` + `whitespace-nowrap` no puede ceder tampoco — el container se expande más allá del viewport. Regla nacida del bug del `AlertaInlineForm` en `/es/honduras` (2026-04-24), aislado vía bisect sistemático (commits `9bed277`, `fc3401a`, `9ca5596`) y resuelto cambiando `formLayoutClass` del compact mode de `'flex gap-2'` a `'flex flex-col sm:flex-row gap-2'`. **Aplica a cualquier form nuevo** con input + button en el proyecto: desktop puede ser row (`sm:flex-row` ≥640px), mobile siempre column. Side-effect positivo: forms stacked en mobile son más tap-friendly (accesibilidad).
 
 ### Reglas operacionales y de negocio
-14. Revisar métricas una vez por semana — no todos los días
-15. El número que importa cada semana: clics en "Enviar ahora"
-16. Ninguna decisión de dirección estratégica antes del mes 18
-17. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
-18. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
-19. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
-20. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
-21. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
-22. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
-23. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
+15. Revisar métricas una vez por semana — no todos los días
+16. El número que importa cada semana: clics en "Enviar ahora"
+17. Ninguna decisión de dirección estratégica antes del mes 18
+18. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
+19. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
+20. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
+21. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
+22. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
+23. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
+24. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
 
 ---
 
