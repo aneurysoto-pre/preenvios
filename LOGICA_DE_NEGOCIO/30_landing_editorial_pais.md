@@ -212,6 +212,27 @@ sesiones futuras:
    se quiere actualización automática, agregar `export const revalidate =
    3600` a las pages o envolver con `unstable_cache` en el helper.
 
+## Regla arquitectónica reforzada durante el port
+
+El 2026-04-24, post-deploy inicial a la preview URL, el founder reportó scroll
+horizontal **solo** en `/es/honduras`. Diagnóstico: el wrapper `<div absolute
+w-0 h-0 overflow-hidden>` del honeypot en
+[`AlertaInlineForm.tsx`](../components/landing-editorial/AlertaInlineForm.tsx)
+no tenía ancestro con `position: relative` → el browser anclaba el absolute
+al viewport/`<body>` y Mobile Safari calculaba un ancho del documento mayor
+al viewport visual. Páginas con el form renderizado 2 veces (seccion 0 +
+seccion 6 del landing editorial) exponían el bug; los otros 5 países MVP, al
+no tener landing editorial, no tenían el form y no exponían nada.
+
+**Fix arquitectónico**: agregar `relative` al `<form>` — el honeypot
+`absolute` queda anclado a su contenedor lógico (el form), no al viewport.
+
+**Regla consolidada (ver CONTEXTO_FINAL § Reglas arquitectónicas de CSS/DOM,
+regla 13):** PROHIBIDO `overflow-x: hidden` en cualquier scope (global,
+section, card). Si un elemento causa scroll horizontal, el fix correcto es
+encontrar ese elemento y corregirlo en su raíz — nunca taparlo con
+`overflow-x: hidden` como red de seguridad.
+
 ## Relacionados
 
 - Proceso 02 — `paises.ts` — schema base de `PaisData`

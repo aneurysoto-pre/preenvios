@@ -164,7 +164,29 @@ export default function AlertaInlineForm({
         </div>
       </div>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate className={formLayoutClass}>
+      {/*
+        CRITICO — `relative` en el <form> es requerido para que el
+        honeypot `absolute` abajo se ancle a ESTE form y NO al viewport.
+
+        Sin `relative` aca, el browser buscaba el primer ancestro con
+        position: relative — en mobile Safari eso era el viewport/body,
+        y el div absolute del honeypot (aunque `w-0 h-0 overflow-hidden`)
+        causaba scroll horizontal en /es/honduras (2026-04-24). Bug
+        aislado al landing editorial porque esta pagina renderiza el
+        form 2 veces (hero + CTA final); las otras 5 paises MVP no
+        tienen landing editorial y no exponian el bug.
+
+        NO FIXEAR con `overflow-x: hidden` (global, seccion, card o
+        cualquier scope) — es parche y esta PROHIBIDO por regla
+        arquitectural del proyecto (ver CONTEXTO_FINAL § Reglas
+        tecnicas, regla 23). El fix correcto es anclar el honeypot
+        a su contenedor logico.
+      */}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        className={`relative ${formLayoutClass}`}
+      >
         <input
           type="email"
           autoComplete="email"
@@ -176,7 +198,9 @@ export default function AlertaInlineForm({
           {...form.register('email')}
         />
 
-        {/* Honeypot — oculto a usuarios, bots lo rellenan */}
+        {/* Honeypot — oculto a usuarios, bots lo rellenan. El wrapper
+            `absolute` queda anclado al <form relative> arriba por la
+            razon explicada en el comentario previo al <form>. */}
         <div
           aria-hidden="true"
           className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none"
