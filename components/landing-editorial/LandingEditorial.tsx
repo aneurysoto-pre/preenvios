@@ -70,7 +70,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
       <section className="py-6 md:py-7 border-b border-g200">
         <div className="max-w-[1240px] mx-auto px-5 grid md:grid-cols-2 gap-3 md:gap-4">
           {/* Card tasa BCH */}
-          <div className="bg-white rounded-2xl p-4 border border-g200 flex items-center gap-3">
+          <div className="bg-white rounded-2xl p-4 border border-g200 shadow-sm flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center font-heading font-black text-white text-[13px] shrink-0 bg-blue">
               {siglaBanco}
             </div>
@@ -295,7 +295,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
 
           <div className="grid md:grid-cols-2 gap-3">
             {(t.raw('errores.items') as Array<{ titulo: string; texto: string }>).map((error, i) => (
-              <div key={i} className="bg-white rounded-xl p-4 border border-red-200 flex gap-3">
+              <div key={i} className="bg-white rounded-xl p-4 border border-red-200 flex gap-3 h-full">
                 <div className="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center shrink-0 font-heading font-black text-sm">
                   ✕
                 </div>
