@@ -51,6 +51,32 @@ export default function LandingEditorial({ data, tasa, locale, slugEs }: Props) 
 function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaBancoCentral | null }) {
   const t = useTranslations(`landing.editorial.${data.corredorId}`)
 
+  // ╔═══════════════════════════════════════════════════════════════════════╗
+  // ║ BISECT TEMPORAL — diagnostico scroll horizontal /es/honduras (2026-04-24) ║
+  // ║                                                                          ║
+  // ║ El fix de anclaje honeypot con form relative (commit 155680a) no        ║
+  // ║ resolvio el bug. El founder reporto que el scroll horizontal persiste.  ║
+  // ║ Aplicamos regla "max 2 intentos fallidos del mismo problema, escalar" — ║
+  // ║ cambio de estrategia: aislamiento sistematico (binary search lineal).   ║
+  // ║                                                                          ║
+  // ║ Subir BISECT_STEP en cada iteracion. Cuando el bug reaparezca por       ║
+  // ║ primera vez, la ultima seccion agregada es la culpable.                 ║
+  // ║                                                                          ║
+  // ║ BISECT_STEP = 1 → solo Seccion 0 (tasa + form alertas)                  ║
+  // ║ BISECT_STEP = 2 → + Seccion 1 (stats)                                   ║
+  // ║ BISECT_STEP = 3 → + Seccion 2 (editorial oscuro)                        ║
+  // ║ BISECT_STEP = 4 → + Seccion 3 (ciudades)                                ║
+  // ║ BISECT_STEP = 5 → + Seccion 4 (errores)                                 ║
+  // ║ BISECT_STEP = 6 → + Seccion 5 (FAQ)                                     ║
+  // ║ BISECT_STEP = 7 → + Seccion 6 (CTA final)                               ║
+  // ║ BISECT_STEP = 8 → + Fuentes (estado final)                              ║
+  // ║                                                                          ║
+  // ║ Una vez identificada la seccion culpable, remover esta constante y las  ║
+  // ║ condicionales — reemplazar por el fix arquitectonico especifico que    ║
+  // ║ surja del diagnostico.                                                  ║
+  // ╚═══════════════════════════════════════════════════════════════════════╝
+  const BISECT_STEP: number = 1
+
   // Formateadores de fecha — locale es-HN consistente con el corredor.
   // Para otros corredores latinoamericanos, es-ES seria equivalente; la
   // diferencia regional en nombres de mes es despreciable.
@@ -74,6 +100,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 0 — Tasa BCH + Form Alertas (primer bloque post-disclaimer)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 1 && (
       <section className="py-6 md:py-7 border-b border-g200">
         <div className="max-w-[1240px] mx-auto px-5 grid md:grid-cols-2 gap-3 md:gap-4">
           {/* Card tasa BCH */}
@@ -115,10 +142,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           />
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 1 — Stats (Honduras y las remesas)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 2 && (
       <section className="py-10 md:py-14">
         <div className="max-w-[1240px] mx-auto px-5">
           <div className="mb-7 max-w-2xl">
@@ -206,10 +235,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 2 — Editorial oscuro (la diaspora hondureña)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 3 && (
       <section className="bg-slate-900 text-white py-14 md:py-16 relative overflow-hidden">
         <div className="absolute top-8 right-8 text-[160px] font-heading font-black opacity-5 leading-none select-none">
           {data.codigoPais.toUpperCase()}
@@ -237,10 +268,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 3 — Ciudades (6 zonas principales)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 4 && (
       <section className="py-10 md:py-14">
         <div className="max-w-[1240px] mx-auto px-5">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
@@ -284,10 +317,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 4 — Errores comunes (6 warning cards)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 5 && (
       <section className="py-10 md:py-14 bg-red-50/40">
         <div className="max-w-[1240px] mx-auto px-5">
           <div className="mb-7 max-w-2xl">
@@ -317,10 +352,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 5 — FAQ (7 preguntas, accordion)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 6 && (
       <section className="py-10 md:py-14">
         <div className="max-w-[860px] mx-auto px-5">
           <div className="mb-7 text-center">
@@ -364,10 +401,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            SECCION 6 — CTA final (titulo + checklist + form alertas grande)
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 7 && (
       <section className="py-10 md:py-14 relative overflow-hidden bg-gradient-to-br from-blue to-blue-dark">
         <div className="relative max-w-[1100px] mx-auto px-5 grid md:grid-cols-2 gap-6 md:gap-8 items-start text-white">
           {/* Columna izquierda — titulo + CTA comparador */}
@@ -419,10 +458,12 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════
            Fuentes — micro-bloque antes del footer
            ═══════════════════════════════════════════════════════════════ */}
+      {BISECT_STEP >= 8 && (
       <section className="py-5 bg-g50 border-t border-g200">
         <div className="max-w-[1240px] mx-auto px-5">
           <p className="text-[11px] text-g500 leading-relaxed">
@@ -432,6 +473,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           </p>
         </div>
       </section>
+      )}
     </>
   )
 }
