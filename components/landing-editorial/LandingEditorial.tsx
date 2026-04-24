@@ -327,7 +327,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
 
           <div className="space-y-2.5">
             {(t.raw('faq.items') as FAQItem[]).map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-g200 p-4 md:p-5 group">
+              <details key={i} name={`faq-${data.corredorId}`} className="bg-white rounded-xl border border-g200 p-4 md:p-5 group">
                 <summary className="flex items-center justify-between font-heading font-extrabold text-sm md:text-base cursor-pointer list-none text-ink">
                   <span>{item.q}</span>
                   <svg
