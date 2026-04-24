@@ -123,6 +123,32 @@ export default function AlertaInlineForm({
 
   const formLayoutClass = isLarge ? 'flex flex-col sm:flex-row gap-2' : 'flex gap-2'
 
+  // ╔═══════════════════════════════════════════════════════════════════════╗
+  // ║ SUB-BISECT TEMPORAL — aislar sub-elemento culpable del scroll        ║
+  // ║ horizontal (2026-04-24).                                              ║
+  // ║                                                                        ║
+  // ║ Bisect externo (LandingEditorial.tsx) ya aislo que el culprit vive   ║
+  // ║ dentro de <AlertaInlineForm>. Este sub-bisect aisla QUE elemento     ║
+  // ║ del form especificamente.                                             ║
+  // ║                                                                        ║
+  // ║ Cambiar BISECT_FORM_OMIT para omitir 1 elemento por iteracion:       ║
+  // ║ - 'button'   → omite <button submit> (sospechoso #1: whitespace-    ║
+  // ║                nowrap + shrink-0 + px-4/8 interaccion con input      ║
+  // ║                flex-1 min-w-0 en mobile Safari flex row)             ║
+  // ║ - 'input'    → omite <input email>                                   ║
+  // ║ - 'honeypot' → omite div honeypot (intento previo de fix con       ║
+  // ║                `relative en form` fue fallido; ahora REMOVER el div ║
+  // ║                honeypot entero)                                      ║
+  // ║ - 'header'   → omite icon + titulo + subtitulo                      ║
+  // ║ - 'none'     → estado final con todo renderizado                    ║
+  // ║                                                                        ║
+  // ║ Si el bug DESAPARECE con alguna omision, ese elemento es el culprit. ║
+  // ║ Si persiste en las 4 omisiones → el culprit es el <form> tag o el   ║
+  // ║ wrapper <div className={cardClass}>, o hay interaccion compuesta.   ║
+  // ╚═══════════════════════════════════════════════════════════════════════╝
+  type BisectFormOmit = 'none' | 'button' | 'input' | 'honeypot' | 'header'
+  const BISECT_FORM_OMIT = 'button' as BisectFormOmit
+
   // Success state — compacto, replace del form
   if (state.kind === 'success') {
     return (
@@ -152,6 +178,7 @@ export default function AlertaInlineForm({
 
   return (
     <div className={cardClass}>
+      {BISECT_FORM_OMIT !== 'header' && (
       <div className="flex items-center gap-2.5 mb-2.5">
         <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-blue">
           <Bell className="w-[18px] h-[18px] text-white" aria-hidden="true" />
@@ -163,6 +190,7 @@ export default function AlertaInlineForm({
           <p className="text-[11px] text-g600 mt-0.5">{subtitulo}</p>
         </div>
       </div>
+      )}
 
       {/*
         CRITICO — `relative` en el <form> es requerido para que el
@@ -187,6 +215,7 @@ export default function AlertaInlineForm({
         noValidate
         className={`relative ${formLayoutClass}`}
       >
+        {BISECT_FORM_OMIT !== 'input' && (
         <input
           type="email"
           autoComplete="email"
@@ -197,10 +226,12 @@ export default function AlertaInlineForm({
           aria-invalid={form.formState.errors.email ? 'true' : 'false'}
           {...form.register('email')}
         />
+        )}
 
         {/* Honeypot — oculto a usuarios, bots lo rellenan. El wrapper
             `absolute` queda anclado al <form relative> arriba por la
             razon explicada en el comentario previo al <form>. */}
+        {BISECT_FORM_OMIT !== 'honeypot' && (
         <div
           aria-hidden="true"
           className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none"
@@ -212,7 +243,9 @@ export default function AlertaInlineForm({
             {...form.register('website')}
           />
         </div>
+        )}
 
+        {BISECT_FORM_OMIT !== 'button' && (
         <button
           type="submit"
           disabled={state.kind === 'submitting'}
@@ -220,6 +253,7 @@ export default function AlertaInlineForm({
         >
           {state.kind === 'submitting' ? '...' : ctaText}
         </button>
+        )}
       </form>
 
       {form.formState.errors.email && (

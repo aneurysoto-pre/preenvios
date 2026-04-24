@@ -84,7 +84,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
   // Cast explicito para que TS no narrowee al literal actual y las
   // comparaciones con los otros miembros no se marquen "unintentional".
   type BisectSub = 'all' | 'tasa-only' | 'form-only'
-  const BISECT_SUB = 'tasa-only' as BisectSub
+  const BISECT_SUB = 'form-only' as BisectSub
 
   // Formateadores de fecha — locale es-HN consistente con el corredor.
   // Para otros corredores latinoamericanos, es-ES seria equivalente; la
