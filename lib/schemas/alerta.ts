@@ -35,6 +35,14 @@ const CORREDOR_IDS = [
   'mexico',
 ] as const
 
+/**
+ * Tipo union literal de los corredorIds validos. Exportado para usar
+ * en props de componentes que envian al form (ej. AlertaInlineForm
+ * del landing editorial), asi TypeScript fuerza que el corredorId
+ * pasado sea uno de los 6 MVP.
+ */
+export type CorredorId = (typeof CORREDOR_IDS)[number]
+
 export const alertaSchema = z.object({
   email: z
     .string()
