@@ -77,6 +77,15 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
   // ╚═══════════════════════════════════════════════════════════════════════╝
   const BISECT_STEP: number = 1
 
+  // Sub-bisect dentro de Seccion 0 (iteracion 2, 2026-04-24).
+  // 'tasa-only' → solo card tasa BCH, sin AlertaInlineForm.
+  // 'form-only' → solo AlertaInlineForm, sin card tasa BCH.
+  // 'all'       → ambos (estado final pre-bisect).
+  // Cast explicito para que TS no narrowee al literal actual y las
+  // comparaciones con los otros miembros no se marquen "unintentional".
+  type BisectSub = 'all' | 'tasa-only' | 'form-only'
+  const BISECT_SUB = 'tasa-only' as BisectSub
+
   // Formateadores de fecha — locale es-HN consistente con el corredor.
   // Para otros corredores latinoamericanos, es-ES seria equivalente; la
   // diferencia regional en nombres de mes es despreciable.
@@ -103,7 +112,8 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
       {BISECT_STEP >= 1 && (
       <section className="py-6 md:py-7 border-b border-g200">
         <div className="max-w-[1240px] mx-auto px-5 grid md:grid-cols-2 gap-3 md:gap-4">
-          {/* Card tasa BCH */}
+          {/* Card tasa BCH — sub-bisect: solo si BISECT_SUB != 'form-only' */}
+          {(BISECT_SUB === 'all' || BISECT_SUB === 'tasa-only') && (
           <div className="bg-white rounded-2xl p-4 border border-g200 flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center font-heading font-black text-white text-[13px] shrink-0 bg-blue">
               {siglaBanco}
@@ -129,8 +139,10 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
               </div>
             </div>
           </div>
+          )}
 
-          {/* Form alertas compact (location='hero') */}
+          {/* Form alertas compact — sub-bisect: solo si BISECT_SUB != 'tasa-only' */}
+          {(BISECT_SUB === 'all' || BISECT_SUB === 'form-only') && (
           <AlertaInlineForm
             corredor={data.corredorId as CorredorId}
             idioma="es"
@@ -140,6 +152,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
             emailPlaceholder={t('seccion0.alertasEmailPlaceholder')}
             ctaText={t('seccion0.alertasCta')}
           />
+          )}
         </div>
       </section>
       )}
