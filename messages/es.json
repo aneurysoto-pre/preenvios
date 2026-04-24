@@ -299,5 +299,152 @@
     "categoryAnalyticsDesc": "Google Analytics nos dice qué funciona y qué no. Por ejemplo: cuántas personas encontraron la remesa más barata. Anónimo y agregado.",
     "categoryMarketing": "Marketing",
     "categoryMarketingDesc": "Por ahora no usamos cookies de marketing. En el futuro podríamos medir conversiones de anuncios (Google Ads, Meta). Tú decides si las permites desde ya."
+  },
+  "landing": {
+    "editorial": {
+      "comingSoon": {
+        "title": "Versión en inglés próximamente",
+        "message": "Estamos traduciendo el contenido completo. Mientras tanto, podés ver la versión en español.",
+        "ctaEs": "Ver versión en español →"
+      },
+      "honduras": {
+        "seccion0": {
+          "bancoLabel": "Honduras",
+          "bancoNombre": "Banco Central de Honduras",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas diarias",
+          "alertasSubtitle": "Avisos cuando HNL/USD suba — envía cuando más rinde",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a Honduras",
+          "title": "Honduras y las remesas desde Estados Unidos en 2026",
+          "lede": "El 26% del PIB hondureño viene de las remesas que envía la diáspora desde Estados Unidos. Cada dólar que llega sostiene una familia, un negocio, un estudio. Honduras es uno de los países centroamericanos más dependientes de remesas — estos son los números que lo demuestran. Datos del Banco Central de Honduras (BCH) 2025 y CEPAL 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a Honduras",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "hondureños en EE.UU.",
+          "rankingLabel": "Ranking regional",
+          "rankingSubtitle": "receptor de remesas en Centroamérica"
+        },
+        "editorial": {
+          "tag": "La diáspora hondureña en Estados Unidos",
+          "titleLine1": "Desde Miami a Tegucigalpa.",
+          "titleLine2": "Desde Houston a San Pedro Sula.",
+          "titleLine3": "Enviar dinero a Honduras no es solo una transacción.",
+          "p1": "Los catrachos en Estados Unidos mueven aproximadamente $8,500 millones al año hacia casa. Ese dinero paga colegiaturas en Comayagua, construye casas en La Ceiba, sostiene pequeños negocios en Choluteca.",
+          "p2": "La diferencia entre una remesadora y otra puede ser hasta <strong>$10 por cada $200 enviados</strong>. Multiplicá eso por los 8 a 12 envíos anuales que hacen muchas familias — y el ahorro son <highlight>entre $80 y $120</highlight> que se quedan con tu gente cada año."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de Honduras",
+          "title": "Enviar dinero a ciudades de Honduras: 6 zonas principales",
+          "lede": "6 ciudades principales de Honduras donde tu familia probablemente recibe. Todas tienen cobertura de las principales remesadoras (Remitly, Xoom, Western Union, MoneyGram) en bancos y agencias. Zonas rurales pueden requerir Tigo Money o depósito en banco del centro urbano más cercano.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "industrial": "Industrial",
+            "turismo": "Turismo",
+            "patrimonio_maya": "Patrimonio maya",
+            "puerto_caribe": "Puerto caribe",
+            "agricola": "Agrícola"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a Honduras que te cuestan hasta $50",
+          "lede": "Cada uno de estos errores le ha costado a un hondureño entre $5 y $50. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "Usar la misma remesadora siempre",
+              "texto": "La mejor remesadora cambia semana a semana según la tasa. Comparar cada vez te ahorra $5–$10 por envío."
+            },
+            {
+              "titulo": "Caer en \"comisión $0\"",
+              "texto": "\"Comisión $0\" no significa envío gratis. El operador compensa ofreciendo una tasa de cambio peor — terminás recibiendo menos lempiras. Siempre mirá los lempiras recibidos finales, no solo la comisión en dólares."
+            },
+            {
+              "titulo": "Pagar Express cuando no urge",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra vs \"Económico\" en 1 día hábil. Si tu familia no necesita el dinero HOY, el Express es dinero tirado. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "Copiar el nombre así nomás",
+              "texto": "Si el nombre no coincide carácter por carácter con la cédula hondureña, el envío se retiene y puede tardar días. Copialo tal cual aparece — tildes, segundos apellidos, todo."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra porque las procesadoras de tarjeta (Visa/Mastercard) les cobran comisión alta. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH (transferencia bancaria directa)."
+            },
+            {
+              "titulo": "Enviar viernes o fin de semana",
+              "texto": "El BCH no opera sábado ni domingo. La tasa se \"congela\" con el valor del viernes, que históricamente suele ser el peor de la semana por cierres bancarios. Enviá lunes o martes para la mejor tasa."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de hondureños en EE.UU.",
+          "items": [
+            {
+              "q": "¿Cuántos lempiras recibo por $200 USD?",
+              "a": "Con la tasa actual del Banco Central de Honduras (BCH), $200 equivalen a los lempiras teóricos que ves arriba multiplicados por 200. Pero cada remesadora aplica un margen: el mejor operador entrega aproximadamente un 1-2% menos y el peor hasta 3-4% menos. Diferencia real: hasta 70 lempiras ($2.80 USD) en un solo envío de $200."
+            },
+            {
+              "q": "¿Qué bancos hondureños reciben remesas?",
+              "a": "Los 5 principales son BAC Credomatic, Banco Atlántida, Ficohsa, Banpaís y Banco del País. Todas las remesadoras grandes (Remitly, Xoom, WorldRemit) depositan directo a estas cuentas. Si tu familia no tiene cuenta, Tigo Money o retiro en efectivo son la alternativa."
+            },
+            {
+              "q": "¿Tigo Money funciona en toda Honduras?",
+              "a": "Sí. Tigo tiene cobertura nacional y Tigo Money opera en los 18 departamentos del país. Especialmente útil en zonas rurales donde no hay banco cerca: Lempira, Intibucá, Ocotepeque, La Paz. Regulado por la CNBS."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en Honduras?",
+              "a": "No. Honduras no cobra impuesto sobre remesas recibidas. Las remesas están exentas de ISR (Impuesto Sobre la Renta) a nivel personal. El único costo es la comisión de la remesadora y el margen en la tasa de cambio."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Tigo Money (billetera móvil): segundos",
+                "Efectivo (Western Union, Ria): minutos tras recibir el código MTCN",
+                "Depósito bancario: 2–24 horas según el banco receptor"
+              ]
+            },
+            {
+              "q": "¿Cuánto llega a Honduras si envío $100 USD?",
+              "a": "Con la tasa actual del BCH, $100 equivalen a los lempiras teóricos que ves arriba multiplicados por 100. Las remesadoras entregan entre un 1% y un 4% menos según el operador y método. Diferencia: hasta 30 lempiras ($1.15 USD) por envío — usá el comparador para ver cuál entrega más hoy."
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a Honduras?",
+              "a": "No hay una sola \"mejor\" — depende del monto, urgencia y método. Remitly suele ganar para montos menores a $500 con cash pickup. Wise gana en depósito bancario por tasa cercana a la del BCH. Xoom y WorldRemit son competitivos en promociones para nuevos usuarios. Usá el comparador arriba de esta página para ver cuál entrega más lempiras hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a Honduras.",
+          "titleLine2": "Compará remesadoras y ahorrá $8–$15.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a Honduras puede ahorrarte $8–$15 vs usar la primera remesadora que aparezca en Google. Multiplicado por 12 envíos anuales, son $100+ que se quedan con tu familia.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Envía lunes/martes · evita viernes/fines de semana",
+            "Débito o ACH > tarjeta de crédito",
+            "Mira los lempiras recibidos, no solo el fee",
+            "Confirma el nombre tal cual cédula",
+            "Guardá el MTCN o tracking ID de cada envío",
+            "Comparar cada envío — la mejor remesadora cambia semana a semana"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. Tasa HNL/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
+        }
+      }
+    }
   }
 }
