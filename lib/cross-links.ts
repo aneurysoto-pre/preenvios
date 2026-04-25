@@ -13,17 +13,17 @@ import { PAISES_MVP } from '@/lib/paises'
 export const BLOG_LINKS: Record<string, { corredores: string[]; operadores: string[] }> = {
   // Guías por país
   'mejor-remesadora-republica-dominicana-2026':         { corredores: ['dominican_republic'], operadores: ['remitly', 'wise', 'western-union'] },
-  'enviar-colombia-desde-eeuu-opciones-costos':         { corredores: ['colombia'],           operadores: ['wise', 'remitly', 'xoom'] },
+  'enviar-dinero-colombia-opciones-costos':             { corredores: ['colombia'],           operadores: ['wise', 'remitly', 'xoom'] },
   'remesadora-mas-barata-mexico':                       { corredores: ['mexico'],             operadores: ['remitly', 'wise', 'xoom'] },
-  'enviar-latinoamerica-sin-comisiones-altas':          { corredores: [],                     operadores: ['wise', 'remitly', 'ria'] },
-  'cuanto-se-pierde-comisiones-remesas':                { corredores: [],                     operadores: ['wise'] },
+  'enviar-dinero-latinoamerica-sin-comisiones-altas':   { corredores: [],                     operadores: ['wise', 'remitly', 'ria'] },
+  'cuanto-dinero-se-pierde-comisiones-remesas':         { corredores: [],                     operadores: ['wise'] },
   'cuanto-cobra-western-union-honduras':                { corredores: ['honduras'],           operadores: ['western-union', 'remitly', 'wise'] },
   'forma-mas-barata-enviar-guatemala':                  { corredores: ['guatemala'],          operadores: ['wise', 'remitly', 'ria'] },
   // Comparativas
   'remitly-vs-western-union-dominicana':                { corredores: ['dominican_republic'], operadores: ['remitly', 'western-union', 'wise'] },
   'remitly-vs-ria-money-transfer-cual-conviene':        { corredores: [],                     operadores: ['remitly', 'ria'] },
   'western-union-vs-moneygram-comparacion-completa':    { corredores: [],                     operadores: ['western-union', 'moneygram'] },
-  'felix-pago-vs-remitly-whatsapp-vs-app':              { corredores: [],                     operadores: ['remitly'] },
+  'wise-vs-remitly-cual-conviene':                      { corredores: [],                     operadores: ['wise', 'remitly'] },
   'ria-money-transfer-vs-moneygram-rapido-barato':      { corredores: [],                     operadores: ['ria', 'moneygram'] },
   'xoom-vs-remitly-cual-conviene-mas':                  { corredores: [],                     operadores: ['xoom', 'remitly'] },
   // Tendencias
@@ -71,7 +71,7 @@ export const CORRIDOR_BLOGS: Record<string, string[]> = {
   dominican_republic: ['mejor-remesadora-republica-dominicana-2026', 'remitly-vs-western-union-dominicana', 'enviar-dinero-republica-dominicana-whatsapp-guia'],
   guatemala:          ['forma-mas-barata-enviar-guatemala'],
   el_salvador:        [],
-  colombia:           ['enviar-colombia-desde-eeuu-opciones-costos'],
+  colombia:           ['enviar-dinero-colombia-opciones-costos'],
   mexico:             ['remesadora-mas-barata-mexico'],
 }
 

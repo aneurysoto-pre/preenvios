@@ -63,17 +63,17 @@ export const WIKI_ARTICLES = [
 export const BLOG_ARTICLES = [
   // Guías por país (7) — high-intent + 2 existentes recategorizados
   { slug: 'mejor-remesadora-republica-dominicana-2026',        cat: 'guias-pais',     titulo: 'Mejor remesadora para enviar dinero a República Dominicana en 2026', titulo_en: 'Best remittance company to send money to the Dominican Republic in 2026' },
-  { slug: 'enviar-colombia-desde-eeuu-opciones-costos',        cat: 'guias-pais',     titulo: 'Enviar dinero a Colombia desde Estados Unidos — opciones y costos',  titulo_en: 'Sending money to Colombia from the US — options and costs' },
+  { slug: 'enviar-dinero-colombia-opciones-costos',            cat: 'guias-pais',     titulo: 'Enviar dinero a Colombia desde Estados Unidos — opciones y costos',  titulo_en: 'Sending money to Colombia from the US — options and costs' },
   { slug: 'remesadora-mas-barata-mexico',                      cat: 'guias-pais',     titulo: 'Cuál es la remesadora más barata para enviar dinero a México',       titulo_en: 'Which is the cheapest remittance company to send money to Mexico' },
-  { slug: 'enviar-latinoamerica-sin-comisiones-altas',         cat: 'guias-pais',     titulo: 'Cómo enviar dinero a Latinoamérica sin pagar comisiones altas',      titulo_en: 'How to send money to Latin America without paying high fees' },
-  { slug: 'cuanto-se-pierde-comisiones-remesas',               cat: 'guias-pais',     titulo: 'Cuánto dinero se pierde en comisiones al enviar remesas',            titulo_en: 'How much money is lost in fees when sending remittances' },
+  { slug: 'enviar-dinero-latinoamerica-sin-comisiones-altas',  cat: 'guias-pais',     titulo: 'Cómo enviar dinero a Latinoamérica sin pagar comisiones altas',      titulo_en: 'How to send money to Latin America without paying high fees' },
+  { slug: 'cuanto-dinero-se-pierde-comisiones-remesas',        cat: 'guias-pais',     titulo: 'Cuánto dinero se pierde en comisiones al enviar remesas',            titulo_en: 'How much money is lost in fees when sending remittances' },
   { slug: 'cuanto-cobra-western-union-honduras',               cat: 'guias-pais',     titulo: 'Cuánto cobra Western Union para enviar dinero a Honduras hoy',       titulo_en: 'How much does Western Union charge to send money to Honduras today' },
   { slug: 'forma-mas-barata-enviar-guatemala',                 cat: 'guias-pais',     titulo: 'La forma más barata de mandar dinero a Guatemala en 2026',           titulo_en: 'The cheapest way to send money to Guatemala in 2026' },
-  // Comparativas (6) — incluye Xoom vs Remitly extra y Remitly vs WU RD
+  // Comparativas (6) — Wise vs Remitly reemplaza Félix Pago vs Remitly (decisión founder 2026-04-25)
   { slug: 'remitly-vs-western-union-dominicana',               cat: 'comparaciones',  titulo: 'Remitly vs Western Union para enviar a República Dominicana',        titulo_en: 'Remitly vs Western Union for sending to the Dominican Republic' },
   { slug: 'remitly-vs-ria-money-transfer-cual-conviene',       cat: 'comparaciones',  titulo: 'Remitly vs Ria Money Transfer — cuál conviene más',                  titulo_en: 'Remitly vs Ria Money Transfer — which is better' },
   { slug: 'western-union-vs-moneygram-comparacion-completa',   cat: 'comparaciones',  titulo: 'Western Union vs MoneyGram — comparación completa',                  titulo_en: 'Western Union vs MoneyGram — full comparison' },
-  { slug: 'felix-pago-vs-remitly-whatsapp-vs-app',             cat: 'comparaciones',  titulo: 'Félix Pago vs Remitly — envío por WhatsApp vs app',                  titulo_en: 'Felix Pago vs Remitly — WhatsApp vs app sending' },
+  { slug: 'wise-vs-remitly-cual-conviene',                     cat: 'comparaciones',  titulo: 'Wise vs Remitly — cuál te conviene más en 2026',                     titulo_en: 'Wise vs Remitly — which is better in 2026' },
   { slug: 'ria-money-transfer-vs-moneygram-rapido-barato',     cat: 'comparaciones',  titulo: 'Ria Money Transfer vs MoneyGram — cuál es más rápido y barato',      titulo_en: 'Ria Money Transfer vs MoneyGram — faster and cheaper' },
   { slug: 'xoom-vs-remitly-cual-conviene-mas',                 cat: 'comparaciones',  titulo: 'Xoom vs Remitly — cuál conviene más para enviar remesas',            titulo_en: 'Xoom vs Remitly — which is better for remittances' },
   // Tendencias (4) — innovaciones del corredor
