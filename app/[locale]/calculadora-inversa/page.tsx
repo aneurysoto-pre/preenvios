@@ -13,10 +13,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Calculate how much to send in USD so your family receives an exact amount. Honduras, Dominican Republic, Guatemala, El Salvador, Colombia, Mexico. Free and no signup.'
       : 'Calcula cuánto enviar en USD para que tu familia reciba un monto exacto. Honduras, Rep. Dominicana, Guatemala, El Salvador, Colombia, México. Gratis y sin registro.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/calculadora-inversa`,
+      canonical: `https://preenvios.vercel.app/${locale}/calculadora-inversa`,
       languages: {
-        es: 'https://preenvios.com/es/calculadora-inversa',
-        en: 'https://preenvios.com/en/calculadora-inversa',
+        es: 'https://preenvios.vercel.app/es/calculadora-inversa',
+        en: 'https://preenvios.vercel.app/en/calculadora-inversa',
       },
     },
   }
@@ -33,7 +33,7 @@ export default async function CalculadoraInversaPage({ params }: { params: Promi
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    url: `https://preenvios.com/${locale}/calculadora-inversa`,
+    url: `https://preenvios.vercel.app/${locale}/calculadora-inversa`,
     inLanguage: locale,
     name: en ? 'Reverse remittance calculator' : 'Calculadora inversa de remesas',
     description: en
@@ -46,7 +46,7 @@ export default async function CalculadoraInversaPage({ params }: { params: Promi
       price: '0',
       priceCurrency: 'USD',
     },
-    publisher: { '@id': 'https://preenvios.com/#organization' },
+    publisher: { '@id': 'https://preenvios.vercel.app/#organization' },
   }
 
   return (

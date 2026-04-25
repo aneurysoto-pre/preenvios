@@ -74,8 +74,8 @@ export default function BlogArticle({ slug, bodyHtml, mdTitle }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Article',
         headline: title, datePublished: '2026-04-17',
-        publisher: { '@type': 'Organization', name: 'PreEnvios.com', url: 'https://preenvios.com' },
-        mainEntityOfPage: `https://preenvios.com/${locale}/blog/${slug}`,
+        publisher: { '@type': 'Organization', name: 'PreEnvios.com', url: 'https://preenvios.vercel.app' },
+        mainEntityOfPage: `https://preenvios.vercel.app/${locale}/blog/${slug}`,
       })}} />
     </LegalPage>
   )

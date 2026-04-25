@@ -51,9 +51,30 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://preenvios.vercel.app'),
   title: 'PreEnvios.com — Compara remesadoras. Envía más por menos.',
   description:
     'Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Envía más dinero a Honduras, República Dominicana, Guatemala y El Salvador.',
+  // OpenGraph y Twitter Cards defaults — cada page.tsx puede sobreescribir
+  // su title/description via generateMetadata. La imagen og se sirve
+  // desde `app/[locale]/opengraph-image.tsx` (1200×630 dinamica),
+  // auto-detectada por Next.js y agregada a la metadata. Ambos campos
+  // se heredan a TODAS las rutas dentro de `[locale]/*` salvo que la
+  // pagina los redeclare.
+  openGraph: {
+    type: 'website',
+    siteName: 'PreEnvios.com',
+    locale: 'es_ES',
+    alternateLocale: ['en_US'],
+    title: 'PreEnvios.com — Compara remesadoras. Envía más por menos.',
+    description:
+      'Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Envía más dinero a Latinoamérica.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PreEnvios.com — Compara remesadoras',
+    description: 'Compara antes de enviar. Envía más dinero a Latinoamérica.',
+  },
 }
 
 // viewport export (Next.js 14+) — separa los tokens del viewport de
@@ -106,9 +127,9 @@ export default async function LocaleLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="alternate" hrefLang="es" href="https://preenvios.com/es" />
-        <link rel="alternate" hrefLang="en" href="https://preenvios.com/en" />
-        <link rel="alternate" hrefLang="x-default" href="https://preenvios.com/es" />
+        <link rel="alternate" hrefLang="es" href="https://preenvios.vercel.app/es" />
+        <link rel="alternate" hrefLang="en" href="https://preenvios.vercel.app/en" />
+        <link rel="alternate" hrefLang="x-default" href="https://preenvios.vercel.app/es" />
       </head>
       <body className="font-sans text-ink bg-white leading-relaxed">
         {/* Google Consent Mode v2 — default denied hasta consent explicito.

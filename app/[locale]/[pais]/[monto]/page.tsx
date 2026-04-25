@@ -38,10 +38,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? `Compare Remitly, Wise, Xoom, Ria and more to send $${montoNum} USD to ${nombre}. Find the best rate today. 100% free, no signup.`
       : `Compara Remitly, Wise, Xoom, Ria y más para enviar $${montoNum} USD a ${nombre}. Encuentra la mejor tasa hoy. 100% gratis, sin registro.`,
     alternates: {
-      canonical: `https://preenvios.com/${locale}/${slug}/${montoNum}`,
+      canonical: `https://preenvios.vercel.app/${locale}/${slug}/${montoNum}`,
       languages: {
-        es: `https://preenvios.com/es/${pais.slugEs}/${montoNum}`,
-        en: `https://preenvios.com/en/${pais.slugEn}/${montoNum}`,
+        es: `https://preenvios.vercel.app/es/${pais.slugEs}/${montoNum}`,
+        en: `https://preenvios.vercel.app/en/${pais.slugEn}/${montoNum}`,
       },
     },
   }

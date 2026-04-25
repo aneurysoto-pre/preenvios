@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'News, comparisons and tips on sending money to Latin America. Real analysis of Remitly, Wise, Western Union and more.'
       : 'Noticias, comparativas y tips sobre enviar dinero a Latinoamérica. Análisis reales de Remitly, Wise, Western Union y más.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/blog`,
-      languages: { es: 'https://preenvios.com/es/blog', en: 'https://preenvios.com/en/blog' },
+      canonical: `https://preenvios.vercel.app/${locale}/blog`,
+      languages: { es: 'https://preenvios.vercel.app/es/blog', en: 'https://preenvios.vercel.app/en/blog' },
     },
   }
 }
@@ -27,18 +27,18 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    '@id': `https://preenvios.com/${locale}/blog#blog`,
-    url: `https://preenvios.com/${locale}/blog`,
+    '@id': `https://preenvios.vercel.app/${locale}/blog#blog`,
+    url: `https://preenvios.vercel.app/${locale}/blog`,
     inLanguage: locale,
     name: en ? 'PreEnvios Blog' : 'Blog de PreEnvios',
     description: en
       ? 'News, comparisons and tips on sending money to Latin America. Real analysis of Remitly, Wise, Western Union and more.'
       : 'Noticias, comparativas y tips sobre enviar dinero a Latinoamérica. Análisis reales de Remitly, Wise, Western Union y más.',
-    publisher: { '@id': 'https://preenvios.com/#organization' },
+    publisher: { '@id': 'https://preenvios.vercel.app/#organization' },
     blogPost: BLOG_ARTICLES.map((post) => ({
       '@type': 'BlogPosting',
       headline: en ? post.titulo_en : post.titulo,
-      url: `https://preenvios.com/${locale}/blog/${post.slug}`,
+      url: `https://preenvios.vercel.app/${locale}/blog/${post.slug}`,
       inLanguage: locale,
     })),
   }

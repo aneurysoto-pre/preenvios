@@ -26,6 +26,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: en
       ? `Compare Remitly, Wise, Xoom, Ria and more to send money to ${nombre}. Find the best rate today. 100% free, no signup.`
       : `Compara Remitly, Wise, Xoom, Ria y más para enviar dinero a ${nombre}. Encuentra la mejor tasa hoy. 100% gratis, sin registro.`,
+    alternates: {
+      canonical: `https://preenvios.vercel.app/${locale}/${slug}`,
+      languages: {
+        es: `https://preenvios.vercel.app/es/${pais.slugEs}`,
+        en: `https://preenvios.vercel.app/en/${pais.slugEn}`,
+      },
+    },
   }
 }
 

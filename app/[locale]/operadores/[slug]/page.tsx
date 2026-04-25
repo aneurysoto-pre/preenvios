@@ -20,10 +20,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? `Is ${op.nombre} worth it to send money to Latin America? Rates, fees, speed and honest reviews — compare with Remitly, Wise and others.`
       : `¿Vale la pena ${op.nombre} para enviar dinero a Latinoamérica? Tasas, comisiones, velocidad y opiniones reales — compara con Remitly, Wise y más.`,
     alternates: {
-      canonical: `https://preenvios.com/${locale}/operadores/${slug}`,
+      canonical: `https://preenvios.vercel.app/${locale}/operadores/${slug}`,
       languages: {
-        es: `https://preenvios.com/es/operadores/${slug}`,
-        en: `https://preenvios.com/en/operadores/${slug}`,
+        es: `https://preenvios.vercel.app/es/operadores/${slug}`,
+        en: `https://preenvios.vercel.app/en/operadores/${slug}`,
       },
     },
   }

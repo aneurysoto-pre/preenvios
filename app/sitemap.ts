@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES, BLOG_ARTICLES } from '@/lib/corredores'
 import { PAISES_MVP } from '@/lib/paises'
 
-const BASE_URL = 'https://preenvios.com'
+const BASE_URL = 'https://preenvios.vercel.app'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
 const INSTITUTIONAL_PAGES = ['nosotros', 'contacto', 'alertas']
 // Source of truth: BLOG_ARTICLES en lib/corredores.ts. Cuando se agregue

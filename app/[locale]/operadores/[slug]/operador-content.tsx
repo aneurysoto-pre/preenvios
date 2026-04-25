@@ -94,7 +94,7 @@ export default function OperadorContent({ slug }: { slug: string }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org', '@type': 'Organization',
         name: op.nombre, description: en ? op.desc_en : op.desc_es,
-        url: `https://preenvios.com/${locale}/operadores/${slug}`,
+        url: `https://preenvios.vercel.app/${locale}/operadores/${slug}`,
       })}} />
     </LegalPage>
   )
