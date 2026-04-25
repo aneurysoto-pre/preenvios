@@ -77,3 +77,11 @@ Qué hace esta pieza y por qué existe.
 ### Fase 4.4.A — cerrada 2026-04-17 (9/9 checkboxes completados)
 
 Este índice se actualiza cada vez que se agrega un nuevo documento.
+
+---
+
+## Documentos sin numeración (referencia y backlog)
+
+| Archivo | Qué documenta |
+|---------|---------------|
+| [PENDIENTES_LEGALES_FUTUROS.md](PENDIENTES_LEGALES_FUTUROS.md) | Documentos legales por crear cuando aparezca el trigger correspondiente (Términos B2B, API ToS, Data Licensing, SLA, DPA, SOC 2, Trademark, etc.). Cada uno requiere abogado fintech al momento de redactarse. |
