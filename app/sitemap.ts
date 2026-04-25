@@ -5,7 +5,16 @@ import { PAISES_MVP } from '@/lib/paises'
 const BASE_URL = 'https://preenvios.com'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
 const INSTITUTIONAL_PAGES = ['nosotros', 'contacto', 'alertas']
-const BLOG_SLUGS = ['cuanto-cobra-western-union-honduras', 'remitly-vs-western-union-dominicana', 'forma-mas-barata-enviar-guatemala']
+// Paridad 100% entre los 6 corredores MVP — 1 blog dedicado por corredor.
+// Source of truth: lib/cross-links.ts CORRIDOR_BLOGS / BLOG_LINKS.
+const BLOG_SLUGS = [
+  'cuanto-cobra-western-union-honduras',
+  'remitly-vs-western-union-dominicana',
+  'forma-mas-barata-enviar-guatemala',
+  'comision-cero-el-salvador-realmente-gratis',
+  'wise-vs-remitly-colombia-mejor-tasa',
+  'mejor-remesadora-mexico-2026',
+]
 
 function altLangs(path: string) {
   return { languages: { es: `${BASE_URL}/es${path}`, en: `${BASE_URL}/en${path}` } }

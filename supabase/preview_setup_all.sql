@@ -5,20 +5,20 @@
 -- Autor: Claude · 2026-04-23 · FASE 10 BLOQUE K.1
 --
 -- Qué hace:
---   1. Corre las 7 migraciones 001..007 en orden (idempotente).
---   2. Seedea los 4 corredores MVP originales (Honduras, Rep. Dominicana,
---      Guatemala, El Salvador) + sus tasas de banco central. Los otros 2
---      corredores MVP (México, Colombia) ya vienen en migración 006.
+--   1. Corre las migraciones 001..013 en orden (idempotente).
+--   2. Seedea los 6 corredores MVP (HN, DO, GT, SV, CO, MX) + tasas
+--      banco central + 42 precios (7 por corredor — paridad 100%).
 --
 -- Resultado esperado post-ejecución:
---   - 8 tablas creadas: corredores, precios, tasas_bancos_centrales,
---     contactos, scraper_anomalies, + posible otras si agregaste futuras.
+--   - 8+ tablas creadas: corredores, precios, tasas_bancos_centrales,
+--     contactos, scraper_anomalies, alertas_email, + futuras.
 --   - 6 corredores activos en UI: HN, DO, GT, SV, CO, MX.
 --   - 6 tasas banco central.
---   - 21 precios iniciales: 14 de MX/CO (migración 006) + 7 de HN
---     (migración 012, snapshot de prod 2026-04-24). DO/GT/SV aún arrancan
---     sin precios — se completarán cuando esos países se porten al
---     landing editorial (cero scope creep).
+--   - 42 precios iniciales (7 × 6 corredores — paridad post-2026-04-25):
+--     · MX/CO via migración 006
+--     · HN via migración 012 (snapshot prod 2026-04-24)
+--     · DR/GT/SV via migración 013 (snapshot prod 2026-04-25)
+--   - Tabla alertas_email con columnas corredor + idioma (migration 011).
 --
 -- IMPORTANTE: este script NO inserta data sensible (emails de contactos,
 -- suscriptores, anomalías) — todo queda vacío para preview.
@@ -395,6 +395,101 @@ ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
   actualizado_en = NOW();
 
 
+-- ───────────────────────────────────────────────────────────────────────
+-- Migración 011: alertas_email + corredor + idioma
+-- Replica migration 011_alertas_email_corredor_idioma.sql. Agrega 2
+-- columnas opcionales a alertas_email para fidelización por país desde
+-- el landing editorial. Idempotente.
+-- ───────────────────────────────────────────────────────────────────────
+
+ALTER TABLE alertas_email ADD COLUMN IF NOT EXISTS corredor TEXT;
+ALTER TABLE alertas_email ADD COLUMN IF NOT EXISTS idioma TEXT;
+
+CREATE INDEX IF NOT EXISTS alertas_email_corredor_idx
+  ON alertas_email (corredor) WHERE corredor IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS alertas_email_idioma_idx
+  ON alertas_email (idioma) WHERE idioma IS NOT NULL;
+
+COMMENT ON COLUMN alertas_email.corredor IS 'CorredorId del país desde el que se suscribió (ej. honduras, mexico). NULL = suscripción genérica sin contexto país (form de /alertas) o registro previo a migración 011.';
+COMMENT ON COLUMN alertas_email.idioma IS 'Locale del usuario al momento de suscribirse (es | en). Usado para enviarle alertas en su idioma.';
+
+
+-- ───────────────────────────────────────────────────────────────────────
+-- Migración 013: Seed precios DR + GT + SV (SOLO PREVIEW)
+-- Replica migration 013_seed_precios_dr_gt_sv.sql. Cierra el gap de
+-- armonía expuesto post-activación de los 5 corredores faltantes
+-- (commit c7a591f): paridad 100% — los 6 corredores MVP tienen sus 7
+-- precios. Snapshot de prod 2026-04-25.
+-- ───────────────────────────────────────────────────────────────────────
+
+-- República Dominicana (DOP) — 7 filas, tasas ~58-60 DOP/USD
+INSERT INTO precios (
+  operador, corredor, metodo_entrega, tasa, fee, velocidad,
+  nombre_operador, rating, reviews, afiliado, link,
+  confiabilidad, metodos_disponibles,
+  comision_usd, cookie_dias, trafico_calificable
+) VALUES
+  ('moneygram',    'dominican_republic', 'bank', 58.5000, 1.99, 'Horas',    'MoneyGram',     4.4, 7541,  FALSE, '',                                                                            85, 3, 5.00,  30,   1.00),
+  ('remitly',      'dominican_republic', 'bank', 59.6400, 0.00, 'Minutos',  'Remitly',       4.8, 8421,  TRUE,  'https://www.remitly.com/us/en/dominican-republic',                            80, 3, 12.00, 30,   1.00),
+  ('ria',          'dominican_republic', 'bank', 58.8000, 1.99, 'Minutos',  'Ria',           4.6, 5200,  TRUE,  'https://www.riamoneytransfer.com/us/en/send-money-to/dominican-republic',     85, 4, 8.00,  30,   1.00),
+  ('westernunion', 'dominican_republic', 'bank', 59.2000, 0.00, 'Minutos',  'Western Union', 4.5, 15820, FALSE, '',                                                                            95, 3, 10.00, 30,   1.00),
+  ('wise',         'dominican_republic', 'bank', 58.0200, 4.50, 'Segundos', 'Wise',          4.9, 12043, TRUE,  'https://wise.com/us/send-money/send-money-to-dominican-republic',             95, 2, 12.00, 9999, 1.00),
+  ('worldremit',   'dominican_republic', 'bank', 58.5000, 1.99, 'Minutos',  'WorldRemit',    4.6, 4800,  TRUE,  'https://www.worldremit.com/en/send-money/united-states/dominican-republic',   75, 4, 30.00, 45,   1.00),
+  ('xoom',         'dominican_republic', 'bank', 58.7000, 4.99, 'Minutos',  'Xoom',          4.7, 6120,  TRUE,  'https://www.xoom.com/dominican-republic/send-money',                          90, 3, 10.00, 30,   0.40)
+ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
+  tasa = EXCLUDED.tasa, fee = EXCLUDED.fee, velocidad = EXCLUDED.velocidad,
+  nombre_operador = EXCLUDED.nombre_operador, rating = EXCLUDED.rating, reviews = EXCLUDED.reviews,
+  afiliado = EXCLUDED.afiliado, link = EXCLUDED.link, confiabilidad = EXCLUDED.confiabilidad,
+  metodos_disponibles = EXCLUDED.metodos_disponibles, comision_usd = EXCLUDED.comision_usd,
+  cookie_dias = EXCLUDED.cookie_dias, trafico_calificable = EXCLUDED.trafico_calificable,
+  activo = TRUE, actualizado_en = NOW();
+
+-- Guatemala (GTQ) — 7 filas, tasas ~7.5-7.8 GTQ/USD
+INSERT INTO precios (
+  operador, corredor, metodo_entrega, tasa, fee, velocidad,
+  nombre_operador, rating, reviews, afiliado, link,
+  confiabilidad, metodos_disponibles,
+  comision_usd, cookie_dias, trafico_calificable
+) VALUES
+  ('moneygram',    'guatemala', 'bank', 7.4800, 1.99, 'Horas',    'MoneyGram',     4.4, 7541,  FALSE, '',                                                                 85, 3, 5.00,  30,   1.00),
+  ('remitly',      'guatemala', 'bank', 7.7700, 2.99, 'Minutos',  'Remitly',       4.8, 8421,  TRUE,  'https://www.remitly.com/us/en/guatemala',                          80, 3, 12.00, 30,   1.00),
+  ('ria',          'guatemala', 'bank', 7.5600, 0.00, 'Minutos',  'Ria',           4.6, 5200,  TRUE,  'https://www.riamoneytransfer.com/us/en/send-money-to/guatemala',   85, 4, 8.00,  30,   1.00),
+  ('westernunion', 'guatemala', 'bank', 7.5200, 0.00, 'Minutos',  'Western Union', 4.5, 15820, FALSE, '',                                                                 95, 3, 10.00, 30,   1.00),
+  ('wise',         'guatemala', 'bank', 7.6400, 2.50, 'Segundos', 'Wise',          4.9, 12043, TRUE,  'https://wise.com/us/send-money/send-money-to-guatemala',           95, 2, 12.00, 9999, 1.00),
+  ('worldremit',   'guatemala', 'bank', 7.5500, 1.99, 'Minutos',  'WorldRemit',    4.6, 4800,  TRUE,  'https://www.worldremit.com/en/send-money/united-states/guatemala', 75, 4, 30.00, 45,   1.00),
+  ('xoom',         'guatemala', 'bank', 7.5800, 4.99, 'Minutos',  'Xoom',          4.7, 6120,  TRUE,  'https://www.xoom.com/guatemala/send-money',                        90, 3, 10.00, 30,   0.40)
+ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
+  tasa = EXCLUDED.tasa, fee = EXCLUDED.fee, velocidad = EXCLUDED.velocidad,
+  nombre_operador = EXCLUDED.nombre_operador, rating = EXCLUDED.rating, reviews = EXCLUDED.reviews,
+  afiliado = EXCLUDED.afiliado, link = EXCLUDED.link, confiabilidad = EXCLUDED.confiabilidad,
+  metodos_disponibles = EXCLUDED.metodos_disponibles, comision_usd = EXCLUDED.comision_usd,
+  cookie_dias = EXCLUDED.cookie_dias, trafico_calificable = EXCLUDED.trafico_calificable,
+  activo = TRUE, actualizado_en = NOW();
+
+-- El Salvador (USD) — 7 filas, tasa = 1.00 (dolarizado desde 2001)
+INSERT INTO precios (
+  operador, corredor, metodo_entrega, tasa, fee, velocidad,
+  nombre_operador, rating, reviews, afiliado, link,
+  confiabilidad, metodos_disponibles,
+  comision_usd, cookie_dias, trafico_calificable
+) VALUES
+  ('moneygram',    'el_salvador', 'bank', 1.0000, 1.99, 'Horas',    'MoneyGram',     4.4, 7541,  FALSE, '',                          85, 3, 5.00,  30,   1.00),
+  ('remitly',      'el_salvador', 'bank', 1.0000, 0.00, 'Minutos',  'Remitly',       4.8, 8421,  TRUE,  'https://www.remitly.com',   80, 3, 12.00, 30,   1.00),
+  ('ria',          'el_salvador', 'bank', 1.0000, 1.99, 'Minutos',  'Ria',           4.6, 5200,  TRUE,  'https://www.riamoneytransfer.com', 85, 4, 8.00,  30,   1.00),
+  ('westernunion', 'el_salvador', 'bank', 1.0000, 5.00, 'Minutos',  'Western Union', 4.5, 15820, FALSE, '',                          95, 3, 10.00, 30,   1.00),
+  ('wise',         'el_salvador', 'bank', 1.0000, 2.50, 'Segundos', 'Wise',          4.9, 12043, TRUE,  'https://wise.com/send',     95, 2, 12.00, 9999, 1.00),
+  ('worldremit',   'el_salvador', 'bank', 1.0000, 1.99, 'Minutos',  'WorldRemit',    4.6, 4800,  TRUE,  'https://www.worldremit.com', 75, 4, 30.00, 45,   1.00),
+  ('xoom',         'el_salvador', 'bank', 1.0000, 4.99, 'Minutos',  'Xoom',          4.7, 6120,  TRUE,  'https://www.xoom.com',      90, 3, 10.00, 30,   0.40)
+ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
+  tasa = EXCLUDED.tasa, fee = EXCLUDED.fee, velocidad = EXCLUDED.velocidad,
+  nombre_operador = EXCLUDED.nombre_operador, rating = EXCLUDED.rating, reviews = EXCLUDED.reviews,
+  afiliado = EXCLUDED.afiliado, link = EXCLUDED.link, confiabilidad = EXCLUDED.confiabilidad,
+  metodos_disponibles = EXCLUDED.metodos_disponibles, comision_usd = EXCLUDED.comision_usd,
+  cookie_dias = EXCLUDED.cookie_dias, trafico_calificable = EXCLUDED.trafico_calificable,
+  activo = TRUE, actualizado_en = NOW();
+
+
 -- ═══════════════════════════════════════════════════════════════════════
 -- Verificación final (correr DESPUÉS del script de arriba)
 -- ═══════════════════════════════════════════════════════════════════════
@@ -403,7 +498,7 @@ ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
 -- SELECT
 --   (SELECT count(*) FROM corredores)                         AS corredores_count,      -- esperado: 6
 --   (SELECT count(*) FROM tasas_bancos_centrales)             AS tasas_bc_count,        -- esperado: 6
---   (SELECT count(*) FROM precios)                            AS precios_count,         -- esperado: 21 (14 MX+CO + 7 HN)
+--   (SELECT count(*) FROM precios)                            AS precios_count,         -- esperado: 42 (7 × 6 corredores MVP — paridad 100%)
 --   (SELECT count(*) FROM contactos)                          AS contactos_count,       -- esperado: 0
 --   (SELECT count(*) FROM alertas_email)                      AS alertas_email_count,   -- esperado: 0
 --   (SELECT count(*) FROM scraper_anomalies)                  AS anomalies_count,       -- esperado: 0
