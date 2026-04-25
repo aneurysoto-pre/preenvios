@@ -444,6 +444,696 @@
           "label": "Fuentes:",
           "text": "Datos macroeconómicos actualizados anualmente. Tasa HNL/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
         }
+      },
+      "dominican_republic": {
+        "seccion0": {
+          "bancoLabel": "República Dominicana",
+          "bancoNombre": "Banco Central de la Rep. Dominicana",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas diarias",
+          "alertasSubtitle": "Avisos cuando DOP/USD suba — envía cuando más rinde",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a República Dominicana",
+          "title": "República Dominicana y las remesas desde Estados Unidos en 2026",
+          "lede": "Cada año, $10,300 millones cruzan desde los barrios dominicanos del Bronx, Washington Heights, Lawrence y Miami hacia las casas en Santo Domingo, Santiago y los pueblos del Cibao. Es el corredor de remesas más grande del Caribe — y uno de los más maduros del mundo. Datos del Banco Central de la República Dominicana (BCRD) 2024 y BID 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a RD",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "dominicanos en EE.UU.",
+          "rankingLabel": "Ranking regional",
+          "rankingSubtitle": "receptor del Caribe"
+        },
+        "editorial": {
+          "tag": "La diáspora dominicana en Estados Unidos",
+          "titleLine1": "Del Alto Manhattan a Santo Domingo.",
+          "titleLine2": "De Lawrence a Santiago.",
+          "titleLine3": "Un corredor con 50 años de historia — y diferencias que importan.",
+          "p1": "La emigración dominicana hacia Estados Unidos empezó en serio en los años 60. Cinco décadas después, hay 2.4 millones de dominicanos en el país, concentrados en Nueva York, Nueva Jersey, Massachusetts y Florida. Es uno de los corredores de remesas más establecidos del mundo — Quisqueyana, Caribe Express y Pronto Envíos llevan décadas operándolo.",
+          "p2": "Pero el comparador internacional (Remitly, Wise, Xoom, WorldRemit) suele <strong>entregar más pesos por dólar</strong> que los operadores tradicionales — la diferencia puede ser hasta <highlight>$8 por cada $200 enviados</highlight>. En 12 envíos al año son $96 que se quedan con tu familia en RD en lugar de pagar margen al operador."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de República Dominicana",
+          "title": "Enviar dinero a ciudades de RD: 6 destinos principales",
+          "lede": "6 destinos donde tu familia probablemente recibe. Todos los grandes operadores (Remitly, Xoom, WorldRemit, Western Union, MoneyGram) tienen cobertura nacional vía depósito a Banco Popular, BHD, Banreservas y Scotiabank. Para zonas más alejadas del Sur o el Cibao profundo, retiro en efectivo de WU/MG sigue siendo lo más confiable.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "cibao": "Cibao",
+            "turismo": "Turismo",
+            "zona_franca": "Zona franca",
+            "puerto_norte": "Puerto norte",
+            "beisbol": "Béisbol"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a RD que te cuestan hasta $50",
+          "lede": "Cada uno de estos errores le ha costado a un dominicano entre $5 y $50. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "Quedarte con la operadora de toda la vida",
+              "texto": "Quisqueyana o Caribe Express son tradición — pero las remesadoras digitales suelen entregar 1-2% más pesos por dólar. En un envío de $200, son hasta 250 pesos extra (RD$250 ≈ $4.10 USD) que recibe tu familia."
+            },
+            {
+              "titulo": "Confiar en \"comisión $0\"",
+              "texto": "\"Comisión $0\" no significa envío gratis. El operador compensa con peor tasa de cambio — al final tu familia recibe menos pesos. Siempre comparar pesos finales recibidos, no la comisión en dólares."
+            },
+            {
+              "titulo": "Pagar Express cuando no urge",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra vs \"Económico\" en 1 día hábil. Si tu familia no necesita el dinero HOY, el Express es plata botada. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "Equivocarte con los dos apellidos",
+              "texto": "En RD se usan dos apellidos (paterno y materno). Si el nombre no coincide carácter por carácter con la cédula, el envío se retiene y puede tardar días. Copialo tal cual — tildes, segundo apellido, todo."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra cuando pagás con crédito porque las procesadoras les cobran comisión alta. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH (transferencia bancaria directa)."
+            },
+            {
+              "titulo": "Enviar viernes en la tarde",
+              "texto": "El BCRD no opera sábado ni domingo. La tasa se \"congela\" con el valor del viernes — históricamente el peor de la semana por cierres. Enviá lunes o martes para mejor tasa."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de dominicanos en EE.UU.",
+          "items": [
+            {
+              "q": "¿Cuántos pesos recibo por $200 USD?",
+              "a": "Con la tasa actual del Banco Central de la República Dominicana (BCRD), $200 equivalen a los pesos teóricos que ves arriba multiplicados por 200. Pero cada remesadora aplica un margen: el mejor operador entrega aproximadamente un 1-2% menos y el peor hasta 3-4% menos. Diferencia real: hasta 500 pesos ($8.30 USD) en un solo envío de $200."
+            },
+            {
+              "q": "¿Qué bancos dominicanos reciben remesas?",
+              "a": "Los principales son Banco Popular Dominicano, BHD, Banreservas, Scotiabank, Banco Santa Cruz y APAP. Todas las grandes remesadoras (Remitly, Xoom, WorldRemit, Wise) depositan directo a estas cuentas. Si tu familia no tiene cuenta, retiro en efectivo en agencias WU/MG es la alternativa."
+            },
+            {
+              "q": "¿Caribe Express y Quisqueyana entran en el comparador?",
+              "a": "No. El comparador agrupa los 7 operadores globales (Remitly, Wise, Xoom, WorldRemit, Western Union, MoneyGram, Ria) que dominan la mayoría del mercado dominicano hoy. Los operadores tradicionales (Quisqueyana, Caribe Express, Pronto Envíos) tienen presencia fuerte en NYC pero suelen quedar atrás en tasa vs los digitales — vale la pena comparar."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en RD?",
+              "a": "No. La República Dominicana no cobra impuesto sobre remesas recibidas. Están exentas de ISR (Impuesto Sobre la Renta) personal. El único costo es la comisión de la remesadora más el margen sobre la tasa de cambio."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Efectivo (Western Union, Ria, MoneyGram): minutos tras recibir el código",
+                "Depósito bancario: 2–24 horas según el banco receptor",
+                "Billetera tPago (Banreservas): segundos"
+              ]
+            },
+            {
+              "q": "¿Cuánto llega a RD si envío $100 USD?",
+              "a": "Con la tasa actual del BCRD, $100 equivalen a los pesos teóricos que ves arriba multiplicados por 100. Las remesadoras entregan entre un 1% y un 4% menos según operador y método. Diferencia: hasta 250 pesos ($4.10 USD) por envío — usá el comparador para ver cuál entrega más hoy."
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a RD?",
+              "a": "No hay una sola \"mejor\" — depende del monto, urgencia y método. Remitly suele ganar para montos menores a $500 con cash pickup. Wise es típicamente mejor para depósito bancario por tasa cercana al BCRD. Xoom y WorldRemit son competitivos con promociones para nuevos usuarios. Western Union sigue siendo la opción más confiable para retiro en efectivo en zonas alejadas. Usá el comparador arriba para ver cuál entrega más pesos hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a RD.",
+          "titleLine2": "Compará remesadoras y ahorrá $8–$15.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a RD puede ahorrarte $8–$15 vs usar la primera remesadora que aparezca en Google. Multiplicado por 12 envíos anuales, son $100+ que se quedan con tu gente.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Envía lunes/martes · evita viernes/fines de semana",
+            "Débito o ACH > tarjeta de crédito",
+            "Mira los pesos recibidos, no solo el fee",
+            "Confirma el nombre tal cual cédula (con dos apellidos)",
+            "Guardá el MTCN o tracking ID de cada envío",
+            "Comparar cada envío — la mejor remesadora cambia semana a semana"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. Tasa DOP/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
+        }
+      },
+      "guatemala": {
+        "seccion0": {
+          "bancoLabel": "Guatemala",
+          "bancoNombre": "Banco de Guatemala",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas diarias",
+          "alertasSubtitle": "Avisos cuando GTQ/USD suba — envía cuando más rinde",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a Guatemala",
+          "title": "Guatemala y las remesas desde Estados Unidos en 2026",
+          "lede": "Guatemala recibe $21,500 millones al año desde Estados Unidos — el corredor de remesas más grande de Centroamérica, casi el doble que Honduras. Esos quetzales sostienen a familias en Quetzaltenango, Huehuetenango, Cobán y los 22 departamentos del país. Datos del Banco de Guatemala (Banguat) 2024 y CEPAL 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a Guatemala",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "guatemaltecos en EE.UU.",
+          "rankingLabel": "Ranking regional",
+          "rankingSubtitle": "receptor de Centroamérica"
+        },
+        "editorial": {
+          "tag": "La diáspora guatemalteca en Estados Unidos",
+          "titleLine1": "De Los Ángeles a la capital.",
+          "titleLine2": "De Houston a Huehuetenango.",
+          "titleLine3": "Centroamérica entera mira al corredor más grande de la región.",
+          "p1": "Hay 1.8 millones de guatemaltecos en Estados Unidos. La mayoría viven en California, Texas, Florida y Nueva York — y muchos vienen de los departamentos del altiplano: Huehuetenango, San Marcos, Quiché. Cada año mueven $21,500 millones hacia casa, casi 19% del PIB del país. Es el corredor de remesas más grande de Centroamérica.",
+          "p2": "Pero ese tamaño esconde una complejidad: la cobertura bancaria varía mucho por departamento. Banrural domina las zonas rurales del altiplano, mientras Banco Industrial y BAM concentran lo urbano. <strong>Elegir bien la remesadora según dónde recibe tu familia</strong> puede ahorrarte hasta <highlight>$10 por cada $200 enviados</highlight> — multiplicado por los envíos del año, son cientos de quetzales que se quedan con tu gente."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de Guatemala",
+          "title": "Enviar dinero a ciudades de Guatemala: 6 zonas principales",
+          "lede": "6 destinos donde tu familia probablemente recibe. Las grandes remesadoras (Remitly, Xoom, WorldRemit, WU, MG) cubren todo el país vía Banrural, Banco Industrial y BAM. En zonas rurales del altiplano (Huehuetenango, Quiché, San Marcos), Banrural sigue siendo el banco con más cobertura — verificá que tu remesadora deposite ahí antes de pagar Express.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "altiplano": "Altiplano",
+            "patrimonio_colonial": "Patrimonio",
+            "frontera_norte": "Frontera norte",
+            "cafetalero": "Cafetalero",
+            "metropolitana": "Metropolitana"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a Guatemala que te cuestan hasta $60",
+          "lede": "Cada uno de estos errores le ha costado a un guatemalteco entre $5 y $60. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "No confirmar qué banco usa tu familia",
+              "texto": "Si la remesadora no deposita en Banrural pero tu familia solo tiene cuenta ahí, terminás pagando comisión extra para retiro en efectivo o cambiando de operador. Confirmá ANTES qué banco usa la persona que recibe."
+            },
+            {
+              "titulo": "Caer en \"comisión $0\"",
+              "texto": "\"Comisión $0\" no significa envío gratis. El operador compensa con peor tasa de cambio — terminás recibiendo menos quetzales. Mirá los quetzales finales recibidos, no solo la comisión en dólares."
+            },
+            {
+              "titulo": "Pagar Express cuando no urge",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra vs \"Económico\" en 1–2 días. Si tu familia no necesita el dinero HOY, el Express es dinero tirado. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "No copiar el nombre completo",
+              "texto": "Si el nombre no coincide carácter por carácter con el DPI guatemalteco, el envío se retiene y puede tardar días. Copialo tal cual — tildes, ambos apellidos, todo. Errores en nombres son la causa #1 de retención de envíos."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra cuando pagás con crédito. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH (transferencia bancaria directa)."
+            },
+            {
+              "titulo": "Ignorar el día festivo guatemalteco",
+              "texto": "En Guatemala hay días festivos (15 de septiembre, Semana Santa) donde los bancos cierran. Si enviás el día anterior con depósito bancario, el dinero queda flotando hasta el siguiente día hábil. Para esas fechas, retiro en efectivo o billetera móvil son más rápidos."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de guatemaltecos en EE.UU.",
+          "items": [
+            {
+              "q": "¿Cuántos quetzales recibo por $200 USD?",
+              "a": "Con la tasa actual del Banco de Guatemala (Banguat), $200 equivalen a los quetzales teóricos que ves arriba multiplicados por 200. Pero cada remesadora aplica un margen: el mejor operador entrega aproximadamente un 1-2% menos y el peor hasta 3-4% menos. Diferencia real: hasta 60 quetzales ($7.85 USD) en un solo envío de $200."
+            },
+            {
+              "q": "¿Qué bancos guatemaltecos reciben remesas?",
+              "a": "Los principales son Banrural (cobertura nacional, dominante en zonas rurales), Banco Industrial (BI), Banco G&T Continental, BAM y Banco Promerica. Todas las grandes remesadoras depositan en estos. Banrural es especialmente importante para diáspora del altiplano por su red de agencias en pueblos pequeños."
+            },
+            {
+              "q": "¿Funciona Tigo Money en toda Guatemala?",
+              "a": "Sí. Tigo Money tiene cobertura en los 22 departamentos. Es especialmente útil donde no hay sucursales bancarias cerca: zonas rurales de Quiché, Huehuetenango, San Marcos, Petén. Tu familia retira en efectivo en cualquier comercio Tigo Money. Regulado por la Superintendencia de Bancos (SIB)."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en Guatemala?",
+              "a": "No. Guatemala no cobra impuesto sobre remesas recibidas. Están exentas de ISR (Impuesto Sobre la Renta) a nivel personal. El único costo es la comisión de la remesadora más el margen sobre la tasa de cambio."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Tigo Money (billetera móvil): segundos",
+                "Efectivo (Western Union, MoneyGram, Ria): minutos tras recibir el código MTCN",
+                "Depósito Banrural / BI: 2–24 horas según el banco"
+              ]
+            },
+            {
+              "q": "¿Cuánto llega a Guatemala si envío $100 USD?",
+              "a": "Con la tasa actual del Banguat, $100 equivalen a los quetzales teóricos que ves arriba multiplicados por 100. Las remesadoras entregan entre un 1% y un 4% menos según operador y método. Diferencia: hasta 30 quetzales ($3.90 USD) por envío — usá el comparador para ver cuál entrega más hoy."
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a Guatemala?",
+              "a": "No hay una sola \"mejor\" — depende del banco receptor, monto, urgencia y método. Remitly suele ganar para cash pickup en montos menores a $500. Wise es típicamente mejor para depósito bancario por tasa cercana al Banguat. Western Union y MoneyGram dominan en zonas rurales por densidad de agencias. Usá el comparador arriba para ver cuál entrega más quetzales hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a Guatemala.",
+          "titleLine2": "Compará remesadoras y ahorrá $10–$20.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a Guatemala puede ahorrarte $10–$20 vs usar la primera remesadora que aparezca en Google. Multiplicado por 12 envíos anuales, son $120+ que se quedan con tu familia.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Confirmá qué banco usa tu familia (Banrural domina rural)",
+            "Envía lunes/martes · evita viernes/fines de semana",
+            "Débito o ACH > tarjeta de crédito",
+            "Mira los quetzales recibidos, no solo el fee",
+            "Confirma el nombre tal cual DPI",
+            "Comparar cada envío — la mejor cambia semana a semana"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. Tasa GTQ/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
+        }
+      },
+      "el_salvador": {
+        "seccion0": {
+          "bancoLabel": "El Salvador",
+          "bancoNombre": "Banco Central de Reserva",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas de envíos",
+          "alertasSubtitle": "Avisos cuando bajen comisiones o suban promociones",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a El Salvador",
+          "title": "El Salvador y las remesas desde Estados Unidos en 2026",
+          "lede": "El Salvador recibe $8,500 millones al año desde Estados Unidos — el segundo corredor más grande de Centroamérica. Está dolarizado desde 2001, así que no hay tipo de cambio que perder en la conversión. Pero las comisiones, los métodos de entrega y las promociones siguen variando entre operadoras: ahí está la diferencia. Datos del BCR 2024 y CEPAL 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a SV",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "salvadoreños en EE.UU.",
+          "rankingLabel": "Ranking regional",
+          "rankingSubtitle": "receptor de Centroamérica"
+        },
+        "editorial": {
+          "tag": "La diáspora salvadoreña en Estados Unidos",
+          "titleLine1": "De Los Ángeles a San Salvador.",
+          "titleLine2": "De Washington DC a Santa Ana.",
+          "titleLine3": "Sin tipo de cambio que comparar — pero sí hay diferencias.",
+          "p1": "Hay 2.5 millones de salvadoreños en Estados Unidos: una de las diásporas más densas por habitante de toda Latinoamérica. Concentrados en California, Maryland, Texas, Virginia y Nueva York, mueven $8,500 millones al año hacia casa. Eso son 24 centavos de cada dólar del PIB salvadoreño — uno de los porcentajes más altos del continente.",
+          "p2": "El Salvador es el único corredor del comparador donde no hay conversión: USD entra, USD sale. Eso simplifica la decisión, pero <strong>no la elimina</strong>. Las comisiones varían de $0 a $7 por envío, los métodos rápidos cuestan $5–$8 extra, y solo algunas operadoras pagan en ChivoWallet o billetera Tigo Money. <highlight>Comparar igual te ahorra $5–$10 por envío</highlight>."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de El Salvador",
+          "title": "Enviar dinero a ciudades de El Salvador: 6 zonas principales",
+          "lede": "6 destinos donde tu familia probablemente recibe. Como el país es pequeño y dolarizado, casi todas las grandes remesadoras (Remitly, Xoom, WorldRemit, WU, MG) tienen cobertura nacional. Banco Cuscatlán, Banco Agrícola y Banco Davivienda dominan los depósitos. Tigo Money y ChivoWallet operan a nivel nacional para retiros en efectivo.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "cafetalero": "Cafetalero",
+            "oriental": "Oriental",
+            "industrial": "Industrial",
+            "costero": "Costero",
+            "occidental": "Occidental"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a El Salvador que te cuestan hasta $50",
+          "lede": "Cada uno de estos errores le ha costado a un salvadoreño entre $5 y $50. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "Pensar que \"USD a USD\" es siempre lo mismo",
+              "texto": "No hay conversión, sí — pero las comisiones varían de $0 a $7 por envío de $200. Y \"comisión $0\" a veces incluye un costo oculto en el método de entrega o tiempo de espera. Comparar el costo total importa."
+            },
+            {
+              "titulo": "Pagar Express por costumbre",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra. Si tu familia no necesita el dinero HOY mismo, \"Económico\" en 1 día hábil es plata ahorrada. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "No verificar si tu familia usa ChivoWallet",
+              "texto": "ChivoWallet es la billetera oficial del gobierno (Bitcoin/USD). Algunas remesadoras pagan ahí directo, pero no todas. Si tu familia la usa activamente, eso ahorra el viaje a la agencia. Verificá en cuál remesadora aparece como método."
+            },
+            {
+              "titulo": "No copiar el nombre completo",
+              "texto": "Si el nombre no coincide carácter por carácter con el DUI salvadoreño, el envío se retiene y puede tardar días. Copialo tal cual — tildes, segundo apellido, todo."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra cuando pagás con crédito porque las procesadoras les cobran comisión alta. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH."
+            },
+            {
+              "titulo": "Mandar siempre con la misma",
+              "texto": "Las promociones de bienvenida y \"envío #1 con comisión $0\" rotan entre operadoras. Si solo usás una, te perdés esos descuentos. Crear cuenta en 2–3 te deja aprovechar las promos sin amarrarte a ninguna."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de salvadoreños en EE.UU.",
+          "items": [
+            {
+              "q": "Si El Salvador usa USD, ¿para qué comparar remesadoras?",
+              "a": "Buena pregunta. La conversión USD/USD es 1.00, pero las comisiones varían: de $0 a $7 por envío. El método de entrega (Express vs Económico) cuesta $5–$8 extra. Las promociones de bienvenida y nuevos clientes rotan. En 12 envíos al año, comparar te puede ahorrar $60–$120 sin tocar la \"tasa\". Eso es lo que hace el comparador arriba."
+            },
+            {
+              "q": "¿Qué bancos salvadoreños reciben remesas?",
+              "a": "Los principales son Banco Cuscatlán, Banco Agrícola, Banco Davivienda y Banco Promerica. Todas las grandes remesadoras (Remitly, Xoom, WorldRemit, Wise, WU, MG) depositan en estos. Como SV está dolarizado, el depósito llega como USD directo sin conversión."
+            },
+            {
+              "q": "¿Funciona Tigo Money y ChivoWallet?",
+              "a": "Sí. Tigo Money tiene cobertura nacional (regulado por la Superintendencia del Sistema Financiero). ChivoWallet es la billetera oficial del gobierno (USD + Bitcoin) lanzada en 2021 — tiene aceptación variable según la familia. Ambas funcionan para retiro en efectivo o pagos. Verificá en tu remesadora si la incluye como método."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en El Salvador?",
+              "a": "No. El Salvador no cobra impuesto sobre remesas recibidas. Están exentas de ISR (Impuesto Sobre la Renta) personal. El único costo es la comisión de la remesadora — y como no hay conversión cambiaria, eso es todo."
+            },
+            {
+              "q": "¿Bitcoin sirve para enviar remesas a El Salvador?",
+              "a": "Técnicamente sí desde 2021 (es legal tender), pero la adopción real para remesas familiares ha sido baja. La mayoría de las remesas siguen llegando como USD vía bancos, billeteras o efectivo. Si tu familia no es usuaria activa de ChivoWallet, mandar BTC genera fricción extra (volatilidad, conversión, comprensión). El comparador se enfoca en USD que es lo que cubre el ~99% del corredor."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Tigo Money / ChivoWallet (billetera): segundos",
+                "Efectivo (Western Union, MoneyGram, Ria): minutos tras recibir el código",
+                "Depósito Cuscatlán / Agrícola: 2–24 horas"
+              ]
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a El Salvador?",
+              "a": "Como no hay conversión, \"mejor\" se reduce a comisiones, velocidad y método. Remitly suele tener promos fuertes para nuevos usuarios y cash pickup. Wise gana por bajas comisiones en depósito bancario. Western Union sigue siendo la opción con más agencias físicas. Usá el comparador arriba para ver cuál tiene mejor oferta hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a El Salvador.",
+          "titleLine2": "Compará comisiones y ahorrá $5–$10.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a SV puede ahorrarte $5–$10 vs usar la primera remesadora que aparezca en Google. Multiplicado por 12 envíos anuales, son $60+ que se quedan con tu familia.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Sin conversión: foco en comisiones y método",
+            "Aprovechá promos de nuevos usuarios — rotan entre operadoras",
+            "Económico > Express si no urge",
+            "Débito o ACH > tarjeta de crédito",
+            "Confirma el nombre tal cual DUI",
+            "Verificá si tu familia usa Tigo Money / ChivoWallet"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. El Salvador está dolarizado desde 2001 — sin conversión USD/USD. Última actualización del contenido: {fechaActualizacion}."
+        }
+      },
+      "colombia": {
+        "seccion0": {
+          "bancoLabel": "Colombia",
+          "bancoNombre": "Banco de la República",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas diarias",
+          "alertasSubtitle": "Avisos cuando COP/USD suba — envía cuando más rinde",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a Colombia",
+          "title": "Colombia y las remesas desde Estados Unidos en 2026",
+          "lede": "Colombia recibe alrededor de $12,000 millones al año desde Estados Unidos. Es un corredor con tasa COP/USD volátil — el peso colombiano se mueve fuerte semana a semana, y eso significa que comparar antes de enviar puede valer 100 o 200 pesos por dólar. En un envío de $200, son hasta 40,000 pesos extra. Datos del Banco de la República 2024 y DANE 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a Colombia",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "colombianos en EE.UU.",
+          "rankingLabel": "Ranking regional",
+          "rankingSubtitle": "en Latinoamérica"
+        },
+        "editorial": {
+          "tag": "La diáspora colombiana en Estados Unidos",
+          "titleLine1": "De Miami a Bogotá.",
+          "titleLine2": "De Nueva York a Medellín.",
+          "titleLine3": "Cien pesos por dólar parecen poco — multiplicalo por mil.",
+          "p1": "Hay 1.3 millones de colombianos en Estados Unidos. La mayoría viven en Florida (sobre todo Miami), Nueva York, Nueva Jersey y Texas. Cada año envían cerca de $12,000 millones — el segundo corredor más grande de Sudamérica después de México. Y como el peso colombiano cotiza en miles, las diferencias entre operadoras se ven en cientos de pesos por dólar, no en centavos.",
+          "p2": "En la práctica eso significa: el mejor operador puede entregar 4,150 COP por dólar mientras el peor entrega 4,000. Son 150 pesos de diferencia por dólar — <strong>30,000 pesos en un envío de $200</strong>. Multiplicado por los 8 a 12 envíos anuales que hacen muchas familias, son <highlight>entre $50 y $80 USD</highlight> que se quedan con tu gente cada año."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de Colombia",
+          "title": "Enviar dinero a ciudades de Colombia: 6 zonas principales",
+          "lede": "6 destinos donde tu familia probablemente recibe. Bancolombia, Davivienda, BBVA Colombia y Banco de Bogotá dominan los depósitos. Para zonas rurales, Banco Agrario tiene la red de agencias más amplia. Operadoras como Western Union y MoneyGram tienen agencias en casi todo el país para retiro en efectivo.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "innovacion": "Innovación",
+            "salsa": "Salsa",
+            "caribe": "Caribe",
+            "patrimonio_colonial": "Patrimonio",
+            "cafetalero": "Cafetalero"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a Colombia que te cuestan hasta $80",
+          "lede": "Cada uno de estos errores le ha costado a un colombiano entre $10 y $80. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "Mirar la \"comisión\" sin mirar la tasa",
+              "texto": "En Colombia los pesos por dólar varían 100–200 entre operadoras. \"Comisión $0\" puede esconder una tasa peor que cuesta 30,000 pesos en un envío de $200. Siempre mirá los pesos finales recibidos, no la comisión sola."
+            },
+            {
+              "titulo": "Quedarte con la primera remesadora que probaste",
+              "texto": "La mejor remesadora para Colombia cambia semana a semana según la tasa COP/USD del Banco de la República y las promociones. Comparar cada vez te ahorra $5–$10 por envío en pesos colombianos."
+            },
+            {
+              "titulo": "Pagar Express cuando no urge",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra vs \"Económico\" en 1 día. Si tu familia no necesita el dinero HOY, el Express es plata botada. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "Confundirte con el cargo automático del banco receptor",
+              "texto": "Algunos bancos colombianos cobran un pequeño cargo cuando reciben transferencia internacional ($1–$3 USD descontados al recibir). Eso depende del banco, no de la remesadora. Verificá con tu familia si Bancolombia / BBVA / Davivienda les cobra algo al recibir."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra cuando pagás con crédito porque las procesadoras les cobran comisión alta. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH."
+            },
+            {
+              "titulo": "No verificar el número de cédula colombiana",
+              "texto": "En Colombia se usa cédula de ciudadanía (NUIP). Si el número o nombre no coincide exactamente con la cédula, el envío se retiene. Pedí a tu familia el número exacto antes de enviar — un dígito mal y son días de demora."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de colombianos en EE.UU.",
+          "items": [
+            {
+              "q": "¿Cuántos pesos colombianos recibo por $200 USD?",
+              "a": "Con la tasa actual del Banco de la República, $200 equivalen a los pesos teóricos que ves arriba multiplicados por 200. Pero cada remesadora aplica un margen: el mejor operador entrega aproximadamente un 1-2% menos y el peor hasta 3-4% menos. Diferencia real: hasta 30,000 pesos ($7.20 USD) en un solo envío de $200."
+            },
+            {
+              "q": "¿Qué bancos colombianos reciben remesas?",
+              "a": "Los principales son Bancolombia, Davivienda, BBVA Colombia, Banco de Bogotá, Banco Caja Social y Banco Agrario (este último con cobertura más amplia en zonas rurales). Todas las grandes remesadoras (Remitly, Xoom, WorldRemit, Wise) depositan a estas cuentas. Si tu familia no tiene cuenta, retiro en efectivo en WU/MG es la alternativa."
+            },
+            {
+              "q": "¿Mi banco colombiano me cobra al recibir?",
+              "a": "Algunos sí, otros no. Bancolombia, BBVA Colombia y Davivienda suelen cobrar un cargo de aproximadamente 1,000–10,000 pesos al recibir transferencia internacional. Otros bancos no cobran. Esto depende del banco receptor, NO de la remesadora. Verificá con tu familia antes de enviar."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en Colombia?",
+              "a": "No. Colombia no cobra impuesto sobre remesas recibidas. Están exentas de retención en la fuente y de IVA. El único costo es la comisión de la remesadora más el margen sobre la tasa de cambio (y el cargo eventual del banco receptor por recibir SWIFT)."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Efectivo (Western Union, Ria, MoneyGram): minutos tras recibir el código",
+                "Depósito Bancolombia / BBVA / Davivienda: 2–24 horas",
+                "Nequi (billetera digital): segundos en muchas remesadoras"
+              ]
+            },
+            {
+              "q": "¿Cuánto llega a Colombia si envío $100 USD?",
+              "a": "Con la tasa actual del Banco de la República, $100 equivalen a los pesos teóricos que ves arriba multiplicados por 100. Las remesadoras entregan entre un 1% y un 4% menos según operador y método. Diferencia: hasta 15,000 pesos ($3.60 USD) por envío — usá el comparador para ver cuál entrega más hoy."
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a Colombia?",
+              "a": "No hay una sola \"mejor\" — depende del monto, urgencia y método. Remitly suele ganar para montos menores a $500 con cash pickup o Nequi. Wise es típicamente mejor para depósito bancario por tasa cercana al Banco de la República. Xoom y WorldRemit son competitivos en promociones para nuevos usuarios. Western Union domina en zonas alejadas con su red de agencias. Usá el comparador arriba para ver cuál entrega más pesos hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a Colombia.",
+          "titleLine2": "Compará remesadoras y ahorrá $8–$15.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a Colombia puede ahorrarte $8–$15 vs usar la primera remesadora que aparezca en Google. Multiplicado por 12 envíos anuales, son $100+ que se quedan con tu familia.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Mira los pesos colombianos recibidos, no la \"comisión\"",
+            "Verifica si tu banco cobra al recibir",
+            "Envía lunes/martes · evita viernes/fines de semana",
+            "Débito o ACH > tarjeta de crédito",
+            "Confirma cédula de ciudadanía sin un dígito mal",
+            "Comparar cada envío — la mejor cambia semana a semana"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. Tasa COP/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
+        }
+      },
+      "mexico": {
+        "seccion0": {
+          "bancoLabel": "México",
+          "bancoNombre": "Banco de México",
+          "tasaActualizado": "Actualizado hoy, {fechaHoy}",
+          "alertasHeading": "Recibe alertas diarias",
+          "alertasSubtitle": "Avisos cuando MXN/USD suba — envía cuando más rinde",
+          "alertasEmailPlaceholder": "tucorreo@email.com",
+          "alertasCta": "Suscribirme gratis →"
+        },
+        "stats": {
+          "tag": "Envíos de EE.UU. a México",
+          "title": "México y las remesas desde Estados Unidos en 2026",
+          "lede": "México es el corredor de remesas más grande del mundo: $66,000 millones al año desde Estados Unidos. Detrás de cada uno hay 37 millones de mexicanos y mexicano-americanos sosteniendo familias en los 32 estados del país. Cuando los volúmenes son tan grandes, incluso un 0.5% de diferencia en la tasa son cientos de dólares al año. Datos de Banxico 2024 y Banco Mundial 2024.",
+          "remesasAnualesLabel": "Remesas anuales",
+          "remesasAnualesSubtitle": "desde EE.UU. a México",
+          "pibLabel": "Del PIB",
+          "pibSubtitle": "depende de las remesas",
+          "diasporaLabel": "Diáspora",
+          "diasporaSubtitle": "mexicanos / m-americanos en EE.UU.",
+          "rankingLabel": "Ranking mundial",
+          "rankingSubtitle": "receptor de remesas"
+        },
+        "editorial": {
+          "tag": "La diáspora mexicana en Estados Unidos",
+          "titleLine1": "De California a Jalisco.",
+          "titleLine2": "De Texas a Michoacán.",
+          "titleLine3": "El corredor más grande del mundo — la matemática del 0.5%.",
+          "p1": "Hay 37 millones de mexicanos y mexicano-americanos en Estados Unidos: 1 de cada 9 residentes del país. Cada año envían $66,000 millones a casa — más que cualquier otro corredor de remesas del planeta. Esos pesos sostienen casas en Jalisco, milpas en Oaxaca, escuelas en Puebla, comercios en Monterrey y atenciones médicas en todo el país.",
+          "p2": "Con un volumen así, los detalles importan. El mejor operador puede entregar 17.10 pesos por dólar mientras el peor entrega 16.85. Son 25 centavos de diferencia por dólar — <strong>$50 pesos en un envío de $200</strong>. Aplicado a los 12 envíos anuales típicos, son <highlight>$600 pesos al año</highlight> ($35 USD) que se quedan con tu familia en lugar de pagar margen al operador."
+        },
+        "ciudades": {
+          "tag": "Destinos dentro de México",
+          "title": "Enviar dinero a ciudades de México: 6 zonas principales",
+          "lede": "6 destinos representativos. Pero México es enorme — las grandes remesadoras (Remitly, Xoom, WorldRemit, WU, MG) cubren los 32 estados con cuentas en BBVA México, Santander, Banamex, HSBC y Banorte. Para zonas rurales, Western Union, MoneyGram y Elektra tienen la red más densa de agencias para retiro en efectivo.",
+          "principalBadge": "#1 destino",
+          "tipo": {
+            "capital": "Capital",
+            "tequilera": "Tequilera",
+            "industrial": "Industrial",
+            "colonial": "Colonial",
+            "frontera": "Frontera",
+            "patrimonio_maya": "Patrimonio maya"
+          }
+        },
+        "errores": {
+          "tag": "Evita esto",
+          "title": "Errores al enviar dinero a México que te cuestan hasta $100",
+          "lede": "Cada uno de estos errores le ha costado a un mexicano entre $10 y $100. Aprendelos antes del próximo envío.",
+          "items": [
+            {
+              "titulo": "Quedarte con la primera por costumbre",
+              "texto": "La mejor remesadora cambia semana a semana según el peso mexicano (que se mueve fuerte) y promociones. Si llevás años con la misma, probablemente estás dejando $5–$10 por envío en la mesa. Comparar cada vez es la regla #1."
+            },
+            {
+              "titulo": "Confundir \"comisión $0\" con envío gratis",
+              "texto": "\"Comisión $0\" no significa envío gratis. El operador compensa con peor tasa de cambio — terminás recibiendo menos pesos mexicanos. Mirá los pesos finales recibidos, no la comisión sola."
+            },
+            {
+              "titulo": "Pagar Express cuando no urge",
+              "texto": "\"Express\" en 5 minutos cuesta $5–$8 extra vs \"Económico\" en 1 día. Si tu familia no necesita el dinero HOY, el Express es plata botada. Reservalo para emergencias reales."
+            },
+            {
+              "titulo": "No copiar el nombre completo",
+              "texto": "Si el nombre no coincide carácter por carácter con la INE/IFE mexicana, el envío se retiene y puede tardar días. Copialo tal cual — tildes, ambos apellidos, todo. Errores en nombres son la causa #1 de retención."
+            },
+            {
+              "titulo": "Pagar con tarjeta de crédito",
+              "texto": "Las remesadoras cobran 2–4% extra cuando pagás con crédito porque las procesadoras les cobran comisión alta. En un envío de $200, son hasta $8 perdidos. Usá débito o ACH."
+            },
+            {
+              "titulo": "Ignorar las CLABE de 18 dígitos",
+              "texto": "Para depósito bancario en México hace falta la CLABE interbancaria (18 dígitos), no solo el número de cuenta. Si tu familia te da solo los 11 dígitos de la cuenta, el envío se rebota o llega más lento. Pedí siempre la CLABE completa."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Preguntas frecuentes",
+          "title": "Preguntas frecuentes de mexicanos en EE.UU.",
+          "items": [
+            {
+              "q": "¿Cuántos pesos mexicanos recibo por $200 USD?",
+              "a": "Con la tasa actual del Banco de México (Banxico), $200 equivalen a los pesos teóricos que ves arriba multiplicados por 200. Pero cada remesadora aplica un margen: el mejor operador entrega aproximadamente un 1-2% menos y el peor hasta 3-4% menos. Diferencia real: hasta 50 pesos ($2.95 USD) en un solo envío de $200."
+            },
+            {
+              "q": "¿Qué bancos mexicanos reciben remesas?",
+              "a": "Los principales son BBVA México (el más grande), Santander, Citibanamex, Banorte y HSBC. Todas las grandes remesadoras depositan en estos vía CLABE. Para retiro en efectivo, Elektra es el partner clásico de Western Union (con miles de tiendas en todo el país); también funciona en sucursales de Telecomm-Telégrafos en zonas rurales."
+            },
+            {
+              "q": "¿Qué es la CLABE y por qué la necesito?",
+              "a": "La CLABE (Clave Bancaria Estandarizada) es un número de 18 dígitos único para cada cuenta bancaria mexicana. Es lo que las remesadoras necesitan para depositar — no el número corto de la cuenta. Tu familia la encuentra en su estado de cuenta o app. Sin la CLABE correcta, el envío se rebota."
+            },
+            {
+              "q": "¿Hay impuesto sobre remesas en México?",
+              "a": "No a nivel federal. México no cobra ISR (Impuesto Sobre la Renta) sobre remesas recibidas. Pero ojo: en 2025 se discutió en el Congreso de EE.UU. un posible impuesto del 1-5% del lado del emisor (no del receptor). Verificá si tu remesadora ya lo está aplicando — algunas lo desglosan claro, otras no. El comparador arriba muestra el monto neto."
+            },
+            {
+              "q": "¿Cuánto tarda en llegar un envío?",
+              "aIntro": "Depende del método y operador:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutos",
+                "Económico (Wise): 1–2 días hábiles",
+                "Efectivo (Western Union via Elektra, MoneyGram, Ria): minutos tras recibir el código",
+                "Depósito BBVA / Santander / Banorte: 2–24 horas",
+                "SPEI (transferencia interbancaria mexicana): segundos a minutos"
+              ]
+            },
+            {
+              "q": "¿Cuánto llega a México si envío $100 USD?",
+              "a": "Con la tasa actual del Banxico, $100 equivalen a los pesos teóricos que ves arriba multiplicados por 100. Las remesadoras entregan entre un 1% y un 4% menos según operador y método. Diferencia: hasta 25 pesos ($1.50 USD) por envío — chica en absolutos, pero acumulada en 12 envíos al año son $20+. Usá el comparador para ver cuál entrega más hoy."
+            },
+            {
+              "q": "¿Cuál es la mejor remesadora para enviar a México?",
+              "a": "No hay una sola \"mejor\" — depende del monto, urgencia y método. Remitly suele ganar para montos menores a $500 con cash pickup en Elektra. Wise es típicamente mejor para depósito bancario vía CLABE por tasa cercana al Banxico. Xoom (de PayPal) tiene presencia fuerte y promociones recurrentes. Western Union domina retiro en efectivo por densidad de agencias. Usá el comparador arriba para ver cuál entrega más pesos hoy."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Siguiente paso",
+          "titleLine1": "Listo para enviar dinero a México.",
+          "titleLine2": "Compará remesadoras y ahorrá $5–$15.",
+          "lede": "Con lo que viste en esta guía, tu próximo envío a México puede ahorrarte $5–$15 vs usar la primera remesadora que aparezca en Google. Multiplicado por los 12+ envíos anuales típicos, son $100+ que se quedan con tu familia.",
+          "ctaPrimary": "Ver comparador de 7 remesadoras →",
+          "checklistHeading": "Recordatorio rápido",
+          "checklist": [
+            "Pedí la CLABE de 18 dígitos, no la cuenta corta",
+            "Mira los pesos mexicanos recibidos, no solo el fee",
+            "Envía lunes/martes · evita viernes/fines de semana",
+            "Débito o ACH > tarjeta de crédito",
+            "Confirma el nombre tal cual INE/IFE",
+            "Comparar cada envío — la mejor cambia semana a semana"
+          ]
+        },
+        "fuentes": {
+          "label": "Fuentes:",
+          "text": "Datos macroeconómicos actualizados anualmente. Tasa MXN/USD actualizada diariamente. Última actualización del contenido: {fechaActualizacion}."
+        }
       }
     }
   }
