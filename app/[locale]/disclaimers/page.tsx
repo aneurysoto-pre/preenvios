@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Full disclaimers for PreEnvios.com: rates shown are approximate, we are not a financial institution, we do not process payments, and we may receive affiliate commissions.'
       : 'Aclaraciones legales completas de PreEnvios.com: las tasas mostradas son aproximadas, no somos una institución financiera, no procesamos pagos y podemos recibir comisiones de afiliado.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/disclaimers`,
-      languages: { es: 'https://preenvios.com/es/disclaimers', en: 'https://preenvios.com/en/disclaimers' },
+      canonical: `https://preenvios.vercel.app/${locale}/disclaimers`,
+      languages: { es: 'https://preenvios.vercel.app/es/disclaimers', en: 'https://preenvios.vercel.app/en/disclaimers' },
     },
   }
 }
@@ -20,5 +20,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function DisclaimersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
-  return <DisclaimersContent />
+  const en = locale === 'en'
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `https://preenvios.vercel.app/${locale}/disclaimers#webpage`,
+    url: `https://preenvios.vercel.app/${locale}/disclaimers`,
+    name: en ? 'Disclaimers — PreEnvios.com' : 'Aclaraciones legales — PreEnvios.com',
+    inLanguage: locale,
+    isPartOf: { '@id': 'https://preenvios.vercel.app/#website' },
+    publisher: { '@id': 'https://preenvios.vercel.app/#organization' },
+  }
+  return (
+    <>
+      <DisclaimersContent />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </>
+  )
 }

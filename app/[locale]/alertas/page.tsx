@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Get the best remittance rate of the day in your inbox. Free, no spam, unsubscribe anytime.'
       : 'Recibe la mejor tasa de remesas del día en tu inbox. Gratis, sin spam, te desuscribes cuando quieras.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/alertas`,
-      languages: { es: 'https://preenvios.com/es/alertas', en: 'https://preenvios.com/en/alertas' },
+      canonical: `https://preenvios.vercel.app/${locale}/alertas`,
+      languages: { es: 'https://preenvios.vercel.app/es/alertas', en: 'https://preenvios.vercel.app/en/alertas' },
     },
   }
 }

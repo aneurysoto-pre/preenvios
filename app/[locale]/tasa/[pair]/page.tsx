@@ -38,10 +38,10 @@ export async function generateMetadata({
       ? `Today's ${corredor.moneda} exchange rate for sending USD to ${nombre}. Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram with 30-day history chart.`
       : `Tasa ${corredor.moneda} de hoy para enviar USD a ${nombre}. Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram con gráfica de 30 días.`,
     alternates: {
-      canonical: `https://preenvios.com/${locale}/tasa/${pair}`,
+      canonical: `https://preenvios.vercel.app/${locale}/tasa/${pair}`,
       languages: {
-        es: `https://preenvios.com/es/tasa/${pair}`,
-        en: `https://preenvios.com/en/tasa/${pair}`,
+        es: `https://preenvios.vercel.app/es/tasa/${pair}`,
+        en: `https://preenvios.vercel.app/en/tasa/${pair}`,
       },
     },
   }

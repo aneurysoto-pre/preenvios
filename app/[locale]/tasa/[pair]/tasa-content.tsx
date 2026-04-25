@@ -123,7 +123,7 @@ export default function TasaHistorica({ pair }: { pair: string }) {
           priceCurrency: 'USD',
         },
         name: title,
-        url: `https://preenvios.com/${locale}/tasa/${pair}`,
+        url: `https://preenvios.vercel.app/${locale}/tasa/${pair}`,
       })}} />
 
       <Footer />

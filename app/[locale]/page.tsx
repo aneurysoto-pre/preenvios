@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Compare Remitly, Wise, Xoom, Ria, WorldRemit, Western Union and MoneyGram. Send more money to Honduras, Dominican Republic, Guatemala, El Salvador, Colombia and Mexico. 100% free, no signup.'
       : 'Compara Remitly, Wise, Xoom, Ria, WorldRemit, Western Union y MoneyGram. Envía más dinero a Honduras, República Dominicana, Guatemala, El Salvador, Colombia y México. 100% gratis, sin registro.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}`,
+      canonical: `https://preenvios.vercel.app/${locale}`,
       languages: {
-        es: 'https://preenvios.com/es',
-        en: 'https://preenvios.com/en',
+        es: 'https://preenvios.vercel.app/es',
+        en: 'https://preenvios.vercel.app/en',
       },
     },
   }
@@ -63,29 +63,29 @@ export default async function HomePage({
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://preenvios.com/#website',
-        url: 'https://preenvios.com',
+        '@id': 'https://preenvios.vercel.app/#website',
+        url: 'https://preenvios.vercel.app',
         name: 'PreEnvios',
         inLanguage: locale,
         description: en
           ? 'Compare remittance providers from the US to Latin America'
           : 'Compara remesadoras de EE.UU. a Latinoamérica',
-        publisher: { '@id': 'https://preenvios.com/#organization' },
+        publisher: { '@id': 'https://preenvios.vercel.app/#organization' },
         potentialAction: {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `https://preenvios.com/${locale}?q={search_term_string}`,
+            urlTemplate: `https://preenvios.vercel.app/${locale}?q={search_term_string}`,
           },
           'query-input': 'required name=search_term_string',
         },
       },
       {
         '@type': 'Organization',
-        '@id': 'https://preenvios.com/#organization',
+        '@id': 'https://preenvios.vercel.app/#organization',
         name: 'PreEnvios',
-        url: 'https://preenvios.com',
-        logo: 'https://preenvios.com/icon',
+        url: 'https://preenvios.vercel.app',
+        logo: 'https://preenvios.vercel.app/icon',
         sameAs: [],
         contactPoint: {
           '@type': 'ContactPoint',
@@ -96,7 +96,7 @@ export default async function HomePage({
       },
       {
         '@type': 'FAQPage',
-        '@id': `https://preenvios.com/${locale}#faq`,
+        '@id': `https://preenvios.vercel.app/${locale}#faq`,
         mainEntity: [1, 2, 3, 4, 5, 6].map((n) => ({
           '@type': 'Question',
           name: tFaq(`q${n}`),

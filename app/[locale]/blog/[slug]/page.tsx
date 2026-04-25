@@ -42,10 +42,10 @@ export async function generateMetadata({
       : `${title} — Blog de PreEnvios.com`,
     description,
     alternates: {
-      canonical: `https://preenvios.com/${locale}/blog/${slug}`,
+      canonical: `https://preenvios.vercel.app/${locale}/blog/${slug}`,
       languages: {
-        es: `https://preenvios.com/es/blog/${slug}`,
-        en: `https://preenvios.com/en/blog/${slug}`,
+        es: `https://preenvios.vercel.app/es/blog/${slug}`,
+        en: `https://preenvios.vercel.app/en/blog/${slug}`,
       },
     },
   }

@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'How PreEnvios.com ranks remittance providers: 5 weighted criteria — exchange rate, fee, delivery speed, reliability and available delivery methods.'
       : 'Cómo PreEnvios.com ordena las remesadoras: 5 criterios ponderados — tasa de cambio, comisión, velocidad, confiabilidad y métodos de entrega disponibles.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/metodologia`,
-      languages: { es: 'https://preenvios.com/es/metodologia', en: 'https://preenvios.com/en/metodologia' },
+      canonical: `https://preenvios.vercel.app/${locale}/metodologia`,
+      languages: { es: 'https://preenvios.vercel.app/es/metodologia', en: 'https://preenvios.vercel.app/en/metodologia' },
     },
   }
 }
@@ -20,5 +20,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function MetodologiaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
-  return <MetodologiaContent />
+  const en = locale === 'en'
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `https://preenvios.vercel.app/${locale}/metodologia#webpage`,
+    url: `https://preenvios.vercel.app/${locale}/metodologia`,
+    name: en ? 'Ranking methodology — PreEnvios.com' : 'Metodología del ranking — PreEnvios.com',
+    inLanguage: locale,
+    isPartOf: { '@id': 'https://preenvios.vercel.app/#website' },
+    publisher: { '@id': 'https://preenvios.vercel.app/#organization' },
+  }
+  return (
+    <>
+      <MetodologiaContent />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </>
+  )
 }

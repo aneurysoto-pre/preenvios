@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'Reach out to PreEnvios — questions, rate issues, partnerships, press. We reply within 48 hours.'
       : 'Escríbenos a PreEnvios — consultas, problemas con tasas, partnerships, prensa. Respondemos en menos de 48 horas.',
     alternates: {
-      canonical: `https://preenvios.com/${locale}/contacto`,
-      languages: { es: 'https://preenvios.com/es/contacto', en: 'https://preenvios.com/en/contacto' },
+      canonical: `https://preenvios.vercel.app/${locale}/contacto`,
+      languages: { es: 'https://preenvios.vercel.app/es/contacto', en: 'https://preenvios.vercel.app/en/contacto' },
     },
   }
 }
@@ -25,7 +25,7 @@ export default async function ContactoPage({ params }: { params: Promise<{ local
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    url: `https://preenvios.com/${locale}/contacto`,
+    url: `https://preenvios.vercel.app/${locale}/contacto`,
     inLanguage: locale,
     name: en ? 'Contact PreEnvios' : 'Contacto PreEnvios',
     description: en
@@ -33,7 +33,7 @@ export default async function ContactoPage({ params }: { params: Promise<{ local
       : 'Escríbenos a PreEnvios — consultas, problemas con tasas, partnerships, prensa. Respondemos en menos de 48 horas.',
     mainEntity: {
       '@type': 'Organization',
-      '@id': 'https://preenvios.com/#organization',
+      '@id': 'https://preenvios.vercel.app/#organization',
       name: 'PreEnvios',
       contactPoint: {
         '@type': 'ContactPoint',

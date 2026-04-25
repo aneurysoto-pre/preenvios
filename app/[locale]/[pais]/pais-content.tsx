@@ -60,8 +60,8 @@ export default function PaisContent({
   const nombre = en ? pais.nombreEn : pais.nombre
   const editorialData = getCorredorContent(pais.corredorId)
   const pageUrl = initialMonto
-    ? `https://preenvios.com/${locale}/${slug}/${initialMonto}`
-    : `https://preenvios.com/${locale}/${slug}`
+    ? `https://preenvios.vercel.app/${locale}/${slug}/${initialMonto}`
+    : `https://preenvios.vercel.app/${locale}/${slug}`
   const pageName = initialMonto
     ? (en ? `Send $${initialMonto} to ${nombre}` : `Enviar $${initialMonto} a ${nombre}`)
     : (en ? `Send money to ${nombre}` : `Enviar dinero a ${nombre}`)
@@ -114,8 +114,8 @@ export default function PaisContent({
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'PreEnvios', item: `https://preenvios.com/${locale}` },
-            { '@type': 'ListItem', position: 2, name: nombre, item: `https://preenvios.com/${locale}/${slug}` },
+            { '@type': 'ListItem', position: 1, name: 'PreEnvios', item: `https://preenvios.vercel.app/${locale}` },
+            { '@type': 'ListItem', position: 2, name: nombre, item: `https://preenvios.vercel.app/${locale}/${slug}` },
             ...(initialMonto ? [{ '@type': 'ListItem', position: 3, name: `$${initialMonto} USD`, item: pageUrl }] : []),
           ],
         },
