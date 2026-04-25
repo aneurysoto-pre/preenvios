@@ -6,6 +6,7 @@ export default function DisclaimersContent() {
   const t = useTranslations()
   const td = useTranslations('disclaimers')
   const en = useLocale() === 'en'
+  const locale = en ? 'en' : 'es'
   return (
     <LegalPage
       tag={en ? 'Legal' : 'Legal'}
@@ -37,11 +38,20 @@ export default function DisclaimersContent() {
       <p>{td('d6')}</p>
 
       <p>
-        <strong>{en ? 'Related:' : 'Relacionado:'}</strong>{' '}
-        <a href={`/${en ? 'en' : 'es'}/como-ganamos-dinero`}>{en ? 'How we earn money' : 'Cómo ganamos dinero'}</a>{' · '}
-        <a href={`/${en ? 'en' : 'es'}/metodologia`}>{en ? 'Ranking methodology' : 'Metodología del ranking'}</a>{' · '}
-        <a href={`/${en ? 'en' : 'es'}/uso-de-marcas`}>{en ? 'Trademark usage' : 'Uso de marcas'}</a>
+        {en
+          ? 'These disclaimers complement our Terms of Use and Privacy Policy. For questions, contact us at'
+          : 'Estos disclaimers complementan nuestros Términos de uso y Política de privacidad. Para preguntas, contáctanos en'}{' '}
+        <a href="mailto:contact@preenvios.com">contact@preenvios.com</a>.
       </p>
+
+      <h2>{en ? 'Related pages' : 'Páginas relacionadas'}</h2>
+      <ul>
+        <li><a href={`/${locale}/terminos`}>{en ? 'Terms of use' : 'Términos de uso'}</a></li>
+        <li><a href={`/${locale}/privacidad`}>{en ? 'Privacy policy' : 'Política de privacidad'}</a></li>
+        <li><a href={`/${locale}/como-ganamos-dinero`}>{en ? 'How we earn money' : 'Cómo ganamos dinero'}</a></li>
+        <li><a href={`/${locale}/metodologia`}>{en ? 'Ranking methodology' : 'Metodología del ranking'}</a></li>
+        <li><a href={`/${locale}/uso-de-marcas`}>{en ? 'Trademark usage' : 'Uso de marcas'}</a></li>
+      </ul>
     </LegalPage>
   )
 }

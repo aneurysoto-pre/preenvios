@@ -5,6 +5,7 @@ import LegalPage from '@/components/LegalPage'
 export default function UsoMarcasContent() {
   const t = useTranslations()
   const en = useLocale() === 'en'
+  const locale = en ? 'en' : 'es'
   return (
     <LegalPage tag={t('legal.trademarksTag')} title={t('legal.trademarksTitle')} updatedLabel={t('legal.lastUpdated')}>
       <div className="highlight-box"><p><strong>{t('disclaimers.d6')}</strong></p></div>
@@ -23,6 +24,15 @@ export default function UsoMarcasContent() {
       <p>{en ? 'These trademarks are used on PreEnvios.com solely for informational and comparison purposes, under the fair use doctrine of nominative use. We do not imply any sponsorship, endorsement, or affiliation with these companies unless explicitly stated.' : 'Estas marcas se usan en PreEnvios.com exclusivamente con fines informativos y de comparación, bajo la doctrina de uso justo nominativo. No implicamos patrocinio, respaldo o afiliación con estas empresas salvo que se indique explícitamente.'}</p>
       <h2>{en ? 'Trademark concerns' : 'Inquietudes sobre marcas'}</h2>
       <p>{en ? 'If you are a trademark owner and have concerns about how your mark is used on this site, please contact us at' : 'Si eres propietario de una marca y tienes inquietudes sobre cómo se usa en este sitio, contáctanos en'} <a href="mailto:contact@preenvios.com">contact@preenvios.com</a>. {en ? 'We will respond within 5 business days.' : 'Responderemos en un plazo de 5 días hábiles.'}</p>
+
+      <h2>{en ? 'Related pages' : 'Páginas relacionadas'}</h2>
+      <ul>
+        <li><a href={`/${locale}/terminos`}>{en ? 'Terms of use' : 'Términos de uso'}</a></li>
+        <li><a href={`/${locale}/privacidad`}>{en ? 'Privacy policy' : 'Política de privacidad'}</a></li>
+        <li><a href={`/${locale}/disclaimers`}>Disclaimers</a></li>
+        <li><a href={`/${locale}/como-ganamos-dinero`}>{en ? 'How we earn money' : 'Cómo ganamos dinero'}</a></li>
+        <li><a href={`/${locale}/metodologia`}>{en ? 'Ranking methodology' : 'Metodología del ranking'}</a></li>
+      </ul>
     </LegalPage>
   )
 }
