@@ -70,6 +70,7 @@ Qué hace esta pieza y por qué existe.
 | 28 | [28_scrapers_plan_diferido.md](28_scrapers_plan_diferido.md) | ⚠️ Scrapers rotos desde 2026-04-17. Decisión: diferir arreglo hasta post-LLC + APIs de partners. 7 opciones evaluadas, plan de reactivación R1/R2/R3, criterios de urgencia | Post-LLC |
 | 29 | [29_agente_db_health.md](29_agente_db_health.md) | Agente 3 DB health monitor: pg_cron + pg_net → endpoint Next.js → Sentry. Thresholds, auth con Vault, diferencias preview vs prod, plan B migración Edge Function Deno | Fase 7 |
 | 30 | [30_landing_editorial_pais.md](30_landing_editorial_pais.md) | Landing editorial por país (modelo A Magazine) — feature flag por datos, patrón híbrido data-ts + messages-json, cómo agregar país nuevo en 5 pasos, tech debts | 2026-04-24 (Honduras) |
+| 33 | [33_seo_pre_cutover.md](33_seo_pre_cutover.md) | SEO pre-cutover: canonical/sitemap/robots/JSON-LD apuntando a `preenvios.vercel.app` para que Google indexe HOY. Plan de 3 fases para revertir a `preenvios.com` el día del cutover de DNS + redirect 301 + GSC Change of Address | 2026-04-25 |
 
 ### Fase 2 — cerrada 2026-04-16 (22/28 checkboxes código, 6 pendientes acción usuario)
 ### Fase 4.2 — cerrada 2026-04-16 (4/5 checkboxes, 1 pendiente contenido SEO)

@@ -228,9 +228,19 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 - [x] `app/manifest.ts` apunta a los iconos estáticos
 - [x] Cookie `NEXT_LOCALE` persiste idioma por 365 días (ya estaba desde refactor Fase 1)
 
-**Pendiente post-DNS cutover:**
-- [ ] Validar con Google Rich Results Test (https://search.google.com/test/rich-results) — debería mostrar WebSite + Organization + FAQPage válidos sin warnings
+**Completado 2026-04-25 (commit `83122ad` — pre-cutover SEO fixes):**
+
+- [x] **Canonical host = `preenvios.vercel.app`** en sitemap, robots, 18 page.tsx, hreflang globales y JSON-LD `@id`. Razón: hoy `preenvios.com` sirve un sitio viejo de GitHub Pages; Google indexa `preenvios.vercel.app` como entidad propia mientras tanto. Plan de 3 fases documentado en [LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md](LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md).
+- [x] **`/[locale]/[pais]/page.tsx` con canonical + hreflang** explícitos. Antes la columna vertebral SEO (las 12 páginas de corredor) no declaraba `alternates`, dejando a Google decidir qué versión indexar.
+- [x] **Open Graph + Twitter Cards** con defaults en root layout + heredados a todas las rutas. `app/[locale]/opengraph-image.tsx` genera 1200×630 PNG dinámica con logo P verde + tagline localizado. Compartir cualquier link en redes ahora muestra preview de marca.
+- [x] **Schema.org WebPage** en las 6 páginas legales (`terminos`, `privacidad`, `disclaimers`, `como-ganamos-dinero`, `metodologia`, `uso-de-marcas`) con `isPartOf` + `publisher` apuntando a `#website` y `#organization` del home.
+- [x] **`robots.txt` defense-in-depth**: agregado `Disallow: /admin/, /api/` sobre el meta tag `noindex` existente.
+- [x] **Archivo de verificación GSC** `public/google1cb89151f74262c2.html` (commit `eed83ea`). NO BORRAR — Google requiere que se mantenga permanente.
+
+**Pendiente DURANTE el cutover** (ver § 16.3 abajo):
 - [ ] Submit sitemap en Google Search Console tras DNS cutover
+- [ ] GSC Change of Address: transferir señales `preenvios.vercel.app` → `preenvios.com`
+- [ ] Validar Rich Results Test post-cutover
 
 **Tech debt no bloqueante:**
 - `/blog/[slug]` sigue como ruta `ƒ Dynamic` por faltarle `generateStaticParams()`. Conversión a SSG es 1 línea pero fuera de scope del bullet SEO. Ver BACKLOG_POST_REFACTOR § 2.
@@ -491,6 +501,89 @@ Esta sección asegura que el sitio cumple requisitos legales antes de recibir tr
 ### 16.2 Limpieza y cleanup (primera semana)
 - [ ] MVP viejo (`index.html` en GH Pages) se archiva o elimina del repo
 - [ ] Crear Status Page pública en `status.preenvios.com` con BetterStack
+
+### 16.3 🔍 Verificación SEO post-cutover (BLOQUEANTE para preservar rankings)
+
+Esta sección es la **transición Fase 2 → Fase 3** del plan SEO documentado en [LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md](LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md). Si no se ejecuta correctamente, las señales de ranking acumuladas en `preenvios.vercel.app` NO se transfieren a `preenvios.com` y el SEO efectivamente arranca de cero. Ejecutar TODOS los items en el orden listado.
+
+**Día del cutover — paso 1: cambiar canonical en código (~10 min)**
+
+- [ ] Cambiar `BASE_URL` en `app/sitemap.ts`: `https://preenvios.vercel.app` → `https://preenvios.com`
+- [ ] Cambiar `Sitemap:` en `app/robots.ts`: `vercel.app` → `preenvios.com`
+- [ ] Cambiar `metadataBase` en `app/[locale]/layout.tsx`: `vercel.app` → `preenvios.com`
+- [ ] Cambiar 3 hreflang globales en root layout `<head>`: `vercel.app` → `preenvios.com`
+- [ ] Cambiar JSON-LD `@id` (`#website`, `#organization`, `#webpage`, etc.) en home + 6 legales: `vercel.app` → `preenvios.com`
+- [ ] Cambiar todos los `alternates.canonical` y `languages` hardcoded en 18+ page.tsx: `vercel.app` → `preenvios.com`
+- [ ] **Comando de referencia** (find/replace global, NO tocar `app/api/whatsapp/webhook/route.ts` que ya tiene `preenvios.com` correcto):
+  ```bash
+  grep -rEln "preenvios\.vercel\.app" app/ --include="*.ts" --include="*.tsx" \
+    | xargs -I{} sed -i 's|https://preenvios\.vercel\.app|https://preenvios.com|g' {}
+  ```
+- [ ] Build local (`npm run build`) limpio sin errores
+- [ ] Smoke test local: `curl http://localhost:3000/es/honduras | grep canonical` debe mostrar `preenvios.com`
+- [ ] Push a main + esperar deploy de Vercel
+
+**Día del cutover — paso 2: redirect 301 en Vercel (~5 min)**
+
+- [ ] En Vercel Dashboard → proyecto preenvios → Settings → Domains: agregar `preenvios.vercel.app` como redirect 301 → `preenvios.com`
+- [ ] Verificar con curl: `curl -I https://preenvios.vercel.app/es/honduras` debe responder `301 Moved Permanently` con `Location: https://preenvios.com/es/honduras`
+- [ ] Verificar varios paths (al menos 3): `/es`, `/en/honduras`, `/es/wiki/que-es-tasa-cambio-mid-market-por-que-importa`
+
+**Día del cutover — paso 3: Google Search Console (~15 min)**
+
+- [ ] **Verificar la propiedad nueva `preenvios.com`** en GSC:
+  - Settings → Add property → Domain → `preenvios.com`
+  - Descargar el archivo HTML de verificación que provee Google
+  - Agregar el archivo a `/public/` del repo + push a main + esperar deploy
+  - Volver a GSC y darle "Verify"
+- [ ] **Submit sitemap nuevo** en GSC: `https://preenvios.com/sitemap.xml`
+  - Settings → Sitemaps → Add new sitemap → URL: `sitemap.xml`
+  - Verificar que reporte "Success" (puede tardar minutos)
+- [ ] **Change of Address tool** en GSC (CRÍTICO — sin esto los rankings no se transfieren limpio):
+  - Cambiar a la propiedad antigua `preenvios.vercel.app`
+  - Settings → Change of Address
+  - Source: `preenvios.vercel.app` · Destination: `preenvios.com`
+  - Google verifica automáticamente: redirect 301 funciona, propiedad destino verificada, sitemap submitted
+  - Si todos los checks pasan, dar "Submit"
+- [ ] **NO eliminar la propiedad vieja `preenvios.vercel.app`** durante 6 meses post-cutover. Google la usa para procesar la transferencia.
+
+**Primera hora — verificaciones SEO**
+
+- [ ] Rich Results Test (https://search.google.com/test/rich-results) sobre `https://preenvios.com` → ver `WebSite + Organization + FAQPage` válidos sin warnings
+- [ ] Rich Results Test sobre `https://preenvios.com/es/wiki/que-es-tasa-cambio-mid-market-por-que-importa` → `Article` válido
+- [ ] Mobile-Friendly Test (https://search.google.com/test/mobile-friendly) sobre home + 1 corredor + 1 wiki → todos pasan
+- [ ] Verificar `https://preenvios.com/sitemap.xml` accesible y con URLs `preenvios.com`
+- [ ] Verificar `https://preenvios.com/robots.txt` accesible con `Sitemap: https://preenvios.com/sitemap.xml` y `Disallow: /admin/` + `Disallow: /api/`
+- [ ] Verificar Open Graph image accesible: `https://preenvios.com/es/opengraph-image` debe responder 200 + content-type=image/png
+- [ ] **Test visual de OG**: pegá `https://preenvios.com/es` en WhatsApp/Twitter/Slack/iMessage → preview con logo verde + "preenvios.com" + tagline. Si muestra preview viejo (cacheado), forzar refresh con:
+  - Facebook: https://developers.facebook.com/tools/debug/ → pegar URL → "Scrape Again"
+  - LinkedIn: https://linkedin.com/post-inspector/ → pegar URL → Inspect
+
+**Primera semana — monitoreo SEO**
+
+- [ ] **GSC Coverage** (Indexing → Pages): verificar que las URLs `preenvios.com/*` aparecen como "Indexed" progresivamente. Las URLs viejas `preenvios.vercel.app/*` deben aparecer como "Page with redirect" — NO como errores.
+- [ ] **GSC Performance** (Performance → Search results): verificar que clicks/impressions empiezan a aparecer en `preenvios.com`. Los datos de `preenvios.vercel.app` se mantienen en su propia propiedad por separado durante el período de transición.
+- [ ] **Google Site Operator**: hacer search `site:preenvios.com` en Google → debería ver URLs nuevas indexadas. Si no aparecen, esperar 7-14 días (Google demora en re-crawlear).
+
+**Mes 1-2 — consolidación**
+
+- [ ] Coverage de `preenvios.com` en GSC debería estar consolidada ~28 días post-cutover
+- [ ] Si después de 4 semanas las URLs `preenvios.vercel.app/*` siguen apareciendo en `site:preenvios.vercel.app` como Indexed (en lugar de Redirected), revisar:
+  - Redirect 301 en Vercel sigue activo
+  - Change of Address tool muestra status "Move complete"
+  - Si ambos OK, esperar 2-3 semanas más
+
+**Criterio de éxito SEO post-cutover:**
+- 90%+ de URLs en sitemap aparecen como "Indexed" en GSC dentro de 4 semanas post-cutover
+- Cero penalizaciones manuales en GSC (Manual Actions → ningún issue)
+- Posiciones de ranking de queries clave (mismas que tracked en `preenvios.vercel.app` pre-cutover) preservadas o mejoradas en `preenvios.com`
+
+**Criterio de FALLA — escalación inmediata:**
+- A las 2 semanas post-cutover, las URLs nuevas no aparecen en GSC Coverage como "Indexed"
+- Tráfico orgánico cae >50% vs baseline pre-cutover (si había)
+- Manual Actions notification en GSC
+
+→ Investigar redirect 301, sitemap, Change of Address, robots.txt. Documentar en TROUBLESHOOTING como issue post-cutover.
 
 ---
 
