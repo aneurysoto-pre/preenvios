@@ -123,14 +123,24 @@ body { -webkit-font-smoothing: antialiased; }
 
 /* Legal pages prose */
 .prose-legal h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 800; margin: 36px 0 14px; color: var(--color-ink); }
+.prose-legal h3 { font-family: var(--font-heading); font-size: 18px; font-weight: 700; margin: 28px 0 10px; color: var(--color-ink); }
 .prose-legal p { font-size: 15px; color: var(--color-ink-2); line-height: 1.7; margin-bottom: 14px; }
-.prose-legal ul { margin: 14px 0 20px 22px; }
+.prose-legal ul { margin: 14px 0 20px 22px; list-style: disc; }
+.prose-legal ol { margin: 14px 0 20px 22px; list-style: decimal; }
 .prose-legal li { font-size: 15px; color: var(--color-ink-2); line-height: 1.7; margin-bottom: 8px; }
 .prose-legal a { color: var(--color-blue); font-weight: 700; border-bottom: 1px solid var(--color-blue-soft); }
 .prose-legal a:hover { border-color: var(--color-blue); }
 .prose-legal strong { color: var(--color-ink); font-weight: 800; }
+.prose-legal em { font-style: italic; color: var(--color-ink-2); }
+.prose-legal hr { border: 0; border-top: 1px solid var(--color-g200); margin: 32px 0; }
+.prose-legal blockquote { border-left: 3px solid var(--color-blue); padding: 4px 0 4px 16px; margin: 20px 0; color: var(--color-ink-2); font-style: italic; }
+.prose-legal code { background: var(--color-g50); border: 1px solid var(--color-g200); border-radius: 4px; padding: 2px 6px; font-size: 13px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .prose-legal .highlight-box { background: var(--color-g50); border: 1.5px solid var(--color-g200); border-radius: 14px; padding: 20px 24px; margin: 20px 0; }
 .prose-legal .highlight-box p { margin-bottom: 0; }
+/* Wiki markdown content — usa los mismos estilos de prose-legal pero con
+ * un poco más de aire entre secciones para artículos largos. */
+.prose-legal .wiki-md-content > h2:first-child { margin-top: 0; }
+.prose-legal .wiki-md-content > p:last-of-type em { display: inline-block; margin-top: 8px; color: var(--color-g500); }
 
 /* shadcn/ui theme aliases (Nova + Radix preset).
  * Colores mapean a CSS vars en :root y .dark (oklch).

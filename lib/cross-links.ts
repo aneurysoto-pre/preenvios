@@ -24,8 +24,12 @@ export const BLOG_LINKS: Record<string, { corredores: string[]; operadores: stri
 export const WIKI_LINKS: Record<string, { corredores: string[]; operadores: string[] }> = {
   'tasa-cambio-mid-market': { corredores: [], operadores: ['wise'] },
   'diferencia-tasa-fee': { corredores: [], operadores: ['wise', 'remitly'] },
-  'elegir-remesadora-segun-monto': { corredores: [], operadores: [] },
-  'cash-pickup-vs-banco': { corredores: [], operadores: ['western-union', 'moneygram', 'ria'] },
+  // Slug renombrado 2026-04-25 (era 'elegir-remesadora-segun-monto') —
+  // alineado al .md publicado en content/wiki/.
+  'como-elegir-mejor-remesadora-segun-monto': { corredores: [], operadores: ['wise', 'remitly', 'xoom'] },
+  // Slug renombrado 2026-04-25 (era 'cash-pickup-vs-banco') —
+  // alineado al .md publicado en content/wiki/.
+  'cash-pickup-vs-deposito-bancario': { corredores: [], operadores: ['western-union', 'moneygram', 'ria'] },
   'documentos-enviar-dinero-usa': { corredores: [], operadores: [] },
   'recibir-dinero-republica-dominicana': { corredores: ['dominican_republic'], operadores: [] },
   'bancos-honduras-remesadoras': { corredores: ['honduras'], operadores: [] },
@@ -44,10 +48,10 @@ export const CORRIDOR_BLOGS: Record<string, string[]> = {
 
 /** Map corridor IDs to related wiki slugs */
 export const CORRIDOR_WIKIS: Record<string, string[]> = {
-  honduras: ['bancos-honduras-remesadoras', 'cash-pickup-vs-banco', 'documentos-enviar-dinero-usa'],
+  honduras: ['bancos-honduras-remesadoras', 'cash-pickup-vs-deposito-bancario', 'documentos-enviar-dinero-usa'],
   dominican_republic: ['recibir-dinero-republica-dominicana', 'tasa-cambio-mid-market', 'diferencia-tasa-fee'],
-  guatemala: ['tiempo-transferencia-guatemala', 'elegir-remesadora-segun-monto', 'cash-pickup-vs-banco'],
-  el_salvador: ['documentos-enviar-dinero-usa', 'elegir-remesadora-segun-monto', 'diferencia-tasa-fee'],
+  guatemala: ['tiempo-transferencia-guatemala', 'como-elegir-mejor-remesadora-segun-monto', 'cash-pickup-vs-deposito-bancario'],
+  el_salvador: ['documentos-enviar-dinero-usa', 'como-elegir-mejor-remesadora-segun-monto', 'diferencia-tasa-fee'],
 }
 
 /** Top operators per corridor (most commonly used) */
