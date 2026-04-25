@@ -181,6 +181,129 @@ Si el validador empieza a rechazar filas legítimas (ej. el peso colombiano se m
 
 ---
 
+## Manual operacional — para founder y empleados
+
+Esta sección está pensada para que cualquier persona (no developer) sepa
+qué hace el agente, cómo se entera de un problema, y cómo responder.
+
+### Qué protege en lenguaje simple
+
+El Agente 1 es **el portero de la tabla `precios`**. Antes de que un
+scraper guarde un precio en la base de datos, este agente revisa que el
+dato sea creíble:
+
+- ¿La remesadora existe? (Remitly sí · "PayPal" no)
+- ¿El país existe? (Honduras sí · Nicaragua no)
+- ¿La comisión está en un rango razonable? (entre $0 y $50)
+- ¿La tasa está cerca de la del banco central? (±10%)
+- ¿El método de envío es uno de los 4 que reconocemos? (banco, efectivo,
+  domicilio, billetera móvil)
+
+Si algo no pasa, **el dato no entra a la DB**. Se anota en una tabla
+aparte (`scraper_anomalies`) y se manda a Sentry para que sepamos.
+
+### Qué riesgos concretos cubre
+
+| Riesgo si NO existiera el agente | Impacto en el negocio |
+|---|---|
+| Scraper de Remitly devuelve `tasa=45` para Dominicana (real: ~60) | Usuario ve que Remitly da 45 DOP/USD, confía, va al sitio, recibe mucho menos → review negativo + ticket de soporte |
+| Scraper devuelve `operador='paypal'` (typo o cambio de marca) | El Comparador no sabe qué hacer → card rota, posible crash de UI |
+| Scraper devuelve `fee=200` en un envío de $200 | El ranking pone ese operador último cuando no debería → distorsiona el "Mejor opción" |
+| Scraper devuelve `metodo_entrega='delivery'` (string libre) | El filtro de método de entrega del comparador deja de funcionar |
+| Algún día un scraper malicioso intenta meter `corredor='nicaragua'` | Aparece data dormida en DB que el producto no expone → estado oculto |
+
+**Costo ahorrado por evento prevenido**: variable, pero un solo precio
+mal mostrado puede generar 1-3 tickets de soporte + posible review
+negativo en Trustpilot. Mantener integridad de data es la base de la
+confianza del comparador.
+
+### Cómo te llega el alert
+
+Cada vez que el agente rechaza un dato, dispara un evento a Sentry con
+**tag `scraper_anomaly`**. El founder se entera por:
+
+1. **Email de Sentry** (si tenés alertas configuradas) — llega un mail
+   tipo "New issue: scraper_anomaly" con resumen del problema.
+2. **Dashboard de Sentry** — `preenvios.sentry.io` → proyecto
+   `javascript-nextjs` → Issues. Buscar/filtrar `scraper_anomaly`.
+
+### Cómo verificar Sentry — paso a paso
+
+1. Entrar a `preenvios.sentry.io` con tu cuenta de founder
+2. En el menú izquierdo → **Issues** → **Errors & Outages**
+3. En la barra de búsqueda escribir: `scraper_anomaly`
+4. Ver la lista — cada fila es 1 tipo distinto de anomalía agrupada por
+   `(operador, corredor, campo_invalido)`
+5. Clickear cualquier issue para ver detalles:
+   - Cuántas veces ocurrió (Events)
+   - Cuándo fue la primera y última vez
+   - El payload completo del scraper que falló (en la sección "Highlights")
+
+### Cómo distinguir falso positivo vs problema real
+
+**Falso positivo** (el agente alarmó pero el dato era correcto):
+- El banco central movió su tasa real >10% y nuestro fallback quedó
+  viejo. Ej: Colombia salta de 4150 a 4700 COP/USD por una crisis cambiaria.
+  → El agente rechaza tasas correctas porque el rango se quedó atrás.
+- **Cómo detectarlo**: si TODAS las anomalías de las últimas 24h son del
+  mismo corredor + las tasas rechazadas son consistentes entre sí (ej.
+  todas ~4700 COP), probablemente la tasa real cambió.
+- **Cómo arreglar**: actualizar la fila de ese corredor en
+  `tasas_bancos_centrales` (Supabase SQL Editor). El agente recoge el
+  cambio en la próxima invocación, sin redeploy.
+
+**Problema real** (el scraper realmente está roto):
+- Anomalías esporádicas mezcladas (varios corredores, varios campos).
+- Un solo operador con muchas anomalías (típicamente el sitio del
+  operador cambió HTML y el scraper extrae basura).
+- **Cómo detectarlo**: filtrar Sentry por `operador=<nombre>` — si solo
+  uno está fallando, ese scraper específico necesita arreglo de código.
+
+### Playbook de respuesta — qué hacer cuando suena
+
+| Síntoma | Acción inmediata |
+|---|---|
+| 1-2 issues nuevos `scraper_anomaly` esta semana | Probablemente ruido. Marcá Resolved en Sentry y revisá el patrón en 7 días. |
+| 3+ anomalías mismo (operador, corredor) en 1 hora | El agente automáticamente marca todos los precios de ese operador como stale (`actualizado_en='2000-01-01'`). El comparador deja de mostrarlo hasta que se arregle. **No requiere acción manual** — solo investigar la raíz cuando podás. |
+| Decenas de issues nuevas el mismo día | Probable cambio masivo: tasa del banco central, refactor de scraper, cambio en sitio de operador. Revisar primero `tasas_bancos_centrales` por corredor afectado. |
+| Issue nuevo con `operador` desconocido | Alguien introdujo un scraper nuevo o renombró uno. Verificar `lib/scrapers/validator.ts` whitelist. Escalar a developer. |
+
+### Mantenimiento periódico
+
+- **Semanal** (founder, ~5 min): abrir Sentry → filtrar
+  `scraper_anomaly` últimos 7 días → contar issues nuevos. Si <5,
+  pipeline sano. Si >20, revisar patrón.
+- **Mensual** (founder o developer): revisar
+  `TASA_BASE_FALLBACK` en `lib/scrapers/validator.ts` — comparar con
+  tasas reales de los 6 bancos centrales. Actualizar si alguna se movió
+  >5%.
+- **Cuando se agrega corredor nuevo**: paso 3 del Proceso 11 documenta
+  agregar el slug a la whitelist del validador.
+- **Cuando se agrega operador nuevo**: agregar a whitelist en
+  `validator.ts` línea de `OPERADORES_VALIDOS`.
+
+### Cuándo escalar a Claude Code o developer
+
+- El agente bloqueó >100 filas en 24h (algo está muy mal)
+- Aparecieron campos `campo_invalido` que no reconocés (ej. uno nuevo
+  que no estaba en el código)
+- El cron `/api/scrape` empezó a tardar >5x lo normal después de
+  activar el agente (poco probable, el cache lo previene — pero por si)
+- Querés agregar una regla nueva al validador (ej. "tasa no puede ser
+  más alta que el día anterior +X%")
+
+### Resumen para nuevos empleados
+
+> El Agente 1 es el portero de los precios. Si algún scraper te
+> manda algo raro, lo bloquea antes de que entre a la base de datos
+> y nos avisa por Sentry. No vas a verlo trabajando porque trabaja
+> silenciosamente; solo aparece cuando hay problemas. Si llega un
+> alert con tag `scraper_anomaly`, mirá si es 1-2 (ruido normal) o
+> es una avalancha (algo se rompió). El playbook de arriba te dice
+> qué hacer en cada caso.
+
+---
+
 ## Archivos modificados al implementar (2026-04-22)
 
 - `supabase/migrations/007_scraper_anomalies.sql` — tabla nueva + RLS deny-anon
