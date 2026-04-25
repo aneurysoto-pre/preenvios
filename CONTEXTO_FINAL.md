@@ -1177,11 +1177,13 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 **Rollout por país:**
 
 - [x] **Honduras** — port completo 2026-04-24, branch `feat/landing-editorial-honduras` → merge a main post-validación visual del founder en preview URL. Incluye stats macroeconómicos (BCH 2025, CEPAL 2024, US Census 2020), 6 ciudades destacadas (Tegucigalpa, SPS, Roatán, Copán Ruinas, La Ceiba, Choluteca), 6 errores comunes, 7 FAQ específicas del corredor, form alertas duplicado (hero + CTA final) con GA4 tracking segmentado por `location` (`hero` vs `cta_final`).
-- [ ] República Dominicana — pendiente, próximo candidato
-- [ ] Guatemala
-- [ ] El Salvador
-- [ ] Colombia
-- [ ] México
+- [x] **República Dominicana** — activado 2026-04-25 (commit `f723a30`, squash de `feat/landing-editorial-5-corredores`). Ángulo narrativo: "corredor más establecido del Caribe — 50 años, NYC/NJ/Boston/Miami diáspora, $10.3B remesas anuales BCRD 2024". 6 ciudades, 6 errores, 7 FAQ. Wiki dedicada `como-recibir-dinero-republica-dominicana-paso-paso`.
+- [x] **Guatemala** — activado 2026-04-25 (mismo commit). Ángulo: "#1 Centroamérica $21.5B/año, fragmentación bancaria por departamento (Banrural rural vs urbano)". 6 ciudades incluye Quetzaltenango, Huehuetenango, Cobán, altiplano. Wiki dedicada `cuanto-tarda-transferencia-guatemala-realmente`.
+- [x] **El Salvador** — activado 2026-04-25 (mismo commit). Caso especial dolarizado desde 2001 — sin tasa USD/USD que comparar, foco en comisiones + ChivoWallet/Tigo Money sin hype Bitcoin. Wiki dedicada `tigo-money-chivowallet-recibir-remesas-salvador`.
+- [x] **Colombia** — activado 2026-04-25 (mismo commit). Ángulo: "100 pesos por dólar parecen poco, multiplicalo por mil — COP cotiza en miles, las diferencias absolutas grandes pueden engañar". Énfasis en CLABE/Nequi. Wiki dedicada `nequi-bre-b-recibir-remesas-colombia`.
+- [x] **México** — activado 2026-04-25 (mismo commit). Corredor #1 mundial $66B/año, 37M diáspora. Ángulo: "la matemática del 0.5% — cuando el volumen es masivo, las diferencias pequeñas se vuelven cientos al año". Incluye contexto del posible impuesto US 2025 + CLABE de 18 dígitos. Wiki dedicada `clabe-interbancaria-mexico-remesas`.
+
+**Estado paridad 100% post-2026-04-25**: los 6 corredores MVP tienen landing editorial completo, blog dedicado, wiki dedicada, entries en cross-links.ts (5 maps), 7 precios en preview Supabase (migration 013 cerró el gap DR/GT/SV). Memoria persistente `feedback_armonia_no_parches_aislados.md` documenta la regla de no migrar/seedear/configurar 1 corredor sin auditar los 5 restantes.
 
 **Commits del port Honduras (10):**
 
