@@ -171,7 +171,14 @@ validar:
 - GA4 Real-Time muestra `suscripcion_alertas` con `location='hero'` o
   `'cta_final'`
 - FAQ accordion abre/cierra
-- Links de ciudades scrollean al `#comparador` (Opción C del plan)
+- Links de ciudades scrollean al `#calculadora` (id real del hero del
+  Comparador). El offset del Nav fixed lo absorbe `scroll-mt-14` aplicado
+  al `<section id="calculadora">` en `Comparador.tsx` (Tailwind
+  `scroll-margin-top: 3.5rem` = 56px = altura exacta del Nav)
+- Botón "Ver comparador" de Sección 6 CTA scrollea al `#calculadora`
+  vía `<button onClick={scrollToCalculator}>` (handler local en
+  `LandingEditorial.tsx`, espejo del patrón canónico de
+  `components/Sections.tsx::CTASection`)
 
 ## Tech debts documentados
 
@@ -199,12 +206,32 @@ sesiones futuras:
    - El fallback `EnglishComingSoon` desaparece automáticamente (condición
      en `LandingEditorial`). Sin código que tocar, solo copy.
 
-4. **Links de ciudades apuntan a `#comparador`** — decidido 2026-04-24
-   (pregunta 4 del plan, opción C): los 6 tiles de ciudades linkean al
-   comparador como workaround hasta que las páginas `/es/honduras/<ciudad>`
-   existan. Cuando existan, cambiar `href="#comparador"` a
-   `href={\`/\${locale}/\${pais.slugEs}/\${ciudad.slug}\`}` en
+4. **Links de ciudades apuntan a `#calculadora`** — decidido 2026-04-25
+   (decisión N3a-bridge-B). Los 6 tiles de ciudades linkean al hero del
+   Comparador como bridge hasta que las páginas
+   `/es/<pais>/<ciudad>` existan en el roadmap. Se mantienen como
+   `<a href>` (no `<button>`) precisamente porque van a navegar a otras
+   URLs cuando existan; convertirlos a `<button onClick>` ahora forzaría
+   un doble refactor. Bridge implementado:
+   - `href="#calculadora"` (id real, antes era typo `#comparador` que no
+     existía y rompía el scroll silenciosamente)
+   - Offset del Nav fixed absorbido por `scroll-mt-14` (Tailwind
+     `scroll-margin-top: 3.5rem` = 56px) aplicado al `<section
+     id="calculadora">` en
+     [Comparador.tsx](../components/Comparador.tsx). Es CSS puro, no
+     estorba a otros casos.
+
+   **Cuando existan las páginas individuales**: swap a
+   `href={\`/\${locale}/\${slugPais}/\${ciudad.slug}\`}` en
    [LandingEditorial.tsx:ciudades.map](../components/landing-editorial/LandingEditorial.tsx).
+   El `scroll-mt-14` se queda en el Comparador (no estorba) y sigue
+   sirviendo si algún otro link interno apunta al `#calculadora`.
+
+   **Por qué Section 6 CTA sí usa `<button onClick>` y no `<a href>`**:
+   ese CTA NO va a navegar a otra página — su única función es scrollear
+   internamente al hero del Comparador. Patrón canónico documentado en
+   [04_arquitectura_comparador.md](./04_arquitectura_comparador.md) y
+   [TROUBLESHOOTING/25](../TROUBLESHOOTING/25_anchor_links_intra_pagina_y_nav_fixed.md).
 
 5. **Helper `getTasaBancoCentral` usa `React.cache()` sin TTL
    cross-request** — si el landing se renderiza con SSG (no ISR), cada
@@ -273,6 +300,74 @@ compact para consistencia.
 - **Regla 14**: Forms inline con `<input>` + `<button>` van SIEMPRE stacked
   en mobile (`flex flex-col sm:flex-row gap-2`), NUNCA `flex gap-2` (row en
   mobile). Regla nacida de este mismo incidente.
+
+## Replicación del template a los 5 corredores faltantes
+
+**Decidido 2026-04-25** — Honduras es el template canónico. Los 5
+corredores restantes (Dominican Republic, Guatemala, El Salvador,
+Colombia, México) replican al 100% sin tocar código del componente. La
+arquitectura está pensada para esto desde el día 1.
+
+### Pasos por cada corredor nuevo
+
+Para activar `<corredor>` (ej. `guatemala`):
+
+1. **Crear `data/corredores/<corredor>.ts`** con el shape `CorredorContent`
+   (stats, ciudades, gradientes, fuentes, banderaEmoji, codigoPais ISO-2,
+   monedaCodigo, monedaSimbolo, lastEditorialUpdate). Copiar
+   `honduras.ts` como base y reemplazar valores.
+
+2. **Registrar en `data/corredores/index.ts`** el import + entry en
+   `CORREDORES_CONTENT`. Esto activa el feature flag — sin esta línea,
+   `getCorredorContent()` devuelve `null` y la página cae al fallback
+   `TasasReferencia + LazyBelow`.
+
+3. **Agregar bloque `landing.editorial.<corredor>.*`** en
+   `messages/es.json` siguiendo el shape exacto de `honduras` (~150
+   strings: 7 FAQs, 6 errores, 6 ciudades types, párrafos editoriales,
+   stats labels, CTAs, fuentes).
+
+4. **Sembrar tasa banco central** en Supabase tabla
+   `tasas_banco_central` (1 row con `codigo_pais` matching el de
+   `data.codigoPais`). Sin row, Sección 0 muestra "—" y sigla "BCH"
+   hardcoded como fallback. Aplicar en **prod + preview**.
+
+5. **Smoke test** en preview URL: tasa correcta, form alertas funciona,
+   FAQ accordion abre/cierra, tiles de ciudad scrollean al
+   `#calculadora`, schema.org JSON-LD presente.
+
+### Lo que NO hay que tocar al replicar
+
+- `LandingEditorial.tsx` (componente reusable con prop `data`)
+- `AlertaInlineForm.tsx` (parametrizado por `corredor`)
+- `Comparador.tsx` (ya soporta los 6 corredores via `pais` URL)
+- Schemas, RLS policies, GA4 events (todos parametrizados)
+
+### Por qué `Intl.DateTimeFormat` ahora es dinámico
+
+Originalmente `LandingEditorial.tsx:52` tenía `'es-HN'` hardcoded. Para
+que la fecha "Actualizado al 25 de abril de 2026" use el locale BCP 47
+correcto del país (`es-HN`/`es-DO`/`es-GT`/`es-SV`/`es-CO`/`es-MX`), se
+deriva ahora de `data.codigoPais`:
+
+```ts
+const localeBcp47 = `es-${data.codigoPais.toUpperCase()}`
+const dateFormatter = new Intl.DateTimeFormat(localeBcp47, { ... })
+```
+
+Fix 2026-04-25, antes de replicar a los otros 5 corredores. Sin este
+cambio, todos los países mostrarían fecha en formato hondureño (en
+español la diferencia es mínima, pero la práctica correcta es alinear
+locale con país).
+
+### Trade-off real al replicar
+
+El código replica al 100%. **El trabajo real está en el contenido
+editorial**: ~150 strings × 5 corredores = ~750 strings de copy
+narrativo (FAQs específicos del país, errores comunes locales, ciudades
+destacadas con sus gradientes/emojis, fuentes oficiales). Eso lo escribe
+el founder o IA con prompt curated — no es trabajo de Claude Code
+solo.
 
 ## Relacionados
 

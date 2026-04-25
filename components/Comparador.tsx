@@ -264,7 +264,7 @@ export default function Comparador({ defaultCorredor, defaultMonto, heroTitle, h
           del overflow-hidden del parent positioned. El search card
           conserva su shadow-[0_30px_70px_-20px_rgba(10,79,229,.35)] que
           ya proporciona depth visual suficiente sin overflow riesgoso. */}
-      <section id="calculadora" data-section="calculadora" className="relative pt-20 pb-6 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF]">
+      <section id="calculadora" data-section="calculadora" className="relative pt-20 pb-6 overflow-hidden bg-gradient-to-b from-white to-[#F5F9FF] scroll-mt-14">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(10,79,229,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(10,79,229,.05) 1px,transparent 1px)',
           backgroundSize: '42px 42px',

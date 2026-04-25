@@ -49,7 +49,12 @@ export default function LandingEditorial({ data, tasa, locale, slugEs }: Props) 
 function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaBancoCentral | null }) {
   const t = useTranslations(`landing.editorial.${data.corredorId}`)
 
-  const dateFormatter = new Intl.DateTimeFormat('es-HN', {
+  // Locale BCP 47 dinamico — 'es-HN', 'es-DO', 'es-GT', 'es-SV', 'es-CO', 'es-MX'.
+  // `data.codigoPais` es ISO 3166-1 alpha-2 lowercase ('hn', 'do', ...) — lo
+  // upper-casea-mos para formar el locale BCP 47. Fix necesario antes de
+  // replicar el template a los otros 5 corredores (decision 2026-04-25).
+  const localeBcp47 = `es-${data.codigoPais.toUpperCase()}`
+  const dateFormatter = new Intl.DateTimeFormat(localeBcp47, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -61,6 +66,22 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
   const tasaValor = tasa ? tasa.tasa.toFixed(2) : '—'
   const siglaBanco = tasa?.siglas ?? 'BCH'
   const nombreBanco = tasa?.nombre_banco ?? t('seccion0.bancoNombre')
+
+  // Scroll al hero calculator del Comparador compensando el header fixed
+  // de 56px. Espejo del patron canonico de components/Sections.tsx
+  // CTASection (linea 178) — documentado en LOGICA_DE_NEGOCIO/04 como la
+  // forma correcta de scrollear intra-page al `#calculadora`. NO usar
+  // <a href="#calculadora"> aqui porque el browser scrollea al borde
+  // superior del elemento, ocultandolo bajo el Nav fixed.
+  function scrollToCalculator() {
+    const el =
+      document.getElementById('calculadora') ||
+      document.querySelector<HTMLElement>('[data-section="calculadora"]')
+    if (!el) return
+    const headerHeight = 56
+    const y = el.getBoundingClientRect().top + window.pageYOffset - headerHeight
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
 
   return (
     <>
@@ -250,9 +271,15 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {data.ciudades.map((ciudad) => (
+              // Bridge: href apunta a #calculadora (id real del hero del Comparador)
+              // mientras las paginas individuales /es/<pais>/<ciudad> no existan.
+              // Cuando se creen, swap: href={`/${locale}/${slugPais}/${ciudad.slug}`}.
+              // El offset del Nav fixed lo maneja `scroll-margin-top: 56px` aplicado
+              // al `<section id="calculadora">` en Comparador.tsx (CSS puro). Decision
+              // N3a-bridge-B documentada en LOGICA_DE_NEGOCIO/30.
               <a
                 key={ciudad.slug}
-                href="#comparador"
+                href="#calculadora"
                 className="block rounded-2xl overflow-hidden relative aspect-[4/5] shadow-md transition-transform hover:-translate-y-[3px]"
                 style={{ background: ciudad.gradient }}
               >
@@ -374,12 +401,13 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
               <span className="text-green">{t('cta.titleLine2')}</span>
             </h2>
             <p className="text-blue-100 text-sm leading-relaxed mb-6">{t('cta.lede')}</p>
-            <a
-              href="#comparador"
-              className="inline-flex items-center justify-center gap-2 bg-white text-ink px-8 py-4 rounded-full font-extrabold text-base shadow-lg hover:-translate-y-0.5 transition-transform"
+            <button
+              type="button"
+              onClick={scrollToCalculator}
+              className="inline-flex items-center justify-center gap-2 bg-white text-ink px-8 py-4 rounded-full font-extrabold text-base shadow-lg hover:-translate-y-0.5 transition-transform cursor-pointer"
             >
               {t('cta.ctaPrimary')}
-            </a>
+            </button>
           </div>
 
           {/* Columna derecha — checklist + form alertas grande */}
