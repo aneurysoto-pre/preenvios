@@ -88,15 +88,16 @@ export default function WikiArticle({ slug, bodyHtml, mdTitle }: Props) {
         </div>
       )}
 
-      {/* Alert subscription CTA */}
-      <div className="bg-[var(--color-blue-soft)] rounded-[18px] p-6 mt-6 text-center">
-        <p className="font-bold text-sm mb-2">{en ? 'Get daily rate alerts' : 'Recibe alertas diarias de tasas'}</p>
-        <p className="text-xs text-[var(--color-g600)] mb-3">{en ? 'Free daily email with the best rate for your corridor.' : 'Email gratis diario con la mejor tasa para tu corredor.'}</p>
-        {PAISES_MVP.length > 0 && (
-          <a href={`/${locale}/${en ? PAISES_MVP[0].slugEn : PAISES_MVP[0].slugEs}`} className="inline-block bg-[var(--color-blue)] text-white px-5 py-2 rounded-full font-bold text-xs">
-            {en ? 'Subscribe free →' : 'Suscribirme gratis →'}
-          </a>
-        )}
+      {/* Volver al inicio — reemplaza el CTA de alertas anterior (2026-04-25)
+          que tenía un botón sin texto-aria visible y un mensaje inconsistente
+          con la acción real (linkeaba al primer país, no a /alertas). */}
+      <div className="text-center mt-8">
+        <a
+          href={`/${locale}`}
+          className="inline-block bg-[var(--color-g100)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm hover:bg-[var(--color-g200)] transition-colors"
+        >
+          {en ? '← Back to home' : '← Volver al inicio'}
+        </a>
       </div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
