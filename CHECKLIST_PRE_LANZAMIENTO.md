@@ -6,6 +6,35 @@ URL de staging para todas las pruebas: https://preenvios.vercel.app
 
 ---
 
+## 🚨 REGLA OBLIGATORIA — Este checklist se ejecuta DOS VECES
+
+**PASADA 1 — Pre-cutover (ANTES del cambio de DNS):**
+Marcar `[x]` cada item al validar contra `https://preenvios.vercel.app`. Esto es lo que ya está hecho en la mayoría de las secciones.
+
+**PASADA 2 — Post-cutover (DESPUÉS del cambio de DNS, OBLIGATORIA):**
+Una vez que el DNS apunta a Vercel y `https://preenvios.com` sirve el sitio Next.js, **TODOS los items críticos del checklist DEBEN re-verificarse**. Cambios de dominio pueden romper:
+- Canonical URLs y SEO indexing
+- GA4 measurement (cookies, dominio, eventos)
+- Cookie consent banner (configurado por dominio)
+- Links de afiliado (todos deben seguir vivos)
+- BetterStack monitors (URLs hardcoded)
+- Sentry DSN config
+- Open Graph image cache (Facebook/LinkedIn la cachean)
+- Schema.org `@id` consistency
+- Forms (contacto, alertas) y endpoints API
+
+**Cómo se ejecuta la Pasada 2:**
+- Ir directo a la **§ 16. Después del cambio de DNS** (al final de este checklist)
+- Ejecutar las sub-secciones 16.1 (verificación inmediata), 16.2 (cleanup), 16.3 (SEO), y 16.4 (re-verificación general) IN ORDEN, marcando cada `[ ]` como `[x]`
+- La § 16.4 es la tabla maestra de re-verificación que apunta de vuelta a las secciones originales del checklist (1-15) — es el "second pass" sistemático
+- Si algún item falla post-cutover, documentar en TROUBLESHOOTING y resolver antes de declarar el lanzamiento como "live"
+
+**Criterio de "lanzamiento exitoso"**: Pasada 1 con todos `[x]` + Pasada 2 (§ 16) con todos `[x]` + 48 hrs sin issues nuevos en Sentry/BetterStack.
+
+**Si Pasada 2 detecta regresiones críticas (caídas de tráfico, GA4 no mide, indexing roto, links rotos):** considerar rollback de DNS al sitio viejo, debugear, re-intentar cutover. Mejor un cutover demorado que un cutover roto.
+
+---
+
 ## 1. Landing principal
 
 ### 1.1 Desktop
@@ -584,6 +613,72 @@ Esta sección es la **transición Fase 2 → Fase 3** del plan SEO documentado e
 - Manual Actions notification en GSC
 
 → Investigar redirect 301, sitemap, Change of Address, robots.txt. Documentar en TROUBLESHOOTING como issue post-cutover.
+
+### 16.4 ✅ Re-verificación general post-cutover (PASADA 2 obligatoria)
+
+Esta sub-sección es el "second pass" sistemático del checklist completo. Cada item apunta a una sección original (1-15) que YA fue marcada `[x]` pre-cutover, pero DEBE re-verificarse contra `preenvios.com` post-DNS. Si algún item falla, documentar en TROUBLESHOOTING + decidir si rollback de DNS o seguir con fix.
+
+**Cómo se usa**: ir a la sección referenciada, ejecutar el spot-check rápido descrito acá, marcar `[x]` cuando esté validado contra `preenvios.com`.
+
+**Landing y comparador (re-verificar contra preenvios.com):**
+- [ ] **§ 1 Landing principal** — `preenvios.com` carga sin errores, hero + cards de remesadoras visibles desktop + mobile
+- [ ] **§ 2 Comparador** — selector de país funciona, monto válido, click "Comparar" muestra cards, click "Enviar ahora" abre URL afiliada con tracking ID correcto
+- [ ] **§ 4 Calculadora inversa** — `preenvios.com/es/calculadora-inversa` funciona, conversión inversa correcta
+- [ ] **§ 5 Admin** — `preenvios.com/es/admin` carga login, autenticación funciona
+
+**Páginas legales (re-verificar contra preenvios.com):**
+- [ ] **§ 3.1 /terminos** — `preenvios.com/es/terminos` y `/en/terminos` cargan, contenido completo, cross-links funcionan
+- [ ] **§ 3.2 /privacidad** — idem
+- [ ] **§ 3.3 /como-ganamos-dinero** — idem
+- [ ] **§ 3.4 /metodologia** — idem
+- [ ] **§ 3.5 /uso-de-marcas** — idem
+- [ ] **/disclaimers** — idem
+
+**Wiki y blog:**
+- [ ] `/es/wiki` índice carga las 17 entries con categorías correctas
+- [ ] `/es/blog` índice carga las 21 entries con categorías correctas
+- [ ] 2 artículos al azar: 1 wiki + 1 blog renderizan contenido `.md` correctamente
+- [ ] Open Graph image (`/es/opengraph-image`) sirve 200 + content-type=image/png
+
+**WhatsApp bot:**
+- [ ] **§ 6 WhatsApp bot** — enviar mensaje al bot desde un teléfono real, verificar que responde con tasa actual + link a `preenvios.com/es` o `/en` según idioma del mensaje
+
+**APIs:**
+- [ ] **§ 7.1 /api/precios** — `curl https://preenvios.com/api/precios?corredor=honduras` devuelve 7 filas
+- [ ] **§ 7.1 /api/tasas-banco-central** — devuelve los 6 corredores
+- [ ] **§ 7.5 Validador ingress (Agente 1)** — correr `/api/scrape` manualmente, verificar que NO inserta filas inválidas (ver § 13.9)
+- [ ] **Agente 3 DB health** — verificar que el endpoint `/api/agents/db-health` sigue respondiendo + cron sigue corriendo en Supabase prod (ver § 16.1 si todavía no se activó)
+
+**SEO (ya cubierto en § 16.3 — referencia rápida):**
+- [ ] **§ 8 SEO + meta tags** — re-validar canonical, hreflang, Schema.org, OG, sitemap, robots TODOS apuntando a `preenvios.com` (ver § 16.3 paso por paso)
+
+**Analytics y monitoreo:**
+- [ ] **§ 9 GA4** — verificar que GA4 Real-Time muestra actividad desde `preenvios.com` (no desde `vercel.app`). Confirmar que los 8 eventos custom se siguen disparando: `click_operador`, `inicio_uso`, `comparar_click`, `cambio_corredor`, `cambio_idioma`, `contacto_enviado`, `suscripcion_alertas`. Si GA4 no mide, revisar que `NEXT_PUBLIC_GA_ID` esté correcto en Vercel y que el dominio esté autorizado en GA4 Property Settings.
+- [ ] **§ 10 Variables de entorno Vercel** — confirmar que NO hay env vars hardcoded a `vercel.app` (ej. `NEXT_PUBLIC_SITE_URL` si existe)
+- [ ] **§ 11.1 BetterStack monitors** — los 4 monitores recreados con URLs `preenvios.com` (ver § 16.1)
+- [ ] **§ 11.2 Sentry** — verificar que llegan eventos del nuevo dominio. Forzar 1 error de prueba en preview de Vercel (`/api/sentry-test` si existe, o triggering manual). Confirmar que el evento aparece en Sentry con tag `environment=production` y URL `preenvios.com`.
+
+**Forms (verificar end-to-end con submit real):**
+- [ ] **§ 13.4 Form contacto** — submit desde `preenvios.com/es/contacto` con email real → verificar fila en Supabase tabla `contactos` + email de notificación al founder
+- [ ] **§ 13.4 Form alertas** — submit desde `preenvios.com/es/alertas` o desde el landing editorial → verificar fila en `alertas_email` con `corredor` correcto
+
+**Cookie consent + compliance:**
+- [ ] **§ 15.1 Cookie consent banner** — verificar que aparece en primera visita a `preenvios.com`. Aceptar → cookie `_ga` se setea + GA4 eventos se disparan. Rechazar → cookies analíticas NO se setean.
+- [ ] **§ 15.3 FTC disclosure en links afiliados** — visible cerca de los botones "Enviar ahora" en el comparador
+- [ ] **§ 15.4 Footer global** — todos los links legales funcionan en `preenvios.com`
+
+**Smoke test full (versión rápida — 10 min en lugar de los 30-45 min de § 13):**
+- [ ] **§ 13 Smoke test formal** — re-ejecutar versión condensada: home + 1 corredor + 1 monto + 1 wiki + 1 blog + 1 legal + form contacto. Si todos los flujos OK, marcar.
+
+**Criterio de "Pasada 2 completa":**
+TODOS los items de arriba marcados `[x]` + 48 hrs sin issues nuevos en Sentry/BetterStack post-cutover + métricas GA4 dentro de rangos normales (no caídas >30% sostenidas).
+
+**Si Pasada 2 detecta regresión grave:**
+1. Documentar el síntoma en TROUBLESHOOTING/ con timestamp y screenshots
+2. Decidir según severidad:
+   - **Bug aislado** (ej. 1 página rota) → fix forward, mantener cutover
+   - **Regresión sistémica** (ej. ningún form funciona, GA4 no mide, sitio entero 500) → considerar rollback de DNS al sitio viejo
+3. Si rollback: cambiar DNS de vuelta, debugear con calma, re-intentar cutover otro día. Mejor un cutover demorado que un cutover roto.
 
 ---
 
