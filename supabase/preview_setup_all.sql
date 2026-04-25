@@ -15,8 +15,10 @@
 --     contactos, scraper_anomalies, + posible otras si agregaste futuras.
 --   - 6 corredores activos en UI: HN, DO, GT, SV, CO, MX.
 --   - 6 tasas banco central.
---   - 14 precios iniciales (solo MX/CO, de migración 006). Los 4 países
---     originales arrancan sin precios — el cron de scrapers los llena.
+--   - 21 precios iniciales: 14 de MX/CO (migración 006) + 7 de HN
+--     (migración 012, snapshot de prod 2026-04-24). DO/GT/SV aún arrancan
+--     sin precios — se completarán cuando esos países se porten al
+--     landing editorial (cero scope creep).
 --
 -- IMPORTANTE: este script NO inserta data sensible (emails de contactos,
 -- suscriptores, anomalías) — todo queda vacío para preview.
@@ -352,6 +354,47 @@ ON CONFLICT (id) DO UPDATE SET
   actualizado_en = NOW();
 
 
+-- ───────────────────────────────────────────────────────────────────────
+-- Migración 012: Seed precios Honduras (SOLO PREVIEW)
+-- Replica migration 012_seed_honduras_precios.sql. Snapshot de prod
+-- 2026-04-24. Cierra gap de data histórico: el comentario del header
+-- decía que los 4 países MVP originales "arrancan sin precios — el cron
+-- de scrapers los llena", pero con los scrapers rotos desde 2026-04-17
+-- nunca llegaron. Honduras se cierra aquí; DO/GT/SV siguen vacíos en
+-- preview hasta que se porten al landing editorial.
+-- ───────────────────────────────────────────────────────────────────────
+
+INSERT INTO precios (
+  operador, corredor, metodo_entrega, tasa, fee, velocidad,
+  nombre_operador, rating, reviews, afiliado, link,
+  confiabilidad, metodos_disponibles,
+  comision_usd, cookie_dias, trafico_calificable
+) VALUES
+  ('moneygram',    'honduras', 'bank', 25.9500, 1.99, 'Horas',    'MoneyGram',     4.4, 7541,  FALSE, '',                                                                85, 3, 5.00,  30,   1.00),
+  ('remitly',      'honduras', 'bank', 26.4500, 2.99, 'Minutos',  'Remitly',       4.8, 8421,  TRUE,  'https://www.remitly.com/us/en/honduras',                          80, 3, 12.00, 30,   1.00),
+  ('ria',          'honduras', 'bank', 26.2500, 0.00, 'Minutos',  'Ria',           4.6, 5200,  TRUE,  'https://www.riamoneytransfer.com/us/en/send-money-to/honduras',   85, 4, 8.00,  30,   1.00),
+  ('westernunion', 'honduras', 'bank', 26.1000, 0.00, 'Minutos',  'Western Union', 4.5, 15820, FALSE, '',                                                                95, 3, 10.00, 30,   1.00),
+  ('wise',         'honduras', 'bank', 26.5800, 2.50, 'Segundos', 'Wise',          4.9, 12043, TRUE,  'https://wise.com/us/send-money/send-money-to-honduras',           95, 2, 12.00, 9999, 1.00),
+  ('worldremit',   'honduras', 'bank', 26.2000, 1.99, 'Minutos',  'WorldRemit',    4.6, 4800,  TRUE,  'https://www.worldremit.com/en/send-money/united-states/honduras', 75, 4, 30.00, 45,   1.00),
+  ('xoom',         'honduras', 'bank', 26.3000, 4.99, 'Minutos',  'Xoom',          4.7, 6120,  TRUE,  'https://www.xoom.com/honduras/send-money',                        90, 3, 10.00, 30,   0.40)
+ON CONFLICT (operador, corredor, metodo_entrega) DO UPDATE SET
+  tasa = EXCLUDED.tasa,
+  fee = EXCLUDED.fee,
+  velocidad = EXCLUDED.velocidad,
+  nombre_operador = EXCLUDED.nombre_operador,
+  rating = EXCLUDED.rating,
+  reviews = EXCLUDED.reviews,
+  afiliado = EXCLUDED.afiliado,
+  link = EXCLUDED.link,
+  confiabilidad = EXCLUDED.confiabilidad,
+  metodos_disponibles = EXCLUDED.metodos_disponibles,
+  comision_usd = EXCLUDED.comision_usd,
+  cookie_dias = EXCLUDED.cookie_dias,
+  trafico_calificable = EXCLUDED.trafico_calificable,
+  activo = TRUE,
+  actualizado_en = NOW();
+
+
 -- ═══════════════════════════════════════════════════════════════════════
 -- Verificación final (correr DESPUÉS del script de arriba)
 -- ═══════════════════════════════════════════════════════════════════════
@@ -360,7 +403,7 @@ ON CONFLICT (id) DO UPDATE SET
 -- SELECT
 --   (SELECT count(*) FROM corredores)                         AS corredores_count,      -- esperado: 6
 --   (SELECT count(*) FROM tasas_bancos_centrales)             AS tasas_bc_count,        -- esperado: 6
---   (SELECT count(*) FROM precios)                            AS precios_count,         -- esperado: 14 (solo MX + CO)
+--   (SELECT count(*) FROM precios)                            AS precios_count,         -- esperado: 21 (14 MX+CO + 7 HN)
 --   (SELECT count(*) FROM contactos)                          AS contactos_count,       -- esperado: 0
 --   (SELECT count(*) FROM alertas_email)                      AS alertas_email_count,   -- esperado: 0
 --   (SELECT count(*) FROM scraper_anomalies)                  AS anomalies_count,       -- esperado: 0

@@ -3,7 +3,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import Script from 'next/script'
-import { Inter, Work_Sans, Quicksand } from 'next/font/google'
+import { Inter, Work_Sans, Quicksand, Fraunces } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import CookieConsent from '@/components/CookieConsent'
 import '../globals.css'
@@ -36,6 +36,17 @@ const quicksand = Quicksand({
   subsets: ['latin'],
   weight: ['700'],
   variable: '--font-quicksand',
+  display: 'swap',
+})
+
+// Fraunces (serif editorial) — usada en headings de paginas de pais
+// (landing editorial modelo A: Honduras, y los demas MVP cuando se
+// porten). El axis `opsz` (optical size) lo maneja next/font/google
+// automaticamente; aqui solo declaramos los pesos que el landing usa.
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  weight: ['500', '700', '900'],
+  variable: '--font-fraunces',
   display: 'swap',
 })
 
@@ -78,7 +89,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${workSans.variable} ${quicksand.variable}`}
+      className={`${inter.variable} ${workSans.variable} ${quicksand.variable} ${fraunces.variable}`}
     >
       <head>
         <meta name="impact-site-verification" content="55a6cc64-e7c0-42c2-9995-7b243cc91810" />

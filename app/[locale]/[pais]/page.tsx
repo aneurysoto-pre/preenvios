@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { PAISES_MVP, findPaisBySlug } from '@/lib/paises'
+import { getTasaBancoCentral } from '@/lib/tasas-banco-central'
 import PaisContent from './pais-content'
 
 export function generateStaticParams() {
@@ -35,5 +36,11 @@ export default async function PaisPage({ params }: { params: Promise<{ locale: s
   const pais = findPaisBySlug(slug)
   if (!pais) notFound()
 
-  return <PaisContent slug={slug} />
+  // Tasa BCH pre-fetched server-side — queda en el HTML inicial (SEO
+  // + LCP) para el landing editorial cuando el pais tiene entry en
+  // data/corredores/*.ts. Si Supabase falla, devuelve null y el
+  // componente renderiza fallback "—".
+  const tasa = await getTasaBancoCentral(pais.codigoPais)
+
+  return <PaisContent slug={slug} initialTasa={tasa} />
 }

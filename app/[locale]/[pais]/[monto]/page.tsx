@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import { redirect, notFound } from 'next/navigation'
 import { PAISES_MVP, findPaisBySlug } from '@/lib/paises'
+import { getTasaBancoCentral } from '@/lib/tasas-banco-central'
 import PaisContent from '../pais-content'
 
 // Montos pre-renderizados como SSG (indexables por Google). El resto de enteros
@@ -67,5 +68,8 @@ export default async function PaisMontoPage({ params }: { params: Promise<{ loca
     redirect(`/${locale}/${slug}/${montoEntero}`)
   }
 
-  return <PaisContent slug={slug} initialMonto={montoEntero} />
+  // Tasa BCH pre-fetched server-side (mismo patron que la ruta sin monto).
+  const tasa = await getTasaBancoCentral(pais.codigoPais)
+
+  return <PaisContent slug={slug} initialMonto={montoEntero} initialTasa={tasa} />
 }

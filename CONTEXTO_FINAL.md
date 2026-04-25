@@ -1166,6 +1166,43 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 
 ---
 
+### Fase 11 — Landing editorial por país (modelo A Magazine) — rollout progresivo
+
+**Contexto (2026-04-24):** las páginas `/[locale]/[pais]` y `/[locale]/[pais]/[monto]` pasan a soportar un **landing editorial extendido** debajo del disclaimer del Comparador. Reemplaza `<TasasReferencia />` + `<LazyBelow />` (Sections genéricas de LatAm) cuando el país tiene entry en `data/corredores/<pais>.ts`. El patrón es un feature flag "por datos" — los países sin entry siguen renderizando el layout legacy, los con entry "upgradean" automáticamente al editorial.
+
+**Arquitectura completa documentada en [LOGICA_DE_NEGOCIO/30_landing_editorial_pais.md](LOGICA_DE_NEGOCIO/30_landing_editorial_pais.md)** — incluye patrón híbrido (data TS + messages JSON), checklist para agregar país nuevo en 5 pasos, tech debts documentados.
+
+**Rollout por país:**
+
+- [x] **Honduras** — port completo 2026-04-24, branch `feat/landing-editorial-honduras` → merge a main post-validación visual del founder en preview URL. Incluye stats macroeconómicos (BCH 2025, CEPAL 2024, US Census 2020), 6 ciudades destacadas (Tegucigalpa, SPS, Roatán, Copán Ruinas, La Ceiba, Choluteca), 6 errores comunes, 7 FAQ específicas del corredor, form alertas duplicado (hero + CTA final) con GA4 tracking segmentado por `location` (`hero` vs `cta_final`).
+- [ ] República Dominicana — pendiente, próximo candidato
+- [ ] Guatemala
+- [ ] El Salvador
+- [ ] Colombia
+- [ ] México
+
+**Commits del port Honduras (10):**
+
+| # | Hash | Alcance |
+|---|------|---------|
+| 1 | `7955b1e` | `feat(fonts)`: Fraunces serif → clase Tailwind `font-editorial` |
+| 2 | `c24ad43` | `feat(db)`: migration 011 agrega `corredor` + `idioma` a `alertas_email` |
+| — | `b1febfc` | `docs(proceso 27)`: checklist migraciones + incidente 2026-04-24 (docs-only, scope separado) |
+| 3 | `2d915f8` | `feat(api)`: `/api/alertas` acepta `corredor` + `idioma` |
+| 4 | `92bf8a4` | `docs(tracking)`: contrato de `suscripcion_alertas` extendido con params nuevos |
+| 5 | `5101b08` | `feat(lib)`: `getTasaBancoCentral` server helper (cache por-request con `React.cache`) |
+| 6 | `4d9c92b` | `feat(data)`: `data/corredores/honduras.ts` + types + registry con feature flag |
+| 7 | `ba2bf9c` | `feat(i18n)`: `landing.editorial.honduras.*` ES + `comingSoon` EN |
+| 8 | `7e0c53e` | `feat(components)`: `landing-editorial/` (AlertaInlineForm + LandingEditorial + EnglishComingSoon) |
+| 9 | `b500446` | `feat(pais)`: integración feature-flag en `pais-content.tsx` |
+| 10 | (este) | `docs`: Proceso 30 + update CONTEXTO_FINAL |
+
+**Incidente durante el port:** los 4 primeros commits (1, 2, extra, 3) se pushearon por error directo a `main` en lugar de a feature branch. Revertidos con Opción B (4 commits `git revert` no-destructivos en main, hashes `00cff1c`, `6074f05`, `3c22a0d`, `a4d36a7`) y recreados en branch. Aprendizaje guardado en memoria persistente `feedback_feature_branch_no_main.md` y consolidado como regla: trabajo multi-commit va SIEMPRE en feature branch para aprovechar previews.
+
+**Acción pendiente:** founder valida visualmente en preview URL `preenvios-git-feat-landing-editorial-honduras-aneurysoto-pres-projects.vercel.app`, itera (push adicionales a la branch si hace falta), y cuando apruebe → merge a main (producción dormida hasta DNS cutover).
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)
@@ -1228,17 +1265,21 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 11. Los iconos decorativos dentro del sitio (secciones Por qué / Cómo funciona) usan `lucide-react`. Para banderas (idioma y países de corredor en la navegación principal) usar **SVGs inline**, NO emojis — Windows no renderiza flag emojis y los muestra como letras ("us", "es") que parecen un error. Los emojis de bandera en el dropdown de corredores se conservan porque ya están en `PAISES_MVP` y funcionan bien visualmente en mobile/Mac, pero si hay queja en Windows se migrarán a SVG también
 12. Footer tiene 4 columnas de contenido + brand: Producto / Recursos / Empresa / Legal. Si se agrega una página nueva, elegir la columna semánticamente más cercana en lugar de inventar una quinta
 
+### Reglas arquitectónicas de CSS/DOM
+13. **PROHIBIDO `overflow-x: hidden` en cualquier scope** (global `body`/`html`, sección, componente, card, wrapper). Es un parche que oculta el síntoma pero deja el elemento que desborda sin arreglar — cuando se toque ese elemento en el futuro, el bug vuelve. Regla nacida del bug histórico que persiguió al proyecto (commit `5329a11` removió `overflow-x: hidden` global impuesto durante ese episodio) y reafirmada el 2026-04-24 cuando un `<div absolute w-0 h-0>` del honeypot sin ancestro `relative` causó scroll horizontal en `/es/honduras` (solo ahí porque es la única página con `AlertaInlineForm` renderizado 2 veces). **Si un elemento causa scroll horizontal, el fix correcto es encontrar ese elemento y corregirlo en su raíz** — typical causes: `position: absolute` sin ancestro `relative`, `width` fijo > viewport móvil, texto con `whitespace-nowrap` que no wrappea, imágenes sin `max-width: 100%`. `overflow-x: hidden` como fix SOLO se acepta en ventanas muy específicas (carrousels, story bars) donde es deliberado y el comportamiento esperado — no como red de seguridad global.
+14. **Forms inline con `<input>` + `<button>` van SIEMPRE stacked en mobile** (`flex flex-col sm:flex-row gap-2`), NUNCA `flex gap-2` (row en mobile). Razón: el patrón `<button shrink-0 whitespace-nowrap>` + `<input flex-1 min-w-0>` en flex-row causa scroll horizontal en Mobile Safari porque el input con `min-w-0` NO colapsa al 0 real (bug conocido de Safari con inputs email/autocomplete: mantienen un `min-content` intrínseco), mientras el button con `shrink-0` + `whitespace-nowrap` no puede ceder tampoco — el container se expande más allá del viewport. Regla nacida del bug del `AlertaInlineForm` en `/es/honduras` (2026-04-24), aislado vía bisect sistemático (commits `9bed277`, `fc3401a`, `9ca5596`) y resuelto cambiando `formLayoutClass` del compact mode de `'flex gap-2'` a `'flex flex-col sm:flex-row gap-2'`. **Aplica a cualquier form nuevo** con input + button en el proyecto: desktop puede ser row (`sm:flex-row` ≥640px), mobile siempre column. Side-effect positivo: forms stacked en mobile son más tap-friendly (accesibilidad).
+
 ### Reglas operacionales y de negocio
-13. Revisar métricas una vez por semana — no todos los días
-14. El número que importa cada semana: clics en "Enviar ahora"
-15. Ninguna decisión de dirección estratégica antes del mes 18
-16. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
-17. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
-18. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
-19. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
-20. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
-21. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
-22. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
+15. Revisar métricas una vez por semana — no todos los días
+16. El número que importa cada semana: clics en "Enviar ahora"
+17. Ninguna decisión de dirección estratégica antes del mes 18
+18. Revenue Share es la meta explícita — mes 12 a 18 — no es opcional
+19. No construir nada detrás de paywall antes de tener primero su versión gratuita capturando emails
+20. Toda feature nueva pasa el filtro: ¿genera rentabilidad directa, protección legal, o tracción orgánica medible? Si no, se difiere
+21. No replicar Monito 1:1 — replicar solo lo que un usuario latino en EE.UU. necesita
+22. Multi-idioma es español/inglés únicamente hasta Fase 6. No agregar francés, portugués, ni otros idiomas aunque tengan tráfico — el costo de mantenimiento editorial no se justifica hasta expansión Europa
+23. El comparador solo pregunta país origen, país destino, monto y método de entrega — nunca pregunta método de pago (ACH, tarjeta débito, crédito). Eso lo decide el usuario dentro del sitio del operador después del clic. Mantener simple como Monito
+24. El proyecto se lanza SIN esperar la LLC. Se opera como individuo con Wise/Payoneer durante las primeras 4-8 semanas. La LLC, EIN, cuenta bancaria de negocio y E&O se gestionan en paralelo y se activan cuando estén listos, sin bloquear el lanzamiento ni la monetización inicial.
 
 ---
 

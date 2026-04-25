@@ -299,5 +299,14 @@
     "categoryAnalyticsDesc": "Google Analytics tells us what works and what doesn't. Example: how many people found the cheapest remittance. Anonymous and aggregated.",
     "categoryMarketing": "Marketing",
     "categoryMarketingDesc": "We don't use marketing cookies today. In the future we might measure ad conversions (Google Ads, Meta). You decide whether to allow them from now."
+  },
+  "landing": {
+    "editorial": {
+      "comingSoon": {
+        "title": "English version coming soon",
+        "message": "We're translating the full editorial content. In the meantime, you can view the Spanish version.",
+        "ctaEs": "View Spanish version →"
+      }
+    }
   }
 }
