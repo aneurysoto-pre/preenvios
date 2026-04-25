@@ -1,31 +1,11 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { BLOG_ARTICLES } from '@/lib/corredores'
+import { loadMarkdownContent } from '@/lib/markdown-content'
 import BlogArticle from './article'
 
-/**
- * Metadata por post (SEO foundation). Cuando se agregue un post nuevo
- * al blog, agregar entry acá + incluir el slug en `app/sitemap.ts`
- * (array BLOG_SLUGS).
- */
-const BLOG_META: Record<string, { titleEs: string; titleEn: string; descEs: string; descEn: string }> = {
-  'cuanto-cobra-western-union-honduras': {
-    titleEs: '¿Cuánto cobra Western Union por enviar a Honduras? — PreEnvios.com',
-    titleEn: 'How much does Western Union charge to send to Honduras? — PreEnvios.com',
-    descEs: 'Análisis de tasas, comisiones y tiempo de entrega de Western Union en el corredor USA → Honduras. Comparación con las otras 6 remesadoras.',
-    descEn: 'Analysis of Western Union rates, fees and delivery times for the USA → Honduras corridor. Comparison with the other 6 remittance providers.',
-  },
-  'remitly-vs-western-union-dominicana': {
-    titleEs: 'Remitly vs Western Union: cuál rinde más enviando a Rep. Dominicana — PreEnvios.com',
-    titleEn: 'Remitly vs Western Union: which pays more when sending to Dominican Republic — PreEnvios.com',
-    descEs: 'Comparación directa entre Remitly y Western Union en el corredor USA → República Dominicana. Tasas, comisiones, velocidades y cuánto llega realmente a destino.',
-    descEn: 'Head-to-head comparison between Remitly and Western Union for the USA → Dominican Republic corridor. Rates, fees, speeds and what actually arrives.',
-  },
-  'forma-mas-barata-enviar-guatemala': {
-    titleEs: 'La forma más barata de enviar dinero a Guatemala en 2026 — PreEnvios.com',
-    titleEn: 'The cheapest way to send money to Guatemala in 2026 — PreEnvios.com',
-    descEs: 'Comparativa de Wise, Remitly y Ria para enviar a Guatemala. Qué combinación de tasa y comisión le rinde más a tu familia.',
-    descEn: 'Comparison of Wise, Remitly and Ria for sending to Guatemala. Which combination of rate and fee makes more for your family.',
-  },
+export function generateStaticParams() {
+  return BLOG_ARTICLES.map((a) => ({ slug: a.slug }))
 }
 
 export async function generateMetadata({
@@ -35,19 +15,32 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params
   const en = locale === 'en'
-  const meta = BLOG_META[slug]
+  const article = BLOG_ARTICLES.find((a) => a.slug === slug)
 
   // Fallback genérico si el slug no existe — evita crash en páginas 404.
-  if (!meta) {
+  if (!article) {
     return {
       title: en ? 'Post not found — PreEnvios.com' : 'Post no encontrado — PreEnvios.com',
       robots: { index: false, follow: false },
     }
   }
 
+  // Si hay `.md` en `content/blog/<slug>.md`, su frontmatter
+  // (title + description) tiene prioridad sobre el registry. Los .md
+  // son ES-only por ahora; EN cae al fallback derivado del título.
+  const md = en ? null : loadMarkdownContent('blog', slug)
+  const title = md?.title || (en ? article.titulo_en : article.titulo)
+  const description = md?.description
+    ? md.description
+    : en
+    ? `${article.titulo_en}. Practical guide for the Latino diaspora in the US on how to send money home with informed decisions. Part of PreEnvios.com Blog.`
+    : `${article.titulo}. Guía práctica para la diáspora latina en EE.UU. sobre cómo enviar dinero a casa con decisiones informadas. Blog de PreEnvios.com.`
+
   return {
-    title: en ? meta.titleEn : meta.titleEs,
-    description: en ? meta.descEn : meta.descEs,
+    title: en
+      ? `${title} — PreEnvios.com Blog`
+      : `${title} — Blog de PreEnvios.com`,
+    description,
     alternates: {
       canonical: `https://preenvios.com/${locale}/blog/${slug}`,
       languages: {
@@ -61,5 +54,11 @@ export async function generateMetadata({
 export default async function BlogArticlePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  return <BlogArticle slug={slug} />
+
+  // Lectura del .md en build time. Si no hay .md, bodyHtml queda
+  // undefined y el componente cae al placeholder "Próximamente".
+  // ES-only por ahora.
+  const md = locale === 'en' ? null : loadMarkdownContent('blog', slug)
+
+  return <BlogArticle slug={slug} bodyHtml={md?.bodyHtml} mdTitle={md?.title} />
 }

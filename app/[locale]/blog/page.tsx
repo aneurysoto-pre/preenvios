@@ -1,14 +1,8 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
+import { BLOG_ARTICLES } from '@/lib/corredores'
+import { listPublishedSlugs } from '@/lib/markdown-content'
 import BlogIndex from './index-content'
-
-// Posts listados — si se agrega uno nuevo, agregar entry acá +
-// su metadata en app/[locale]/blog/[slug]/page.tsx + slug en sitemap.
-const BLOG_POSTS = [
-  { slug: 'cuanto-cobra-western-union-honduras', titleEs: '¿Cuánto cobra Western Union por enviar a Honduras?', titleEn: 'How much does Western Union charge to send to Honduras?' },
-  { slug: 'remitly-vs-western-union-dominicana', titleEs: 'Remitly vs Western Union: cuál rinde más enviando a Rep. Dominicana', titleEn: 'Remitly vs Western Union: which pays more when sending to Dominican Republic' },
-  { slug: 'forma-mas-barata-enviar-guatemala', titleEs: 'La forma más barata de enviar dinero a Guatemala en 2026', titleEn: 'The cheapest way to send money to Guatemala in 2026' },
-]
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -41,17 +35,21 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
       ? 'News, comparisons and tips on sending money to Latin America. Real analysis of Remitly, Wise, Western Union and more.'
       : 'Noticias, comparativas y tips sobre enviar dinero a Latinoamérica. Análisis reales de Remitly, Wise, Western Union y más.',
     publisher: { '@id': 'https://preenvios.com/#organization' },
-    blogPost: BLOG_POSTS.map((post) => ({
+    blogPost: BLOG_ARTICLES.map((post) => ({
       '@type': 'BlogPosting',
-      headline: en ? post.titleEn : post.titleEs,
+      headline: en ? post.titulo_en : post.titulo,
       url: `https://preenvios.com/${locale}/blog/${post.slug}`,
       inLanguage: locale,
     })),
   }
 
+  // Lista de slugs con .md publicado — solo aplica para ES (los .md son
+  // ES-only por ahora). En EN todos siguen como "Coming soon".
+  const publishedSlugs = locale === 'en' ? [] : listPublishedSlugs('blog')
+
   return (
     <>
-      <BlogIndex />
+      <BlogIndex publishedSlugs={publishedSlugs} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

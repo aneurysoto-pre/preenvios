@@ -4,10 +4,11 @@ import { useLocale } from 'next-intl'
 import { WIKI_ARTICLES } from '@/lib/corredores'
 import LegalPage from '@/components/LegalPage'
 
-// Orden de display = orden de aparición en este objeto. Categoría 'metodos'
-// agregada 2026-04-25 para los .md de wiki publicados (cash-pickup vs banco).
+// Orden de display = orden de aparición en este objeto. Categorías
+// nuevas 'metodos' (1 art) y 'educativos' (4 art) agregadas 2026-04-25.
 const CATS: Record<string, { es: string; en: string; icon: string }> = {
   fundamentos: { es: 'Fundamentos', en: 'Fundamentals', icon: '📚' },
+  educativos:  { es: 'Conceptos básicos', en: 'Core concepts', icon: '📖' },
   metodos:     { es: 'Métodos de envío', en: 'Sending methods', icon: '💸' },
   corredor:    { es: 'Guías por corredor', en: 'Corridor guides', icon: '🌎' },
   educacion:   { es: 'Educación financiera', en: 'Financial education', icon: '💡' },

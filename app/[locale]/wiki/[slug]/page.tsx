@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { WIKI_ARTICLES } from '@/lib/corredores'
-import { loadWikiContent } from '@/lib/wiki-content'
+import { loadMarkdownContent } from '@/lib/markdown-content'
 import WikiArticle from './wiki-article'
 
 export function generateStaticParams() {
@@ -30,7 +30,7 @@ export async function generateMetadata({
   // en WIKI_ARTICLES — permite afinar SEO sin tocar código. Los .md
   // son ES-only por ahora; EN cae al fallback hasta que existan
   // versiones traducidas.
-  const md = en ? null : loadWikiContent(slug)
+  const md = en ? null : loadMarkdownContent('wiki', slug)
   const title = md?.title || (en ? article.titulo_en : article.titulo)
   const description = md?.description
     ? md.description
@@ -60,7 +60,7 @@ export default async function WikiArticlePage({ params }: { params: Promise<{ lo
   // Lectura del .md en build time (Server Component) — el HTML viaja al
   // Client Component vía prop. Si no hay .md, bodyHtml queda undefined
   // y el componente cae al placeholder "Próximamente". ES-only por ahora.
-  const md = locale === 'en' ? null : loadWikiContent(slug)
+  const md = locale === 'en' ? null : loadMarkdownContent('wiki', slug)
 
   return <WikiArticle slug={slug} bodyHtml={md?.bodyHtml} mdTitle={md?.title} />
 }

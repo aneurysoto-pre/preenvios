@@ -1,11 +1,13 @@
 import type { MetadataRoute } from 'next'
-import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES } from '@/lib/corredores'
+import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES, BLOG_ARTICLES } from '@/lib/corredores'
 import { PAISES_MVP } from '@/lib/paises'
 
 const BASE_URL = 'https://preenvios.com'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
 const INSTITUTIONAL_PAGES = ['nosotros', 'contacto', 'alertas']
-const BLOG_SLUGS = ['cuanto-cobra-western-union-honduras', 'remitly-vs-western-union-dominicana', 'forma-mas-barata-enviar-guatemala']
+// Source of truth: BLOG_ARTICLES en lib/corredores.ts. Cuando se agregue
+// un blog post (con o sin .md publicado), aparece automáticamente acá.
+const BLOG_SLUGS = BLOG_ARTICLES.map(a => a.slug)
 
 function altLangs(path: string) {
   return { languages: { es: `${BASE_URL}/es${path}`, en: `${BASE_URL}/en${path}` } }

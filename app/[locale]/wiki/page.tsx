@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { WIKI_ARTICLES } from '@/lib/corredores'
-import { listPublishedWikiSlugs } from '@/lib/wiki-content'
+import { listPublishedSlugs } from '@/lib/markdown-content'
 import WikiIndex from './wiki-index'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -49,7 +49,7 @@ export default async function WikiPage({ params }: { params: Promise<{ locale: s
 
   // Lista de slugs con .md publicado — solo aplica para ES (los .md son
   // ES-only por ahora). En EN todos siguen como "Coming soon".
-  const publishedSlugs = locale === 'en' ? [] : listPublishedWikiSlugs()
+  const publishedSlugs = locale === 'en' ? [] : listPublishedSlugs('wiki')
 
   return (
     <>
