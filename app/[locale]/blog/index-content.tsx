@@ -1,29 +1,68 @@
 'use client'
 import { useLocale } from 'next-intl'
-import Nav from '@/components/Nav'
-import { Footer } from '@/components/Sections'
+import { BLOG_ARTICLES } from '@/lib/corredores'
 import LegalPage from '@/components/LegalPage'
 
-const ARTICLES = [
-  { slug: 'cuanto-cobra-western-union-honduras',       titulo: 'Cuánto cobra Western Union para enviar dinero a Honduras hoy',       titulo_en: 'How much does Western Union charge to send money to Honduras today' },
-  { slug: 'remitly-vs-western-union-dominicana',        titulo: 'Remitly vs Western Union para enviar a República Dominicana',        titulo_en: 'Remitly vs Western Union for sending to the Dominican Republic' },
-  { slug: 'forma-mas-barata-enviar-guatemala',          titulo: 'La forma más barata de mandar dinero a Guatemala en 2026',           titulo_en: 'The cheapest way to send money to Guatemala in 2026' },
-]
+// Categorías agrupadas (paridad 100% con el lote 2026-04-25). Orden de
+// display = orden de aparición en este objeto.
+const CATS: Record<string, { es: string; en: string; icon: string }> = {
+  'guias-pais':    { es: 'Guías por país',    en: 'Country guides',     icon: '🌎' },
+  comparaciones:   { es: 'Comparativas',      en: 'Head-to-head',       icon: '⚖️' },
+  tendencias:      { es: 'Tendencias',        en: 'Trends',             icon: '🚀' },
+  practicas:       { es: 'Guías prácticas',   en: 'Practical guides',   icon: '💡' },
+}
 
-export default function BlogIndex() {
+type Props = {
+  /**
+   * Slugs con .md publicado en `content/blog/`. Calculado server-side
+   * en `page.tsx`. Los slugs presentes acá NO muestran "Próximamente".
+   */
+  publishedSlugs?: string[]
+}
+
+export default function BlogIndex({ publishedSlugs = [] }: Props) {
   const locale = useLocale()
   const en = locale === 'en'
+  const published = new Set(publishedSlugs)
+
   return (
-    <LegalPage tag="Blog" title={en ? 'Remittance guides and comparisons' : 'Guías y comparaciones de remesas'} updatedLabel={en ? 'Last updated' : 'Última actualización'}>
-      <p>{en ? 'Articles coming soon. We are preparing in-depth guides for each corridor.' : 'Artículos próximamente. Estamos preparando guías detalladas para cada corredor.'}</p>
-      <div className="flex flex-col gap-4 mt-8">
-        {ARTICLES.map(a => (
-          <a key={a.slug} href={`/${locale}/blog/${a.slug}`} className="bg-[var(--color-g50)] border-[1.5px] border-[var(--color-g200)] rounded-[14px] p-5 hover:border-[var(--color-blue)] hover:shadow-md transition-all block">
-            <h3 className="font-extrabold text-base mb-1">{en ? a.titulo_en : a.titulo}</h3>
-            <span className="text-xs text-[var(--color-g500)]">{en ? 'Coming soon' : 'Próximamente'}</span>
-          </a>
-        ))}
-      </div>
+    <LegalPage
+      tag="Blog"
+      title={en ? 'Remittance guides and comparisons' : 'Guías y comparaciones de remesas'}
+      updatedLabel={en ? 'Last updated' : 'Última actualización'}
+    >
+      <p>{en
+        ? 'In-depth guides and head-to-head comparisons for sending money to Latin America. Real analysis, no fluff.'
+        : 'Guías detalladas y comparativas para enviar dinero a Latinoamérica. Análisis reales, sin relleno.'}</p>
+
+      {Object.entries(CATS).map(([catKey, cat]) => {
+        const articles = BLOG_ARTICLES.filter(a => a.cat === catKey)
+        if (articles.length === 0) return null
+        return (
+          <div key={catKey} className="mt-8">
+            <h2>{cat.icon} {en ? cat.en : cat.es}</h2>
+            <div className="flex flex-col gap-3 mt-3">
+              {articles.map(a => {
+                const isPublished = published.has(a.slug)
+                return (
+                  <a
+                    key={a.slug}
+                    href={`/${locale}/blog/${a.slug}`}
+                    className="bg-[var(--color-g50)] border-[1.5px] border-[var(--color-g200)] rounded-[14px] p-4 hover:border-[var(--color-blue)] hover:shadow-md transition-all block"
+                  >
+                    <h3 className="font-extrabold text-[15px] mb-1">{en ? a.titulo_en : a.titulo}</h3>
+                    {isPublished ? (
+                      <span className="text-[11px] font-semibold text-[var(--color-blue)]">{en ? 'Read article →' : 'Leer artículo →'}</span>
+                    ) : (
+                      <span className="text-[11px] text-[var(--color-g500)]">{en ? 'Coming soon' : 'Próximamente'}</span>
+                    )}
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
     </LegalPage>
   )
 }
