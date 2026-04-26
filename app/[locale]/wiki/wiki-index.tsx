@@ -47,17 +47,23 @@ export default function WikiIndex({ publishedSlugs = [] }: Props) {
             <div className="flex flex-col gap-3 mt-3">
               {articles.map(a => {
                 const isPublished = published.has(a.slug)
+                // En EN sin .md: linkeamos directo a /es/wiki/<slug> en vez de
+                // /en/wiki/<slug> (que mostraría el placeholder). El badge
+                // avisa que el artículo está en español.
+                const href = en && !isPublished
+                  ? `/es/wiki/${a.slug}`
+                  : `/${locale}/wiki/${a.slug}`
                 return (
                   <a
                     key={a.slug}
-                    href={`/${locale}/wiki/${a.slug}`}
+                    href={href}
                     className="bg-[var(--color-g50)] border-[1.5px] border-[var(--color-g200)] rounded-[14px] p-4 hover:border-[var(--color-blue)] hover:shadow-md transition-all block"
                   >
                     <h3 className="font-extrabold text-[15px] mb-1">{en ? a.titulo_en : a.titulo}</h3>
                     {isPublished ? (
                       <span className="text-[11px] font-semibold text-[var(--color-blue)]">{en ? 'Read article →' : 'Leer artículo →'}</span>
                     ) : (
-                      <span className="text-[11px] text-[var(--color-g500)]">{en ? 'Coming soon' : 'Próximamente'}</span>
+                      <span className="text-[11px] text-[var(--color-g500)]">{en ? 'This article is available in Spanish' : 'Próximamente'}</span>
                     )}
                   </a>
                 )
