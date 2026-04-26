@@ -53,7 +53,11 @@ export default function BlogArticle({ slug, bodyHtml, mdTitle }: Props) {
           <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">Our blog content is currently in Spanish, focused on the Latino diaspora in the US.</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <a href={`/es/blog/${slug}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Read in Spanish →</a>
+            {/* `!text-white` (Tailwind important) — el wrapper LegalPage usa
+                `.prose-legal` que define `a { color: var(--color-blue) }`
+                global con specificity (0,1,1) que vence a `.text-white`.
+                Sin el bang, el texto del botón queda azul sobre fondo azul. */}
+            <a href={`/es/blog/${slug}`} className="inline-block bg-[var(--color-blue)] !text-white px-6 py-3 rounded-full font-bold text-sm">Read in Spanish →</a>
             <a href="/en/blog" className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">Back to blog index</a>
           </div>
         </div>
@@ -63,7 +67,7 @@ export default function BlogArticle({ slug, bodyHtml, mdTitle }: Props) {
           <div className="text-5xl mb-4">📝</div>
           <h2 className="font-extrabold text-xl mb-3">Próximamente</h2>
           <p className="text-[var(--color-ink-2)]">Estamos preparando esta guía detallada. Vuelve pronto.</p>
-          <a href={`/${locale}`} className="inline-block mt-6 bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Comparar ahora →</a>
+          <a href={`/${locale}`} className="inline-block mt-6 bg-[var(--color-blue)] !text-white px-6 py-3 rounded-full font-bold text-sm">Comparar ahora →</a>
         </div>
       )}
 

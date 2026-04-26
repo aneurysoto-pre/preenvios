@@ -64,7 +64,11 @@ export default function WikiArticle({ slug, bodyHtml, mdTitle }: Props) {
           <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">Our wiki content is currently in Spanish, focused on the Latino diaspora in the US.</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <a href={`/es/wiki/${slug}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Read in Spanish →</a>
+            {/* `!text-white` (Tailwind important) — el wrapper LegalPage usa
+                `.prose-legal` que define `a { color: var(--color-blue) }`
+                global con specificity (0,1,1) que vence a `.text-white`.
+                Sin el bang, el texto del botón queda azul sobre fondo azul. */}
+            <a href={`/es/wiki/${slug}`} className="inline-block bg-[var(--color-blue)] !text-white px-6 py-3 rounded-full font-bold text-sm">Read in Spanish →</a>
             <a href="/en/wiki" className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">Back to wiki index</a>
           </div>
         </div>
@@ -76,7 +80,7 @@ export default function WikiArticle({ slug, bodyHtml, mdTitle }: Props) {
           <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">Estamos escribiendo este artículo con datos reales y consejos prácticos para la diáspora latinoamericana en EE.UU.</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Comparar ahora →</a>
+            <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] !text-white px-6 py-3 rounded-full font-bold text-sm">Comparar ahora →</a>
             <a href={`/${locale}/wiki`} className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">Todos los artículos</a>
           </div>
         </div>
