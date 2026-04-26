@@ -535,6 +535,29 @@ Esta sección asegura que el sitio cumple requisitos legales antes de recibir tr
 
 Esta sección es la **transición Fase 2 → Fase 3** del plan SEO documentado en [LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md](LOGICA_DE_NEGOCIO/33_seo_pre_cutover.md). Si no se ejecuta correctamente, las señales de ranking acumuladas en `preenvios.vercel.app` NO se transfieren a `preenvios.com` y el SEO efectivamente arranca de cero. Ejecutar TODOS los items en el orden listado.
 
+#### 16.3.0 Checklist condensado del cutover (orden cronológico)
+
+Este es el resumen cronológico de los 9 items críticos del cutover. Cada uno está expandido con detalle técnico en los bloques "Día del cutover — paso 1, 2, 3" abajo. Marcar `[x]` cuando se ejecute, en orden estricto.
+
+- [ ] **1. Revertir canonical en código**: `vercel.app` → `preenvios.com` en sitemap.ts, robots.ts, metadataBase del root layout, hreflang globales, JSON-LD `@id`, y todos los `alternates.canonical` hardcoded en page.tsx (~18 archivos). Comando sed listo en "paso 1" abajo.
+- [ ] **2. Revertir sitemap**: `app/sitemap.ts` `BASE_URL = 'https://preenvios.com'` (incluido en el comando sed del item 1).
+- [ ] **3. Revertir robots.txt**: `app/robots.ts` `Sitemap: https://preenvios.com/sitemap.xml` (incluido en el comando sed del item 1).
+- [ ] **4. Cambio DNS**: en el dominio registrar de `preenvios.com`, apuntar registros A/CNAME a Vercel según instrucciones de Vercel Dashboard → Settings → Domains → `preenvios.com` → DNS configuration. Esperar propagación DNS (típicamente 10-60 min, hasta 24h en peores casos).
+- [ ] **5. Configurar redirect 301 en Vercel**: en Vercel Dashboard → proyecto preenvios → Settings → Domains → agregar `preenvios.vercel.app` como redirect 301 → `preenvios.com`. Verificar con `curl -I https://preenvios.vercel.app/es/honduras` que responda `301` con `Location: https://preenvios.com/es/honduras`.
+- [ ] **6. GSC Change of Address tool**: ⚠️ CRÍTICO. En Google Search Console → propiedad `preenvios.vercel.app` → Settings → Change of Address → Source: vercel.app, Destination: preenvios.com. Google verifica automáticamente redirect + sitemap. Sin este paso, las señales de ranking NO se transfieren y el SEO de meses arranca de cero.
+- [ ] **7. Submit sitemap nuevo a GSC**: en GSC → propiedad `preenvios.com` (verificar primero con archivo HTML de Google) → Sitemaps → Add new sitemap → URL: `sitemap.xml`. Esperar status "Success".
+- [ ] **8. Re-validar OG image, canonical, sitemap en preenvios.com**:
+  - `curl https://preenvios.com/sitemap.xml | grep -c "<url>"` → debe devolver ~188 URLs todas con `preenvios.com`
+  - `curl https://preenvios.com/es/honduras | grep canonical` → `<link rel="canonical" href="https://preenvios.com/es/honduras">`
+  - `curl -I https://preenvios.com/es/opengraph-image` → 200 + content-type=image/png
+  - Compartir `https://preenvios.com/es` en Twitter/WhatsApp → preview con logo verde + tagline. Si está cacheado el viejo: forzar refresh en Facebook Debugger (`developers.facebook.com/tools/debug/`) y LinkedIn Post Inspector (`linkedin.com/post-inspector/`).
+- [ ] **9. Monitorear Coverage en GSC por 2-4 semanas**: GSC → Indexing → Pages.
+  - **Semana 1**: aparecen URLs nuevas como "Indexed". URLs viejas como "Page with redirect" (NO como errores).
+  - **Semanas 2-3**: progresión visible — más URLs nuevas indexadas, viejas consolidándose como redirected.
+  - **Semana 4**: 90%+ de URLs en sitemap como "Indexed" en `preenvios.com`. Cero "Manual Actions" en GSC. Tráfico orgánico (si había en `preenvios.vercel.app`) preservado o mejorado.
+
+**Si todos los 9 items quedan `[x]` y se cumple el criterio del item 9 → cutover SEO exitoso.**
+
 **Día del cutover — paso 1: cambiar canonical en código (~10 min)**
 
 - [ ] Cambiar `BASE_URL` en `app/sitemap.ts`: `https://preenvios.vercel.app` → `https://preenvios.com`
