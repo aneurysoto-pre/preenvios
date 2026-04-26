@@ -38,11 +38,24 @@ export async function generateMetadata({
     ? `${article.titulo_en}. Educational guide for the Latino diaspora in the US on how to send money home with informed decisions. Part of PreEnvios.com Wiki.`
     : `${article.titulo}. Guía educativa para la diáspora latina en EE.UU. sobre cómo enviar dinero a casa con decisiones informadas. Wiki de PreEnvios.com.`
 
+  // Auto-noindex defensivo: si el slug está registrado en WIKI_ARTICLES
+  // pero no hay .md publicado en content/wiki/, la página renderiza el
+  // placeholder "Próximamente". Eso es thin content para Google y daña
+  // SEO si se indexa. Marcamos noindex,follow hasta que se publique el
+  // .md. Una vez publicado, automáticamente vuelve a ser indexable.
+  // EN siempre cae al fallback (los .md son ES-only por ahora) — por
+  // eso noindex aplica también al locale en mientras tanto.
+  const isPlaceholder = !md
+  const robots = isPlaceholder
+    ? { index: false, follow: true, googleBot: { index: false, follow: true } }
+    : undefined
+
   return {
     title: en
       ? `${title} — PreEnvios.com Wiki`
       : `${title} — Wiki de PreEnvios.com`,
     description,
+    ...(robots ? { robots } : {}),
     alternates: {
       canonical: `https://preenvios.vercel.app/${locale}/wiki/${slug}`,
       languages: {

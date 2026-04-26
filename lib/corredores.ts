@@ -33,20 +33,22 @@ export const WIKI_ARTICLES = [
   { slug: 'diferencia-tasa-fee-cual-cuesta-mas-realmente',   cat: 'fundamentos',  titulo: 'Diferencia entre tasa y fee — cuál cuesta más realmente',       titulo_en: 'Rate vs fee — which actually costs more' },
   { slug: 'como-elegir-mejor-remesadora-segun-monto',        cat: 'fundamentos',  titulo: 'Cómo elegir la mejor remesadora según el monto que envías',     titulo_en: 'How to choose the best provider based on the amount you send' },
   { slug: 'documentos-necesarios-enviar-dinero-eeuu',        cat: 'fundamentos',  titulo: 'Qué documentos necesito para enviar dinero desde EE.UU.',       titulo_en: 'What documents do I need to send money from the US' },
-  // Métodos de envío (1) — categoría agregada 2026-04-25
+  // Métodos de envío (2) — categoría agregada 2026-04-25
   { slug: 'cash-pickup-vs-deposito-bancario',                cat: 'metodos',      titulo: 'Cash pickup vs depósito bancario — cuál me conviene',           titulo_en: 'Cash pickup vs bank deposit — which is better for you' },
+  { slug: 'clabe-interbancaria-18-digitos',                  cat: 'metodos',      titulo: 'CLABE interbancaria de 18 dígitos — qué es y por qué la necesitas', titulo_en: '18-digit CLABE interbank code — what it is and why you need it' },
   // Educativos (4) — categoría agregada 2026-04-25
   { slug: 'que-es-remesadora-como-gana-dinero',              cat: 'educativos',   titulo: 'Qué es una remesadora y cómo gana dinero',                      titulo_en: 'What is a remittance company and how it makes money' },
   { slug: 'tipo-cambio-afecta-mas-que-comision',             cat: 'educativos',   titulo: 'Por qué el tipo de cambio afecta más que la comisión',          titulo_en: 'Why the exchange rate matters more than the fee' },
   { slug: 'cuanto-tarda-envio-internacional-realmente',      cat: 'educativos',   titulo: 'Cuánto tarda realmente un envío internacional',                 titulo_en: 'How long does an international transfer really take' },
   { slug: 'que-metodo-es-mejor-efectivo-banco-billetera-digital', cat: 'educativos', titulo: 'Qué método es mejor: efectivo, banco o billetera digital',  titulo_en: 'Which method is best: cash, bank, or digital wallet' },
-  // Por corredor (6) — paridad 100%: 1 wiki dedicado por cada corredor MVP
+  // Por corredor (5) — wikis dedicados al pais especifico (HN, DR, GT, SV, CO).
+  // Mexico tiene su wiki dedicado en cat:'metodos' (CLABE) por decision del founder
+  // en el frontmatter del .md (2026-04-25).
   { slug: 'como-recibir-dinero-republica-dominicana-paso-paso', cat: 'corredor',  titulo: 'Cómo recibir dinero en República Dominicana paso a paso',       titulo_en: 'How to receive money in the Dominican Republic step by step' },
   { slug: 'bancos-honduras-convenio-remesadoras',            cat: 'corredor',     titulo: 'Qué bancos en Honduras tienen convenio con remesadoras',        titulo_en: 'Which banks in Honduras work with remittance providers' },
   { slug: 'cuanto-tarda-transferencia-guatemala-realmente',  cat: 'corredor',     titulo: 'Cuánto tarda una transferencia a Guatemala realmente',          titulo_en: 'How long does a transfer to Guatemala really take' },
-  { slug: 'tigo-money-chivowallet-recibir-remesas-salvador', cat: 'corredor',     titulo: 'Recibir remesas en El Salvador con Tigo Money y ChivoWallet',   titulo_en: 'Receiving remittances in El Salvador with Tigo Money and ChivoWallet' },
-  { slug: 'nequi-bre-b-recibir-remesas-colombia',            cat: 'corredor',     titulo: 'Cómo recibir remesas en Colombia con Nequi y Bre-B',            titulo_en: 'How to receive remittances in Colombia with Nequi and Bre-B' },
-  { slug: 'clabe-interbancaria-mexico-remesas',              cat: 'corredor',     titulo: 'CLABE interbancaria de 18 dígitos — qué es y por qué la necesitas', titulo_en: '18-digit CLABE interbank code — what it is and why you need it' },
+  { slug: 'recibir-remesas-el-salvador-tigo-money-chivo',    cat: 'corredor',     titulo: 'Recibir remesas en El Salvador con Tigo Money y Chivo Wallet', titulo_en: 'Receiving remittances in El Salvador with Tigo Money and Chivo Wallet' },
+  { slug: 'recibir-remesas-colombia-nequi-bre-b',            cat: 'corredor',     titulo: 'Cómo recibir remesas en Colombia con Nequi y Bre-B',            titulo_en: 'How to receive remittances in Colombia with Nequi and Bre-B' },
   // Educación financiera (2)
   { slug: 'impuestos-remesas-eeuu-pais-receptor',            cat: 'educacion',    titulo: 'Impuestos sobre remesas en EE.UU. y en el país receptor',       titulo_en: 'Taxes on remittances in the US and receiving country' },
   { slug: 'alertas-tipo-cambio-para-que-sirven-como-usarlas', cat: 'educacion',   titulo: 'Alertas de tipo de cambio — para qué sirven y cómo usarlas',    titulo_en: 'Exchange rate alerts — what they do and how to use them' },

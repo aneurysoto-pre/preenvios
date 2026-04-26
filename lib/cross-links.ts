@@ -64,9 +64,9 @@ export const WIKI_LINKS: Record<string, { corredores: string[]; operadores: stri
   'como-recibir-dinero-republica-dominicana-paso-paso':           { corredores: ['dominican_republic'], operadores: [] },
   'bancos-honduras-convenio-remesadoras':                         { corredores: ['honduras'],           operadores: [] },
   'cuanto-tarda-transferencia-guatemala-realmente':               { corredores: ['guatemala'],          operadores: [] },
-  'tigo-money-chivowallet-recibir-remesas-salvador':              { corredores: ['el_salvador'],        operadores: [] },
-  'nequi-bre-b-recibir-remesas-colombia':                         { corredores: ['colombia'],           operadores: [] },
-  'clabe-interbancaria-mexico-remesas':                           { corredores: ['mexico'],             operadores: [] },
+  'recibir-remesas-el-salvador-tigo-money-chivo':                 { corredores: ['el_salvador'],        operadores: [] },
+  'recibir-remesas-colombia-nequi-bre-b':                         { corredores: ['colombia'],           operadores: ['wise', 'remitly', 'xoom'] },
+  'clabe-interbancaria-18-digitos':                               { corredores: ['mexico'],             operadores: ['wise', 'remitly', 'xoom'] },
   // Educación financiera
   'impuestos-remesas-eeuu-pais-receptor':                         { corredores: [], operadores: [] },
   'alertas-tipo-cambio-para-que-sirven-como-usarlas':             { corredores: [], operadores: [] },
@@ -91,9 +91,9 @@ export const CORRIDOR_WIKIS: Record<string, string[]> = {
   honduras:           ['bancos-honduras-convenio-remesadoras', 'cash-pickup-vs-deposito-bancario', 'documentos-necesarios-enviar-dinero-eeuu'],
   dominican_republic: ['como-recibir-dinero-republica-dominicana-paso-paso', 'que-es-tasa-cambio-mid-market-por-que-importa', 'diferencia-tasa-fee-cual-cuesta-mas-realmente'],
   guatemala:          ['cuanto-tarda-transferencia-guatemala-realmente', 'como-elegir-mejor-remesadora-segun-monto', 'cash-pickup-vs-deposito-bancario'],
-  el_salvador:        ['tigo-money-chivowallet-recibir-remesas-salvador', 'documentos-necesarios-enviar-dinero-eeuu', 'como-elegir-mejor-remesadora-segun-monto'],
-  colombia:           ['nequi-bre-b-recibir-remesas-colombia', 'que-es-tasa-cambio-mid-market-por-que-importa', 'cash-pickup-vs-deposito-bancario'],
-  mexico:             ['clabe-interbancaria-mexico-remesas', 'diferencia-tasa-fee-cual-cuesta-mas-realmente', 'impuestos-remesas-eeuu-pais-receptor'],
+  el_salvador:        ['recibir-remesas-el-salvador-tigo-money-chivo', 'documentos-necesarios-enviar-dinero-eeuu', 'como-elegir-mejor-remesadora-segun-monto'],
+  colombia:           ['recibir-remesas-colombia-nequi-bre-b', 'que-es-tasa-cambio-mid-market-por-que-importa', 'cash-pickup-vs-deposito-bancario'],
+  mexico:             ['clabe-interbancaria-18-digitos', 'diferencia-tasa-fee-cual-cuesta-mas-realmente', 'impuestos-remesas-eeuu-pais-receptor'],
 }
 
 /** Top operators per corridor (most commonly used) — paridad 6 corredores */

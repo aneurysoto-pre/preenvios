@@ -1,9 +1,11 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import type { CorredorContent } from '@/data/corredores'
 import type { TasaBancoCentral } from '@/lib/tasas-banco-central'
 import type { CorredorId } from '@/lib/schemas/alerta'
+import { WIKI_ARTICLES } from '@/lib/corredores'
+import { CORRIDOR_WIKIS } from '@/lib/cross-links'
 import AlertaInlineForm from './AlertaInlineForm'
 import EnglishComingSoon from './EnglishComingSoon'
 
@@ -442,6 +444,15 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
+           SECCION 7 — Aprende más sobre [País] (cross-links a wikis)
+           Hub-and-spoke SEO: el landing del corredor es el hub, los
+           wikis son los spokes. Internal linking distribuye autoridad
+           del hub (alto volumen) a los spokes (long-tail keywords).
+           Source: CORRIDOR_WIKIS[data.corredorId] de lib/cross-links.ts
+           ═══════════════════════════════════════════════════════════════ */}
+      <AprendeMasSobre data={data} />
+
+      {/* ═══════════════════════════════════════════════════════════════
            Fuentes — micro-bloque antes del footer
            ═══════════════════════════════════════════════════════════════ */}
       <section className="py-5 bg-g50 border-t border-g200">
@@ -454,6 +465,63 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
         </div>
       </section>
     </>
+  )
+}
+
+/**
+ * Sección "Aprende más sobre [País]" — renderiza 3 cards linkeando a
+ * los wikis cross-relacionados del corredor (CORRIDOR_WIKIS map).
+ *
+ * Solo renderiza wikis que tienen título registrado en WIKI_ARTICLES.
+ * Si un slug del map no existe en el registry (data corruption),
+ * skipea sin romper el render. Si CORRIDOR_WIKIS[corredorId] no
+ * existe, no renderiza la sección entera.
+ */
+function AprendeMasSobre({ data }: { data: CorredorContent }) {
+  const locale = useLocale()
+  const en = locale === 'en'
+  const slugs = CORRIDOR_WIKIS[data.corredorId] || []
+  const wikis = slugs
+    .map(slug => WIKI_ARTICLES.find(a => a.slug === slug))
+    .filter((a): a is NonNullable<typeof a> => Boolean(a))
+
+  if (wikis.length === 0) return null
+
+  const nombrePais = en ? data.banderaEmoji : data.banderaEmoji
+  const heading = en ? `Learn more about sending to` : `Aprende más sobre enviar a`
+  const lede = en
+    ? 'In-depth guides on banks, methods and how money arrives.'
+    : 'Guías a fondo sobre bancos, métodos y cómo llega el dinero.'
+  const ctaText = en ? 'Read article →' : 'Leer artículo →'
+
+  return (
+    <section className="py-10 md:py-14 bg-g50 border-t border-g200">
+      <div className="max-w-[1240px] mx-auto px-5">
+        <div className="mb-6 max-w-2xl">
+          <div className="text-[11px] font-extrabold text-blue uppercase tracking-[0.18em] mb-2.5">
+            {en ? 'Learn more' : 'Aprende más'}
+          </div>
+          <h2 className="font-editorial font-black text-2xl md:text-3xl leading-[1.1] mb-2 text-ink">
+            {heading} {nombrePais}
+          </h2>
+          <p className="text-g600 text-sm leading-relaxed">{lede}</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {wikis.map(wiki => (
+            <a
+              key={wiki.slug}
+              href={`/${locale}/wiki/${wiki.slug}`}
+              className="block bg-white border border-g200 rounded-xl p-4 hover:border-blue hover:shadow-md transition-all"
+            >
+              <h3 className="font-heading font-extrabold text-[14px] leading-snug mb-2 text-ink">
+                {en ? wiki.titulo_en : wiki.titulo}
+              </h3>
+              <span className="text-[11px] font-semibold text-blue">{ctaText}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { CORREDORES_DATA, OPERADORES_DATA, WIKI_ARTICLES, BLOG_ARTICLES } from '@/lib/corredores'
 import { PAISES_MVP } from '@/lib/paises'
+import { listPublishedSlugs } from '@/lib/markdown-content'
 
 const BASE_URL = 'https://preenvios.vercel.app'
 const LEGAL_PAGES = ['terminos', 'privacidad', 'como-ganamos-dinero', 'metodologia', 'uso-de-marcas', 'disclaimers']
@@ -8,6 +9,19 @@ const INSTITUTIONAL_PAGES = ['nosotros', 'contacto', 'alertas']
 // Source of truth: BLOG_ARTICLES en lib/corredores.ts. Cuando se agregue
 // un blog post (con o sin .md publicado), aparece automáticamente acá.
 const BLOG_SLUGS = BLOG_ARTICLES.map(a => a.slug)
+
+// Auto-exclude wikis sin .md publicado: si un slug está registrado en
+// WIKI_ARTICLES pero no tiene archivo en content/wiki/, su página
+// renderiza placeholder "Próximamente" (thin content). NO debe entrar
+// al sitemap hasta que tenga contenido — el page.tsx ya lo marca como
+// noindex, esto es la segunda capa de defensa para que Google ni
+// siquiera lo descubra desde el sitemap.
+const PUBLISHED_WIKI_SLUGS = new Set(listPublishedSlugs('wiki'))
+const SITEMAP_WIKI_ARTICLES = WIKI_ARTICLES.filter(a => PUBLISHED_WIKI_SLUGS.has(a.slug))
+// Idem para blog (consistencia — si en el futuro se agrega un blog al
+// registry sin .md, queda fuera del sitemap automáticamente).
+const PUBLISHED_BLOG_SLUGS = new Set(listPublishedSlugs('blog'))
+const SITEMAP_BLOG_SLUGS = BLOG_SLUGS.filter(slug => PUBLISHED_BLOG_SLUGS.has(slug))
 
 function altLangs(path: string) {
   return { languages: { es: `${BASE_URL}/es${path}`, en: `${BASE_URL}/en${path}` } }
@@ -49,7 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Blog
   pages.push({ url: `${BASE_URL}/es/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7, alternates: altLangs('/blog') })
   pages.push({ url: `${BASE_URL}/en/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7, alternates: altLangs('/blog') })
-  for (const slug of BLOG_SLUGS) {
+  for (const slug of SITEMAP_BLOG_SLUGS) {
     pages.push({ url: `${BASE_URL}/es/blog/${slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/blog/${slug}`) })
     pages.push({ url: `${BASE_URL}/en/blog/${slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/blog/${slug}`) })
   }
@@ -57,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Wiki
   pages.push({ url: `${BASE_URL}/es/wiki`, lastModified: now, changeFrequency: 'weekly', priority: 0.7, alternates: altLangs('/wiki') })
   pages.push({ url: `${BASE_URL}/en/wiki`, lastModified: now, changeFrequency: 'weekly', priority: 0.7, alternates: altLangs('/wiki') })
-  for (const a of WIKI_ARTICLES) {
+  for (const a of SITEMAP_WIKI_ARTICLES) {
     pages.push({ url: `${BASE_URL}/es/wiki/${a.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/wiki/${a.slug}`) })
     pages.push({ url: `${BASE_URL}/en/wiki/${a.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: altLangs(`/wiki/${a.slug}`) })
   }
