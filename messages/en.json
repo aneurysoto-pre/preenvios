@@ -302,10 +302,833 @@
   },
   "landing": {
     "editorial": {
-      "comingSoon": {
-        "title": "English version coming soon",
-        "message": "We're translating the full editorial content. In the meantime, you can view the Spanish version.",
-        "ctaEs": "View Spanish version →"
+      "honduras": {
+        "seccion0": {
+          "bancoLabel": "Honduras",
+          "bancoNombre": "Central Bank of Honduras",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get daily alerts",
+          "alertasSubtitle": "Notifications when HNL/USD goes up — send when it goes farther",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to Honduras",
+          "title": "Honduras and remittances from the United States in 2026",
+          "lede": "26% of Honduras's GDP comes from remittances sent by the diaspora in the United States. Every dollar that arrives sustains a family, a small business, an education. Honduras is one of the Central American countries most dependent on remittances — these are the numbers that prove it. Data from the Central Bank of Honduras (BCH) 2025 and CEPAL 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to Honduras",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Hondurans in the US",
+          "rankingLabel": "Regional ranking",
+          "rankingSubtitle": "remittance recipient in Central America"
+        },
+        "editorial": {
+          "tag": "The Honduran diaspora in the United States",
+          "titleLine1": "From Miami to Tegucigalpa.",
+          "titleLine2": "From Houston to San Pedro Sula.",
+          "titleLine3": "Sending money to Honduras is more than a transaction.",
+          "p1": "Hondurans in the United States send roughly $8.5 billion home each year. That money pays for tuition in Comayagua, builds homes in La Ceiba, and keeps small businesses running in Choluteca.",
+          "p2": "The difference between one provider and another can be as much as <strong>$10 on every $200 sent</strong>. Multiply that by the 8 to 12 transfers many families make each year — and the savings come out to <highlight>between $80 and $120</highlight> staying with your family every year."
+        },
+        "ciudades": {
+          "tag": "Destinations within Honduras",
+          "title": "Sending money to cities in Honduras: 6 main areas",
+          "lede": "6 main cities in Honduras where your family likely receives. All have coverage from the major providers (Remitly, Xoom, Western Union, MoneyGram) at banks and agencies. Rural areas may require Tigo Money or a bank deposit at the nearest urban branch.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "industrial": "Industrial",
+            "turismo": "Tourism",
+            "patrimonio_maya": "Mayan heritage",
+            "puerto_caribe": "Caribbean port",
+            "agricola": "Agricultural"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to Honduras that cost up to $50",
+          "lede": "Each of these mistakes has cost a Honduran between $5 and $50. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Always using the same provider",
+              "texto": "The best provider changes week to week depending on the rate. Comparing every time saves you $5–$10 per transfer."
+            },
+            {
+              "titulo": "Falling for \"$0 fee\"",
+              "texto": "\"$0 fee\" doesn't mean a free transfer. The provider makes up for it with a worse exchange rate — you end up receiving fewer lempiras. Always look at the final lempiras received, not just the dollar fee."
+            },
+            {
+              "titulo": "Paying Express when there's no rush",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra vs \"Economy\" in 1 business day. If your family doesn't need the money TODAY, Express is wasted money. Save it for real emergencies."
+            },
+            {
+              "titulo": "Copying the name carelessly",
+              "texto": "If the name doesn't match character by character with the Honduran ID, the transfer is held and can take days. Copy it exactly — accents, second surnames, everything."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% because card processors (Visa/Mastercard) charge them high fees. On a $200 transfer, that's up to $8 lost. Use debit or ACH (direct bank transfer)."
+            },
+            {
+              "titulo": "Sending on Friday or the weekend",
+              "texto": "The BCH doesn't operate on Saturdays or Sundays. The rate \"freezes\" at Friday's value, which historically tends to be the worst of the week due to bank closures. Send Monday or Tuesday for the best rate."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Hondurans in the US",
+          "items": [
+            {
+              "q": "How many lempiras do I get for $200 USD?",
+              "a": "At the current Central Bank of Honduras (BCH) rate, $200 equals the theoretical lempiras shown above multiplied by 200. But each provider applies a margin: the best operator delivers roughly 1–2% less, and the worst up to 3–4% less. Real difference: up to 70 lempiras ($2.80 USD) on a single $200 transfer."
+            },
+            {
+              "q": "Which Honduran banks receive remittances?",
+              "a": "The 5 main ones are BAC Credomatic, Banco Atlántida, Ficohsa, Banpaís, and Banco del País. All major providers (Remitly, Xoom, WorldRemit) deposit directly to these accounts. If your family doesn't have an account, Tigo Money or cash pickup are the alternatives."
+            },
+            {
+              "q": "Does Tigo Money work everywhere in Honduras?",
+              "a": "Yes. Tigo has nationwide coverage, and Tigo Money operates in all 18 departments of the country. Especially useful in rural areas where there's no bank nearby: Lempira, Intibucá, Ocotepeque, La Paz. Regulated by the CNBS."
+            },
+            {
+              "q": "Is there a tax on remittances in Honduras?",
+              "a": "No. Honduras doesn't tax remittances received. Remittances are exempt from personal income tax (ISR). The only cost is the provider's fee and the margin on the exchange rate."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Tigo Money (mobile wallet): seconds",
+                "Cash (Western Union, Ria): minutes after receiving the MTCN code",
+                "Bank deposit: 2–24 hours depending on the receiving bank"
+              ]
+            },
+            {
+              "q": "How much arrives in Honduras if I send $100 USD?",
+              "a": "At the current BCH rate, $100 equals the theoretical lempiras shown above multiplied by 100. Providers deliver between 1% and 4% less depending on the operator and method. Difference: up to 30 lempiras ($1.15 USD) per transfer — use the comparison tool to see who delivers more today."
+            },
+            {
+              "q": "Which is the best provider to send to Honduras?",
+              "a": "There's no single \"best\" — it depends on the amount, urgency, and method. Remitly tends to win for amounts under $500 with cash pickup. Wise wins on bank deposits with a rate close to the BCH. Xoom and WorldRemit are competitive with promotions for new users. Use the comparison tool above this page to see who delivers more lempiras today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to Honduras.",
+          "titleLine2": "Compare providers and save $8–$15.",
+          "lede": "With what you've learned in this guide, your next transfer to Honduras can save you $8–$15 vs using the first provider that pops up on Google. Multiplied by 12 transfers a year, that's $100+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "Send Monday/Tuesday · avoid Friday/weekends",
+            "Debit or ACH > credit card",
+            "Look at lempiras received, not just the fee",
+            "Confirm the name exactly as on the ID",
+            "Save the MTCN or tracking ID of every transfer",
+            "Compare every transfer — the best provider changes week to week"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. HNL/USD rate updated daily. Last content update: {fechaActualizacion}."
+        }
+      },
+      "dominican_republic": {
+        "seccion0": {
+          "bancoLabel": "Dominican Republic",
+          "bancoNombre": "Central Bank of the Dominican Republic",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get daily alerts",
+          "alertasSubtitle": "Notifications when DOP/USD goes up — send when it goes farther",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to the Dominican Republic",
+          "title": "The Dominican Republic and remittances from the United States in 2026",
+          "lede": "Every year, $10.3 billion crosses from Dominican neighborhoods in the Bronx, Washington Heights, Lawrence, and Miami to homes in Santo Domingo, Santiago, and the small towns of the Cibao. It's the largest remittance corridor in the Caribbean — and one of the most mature in the world. Data from the Central Bank of the Dominican Republic (BCRD) 2024 and IDB 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to DR",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Dominicans in the US",
+          "rankingLabel": "Regional ranking",
+          "rankingSubtitle": "recipient in the Caribbean"
+        },
+        "editorial": {
+          "tag": "The Dominican diaspora in the United States",
+          "titleLine1": "From Upper Manhattan to Santo Domingo.",
+          "titleLine2": "From Lawrence to Santiago.",
+          "titleLine3": "A corridor with 50 years of history — and differences that matter.",
+          "p1": "Dominican migration to the United States started in earnest in the 1960s. Five decades later, there are 2.4 million Dominicans in the country, concentrated in New York, New Jersey, Massachusetts, and Florida. It's one of the most established remittance corridors in the world — Quisqueyana, Caribe Express, and Pronto Envíos have been operating it for decades.",
+          "p2": "But the international comparison set (Remitly, Wise, Xoom, WorldRemit) tends to <strong>deliver more pesos per dollar</strong> than traditional operators — the difference can be up to <highlight>$8 on every $200 sent</highlight>. Across 12 transfers a year, that's $96 staying with your family in the DR instead of paying margin to the operator."
+        },
+        "ciudades": {
+          "tag": "Destinations within the Dominican Republic",
+          "title": "Sending money to cities in DR: 6 main destinations",
+          "lede": "6 destinations where your family likely receives. All major operators (Remitly, Xoom, WorldRemit, Western Union, MoneyGram) have nationwide coverage via deposits to Banco Popular, BHD, Banreservas, and Scotiabank. For more remote areas in the south or deep Cibao, cash pickup at WU/MG remains the most reliable option.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "cibao": "Cibao",
+            "turismo": "Tourism",
+            "zona_franca": "Free trade zone",
+            "puerto_norte": "Northern port",
+            "beisbol": "Baseball"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to DR that cost up to $50",
+          "lede": "Each of these mistakes has cost a Dominican between $5 and $50. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Sticking with the same provider you've always used",
+              "texto": "Quisqueyana or Caribe Express are tradition — but digital providers tend to deliver 1–2% more pesos per dollar. On a $200 transfer, that's up to 250 extra pesos (RD$250 ≈ $4.10 USD) reaching your family."
+            },
+            {
+              "titulo": "Trusting \"$0 fee\"",
+              "texto": "\"$0 fee\" doesn't mean a free transfer. The provider makes up for it with a worse exchange rate — your family ends up receiving fewer pesos. Always compare final pesos received, not the dollar fee."
+            },
+            {
+              "titulo": "Paying Express when there's no rush",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra vs \"Economy\" in 1 business day. If your family doesn't need the money TODAY, Express is wasted money. Save it for real emergencies."
+            },
+            {
+              "titulo": "Getting the two surnames wrong",
+              "texto": "In the DR, two surnames are used (paternal and maternal). If the name doesn't match character by character with the ID, the transfer is held and can take days. Copy it exactly — accents, second surname, everything."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% when you pay with credit because card processors charge them high fees. On a $200 transfer, that's up to $8 lost. Use debit or ACH (direct bank transfer)."
+            },
+            {
+              "titulo": "Sending Friday afternoon",
+              "texto": "The BCRD doesn't operate on Saturdays or Sundays. The rate \"freezes\" at Friday's value — historically the worst of the week due to closures. Send Monday or Tuesday for a better rate."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Dominicans in the US",
+          "items": [
+            {
+              "q": "How many pesos do I get for $200 USD?",
+              "a": "At the current Central Bank of the Dominican Republic (BCRD) rate, $200 equals the theoretical pesos shown above multiplied by 200. But each provider applies a margin: the best operator delivers roughly 1–2% less, and the worst up to 3–4% less. Real difference: up to 500 pesos ($8.30 USD) on a single $200 transfer."
+            },
+            {
+              "q": "Which Dominican banks receive remittances?",
+              "a": "The main ones are Banco Popular Dominicano, BHD, Banreservas, Scotiabank, Banco Santa Cruz, and APAP. All major providers (Remitly, Xoom, WorldRemit, Wise) deposit directly to these accounts. If your family doesn't have an account, cash pickup at WU/MG agencies is the alternative."
+            },
+            {
+              "q": "Are Caribe Express and Quisqueyana included in the comparison?",
+              "a": "No. The comparison covers the 7 global operators (Remitly, Wise, Xoom, WorldRemit, Western Union, MoneyGram, Ria) that dominate most of the Dominican market today. Traditional operators (Quisqueyana, Caribe Express, Pronto Envíos) have a strong presence in NYC but tend to fall behind on rate vs the digital ones — it's worth comparing."
+            },
+            {
+              "q": "Is there a tax on remittances in DR?",
+              "a": "No. The Dominican Republic doesn't tax remittances received. They're exempt from personal income tax (ISR). The only cost is the provider's fee plus the margin on the exchange rate."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Cash (Western Union, Ria, MoneyGram): minutes after receiving the code",
+                "Bank deposit: 2–24 hours depending on the receiving bank",
+                "tPago wallet (Banreservas): seconds"
+              ]
+            },
+            {
+              "q": "How much arrives in DR if I send $100 USD?",
+              "a": "At the current BCRD rate, $100 equals the theoretical pesos shown above multiplied by 100. Providers deliver between 1% and 4% less depending on the operator and method. Difference: up to 250 pesos ($4.10 USD) per transfer — use the comparison tool to see who delivers more today."
+            },
+            {
+              "q": "Which is the best provider to send to DR?",
+              "a": "There's no single \"best\" — it depends on the amount, urgency, and method. Remitly tends to win for amounts under $500 with cash pickup. Wise is typically better for bank deposits thanks to a rate close to the BCRD. Xoom and WorldRemit are competitive with promotions for new users. Western Union is still the most reliable option for cash pickup in remote areas. Use the comparison tool above to see who delivers more pesos today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to DR.",
+          "titleLine2": "Compare providers and save $8–$15.",
+          "lede": "With what you've learned in this guide, your next transfer to DR can save you $8–$15 vs using the first provider that pops up on Google. Multiplied by 12 transfers a year, that's $100+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "Send Monday/Tuesday · avoid Friday/weekends",
+            "Debit or ACH > credit card",
+            "Look at pesos received, not just the fee",
+            "Confirm the name exactly as on the ID (with both surnames)",
+            "Save the MTCN or tracking ID of every transfer",
+            "Compare every transfer — the best provider changes week to week"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. DOP/USD rate updated daily. Last content update: {fechaActualizacion}."
+        }
+      },
+      "guatemala": {
+        "seccion0": {
+          "bancoLabel": "Guatemala",
+          "bancoNombre": "Bank of Guatemala",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get daily alerts",
+          "alertasSubtitle": "Notifications when GTQ/USD goes up — send when it goes farther",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to Guatemala",
+          "title": "Guatemala and remittances from the United States in 2026",
+          "lede": "Guatemala receives $21.5 billion a year from the United States — the largest remittance corridor in Central America, almost double Honduras. Those quetzales support families in Quetzaltenango, Huehuetenango, Cobán, and the country's 22 departments. Data from the Bank of Guatemala (Banguat) 2024 and CEPAL 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to Guatemala",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Guatemalans in the US",
+          "rankingLabel": "Regional ranking",
+          "rankingSubtitle": "recipient in Central America"
+        },
+        "editorial": {
+          "tag": "The Guatemalan diaspora in the United States",
+          "titleLine1": "From Los Angeles to the capital.",
+          "titleLine2": "From Houston to Huehuetenango.",
+          "titleLine3": "All of Central America watches the largest corridor in the region.",
+          "p1": "There are 1.8 million Guatemalans in the United States. Most live in California, Texas, Florida, and New York — and many come from the highland departments: Huehuetenango, San Marcos, Quiché. Each year they send $21.5 billion home, almost 19% of the country's GDP. It's the largest remittance corridor in Central America.",
+          "p2": "But that scale hides a complexity: bank coverage varies a lot by department. Banrural dominates the rural highlands, while Banco Industrial and BAM concentrate the urban areas. <strong>Choosing the right provider based on where your family receives</strong> can save you up to <highlight>$10 on every $200 sent</highlight> — multiplied across the year's transfers, that's hundreds of quetzales staying with your family."
+        },
+        "ciudades": {
+          "tag": "Destinations within Guatemala",
+          "title": "Sending money to cities in Guatemala: 6 main areas",
+          "lede": "6 destinations where your family likely receives. The major providers (Remitly, Xoom, WorldRemit, WU, MG) cover the entire country via Banrural, Banco Industrial, and BAM. In rural highland areas (Huehuetenango, Quiché, San Marcos), Banrural still has the broadest coverage — confirm your provider deposits there before paying for Express.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "altiplano": "Highlands",
+            "patrimonio_colonial": "Heritage",
+            "frontera_norte": "Northern border",
+            "cafetalero": "Coffee region",
+            "metropolitana": "Metropolitan"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to Guatemala that cost up to $60",
+          "lede": "Each of these mistakes has cost a Guatemalan between $5 and $60. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Not confirming which bank your family uses",
+              "texto": "If the provider doesn't deposit to Banrural but your family only has an account there, you end up paying an extra fee for cash pickup or switching operators. Confirm BEFORE which bank the recipient uses."
+            },
+            {
+              "titulo": "Falling for \"$0 fee\"",
+              "texto": "\"$0 fee\" doesn't mean a free transfer. The provider makes up for it with a worse exchange rate — you end up receiving fewer quetzales. Look at the final quetzales received, not just the dollar fee."
+            },
+            {
+              "titulo": "Paying Express when there's no rush",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra vs \"Economy\" in 1–2 days. If your family doesn't need the money TODAY, Express is wasted money. Save it for real emergencies."
+            },
+            {
+              "titulo": "Not copying the full name",
+              "texto": "If the name doesn't match character by character with the Guatemalan DPI, the transfer is held and can take days. Copy it exactly — accents, both surnames, everything. Name errors are the #1 cause of held transfers."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% when you pay with credit. On a $200 transfer, that's up to $8 lost. Use debit or ACH (direct bank transfer)."
+            },
+            {
+              "titulo": "Ignoring Guatemalan holidays",
+              "texto": "Guatemala has public holidays (September 15, Holy Week) when banks close. If you send the day before with a bank deposit, the money sits in limbo until the next business day. For those dates, cash pickup or a mobile wallet are faster."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Guatemalans in the US",
+          "items": [
+            {
+              "q": "How many quetzales do I get for $200 USD?",
+              "a": "At the current Bank of Guatemala (Banguat) rate, $200 equals the theoretical quetzales shown above multiplied by 200. But each provider applies a margin: the best operator delivers roughly 1–2% less, and the worst up to 3–4% less. Real difference: up to 60 quetzales ($7.85 USD) on a single $200 transfer."
+            },
+            {
+              "q": "Which Guatemalan banks receive remittances?",
+              "a": "The main ones are Banrural (nationwide coverage, dominant in rural areas), Banco Industrial (BI), Banco G&T Continental, BAM, and Banco Promerica. All major providers deposit to these. Banrural is especially important for the highland diaspora because of its agency network in small towns."
+            },
+            {
+              "q": "Does Tigo Money work everywhere in Guatemala?",
+              "a": "Yes. Tigo Money has coverage in all 22 departments. It's especially useful where there are no nearby bank branches: rural areas of Quiché, Huehuetenango, San Marcos, Petén. Your family withdraws cash at any Tigo Money outlet. Regulated by the Superintendencia de Bancos (SIB)."
+            },
+            {
+              "q": "Is there a tax on remittances in Guatemala?",
+              "a": "No. Guatemala doesn't tax remittances received. They're exempt from personal income tax (ISR). The only cost is the provider's fee plus the margin on the exchange rate."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Tigo Money (mobile wallet): seconds",
+                "Cash (Western Union, MoneyGram, Ria): minutes after receiving the MTCN code",
+                "Banrural / BI deposit: 2–24 hours depending on the bank"
+              ]
+            },
+            {
+              "q": "How much arrives in Guatemala if I send $100 USD?",
+              "a": "At the current Banguat rate, $100 equals the theoretical quetzales shown above multiplied by 100. Providers deliver between 1% and 4% less depending on the operator and method. Difference: up to 30 quetzales ($3.90 USD) per transfer — use the comparison tool to see who delivers more today."
+            },
+            {
+              "q": "Which is the best provider to send to Guatemala?",
+              "a": "There's no single \"best\" — it depends on the receiving bank, amount, urgency, and method. Remitly tends to win for cash pickup on amounts under $500. Wise is typically better for bank deposits thanks to a rate close to the Banguat. Western Union and MoneyGram dominate in rural areas due to agency density. Use the comparison tool above to see who delivers more quetzales today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to Guatemala.",
+          "titleLine2": "Compare providers and save $10–$20.",
+          "lede": "With what you've learned in this guide, your next transfer to Guatemala can save you $10–$20 vs using the first provider that pops up on Google. Multiplied by 12 transfers a year, that's $120+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "Confirm which bank your family uses (Banrural dominates rural areas)",
+            "Send Monday/Tuesday · avoid Friday/weekends",
+            "Debit or ACH > credit card",
+            "Look at quetzales received, not just the fee",
+            "Confirm the name exactly as on the DPI",
+            "Compare every transfer — the best changes week to week"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. GTQ/USD rate updated daily. Last content update: {fechaActualizacion}."
+        }
+      },
+      "el_salvador": {
+        "seccion0": {
+          "bancoLabel": "El Salvador",
+          "bancoNombre": "Central Reserve Bank",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get transfer alerts",
+          "alertasSubtitle": "Notifications when fees drop or promotions launch",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to El Salvador",
+          "title": "El Salvador and remittances from the United States in 2026",
+          "lede": "El Salvador receives $8.5 billion a year from the United States — the second largest corridor in Central America. The country has been dollarized since 2001, so there's no exchange rate to lose in conversion. But fees, delivery methods, and promotions still vary across providers: that's where the difference is. Data from the BCR 2024 and CEPAL 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to SV",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Salvadorans in the US",
+          "rankingLabel": "Regional ranking",
+          "rankingSubtitle": "recipient in Central America"
+        },
+        "editorial": {
+          "tag": "The Salvadoran diaspora in the United States",
+          "titleLine1": "From Los Angeles to San Salvador.",
+          "titleLine2": "From Washington DC to Santa Ana.",
+          "titleLine3": "No exchange rate to compare — but there are differences.",
+          "p1": "There are 2.5 million Salvadorans in the United States: one of the densest diasporas per capita in all of Latin America. Concentrated in California, Maryland, Texas, Virginia, and New York, they send $8.5 billion home each year. That's 24 cents of every dollar of Salvadoran GDP — one of the highest percentages on the continent.",
+          "p2": "El Salvador is the only corridor in the comparison where there's no conversion: USD in, USD out. That simplifies the decision but <strong>doesn't eliminate it</strong>. Fees vary from $0 to $7 per transfer, fast methods cost $5–$8 extra, and only some providers pay out via ChivoWallet or Tigo Money wallet. <highlight>Comparing still saves you $5–$10 per transfer</highlight>."
+        },
+        "ciudades": {
+          "tag": "Destinations within El Salvador",
+          "title": "Sending money to cities in El Salvador: 6 main areas",
+          "lede": "6 destinations where your family likely receives. Since the country is small and dollarized, almost all major providers (Remitly, Xoom, WorldRemit, WU, MG) have nationwide coverage. Banco Cuscatlán, Banco Agrícola, and Banco Davivienda dominate deposits. Tigo Money and ChivoWallet operate nationally for cash pickup.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "cafetalero": "Coffee region",
+            "oriental": "Eastern",
+            "industrial": "Industrial",
+            "costero": "Coastal",
+            "occidental": "Western"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to El Salvador that cost up to $50",
+          "lede": "Each of these mistakes has cost a Salvadoran between $5 and $50. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Thinking \"USD to USD\" is always the same",
+              "texto": "There's no conversion, true — but fees vary from $0 to $7 on a $200 transfer. And \"$0 fee\" sometimes hides a cost in the delivery method or wait time. Comparing the total cost matters."
+            },
+            {
+              "titulo": "Paying Express out of habit",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra. If your family doesn't need the money TODAY, \"Economy\" in 1 business day is money saved. Save it for real emergencies."
+            },
+            {
+              "titulo": "Not checking if your family uses ChivoWallet",
+              "texto": "ChivoWallet is the official government wallet (Bitcoin/USD). Some providers pay out there directly, but not all. If your family is an active user, that saves the trip to the agency. Check which provider lists it as a method."
+            },
+            {
+              "titulo": "Not copying the full name",
+              "texto": "If the name doesn't match character by character with the Salvadoran DUI, the transfer is held and can take days. Copy it exactly — accents, second surname, everything."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% when you pay with credit because card processors charge them high fees. On a $200 transfer, that's up to $8 lost. Use debit or ACH."
+            },
+            {
+              "titulo": "Always sending with the same provider",
+              "texto": "Welcome promotions and \"first transfer with $0 fee\" rotate among operators. If you only use one, you miss those discounts. Creating accounts at 2–3 lets you take advantage of promos without locking in to any."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Salvadorans in the US",
+          "items": [
+            {
+              "q": "If El Salvador uses USD, why compare providers?",
+              "a": "Good question. The USD/USD conversion is 1.00, but fees vary: from $0 to $7 per transfer. The delivery method (Express vs Economy) costs $5–$8 extra. Welcome and new-customer promotions rotate. Across 12 transfers a year, comparing can save you $60–$120 without touching the \"rate.\" That's what the comparison tool above does."
+            },
+            {
+              "q": "Which Salvadoran banks receive remittances?",
+              "a": "The main ones are Banco Cuscatlán, Banco Agrícola, Banco Davivienda, and Banco Promerica. All major providers (Remitly, Xoom, WorldRemit, Wise, WU, MG) deposit to these. Since SV is dollarized, deposits arrive directly as USD with no conversion."
+            },
+            {
+              "q": "Do Tigo Money and ChivoWallet work?",
+              "a": "Yes. Tigo Money has nationwide coverage (regulated by the Superintendencia del Sistema Financiero). ChivoWallet is the official government wallet (USD + Bitcoin) launched in 2021 — adoption varies by family. Both work for cash pickup or payments. Check whether your provider includes them as a method."
+            },
+            {
+              "q": "Is there a tax on remittances in El Salvador?",
+              "a": "No. El Salvador doesn't tax remittances received. They're exempt from personal income tax (ISR). The only cost is the provider's fee — and since there's no currency conversion, that's all of it."
+            },
+            {
+              "q": "Is Bitcoin useful for sending remittances to El Salvador?",
+              "a": "Technically yes since 2021 (it's legal tender), but real adoption for family remittances has been low. Most remittances still arrive as USD via banks, wallets, or cash. If your family isn't an active ChivoWallet user, sending BTC creates extra friction (volatility, conversion, understanding). The comparison tool focuses on USD, which covers ~99% of the corridor."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Tigo Money / ChivoWallet (wallet): seconds",
+                "Cash (Western Union, MoneyGram, Ria): minutes after receiving the code",
+                "Cuscatlán / Agrícola deposit: 2–24 hours"
+              ]
+            },
+            {
+              "q": "Which is the best provider to send to El Salvador?",
+              "a": "Since there's no conversion, \"best\" comes down to fees, speed, and method. Remitly tends to have strong promos for new users and cash pickup. Wise wins on low fees for bank deposits. Western Union remains the option with the most physical agencies. Use the comparison tool above to see who has the best offer today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to El Salvador.",
+          "titleLine2": "Compare fees and save $5–$10.",
+          "lede": "With what you've learned in this guide, your next transfer to SV can save you $5–$10 vs using the first provider that pops up on Google. Multiplied by 12 transfers a year, that's $60+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "No conversion: focus on fees and method",
+            "Take advantage of new-user promos — they rotate among operators",
+            "Economy > Express if there's no rush",
+            "Debit or ACH > credit card",
+            "Confirm the name exactly as on the DUI",
+            "Check if your family uses Tigo Money / ChivoWallet"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. El Salvador has been dollarized since 2001 — no USD/USD conversion. Last content update: {fechaActualizacion}."
+        }
+      },
+      "colombia": {
+        "seccion0": {
+          "bancoLabel": "Colombia",
+          "bancoNombre": "Bank of the Republic",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get daily alerts",
+          "alertasSubtitle": "Notifications when COP/USD goes up — send when it goes farther",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to Colombia",
+          "title": "Colombia and remittances from the United States in 2026",
+          "lede": "Colombia receives around $12 billion a year from the United States. It's a corridor with a volatile COP/USD rate — the Colombian peso swings sharply week to week, which means comparing before sending can be worth 100 or 200 pesos per dollar. On a $200 transfer, that's up to 40,000 extra pesos. Data from the Bank of the Republic 2024 and DANE 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to Colombia",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Colombians in the US",
+          "rankingLabel": "Regional ranking",
+          "rankingSubtitle": "in Latin America"
+        },
+        "editorial": {
+          "tag": "The Colombian diaspora in the United States",
+          "titleLine1": "From Miami to Bogotá.",
+          "titleLine2": "From New York to Medellín.",
+          "titleLine3": "A hundred pesos per dollar sounds like little — multiply it by a thousand.",
+          "p1": "There are 1.3 million Colombians in the United States. Most live in Florida (especially Miami), New York, New Jersey, and Texas. Each year they send around $12 billion — the second largest corridor in South America after Mexico. And because the Colombian peso is quoted in the thousands, differences across operators show up in hundreds of pesos per dollar, not in cents.",
+          "p2": "In practice that means: the best operator might deliver 4,150 COP per dollar while the worst delivers 4,000. That's 150 pesos of difference per dollar — <strong>30,000 pesos on a $200 transfer</strong>. Multiplied by the 8 to 12 transfers many families make each year, that's <highlight>between $50 and $80 USD</highlight> staying with your family every year."
+        },
+        "ciudades": {
+          "tag": "Destinations within Colombia",
+          "title": "Sending money to cities in Colombia: 6 main areas",
+          "lede": "6 destinations where your family likely receives. Bancolombia, Davivienda, BBVA Colombia, and Banco de Bogotá dominate deposits. For rural areas, Banco Agrario has the broadest agency network. Operators like Western Union and MoneyGram have agencies in nearly the entire country for cash pickup.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "innovacion": "Innovation",
+            "salsa": "Salsa",
+            "caribe": "Caribbean",
+            "patrimonio_colonial": "Heritage",
+            "cafetalero": "Coffee region"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to Colombia that cost up to $80",
+          "lede": "Each of these mistakes has cost a Colombian between $10 and $80. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Looking at the \"fee\" without looking at the rate",
+              "texto": "In Colombia, pesos per dollar vary 100–200 across operators. \"$0 fee\" can hide a worse rate that costs 30,000 pesos on a $200 transfer. Always look at the final pesos received, not the fee alone."
+            },
+            {
+              "titulo": "Sticking with the first provider you tried",
+              "texto": "The best provider for Colombia changes week to week depending on the COP/USD rate from the Bank of the Republic and on promotions. Comparing every time saves you $5–$10 per transfer in Colombian pesos."
+            },
+            {
+              "titulo": "Paying Express when there's no rush",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra vs \"Economy\" in 1 day. If your family doesn't need the money TODAY, Express is wasted money. Save it for real emergencies."
+            },
+            {
+              "titulo": "Forgetting the receiving bank's automatic charge",
+              "texto": "Some Colombian banks charge a small fee when they receive an international transfer ($1–$3 USD deducted on receipt). That depends on the bank, not on the provider. Check with your family whether Bancolombia / BBVA / Davivienda charges them anything on receipt."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% when you pay with credit because card processors charge them high fees. On a $200 transfer, that's up to $8 lost. Use debit or ACH."
+            },
+            {
+              "titulo": "Not verifying the Colombian ID number",
+              "texto": "Colombia uses a citizen ID (NUIP). If the number or name doesn't match exactly with the ID, the transfer is held. Ask your family for the exact number before sending — one wrong digit means days of delay."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Colombians in the US",
+          "items": [
+            {
+              "q": "How many Colombian pesos do I get for $200 USD?",
+              "a": "At the current Bank of the Republic rate, $200 equals the theoretical pesos shown above multiplied by 200. But each provider applies a margin: the best operator delivers roughly 1–2% less, and the worst up to 3–4% less. Real difference: up to 30,000 pesos ($7.20 USD) on a single $200 transfer."
+            },
+            {
+              "q": "Which Colombian banks receive remittances?",
+              "a": "The main ones are Bancolombia, Davivienda, BBVA Colombia, Banco de Bogotá, Banco Caja Social, and Banco Agrario (the latter with broader coverage in rural areas). All major providers (Remitly, Xoom, WorldRemit, Wise) deposit to these accounts. If your family doesn't have an account, cash pickup at WU/MG is the alternative."
+            },
+            {
+              "q": "Does my Colombian bank charge me on receipt?",
+              "a": "Some do, others don't. Bancolombia, BBVA Colombia, and Davivienda typically charge a fee of around 1,000–10,000 pesos on receiving an international transfer. Other banks don't charge. This depends on the receiving bank, NOT on the provider. Check with your family before sending."
+            },
+            {
+              "q": "Is there a tax on remittances in Colombia?",
+              "a": "No. Colombia doesn't tax remittances received. They're exempt from withholding tax and from VAT. The only cost is the provider's fee plus the margin on the exchange rate (and the occasional charge from the receiving bank for receiving SWIFT)."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Cash (Western Union, Ria, MoneyGram): minutes after receiving the code",
+                "Bancolombia / BBVA / Davivienda deposit: 2–24 hours",
+                "Nequi (digital wallet): seconds at many providers"
+              ]
+            },
+            {
+              "q": "How much arrives in Colombia if I send $100 USD?",
+              "a": "At the current Bank of the Republic rate, $100 equals the theoretical pesos shown above multiplied by 100. Providers deliver between 1% and 4% less depending on the operator and method. Difference: up to 15,000 pesos ($3.60 USD) per transfer — use the comparison tool to see who delivers more today."
+            },
+            {
+              "q": "Which is the best provider to send to Colombia?",
+              "a": "There's no single \"best\" — it depends on the amount, urgency, and method. Remitly tends to win for amounts under $500 with cash pickup or Nequi. Wise is typically better for bank deposits thanks to a rate close to the Bank of the Republic. Xoom and WorldRemit are competitive with promotions for new users. Western Union dominates in remote areas with its agency network. Use the comparison tool above to see who delivers more pesos today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to Colombia.",
+          "titleLine2": "Compare providers and save $8–$15.",
+          "lede": "With what you've learned in this guide, your next transfer to Colombia can save you $8–$15 vs using the first provider that pops up on Google. Multiplied by 12 transfers a year, that's $100+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "Look at Colombian pesos received, not the \"fee\"",
+            "Check whether your bank charges on receipt",
+            "Send Monday/Tuesday · avoid Friday/weekends",
+            "Debit or ACH > credit card",
+            "Confirm citizen ID with no wrong digit",
+            "Compare every transfer — the best changes week to week"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. COP/USD rate updated daily. Last content update: {fechaActualizacion}."
+        }
+      },
+      "mexico": {
+        "seccion0": {
+          "bancoLabel": "Mexico",
+          "bancoNombre": "Bank of Mexico",
+          "tasaActualizado": "Updated today, {fechaHoy}",
+          "alertasHeading": "Get daily alerts",
+          "alertasSubtitle": "Notifications when MXN/USD goes up — send when it goes farther",
+          "alertasEmailPlaceholder": "your@email.com",
+          "alertasCta": "Subscribe free →"
+        },
+        "stats": {
+          "tag": "Sending money from the US to Mexico",
+          "title": "Mexico and remittances from the United States in 2026",
+          "lede": "Mexico is the largest remittance corridor in the world: $66 billion a year from the United States. Behind every dollar are 37 million Mexicans and Mexican-Americans supporting families across all 32 states. When volumes are this large, even a 0.5% rate difference adds up to hundreds of dollars a year. Data from Banxico 2024 and the World Bank 2024.",
+          "remesasAnualesLabel": "Annual remittances",
+          "remesasAnualesSubtitle": "from the US to Mexico",
+          "pibLabel": "Of GDP",
+          "pibSubtitle": "depends on remittances",
+          "diasporaLabel": "Diaspora",
+          "diasporaSubtitle": "Mexicans / Mexican-Americans in the US",
+          "rankingLabel": "World ranking",
+          "rankingSubtitle": "remittance recipient"
+        },
+        "editorial": {
+          "tag": "The Mexican diaspora in the United States",
+          "titleLine1": "From California to Jalisco.",
+          "titleLine2": "From Texas to Michoacán.",
+          "titleLine3": "The world's largest corridor — the math of the 0.5%.",
+          "p1": "There are 37 million Mexicans and Mexican-Americans in the United States: 1 in every 9 residents of the country. Each year they send $66 billion home — more than any other remittance corridor on the planet. Those pesos sustain homes in Jalisco, milpas in Oaxaca, schools in Puebla, businesses in Monterrey, and medical care all over the country.",
+          "p2": "With volume like that, the details matter. The best operator might deliver 17.10 pesos per dollar while the worst delivers 16.85. That's 25 cents of difference per dollar — <strong>$50 pesos on a $200 transfer</strong>. Applied to the typical 12 transfers a year, that's <highlight>$600 pesos a year</highlight> ($35 USD) staying with your family instead of paying margin to the operator."
+        },
+        "ciudades": {
+          "tag": "Destinations within Mexico",
+          "title": "Sending money to cities in Mexico: 6 main areas",
+          "lede": "6 representative destinations. But Mexico is huge — the major providers (Remitly, Xoom, WorldRemit, WU, MG) cover all 32 states with accounts at BBVA México, Santander, Banamex, HSBC, and Banorte. For rural areas, Western Union, MoneyGram, and Elektra have the densest agency network for cash pickup.",
+          "principalBadge": "#1 destination",
+          "tipo": {
+            "capital": "Capital",
+            "tequilera": "Tequila region",
+            "industrial": "Industrial",
+            "colonial": "Colonial",
+            "frontera": "Border",
+            "patrimonio_maya": "Mayan heritage"
+          }
+        },
+        "errores": {
+          "tag": "Avoid this",
+          "title": "Mistakes when sending money to Mexico that cost up to $100",
+          "lede": "Each of these mistakes has cost a Mexican between $10 and $100. Learn them before your next transfer.",
+          "items": [
+            {
+              "titulo": "Sticking with the first provider out of habit",
+              "texto": "The best provider changes week to week depending on the Mexican peso (which moves a lot) and on promotions. If you've been using the same one for years, you're probably leaving $5–$10 per transfer on the table. Comparing every time is rule #1."
+            },
+            {
+              "titulo": "Confusing \"$0 fee\" with a free transfer",
+              "texto": "\"$0 fee\" doesn't mean a free transfer. The provider makes up for it with a worse exchange rate — you end up receiving fewer Mexican pesos. Look at the final pesos received, not the fee alone."
+            },
+            {
+              "titulo": "Paying Express when there's no rush",
+              "texto": "\"Express\" in 5 minutes costs $5–$8 extra vs \"Economy\" in 1 day. If your family doesn't need the money TODAY, Express is wasted money. Save it for real emergencies."
+            },
+            {
+              "titulo": "Not copying the full name",
+              "texto": "If the name doesn't match character by character with the Mexican INE/IFE, the transfer is held and can take days. Copy it exactly — accents, both surnames, everything. Name errors are the #1 cause of held transfers."
+            },
+            {
+              "titulo": "Paying with a credit card",
+              "texto": "Providers charge an extra 2–4% when you pay with credit because card processors charge them high fees. On a $200 transfer, that's up to $8 lost. Use debit or ACH."
+            },
+            {
+              "titulo": "Ignoring the 18-digit CLABE",
+              "texto": "For a bank deposit in Mexico you need the interbank CLABE (18 digits), not just the account number. If your family gives you only the 11-digit account, the transfer bounces or arrives more slowly. Always ask for the full CLABE."
+            }
+          ]
+        },
+        "faq": {
+          "tag": "Frequently asked questions",
+          "title": "Frequently asked questions from Mexicans in the US",
+          "items": [
+            {
+              "q": "How many Mexican pesos do I get for $200 USD?",
+              "a": "At the current Bank of Mexico (Banxico) rate, $200 equals the theoretical pesos shown above multiplied by 200. But each provider applies a margin: the best operator delivers roughly 1–2% less, and the worst up to 3–4% less. Real difference: up to 50 pesos ($2.95 USD) on a single $200 transfer."
+            },
+            {
+              "q": "Which Mexican banks receive remittances?",
+              "a": "The main ones are BBVA México (the largest), Santander, Citibanamex, Banorte, and HSBC. All major providers deposit to these via CLABE. For cash pickup, Elektra is Western Union's classic partner (with thousands of stores across the country); it also works at Telecomm-Telégrafos branches in rural areas."
+            },
+            {
+              "q": "What is the CLABE and why do I need it?",
+              "a": "The CLABE (Standardized Banking Code) is a unique 18-digit number for every Mexican bank account. It's what providers need to deposit — not the short account number. Your family can find it on their bank statement or app. Without the correct CLABE, the transfer bounces."
+            },
+            {
+              "q": "Is there a tax on remittances in Mexico?",
+              "a": "No at the federal level. Mexico doesn't tax remittances received under personal income tax (ISR). But heads up: in 2025, the US Congress discussed a possible 1–5% tax on the sender side (not the recipient). Check whether your provider is already applying it — some break it out clearly, others don't. The comparison tool above shows the net amount."
+            },
+            {
+              "q": "How long does a transfer take to arrive?",
+              "aIntro": "Depends on the method and provider:",
+              "aBullets": [
+                "Express (Remitly, Xoom, WorldRemit): 5–30 minutes",
+                "Economy (Wise): 1–2 business days",
+                "Cash (Western Union via Elektra, MoneyGram, Ria): minutes after receiving the code",
+                "BBVA / Santander / Banorte deposit: 2–24 hours",
+                "SPEI (Mexican interbank transfer): seconds to minutes"
+              ]
+            },
+            {
+              "q": "How much arrives in Mexico if I send $100 USD?",
+              "a": "At the current Banxico rate, $100 equals the theoretical pesos shown above multiplied by 100. Providers deliver between 1% and 4% less depending on the operator and method. Difference: up to 25 pesos ($1.50 USD) per transfer — small in absolute terms, but accumulated across 12 transfers a year that's $20+. Use the comparison tool to see who delivers more today."
+            },
+            {
+              "q": "Which is the best provider to send to Mexico?",
+              "a": "There's no single \"best\" — it depends on the amount, urgency, and method. Remitly tends to win for amounts under $500 with cash pickup at Elektra. Wise is typically better for bank deposits via CLABE thanks to a rate close to Banxico. Xoom (from PayPal) has a strong presence and recurring promotions. Western Union dominates cash pickup with its agency density. Use the comparison tool above to see who delivers more pesos today."
+            }
+          ]
+        },
+        "cta": {
+          "tag": "Next step",
+          "titleLine1": "Ready to send money to Mexico.",
+          "titleLine2": "Compare providers and save $5–$15.",
+          "lede": "With what you've learned in this guide, your next transfer to Mexico can save you $5–$15 vs using the first provider that pops up on Google. Multiplied by the typical 12+ transfers a year, that's $100+ staying with your family.",
+          "ctaPrimary": "See the comparison of 7 providers →",
+          "checklistHeading": "Quick reminder",
+          "checklist": [
+            "Ask for the 18-digit CLABE, not the short account",
+            "Look at Mexican pesos received, not just the fee",
+            "Send Monday/Tuesday · avoid Friday/weekends",
+            "Debit or ACH > credit card",
+            "Confirm the name exactly as on the INE/IFE",
+            "Compare every transfer — the best changes week to week"
+          ]
+        },
+        "fuentes": {
+          "label": "Sources:",
+          "text": "Macroeconomic data updated annually. MXN/USD rate updated daily. Last content update: {fechaActualizacion}."
+        }
       }
     }
   }

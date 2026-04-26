@@ -302,11 +302,6 @@
   },
   "landing": {
     "editorial": {
-      "comingSoon": {
-        "title": "Versión en inglés próximamente",
-        "message": "Estamos traduciendo el contenido completo. Mientras tanto, podés ver la versión en español.",
-        "ctaEs": "Ver versión en español →"
-      },
       "honduras": {
         "seccion0": {
           "bancoLabel": "Honduras",
