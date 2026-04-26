@@ -54,17 +54,30 @@ export default function WikiArticle({ slug, bodyHtml, mdTitle }: Props) {
           className="wiki-md-content"
           dangerouslySetInnerHTML={{ __html: bodyHtml as string }}
         />
-      ) : (
+      ) : en ? (
+        // EN sin .md publicado: el contenido SÍ existe en español. En lugar de
+        // "Coming soon" (que sugiere ausencia), redirigimos al usuario a la
+        // versión ES y al índice EN del wiki.
         <div className="text-center py-16">
-          <div className="text-5xl mb-4">📝</div>
-          <h2 className="font-extrabold text-xl mb-3">{en ? 'Coming soon — full guide in preparation' : 'Próximamente — guía completa en preparación'}</h2>
-          <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">{en
-            ? 'We are writing this article with real data and practical advice for the Latin American diaspora in the US.'
-            : 'Estamos escribiendo este artículo con datos reales y consejos prácticos para la diáspora latinoamericana en EE.UU.'}</p>
+          <div className="text-5xl mb-4">🌎</div>
+          <h2 className="font-extrabold text-xl mb-3">This article is available in Spanish</h2>
+          <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">Our wiki content is currently in Spanish, focused on the Latino diaspora in the US.</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">{en ? 'Compare now' : 'Comparar ahora'} →</a>
-            <a href={`/${locale}/wiki`} className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">{en ? 'All articles' : 'Todos los artículos'}</a>
+            <a href={`/es/wiki/${slug}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Read in Spanish →</a>
+            <a href="/en/wiki" className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">Back to wiki index</a>
+          </div>
+        </div>
+      ) : (
+        // ES sin .md publicado — placeholder histórico de "Próximamente".
+        <div className="text-center py-16">
+          <div className="text-5xl mb-4">📝</div>
+          <h2 className="font-extrabold text-xl mb-3">Próximamente — guía completa en preparación</h2>
+          <p className="text-[var(--color-ink-2)] max-w-[480px] mx-auto">Estamos escribiendo este artículo con datos reales y consejos prácticos para la diáspora latinoamericana en EE.UU.</p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+            <a href={`/${locale}`} className="inline-block bg-[var(--color-blue)] text-white px-6 py-3 rounded-full font-bold text-sm">Comparar ahora →</a>
+            <a href={`/${locale}/wiki`} className="inline-block bg-[var(--color-g200)] text-[var(--color-ink)] px-6 py-3 rounded-full font-bold text-sm">Todos los artículos</a>
           </div>
         </div>
       )}

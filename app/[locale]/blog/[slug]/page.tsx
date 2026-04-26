@@ -36,11 +36,23 @@ export async function generateMetadata({
     ? `${article.titulo_en}. Practical guide for the Latino diaspora in the US on how to send money home with informed decisions. Part of PreEnvios.com Blog.`
     : `${article.titulo}. Guía práctica para la diáspora latina en EE.UU. sobre cómo enviar dinero a casa con decisiones informadas. Blog de PreEnvios.com.`
 
+  // Auto-noindex defensivo (paridad con wiki): si el slug no tiene .md
+  // publicado (ES sin contenido aún, o EN siempre — los .md son ES-only),
+  // la página renderiza placeholder. Eso es thin content para Google y
+  // daña SEO si se indexa. Marcamos noindex,follow hasta que se publique
+  // un .md correspondiente. EN siempre cae al fallback hasta que existan
+  // versiones traducidas — el placeholder ahora redirige a /es/blog/<slug>.
+  const isPlaceholder = !md
+  const robots = isPlaceholder
+    ? { index: false, follow: true, googleBot: { index: false, follow: true } }
+    : undefined
+
   return {
     title: en
       ? `${title} — PreEnvios.com Blog`
       : `${title} — Blog de PreEnvios.com`,
     description,
+    ...(robots ? { robots } : {}),
     alternates: {
       canonical: `https://preenvios.vercel.app/${locale}/blog/${slug}`,
       languages: {
