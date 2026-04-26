@@ -76,14 +76,14 @@ negociar Revenue Share directo con Remitly y Wise.
 ### Backend
 - Supabase — base de datos PostgreSQL + auth + storage
 - Vercel — hosting con deploy automático desde GitHub
-- Upstash Redis — cache de precios (actualización diaria, cada 2 horas en plan Pro)
 
-### Scrapers automáticos
-- Playwright o Puppeteer — scraping de tasas
-- Vercel Cron Jobs — ejecución diaria en Hobby, cada 2 horas en Pro
-- Proxies rotativos — para operadores con protección avanzada ($10–30/mes)
-- Wise API semi-pública — datos directos sin scraping
-- APIs de afiliados (Impact, CJ, Partnerize) — tasas en tiempo real para operadores aprobados
+### Pipeline de tasas (decidido 2026-04-26 — ver Fase 12 + [Proceso 08](LOGICA_DE_NEGOCIO/08_scrapers.md))
+- **Scrapfly ($30/mes plan Starter)** — servicio externo que scrapea + parsea con schemas configurados visualmente en su panel web. 42 schemas (7 ops × 6 corredores), cero código de parseo en nuestro lado.
+- **Hetzner (servidor "cartero")** — Node service ~80 líneas que cada 60 min llama a Scrapfly, guarda el JSON en memoria y lo expone en `/prices` con Bearer token. Comparte el VPS con el bot trading sin interferencia (systemd cgroup limits).
+- **Preenvíos cron** — Vercel cron consulta Hetzner, Agente 1 valida, `savePrices()` UPSERT a Supabase. Sin cambios en la web.
+- **APIs de afiliados (Impact, CJ, Partnerize)** — fuente paralela cuando los programas estén aprobados; reduce dependencia de Scrapfly post-Mes 3.
+- **Wise API pública** — fuente alternativa gratuita, candidata para reemplazar el schema Wise post-cutover.
+- ~~Playwright/Puppeteer + proxies rotativos~~ **descartado 2026-04-26** — ver Proceso 08 §"Por qué decidimos NO arreglar los scrapers in-house viejos".
 
 ### Redes de afiliados
 - Impact.com — Remitly
@@ -354,27 +354,30 @@ Esta fase se ejecuta en paralelo al lanzamiento, no bloquea Fase 2 ni Fase 3. Pl
 
 ### Fase 2 — Scrapers automáticos (Semana 3–4 post-MVP)
 
-> ⚠️ **ESTADO REAL 2026-04-23 — LOS 7 SCRAPERS ESTÁN ROTOS EN PRODUCCIÓN.**
-> Los checkboxes `[x]` de esta fase significan que el CÓDIGO existe y fue
-> escrito en 2026-04-16. La funcionalidad en producción falló el 2026-04-17
-> cuando los operadores cambiaron sus APIs internas (HTTP 401/403/404).
-> Decisión 2026-04-23: diferir arreglo hasta post-LLC + aprobación en programas
-> de afiliados. Cualquier `[x]` abajo debe re-verificarse antes de confiar en
-> él. Plan completo: [LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md](LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md).
-> Resumen ejecutivo: [SCRAPERS_IMPORTANTE.md](SCRAPERS_IMPORTANTE.md) en raíz.
+> 🛑 **SUPERSEDED desde 2026-04-26 — el plan de arreglar scrapers in-house
+> con proxies rotativos quedó descartado.** Reemplazado por **Fase 12 —
+> Pipeline Scrapfly + Hetzner cartero**. Esta fase queda como referencia
+> histórica del trabajo del 2026-04-16 → 2026-04-26.
+>
+> El código de los 7 scrapers in-house en `lib/scrapers/<op>.ts` sigue
+> existiendo pero queda congelado y se desactiva en cutover de Fase 12.4.
+> Después del cutover, se mueve a `lib/scrapers/_legacy/` o se elimina.
+>
+> Estado en producción durante el período obsoleto:
+> Los 7 scrapers fallan al primer byte desde 2026-04-17 (HTTP 401/403/404
+> por cambios en APIs internas de los operadores). Tabla `precios` con
+> data stale desde esa fecha. Ver [Proceso 28](LOGICA_DE_NEGOCIO/28_scrapers_plan_diferido.md)
+> para evidencia detallada del estado roto.
 
-- [ ] Configurar Upstash Redis para cache de precios (diferido — se activa cuando sea necesario)
-- [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16, **falla con HTTP 401 desde 2026-04-17** — reemplazar por Wise API pública oficial post-LLC, ver Proceso 28 Fase R1)
-- [x] Crear scraper para Ria (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
+- [x] Crear scraper para Wise (API semi-pública — más fácil) (completado 2026-04-16, **falla con HTTP 401 desde 2026-04-17** — superseded por Fase 12)
+- [x] Crear scraper para Ria (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — superseded por Fase 12)
 - [x] Crear scraper para Boss Money (completado 2026-04-16 — placeholder, se activa en Fase 4)
-- [x] Crear Vercel Cron Job — ejecuta scrapers una vez al día a las 7:00 AM UTC (completado 2026-04-16 — vercel.json con schedule "0 7 * * *", Hobby plan permite 1 cron/día). **Cron corre OK y retorna 200, pero `saved=0` silencioso por scrapers rotos — Proceso 28.**
-- [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16, **técnicamente correcto cuando hay data que guardar; desde 2026-04-17 ningún scraper devuelve data — Proceso 28**)
-- [ ] Upstash Redis cachea los últimos precios para servir rápido (diferido — se activa cuando sea necesario)
-- [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
-- [x] Crear scraper para Western Union (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 403 desde 2026-04-17, Cloudflare bloqueo** — Proceso 28)
-- [x] Crear scraper para Remitly (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — Proceso 28)
-- [ ] Configurar proxies rotativos si Western Union o Remitly bloquean (diferido — se activa cuando sea necesario)
-- [x] Dashboard interno para monitorear estado de scrapers (completado 2026-04-16 — /api/admin/dashboard)
+- [x] Crear Vercel Cron Job — ejecuta scrapers una vez al día a las 7:00 AM UTC (completado 2026-04-16 — vercel.json con schedule "0 7 * * *", Hobby plan permite 1 cron/día). **Reemplazado en Fase 12.4 cutover por cron cada 60 min al endpoint poll-hetzner.**
+- [x] Los scrapers guardan resultados en Supabase (completado 2026-04-16, **superseded por Fase 12 — Hetzner pasa por savePrices() también**)
+- [x] Crear scraper para MoneyGram (protección media) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — superseded por Fase 12)
+- [x] Crear scraper para Western Union (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 403 desde 2026-04-17, Cloudflare bloqueo** — superseded por Fase 12 / Scrapfly bypassa Cloudflare)
+- [x] Crear scraper para Remitly (protección alta — puede requerir proxy) (completado 2026-04-16, **falla con HTTP 404 desde 2026-04-17** — superseded por Fase 12)
+- [x] Dashboard interno para monitorear estado de scrapers (completado 2026-04-16 — /api/admin/dashboard, se conserva y se le agrega widget "Pipeline status" en Fase 12.4)
 - [x] Agregar campo método_entrega a la tabla precios en Supabase (completado 2026-04-16 — campo ya existe desde Fase 1)
 - [x] Los scrapers capturan la tasa por método de entrega por operador (completado 2026-04-16 — estructura lista, actualmente solo bank)
 - [x] Cada scraper debe capturar las tasas por cada método de entrega soportado por el operador (completado 2026-04-16 — estructura lista, expande a más métodos cuando scrapers estén activos)
@@ -1247,6 +1250,163 @@ Push directo a main commit `485b518` (autorizado por el founder, fix puntual, no
 
 ---
 
+### Fase 12 — Pipeline de tasas: Scrapfly + Hetzner cartero (decidido 2026-04-26)
+
+**Contexto y decisión.** Los 7 scrapers in-house de Fase 2 quedaron rotos
+desde 2026-04-17 (HTTP 401/403/404 por cambios en APIs internas de los
+operadores). El plan diferido de Proceso 28 — arreglarlos con proxies
+residenciales — fue descartado el 2026-04-26 por el founder. Razones:
+mantenimiento eterno, gato-y-ratón con bot detection, mismo costo que
+una solución gestionada.
+
+**Nueva arquitectura.** Scrapfly hace todo el trabajo difícil
+(scrapeo + parseo via schemas configurados visualmente en su panel).
+Hetzner es solo cartero (cero código de parseo). Preenvíos consume el
+JSON limpio, Agente 1 valida, savePrices guarda en Supabase. Detalle
+de la lógica de negocio en [Proceso 08 reescrito](LOGICA_DE_NEGOCIO/08_scrapers.md).
+
+**Filosofía:** "para eso le pago al servicio" — minimizar trabajo de
+mantenimiento futuro, NO reciclar código existente. Si una remesadora
+cambia su HTML, el founder corrige el schema clickeando 3 veces en el
+panel de Scrapfly. Sin code edit, sin redeploy.
+
+#### Fase 12.1 — Pre-requisitos del founder (~3 horas, único día)
+
+- [ ] Crear cuenta en scrapfly.io
+- [ ] Suscripción plan Starter ($30/mes) con tarjeta de la business account
+- [ ] Configurar billing alert al 70% del cap mensual de credits (anti bill-spike)
+- [ ] Generar API key, guardarla en password manager
+- [ ] Verificar capacidad libre en Hetzner: ≥512MB RAM disponibles, ≥1 CPU core libre, ≥1GB disco
+- [ ] Reservar subdominio público para el cartero (sugerencia: `api-internal.preenvios.com` — nombre genérico que no anuncia "scraper" hacia afuera)
+- [ ] Apuntar A record del subdominio a la IP pública del Hetzner (en Namecheap DNS)
+- [ ] Generar shared secret 32 bytes (`openssl rand -hex 32`), guardar en password manager
+- [ ] Confirmar Vercel Pro activado (necesario para cron > 1/día — Vercel Hobby permite solo 1 cron/día)
+
+#### Fase 12.2 — Schemas en Scrapfly (founder + Claude guía paso a paso)
+
+Tiempo estimado: 2-4 horas de trabajo del founder (Claude lo guía
+remotamente con instrucciones específicas por operador).
+
+- [ ] Schema `wise_honduras` — abrir Wise → enviar a Honduras → click visual sobre tasa, fee, método; guardar
+- [ ] Schema `wise_dominican_republic`
+- [ ] Schema `wise_guatemala`
+- [ ] Schema `wise_el_salvador`
+- [ ] Schema `wise_colombia`
+- [ ] Schema `wise_mexico`
+- [ ] Schemas Remitly (× 6 corredores)
+- [ ] Schemas Xoom (× 6 corredores)
+- [ ] Schemas Ria (× 6 corredores)
+- [ ] Schemas WorldRemit (× 6 corredores)
+- [ ] Schemas Western Union (× 6 corredores) — verificar que Scrapfly bypassa Cloudflare con anti-bot del Starter; si no, bumpear schema individual a `render_js: true`
+- [ ] Schemas MoneyGram (× 6 corredores)
+- [ ] Test cada schema desde dashboard Scrapfly antes de activar cron — botón "Run schema" debe devolver JSON con tasa, fee, método válidos
+
+> **Optimización opcional:** si Scrapfly soporta schemas con parámetros
+> (URL templated por corredor), el founder puede reducir 42 schemas a 7
+> (1 por operador). Decisión durante Fase 12.2 al armar el primero.
+
+#### Fase 12.3 — Hetzner cartero (Claude implementa)
+
+Tiempo estimado: ~1 día de Claude (el founder solo provee acceso SSH).
+
+- [ ] Crear directorio `/opt/preenvios-scraper/` con git init local
+- [ ] Crear `package.json` con deps mínimas: `scrapfly-sdk`, `fastify`, `node-cron`, `pino` (logs)
+- [ ] Escribir `index.ts` (~80 líneas: cron interno cada 60 min + fetch a Scrapfly + cache en memoria + GET /prices con Bearer auth + GET /health)
+- [ ] `npm install` + `tsc` o `tsx` para correr TS directamente
+- [ ] Crear systemd unit `/etc/systemd/system/preenvios-scraper.service` con:
+  - `MemoryMax=512M`
+  - `CPUWeight=50` (priority bajo vs trading bot)
+  - `Restart=on-failure`
+  - `EnvironmentFile=/etc/preenvios-scraper.env`
+- [ ] Crear `/etc/preenvios-scraper.env` (chmod 600, owner root):
+  - `SCRAPFLY_API_KEY=<de Fase 12.1>`
+  - `HETZNER_SHARED_SECRET=<de Fase 12.1>`
+  - `SCRAPE_INTERVAL_MIN=60`
+  - `LOG_LEVEL=info`
+- [ ] Instalar Caddy (`apt install caddy`)
+- [ ] Configurar `/etc/caddy/Caddyfile` con reverse proxy del subdominio → puerto local del scraper-service
+- [ ] `systemctl reload caddy` — Let's Encrypt emite cert automático
+- [ ] `systemctl enable preenvios-scraper && systemctl start preenvios-scraper`
+- [ ] Smoke test: `curl https://<subdominio>/health` → 200 con JSON `{status, last_scrape, scrapfly_credits_remaining}`
+- [ ] Smoke test: `curl -H "Authorization: Bearer <secret>" https://<subdominio>/prices` → JSON con 42 entries
+- [ ] Smoke test sin auth: `curl https://<subdominio>/prices` → 401 (verifica que el token está bien protegido)
+- [ ] Configurar logrotate para `/var/log/preenvios-scraper/*.log` (semanal, max 100MB)
+
+#### Fase 12.4 — Integración Preenvíos (Claude implementa)
+
+Tiempo estimado: ~1 día de Claude.
+
+- [ ] Agregar env vars en Vercel (scope **Production + Preview**):
+  - `HETZNER_API_URL=https://<subdominio>/prices`
+  - `HETZNER_SHARED_SECRET=<mismo de Hetzner>`
+- [ ] Crear endpoint `app/api/scrape/poll-hetzner/route.ts` (~50 líneas: fetch + Bearer auth + parse + savePrices loop)
+- [ ] Editar `vercel.json` — agregar cron schedule `0 * * * *` (cada hora) apuntando a `/api/scrape/poll-hetzner`
+- [ ] **Mantener el cron viejo `/api/scrape` activo** durante Fase 12.5 para parallel run (se desactiva en cutover)
+- [ ] Wiring a `savePrices()` existente — Agente 1 sigue siendo el ingreso. **Cero cambios en `lib/scrapers/validator.ts`.**
+- [ ] Sentry instrumentation: cada poll envía `scrape_id` (UUID propagado desde Hetzner) como tag para correlacionar logs Hetzner ↔ Vercel
+- [ ] Sentry alert rules:
+  - `hetzner_poll_failed` 3 ciclos seguidos → email founder
+  - `scrapfly_extraction_failed:<op>_<corredor>` 3 ocurrencias en 1h → email founder
+- [ ] (opcional pre-cutover) Widget admin dashboard "Pipeline status" en `/es/admin/dashboard`:
+  - Última poll exitosa (timestamp)
+  - Credits Scrapfly restantes
+  - Errores 24h por (op, corredor)
+  - Botón "Force poll now" para refresh manual
+
+#### Fase 12.5 — Parallel run + cutover (Claude monitorea, founder valida)
+
+Tiempo estimado: 3-5 días calendar (trabajo activo ~½ día).
+
+- [ ] **Día 1:** activar nuevo cron en Vercel apuntando a Hetzner. Cron viejo (`/api/scrape`) sigue corriendo en paralelo.
+- [ ] **Día 1-2:** ambos crons escriben a Supabase preview. Comparar logs:
+  - Cron viejo: ¿devuelve `saved=0` (esperado, está roto) o data?
+  - Cron nuevo: ¿devuelve `saved≈42` (esperado, sano)?
+  - Agente 1: ¿spike de `scraper_anomalies`? Si sí → tasas de Scrapfly fuera de rango → revisar schemas.
+- [ ] **Día 2-3:** verificar que tabla `precios.actualizado_en` es < 1.5h en preview (Agente 3 confirma freshness OK)
+- [ ] **Día 2-3:** revisar `/admin/dashboard` — los 7 operadores en verde, sin stale rojo
+- [ ] **Día 2-3:** spot check en navegador: `/es/honduras/200` muestra 7 cards con tasas razonables, calculadora inversa funciona
+- [ ] **Día 3:** founder aprueba cutover
+- [ ] **Cutover:** comentar cron viejo en `vercel.json` (`/api/scrape` ya no se dispara). Mantener el endpoint en código por si hay rollback.
+- [ ] **Día 4-7:** monitoring. Si todo estable, Fase 12 cerrada.
+
+#### Fase 12.6 — Cleanup (post-cutover, opcional)
+
+Tiempo estimado: ~1 hora.
+
+- [ ] Mover `lib/scrapers/<op>.ts` (los 7 scrapers viejos) a `lib/scrapers/_legacy/` (mantener como referencia rollback)
+- [ ] Mover `app/api/scrape/route.ts` (cron viejo) a `app/api/scrape/_legacy/` o eliminarlo
+- [ ] Borrar `SCRAPERS_IMPORTANTE.md` o convertir a archivo histórico
+- [ ] Actualizar Proceso 28 con "OBSOLETO desde 2026-04-26" más prominente (ya tiene banner)
+- [ ] Actualizar [SERVICIOS_EXTERNOS.md](SERVICIOS_EXTERNOS.md) — quitar Webshare/ScraperAPI como pendientes, agregar Scrapfly como activo
+
+#### Plan B documentado: migrar a Scrapfly AI Extraction (Opción A)
+
+**Cuándo:** si Opción B (schema-based) requiere correcciones manuales
+más de 1 vez por semana por operador, o si el volumen crece a 20+
+corredores × 30+ remesadoras.
+
+**Qué cambia:** sólo configuración en Scrapfly dashboard (cambio de modo
+"Schema-based" a "Auto Extract" + bump de plan). **Cero cambios en
+Hetzner ni Preenvíos.** Tiempo estimado: 4-6 horas. Detalle completo en
+[Proceso 08 §"Opción A — Backup plan documentado"](LOGICA_DE_NEGOCIO/08_scrapers.md).
+
+#### Restricciones que se respetan en Fase 12
+
+- ✅ **Bot trading en Hetzner intocable** — systemd cgroup limita el
+  scraper-service a 512MB RAM, CPUWeight bajo. Trading bot prioridad alta.
+- ✅ **Scrapers viejos no se borran hasta cutover validado** (Fase 12.6).
+- ✅ **Agente 1 sigue siendo última línea de defensa** — Hetzner stateless
+  no escribe directo a Supabase, todo pasa por `savePrices()` con validación.
+- ✅ **Idempotencia preservada** — `savePrices()` UPSERT por
+  `(operador, corredor)` sin duplicados.
+- ✅ **Separación DB preview vs prod** — Hetzner agnóstico, Vercel
+  maneja env vars por scope (Proceso 27).
+- ✅ **Sin secretos hardcoded** — `SCRAPFLY_API_KEY`, `HETZNER_SHARED_SECRET`,
+  `HETZNER_API_URL` todos en env vars (Hetzner systemd EnvironmentFile,
+  Vercel project settings).
+
+---
+
 ### Fase 16 — Políticas legales
 
 - [x] Implementar Disclaimer #1 (tasas aproximadas) en la tarjeta de cada operador del comparador (completado 2026-04-16)
@@ -1268,13 +1428,13 @@ Push directo a main commit `485b518` (autorizado por el founder, fix puntual, no
 
 | Servicio | Plan actual | Costo | Cuándo upgradear |
 |----------|-------------|-------|------------------|
-| Vercel | Hobby (gratis) | $0 | Vercel Pro $20/mes es REQUERIDO al lanzar el producto para activar cron cada 2 horas y quitar límites de funciones |
+| Vercel | Hobby (gratis) | $0 | Vercel Pro $20/mes es REQUERIDO al lanzar el producto para activar cron cada 60 min (Fase 12) y quitar límites de funciones |
 | Supabase | Free | $0 | Pro $25/mes cuando supere límites del plan gratis o proyecto se pause por inactividad |
-| Upstash Redis | No activado | $0 | ~$10/mes cuando se necesite cache (diferido) |
-| Proxies rotativos | No activado | $0 | $10-30/mes si WU/Remitly bloquean scrapers |
+| Scrapfly | No activado | $0 | $30/mes (Starter) al activar Fase 12 — schema-based extraction de 42 combos. Bump a Pro $100/mes solo si migración a AI Extraction (Opción A backup) |
+| Hetzner cartero | Compartido con bot trading | $0 incremental | Servidor ya pagado por el bot. Si el scraper-service necesita VPS dedicado por aislamiento, +$5/mes (CX22) |
 | Dominio preenvios.com | Namecheap | ~$12/año | Ya activo |
 | **Total actual** | | **$0/mes** | |
-| **Total post-lanzamiento** | Vercel Pro + Supabase Pro | **$45/mes** | Cuando haya tráfico real |
+| **Total post-lanzamiento** | Vercel Pro + Supabase Pro + Scrapfly Starter | **$75/mes** | Cuando haya tráfico real (Vercel Pro y Scrapfly se activan pre-cutover; Supabase Pro cuando hay carga real) |
 
 ---
 

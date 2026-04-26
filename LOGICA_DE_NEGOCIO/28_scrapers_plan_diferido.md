@@ -1,6 +1,24 @@
 # Proceso 28 — Scrapers rotos post-2026-04-17: plan diferido hasta post-LLC
 
-## ⚠️ Alerta crítica para quien lea este proyecto
+> ## 🛑 OBSOLETO desde 2026-04-26
+>
+> Este documento describía el plan de **arreglar los 7 scrapers in-house
+> con proxies residenciales** (ScraperAPI/Webshare). Ese plan fue
+> **descartado el 2026-04-26** por el founder.
+>
+> **Estrategia actual:** Pipeline Scrapfly + Hetzner cartero + Preenvíos.
+> Ver [Proceso 08 (reescrito)](08_scrapers.md) y CONTEXTO_FINAL.md → Fase 12
+> para implementación.
+>
+> Este archivo se conserva como referencia histórica:
+> - Evidencia detallada del estado roto entre 2026-04-17 y 2026-04-26
+> - Análisis de por qué reverse-engineer + proxies no era viable
+> - Razonamiento que llevó a la decisión de migrar a Scrapfly
+>
+> Cualquier instrucción operativa de este archivo (Fase R1/R2/R3 abajo)
+> está superseded. NO ejecutar.
+
+## ⚠️ Alerta crítica para quien lea este proyecto (contexto histórico)
 
 **Antes de confiar en checkboxes `[x]` de scrapers en cualquier otro documento:**
 las fases marcadas como "completadas" de scrapers (Fase 2 entera, Fase 8 MX/CO,
@@ -8,6 +26,10 @@ Fase 9.1 Agente 1) significan que el CÓDIGO existe y se escribió en su momento
 NO que los scrapers funcionan en producción hoy. Desde el 2026-04-17 los 7
 scrapers MVP fallan al primer byte por cambios en las APIs internas de los
 operadores. Ver sección "Fases marcadas `[x]` que requieren revisión" abajo.
+
+**Update 2026-04-26:** ese estado roto sigue siendo cierto pero la
+solución cambió — Fase 12 (Scrapfly + Hetzner) reemplaza los scrapers
+in-house. El cron viejo se desactiva en cutover de Fase 12.4.
 
 ## Resumen ejecutivo
 
