@@ -154,10 +154,12 @@ export default function AlertaInlineForm({
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-heading font-extrabold text-sm leading-tight text-ink">
-              {successText ?? '¡Suscrito!'}
+              {successText ?? (idioma === 'en' ? 'Subscribed!' : '¡Suscrito!')}
             </h3>
             <p className="text-[11px] text-g600 mt-0.5">
-              Te llegara la primera tasa manana.
+              {idioma === 'en'
+                ? "You'll get the first rate tomorrow."
+                : 'Te llegará la primera tasa mañana.'}
             </p>
           </div>
         </div>

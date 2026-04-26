@@ -6,4 +6,3 @@
 
 export { default as LandingEditorial } from './LandingEditorial'
 export { default as AlertaInlineForm } from './AlertaInlineForm'
-export { default as EnglishComingSoon } from './EnglishComingSoon'

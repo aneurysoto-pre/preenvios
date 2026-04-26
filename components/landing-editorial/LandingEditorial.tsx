@@ -7,55 +7,34 @@ import type { CorredorId } from '@/lib/schemas/alerta'
 import { WIKI_ARTICLES } from '@/lib/corredores'
 import { CORRIDOR_WIKIS } from '@/lib/cross-links'
 import AlertaInlineForm from './AlertaInlineForm'
-import EnglishComingSoon from './EnglishComingSoon'
 
 /**
  * Landing editorial por pais — modelo A (Magazine).
  *
- * Orquesta las 8 secciones del landing editorial, con rendering
- * condicional del fallback EnglishComingSoon cuando locale='en' sin
- * traduccion disponible.
- *
- * Este componente se renderiza en `app/[locale]/[pais]/pais-content.tsx`
- * DEBAJO del disclaimer de Comparador — reemplaza TasasReferencia y
- * LazyBelow (Sections.tsx genericas) cuando el pais tiene entry en
- * data/corredores/*.ts. Ver Commit 9 del port + Proceso 30.
- *
- * Todos los textos traducibles vienen de messages/es.json namespace
+ * Orquesta las 8 secciones del landing editorial. Bilingue ES/EN —
+ * los textos traducibles vienen de messages/{es,en}.json namespace
  * `landing.editorial.<corredorId>.*`. Datos estructurales no traducibles
  * (stats, nombres propios, emojis, gradientes) vienen del prop data.
  * La tasa BCH viene pre-fetched server-side desde getTasaBancoCentral().
+ *
+ * Se renderiza en `app/[locale]/[pais]/pais-content.tsx` DEBAJO del
+ * disclaimer de Comparador — reemplaza TasasReferencia y LazyBelow
+ * (Sections.tsx genericas) cuando el pais tiene entry en
+ * data/corredores/*.ts. Ver Commit 9 del port + Proceso 30.
  */
 
 type Props = {
   data: CorredorContent
   tasa: TasaBancoCentral | null
   locale: 'es' | 'en'
-  /** Slug ES del pais — usado por EnglishComingSoon para el link de fallback */
-  slugEs: string
 }
 
-export default function LandingEditorial({ data, tasa, locale, slugEs }: Props) {
-  // Fallback cuando EN no tiene traduccion editorial — decidido 2026-04-24.
-  if (locale === 'en') {
-    return <EnglishComingSoon slugEs={slugEs} />
-  }
-  return <LandingEditorialEs data={data} tasa={tasa} />
-}
-
-/**
- * Version ES — separado en componente interno para respetar rules of
- * hooks (useTranslations debe llamarse incondicionalmente; el early
- * return a EnglishComingSoon en el wrapper hace que esto sea necesario).
- */
-function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaBancoCentral | null }) {
+export default function LandingEditorial({ data, tasa, locale }: Props) {
   const t = useTranslations(`landing.editorial.${data.corredorId}`)
 
-  // Locale BCP 47 dinamico — 'es-HN', 'es-DO', 'es-GT', 'es-SV', 'es-CO', 'es-MX'.
-  // `data.codigoPais` es ISO 3166-1 alpha-2 lowercase ('hn', 'do', ...) — lo
-  // upper-casea-mos para formar el locale BCP 47. Fix necesario antes de
-  // replicar el template a los otros 5 corredores (decision 2026-04-25).
-  const localeBcp47 = `es-${data.codigoPais.toUpperCase()}`
+  // Locale BCP 47 dinamico — '<locale>-<paisISO>' (ej. 'es-HN', 'en-MX').
+  // `data.codigoPais` es ISO 3166-1 alpha-2 lowercase ('hn', 'do', ...).
+  const localeBcp47 = `${locale}-${data.codigoPais.toUpperCase()}`
   const dateFormatter = new Intl.DateTimeFormat(localeBcp47, {
     day: 'numeric',
     month: 'long',
@@ -122,7 +101,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
           {/* Form alertas compact (location='hero') */}
           <AlertaInlineForm
             corredor={data.corredorId as CorredorId}
-            idioma="es"
+            idioma={locale}
             location="hero"
             titulo={t('seccion0.alertasHeading')}
             subtitulo={t('seccion0.alertasSubtitle')}
@@ -432,7 +411,7 @@ function LandingEditorialEs({ data, tasa }: { data: CorredorContent; tasa: TasaB
             {/* Form alertas grande (location='cta_final') */}
             <AlertaInlineForm
               corredor={data.corredorId as CorredorId}
-              idioma="es"
+              idioma={locale}
               location="cta_final"
               titulo={t('seccion0.alertasHeading')}
               subtitulo={t('seccion0.alertasSubtitle')}

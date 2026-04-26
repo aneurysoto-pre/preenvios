@@ -95,7 +95,6 @@ export default function PaisContent({
           data={editorialData}
           tasa={initialTasa ?? null}
           locale={locale === 'en' ? 'en' : 'es'}
-          slugEs={pais.slugEs}
         />
       ) : (
         <>
