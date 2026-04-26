@@ -95,11 +95,14 @@ traducibles viven en `messages/*.json` por coherencia con el resto del sitio
                      │ (solo si hasEditorial)
 ┌────────────────────▼────────────────────────────────────┐
 │  components/landing-editorial/LandingEditorial.tsx      │
-│  - if locale='en' → <EnglishComingSoon />               │
-│  - else → LandingEditorialEs (8 secciones)              │
+│  - Componente único bilingüe (8 secciones)              │
+│  - localeBcp47 = `${locale}-${codigoPais.toUpperCase()}`│
+│    (ej. 'es-HN', 'en-MX' — para Intl.DateTimeFormat)    │
 │                                                          │
-│  Secciones 0+6 incluyen <AlertaInlineForm />            │
+│  Secciones 0+6 incluyen <AlertaInlineForm idioma={locale}/>│
 │  Todos los textos via useTranslations('landing.editorial.<pais>') │
+│  Bilingüe activado 2026-04-25 (Fase 11.1):              │
+│  EnglishComingSoon.tsx eliminado, locale propagado.     │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -199,12 +202,12 @@ sesiones futuras:
    `data/corredores/types.ts` o mover el tipo a `lib/paises.ts` (más limpio
    conceptualmente, pero refactor mayor). 15-30 min.
 
-3. **Inglés (EN) sin contenido editorial** — decidido 2026-04-24:
-   estructura `{ es: completo, en: null }`. Cuando el founder tenga un
-   traductor, hay que:
-   - Agregar keys `landing.editorial.honduras.*` al `messages/en.json`
-   - El fallback `EnglishComingSoon` desaparece automáticamente (condición
-     en `LandingEditorial`). Sin código que tocar, solo copy.
+3. **Inglés (EN) — RESUELTO 2026-04-25 (Fase 11.1).** Los 6 corredores
+   tienen traducción completa en `messages/en.json` (300 strings, 50 × 6).
+   `EnglishComingSoon.tsx` fue eliminado; `LandingEditorial.tsx` es ahora
+   un componente único bilingüe con `locale` propagado. Si en el futuro
+   se agrega un corredor nuevo, hay que escribir copy ES + EN paralelo
+   en messages — no hay fallback automático que cubra la falta de EN.
 
 4. **Links de ciudades apuntan a `#calculadora`** — decidido 2026-04-25
    (decisión N3a-bridge-B). Los 6 tiles de ciudades linkean al hero del

@@ -114,6 +114,16 @@ archivo (el path es `content/<section>/<slug>.md`).
   placeholder. Cuando se traduzca, `page.tsx` puede pasar el `bodyHtml`
   específico por locale (separar en `content/wiki/<slug>.<locale>.md`
   o agregar `bodyHtmlEn` al frontmatter).
+
+  **EN placeholder behavior (2026-04-25, Fase 11.2):** mientras los `.md`
+  son ES-only, el placeholder en `/en/wiki/<slug>` y `/en/blog/<slug>` ya
+  no muestra "Coming soon" — muestra "This article is available in
+  Spanish" + botón "Read in Spanish →" que linkea a `/es/[wiki|blog]/<slug>`
+  + botón secundario "Back to [wiki|blog] index". En los listados
+  `/en/wiki` y `/en/blog`, los cards de artículos sin `.md` linkean
+  directo a `/es/...` (no a `/en/...` que solo mostraría el placeholder).
+  Auto-noindex defensivo aplicado a ambas rutas (wiki y blog) para evitar
+  que Google indexe placeholders thin-content.
 - **Slug renames**: si un slug del registry cambia, hay que sincronizar
   `WIKI_LINKS` / `BLOG_LINKS` / `CORRIDOR_WIKIS` / `CORRIDOR_BLOGS`. El
   TypeScript NO catchea estos mismatches (los maps son

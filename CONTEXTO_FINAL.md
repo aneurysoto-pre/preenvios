@@ -1205,6 +1205,46 @@ Orden de ejecución (estado post-filtro 2026-04-23):
 
 **Acción pendiente:** founder valida visualmente en preview URL `preenvios-git-feat-landing-editorial-honduras-aneurysoto-pres-projects.vercel.app`, itera (push adicionales a la branch si hace falta), y cuando apruebe → merge a main (producción dormida hasta DNS cutover).
 
+#### Fase 11.1 — Traducción EN completa de los 6 corredores (2026-04-25)
+
+- [x] **300 strings ES → EN traducidas** en `messages/en.json` namespace `landing.editorial.{honduras,dominican_republic,guatemala,el_salvador,colombia,mexico}` (50 keys × 6 corredores). Estructura 757/757 paritaria con `es.json`. Voz EN: editorial accesible para diáspora latina en EE.UU., sin slang dialectal. Nombres propios (ciudades, monedas, instituciones BCH/BCRD/Banguat/Banxico) sin traducir. HTML inline (`<strong>`, `<highlight>`) y placeholders ICU (`{fechaHoy}`, `{fechaActualizacion}`) preservados. Squash commit `e014e51` desde branch `feat/i18n-en-corredores`.
+- [x] **Eliminado `EnglishComingSoon.tsx`** — el fallback "English version coming soon" ya no se renderiza porque los 6 corredores tienen traducción completa. `LandingEditorial.tsx` ahora es un componente único bilingüe (sin early-return), con `localeBcp47` dinámico (`${locale}-${codigoPais.toUpperCase()}` — ej. `en-MX`, `es-HN`) y `idioma={locale}` propagado a `AlertaInlineForm`. Key `landing.editorial.comingSoon` eliminada de ambos JSONs (dead).
+- [x] **`AlertaInlineForm.tsx`** — success text con switch por `idioma` (no requería keys nuevas en messages porque los textos no varían por país):
+  - ES: "¡Suscrito!" + "Te llegará la primera tasa mañana."
+  - EN: "Subscribed!" + "You'll get the first rate tomorrow."
+
+#### Fase 11.2 — Wiki/blog EN: "This article is available in Spanish" (2026-04-25)
+
+**Contexto:** los 35 artículos `.md` de `content/wiki/` y `content/blog/` son ES-only. En `/en/wiki/<slug>` y `/en/blog/<slug>` el placeholder mostraba "Coming soon — full guide in preparation" + botón "Compare now", lo cual sugería ausencia de contenido cuando en realidad existe en español. UX confusa para diáspora bilingüe que prefiere EN pero entiende ES.
+
+- [x] **Article placeholders** ([wiki-article.tsx](app/%5Blocale%5D/wiki/%5Bslug%5D/wiki-article.tsx), [blog/article.tsx](app/%5Blocale%5D/blog/%5Bslug%5D/article.tsx)) — para EN sin `.md`:
+  - Heading: "This article is available in Spanish"
+  - Subtext: "Our [wiki|blog] content is currently in Spanish, focused on the Latino diaspora in the US."
+  - Botón primary: "Read in Spanish →" → `/es/[wiki|blog]/<slug>`
+  - Botón secondary: "Back to [wiki|blog] index" → `/en/[wiki|blog]`
+  - ES placeholder ("Próximamente") queda intacto.
+- [x] **Index listings** ([wiki-index.tsx](app/%5Blocale%5D/wiki/wiki-index.tsx), [blog/index-content.tsx](app/%5Blocale%5D/blog/index-content.tsx)) — badge "Coming soon" → "This article is available in Spanish". En EN sin `.md`, el card linkea directo a `/es/[wiki|blog]/<slug>` (no a `/en/...` que solo mostraría el placeholder).
+- [x] **Auto-noindex defensivo extendido a blog** ([blog/[slug]/page.tsx](app/%5Blocale%5D/blog/%5Bslug%5D/page.tsx)) — paridad con wiki que ya lo tenía. Si no hay `.md` publicado, `robots: noindex,follow`. Cuando se publique un `.md` correspondiente, automáticamente vuelve a indexable.
+
+Squash commit `349ff9e` desde branch `feat/en-spanish-fallback`.
+
+#### Fase 11.3 — Fix botón azul invisible (CSS specificity, 2026-04-25)
+
+**Síntoma reportado por el founder en preview:** botón azul "Read in Spanish →" aparecía vacío (texto invisible) en `/en/wiki/<slug>` placeholder.
+
+**Root cause:** [globals.css:131](app/globals.css) define `.prose-legal a { color: var(--color-blue) }` con specificity (0,1,1). [LegalPage.tsx:26](components/LegalPage.tsx) envuelve el children en `<div class="prose-legal">`, así que ese selector aplica a TODOS los `<a>` del placeholder. Vencía a `.text-white` de Tailwind (0,1,0) → texto azul sobre fondo azul = invisible. El texto "Read in Spanish →" siempre estuvo en el HTML — el bug era solo de color.
+
+**Por qué no apareció antes:** el placeholder ES casi nunca renderiza (los wikis ES tienen `.md`). En EN siempre cae al placeholder → el bug solo se vio cuando se publicó la traducción EN de los corredores y los founders empezaron a navegar en EN.
+
+- [x] **Fix:** `text-white` → `!text-white` (Tailwind important modifier — compila a `color: var(--color-white) !important`) en los 4 botones azul+blanco de los placeholders:
+  - `wiki-article.tsx` EN: "Read in Spanish →"
+  - `wiki-article.tsx` ES: "Comparar ahora →" (paridad)
+  - `blog/article.tsx` EN: "Read in Spanish →"
+  - `blog/article.tsx` ES: "Comparar ahora →" (paridad)
+- Botones grises (Back to wiki/blog index, Todos los artículos) NO modificados — su color también es overridden por prose-legal pero quedan legibles (azul sobre gris).
+
+Push directo a main commit `485b518` (autorizado por el founder, fix puntual, no toca CSS global ni arquitectura).
+
 ---
 
 ### Fase 16 — Políticas legales
